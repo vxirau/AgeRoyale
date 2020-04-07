@@ -2,7 +2,7 @@ package src;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import src.Controller.NetworkConfiguartion;
+import src.Controller.NetworkConfiguration;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,7 +19,7 @@ public class MainServer {
         try(BufferedReader reader = new BufferedReader(new FileReader(arxiu))) {
 
             Gson gson = new GsonBuilder().create();
-            NetworkConfiguartion config = gson.fromJson(reader, NetworkConfiguartion.class);
+            NetworkConfiguration config = gson.fromJson(reader, NetworkConfiguration.class);
             config.ompleStatic();
             System.out.println(config.staticIP);
 
