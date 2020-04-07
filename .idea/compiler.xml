@@ -6,10 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="DPO-AgeRoyale" />
         <module name="dpoo-ageroyale-c10" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="DPO-AgeRoyale" target="1.13" />
       <module name="dpoo-ageroyale-c10" target="1.12" />
     </bytecodeTargetLevel>
   </component>
