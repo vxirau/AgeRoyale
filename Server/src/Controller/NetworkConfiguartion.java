@@ -9,15 +9,24 @@ import java.nio.file.Paths;
 
 public class NetworkConfiguartion {
 
-		private static final String ip;
-		private static final int port;
+		private String ip;
+		private int port;
+
+		public static String staticIP;
+		public static int staticPort;
 
 		public NetworkConfiguartion(){
+
 		}
 
 		public NetworkConfiguartion(String ip, int port){
 			this.ip = ip;
 			this.port = port;
+		}
+
+		public void ompleStatic(){
+			staticIP = this.ip;
+			staticPort = this.port;
 		}
 
 		public void setIP(String ip){
@@ -28,7 +37,7 @@ public class NetworkConfiguartion {
 			return this.ip;
 		}
 
-		public void setPort(String port){
+		public void setPort(int port){
 			this.port = port;
 		}
 
