@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class NetworkConfiguartion {
+public class NetworkConfiguration {
 
 		private String ip;
 		private int port;
@@ -15,11 +15,11 @@ public class NetworkConfiguartion {
 		public static String staticIP;
 		public static int staticPort;
 
-		public NetworkConfiguartion(){
+		public NetworkConfiguration(){
 
 		}
 
-		public NetworkConfiguartion(String ip, int port){
+		public NetworkConfiguration(String ip, int port){
 			this.ip = ip;
 			this.port = port;
 		}
