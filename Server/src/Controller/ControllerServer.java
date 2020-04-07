@@ -3,18 +3,22 @@ package src.Controller;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class ControllerServer {
 
   private ServerSocket serverSocket;
   private boolean isRunning;
+  private final ArrayList<DedicatedServer> dedicatedServers;
 
   public ControllerServer(){
     this.serverSocket = null;
+    dedicatedServers = new ArrayList<>();
   }
 
   public void startServer(){
     try {
+
         this.serverSocket = new ServerSocket(NetworkConfiguartion.staticPort);
         this.isRunning = true;
 
@@ -22,6 +26,9 @@ public class ControllerServer {
             System.out.println("Waiting for a client...");
             Socket socket = this.serverSocket.accept();
             System.out.println("Client connected");
+            DedicatedServer dServer = new DedicatedServer(socket, dedicatedServers);
+            dedicatedServers.add(dServer);
+            dServer.start();
         }
     } catch (IOException e) {
         System.err.println(e.getMessage());
