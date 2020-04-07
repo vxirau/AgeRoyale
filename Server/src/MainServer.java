@@ -21,7 +21,7 @@ public class MainServer {
             Gson gson = new GsonBuilder().create();
             NetworkConfiguration config = gson.fromJson(reader, NetworkConfiguration.class);
             config.ompleStatic();
-            System.out.println(config.staticIP);
+            System.out.println(NetworkConfiguration.staticIP);
 
         } catch (IOException e) {
             e.printStackTrace();
