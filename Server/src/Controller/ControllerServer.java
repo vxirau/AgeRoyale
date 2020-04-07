@@ -15,7 +15,7 @@ public class ControllerServer {
 
   public void startServer(){
     try {
-        this.serverSocket = new ServerSocket(NetworkConfiguartion.staticPort);
+        this.serverSocket = new ServerSocket(NetworkConfiguration.staticPort);
         this.isRunning = true;
 
         while (this.isRunning) {
