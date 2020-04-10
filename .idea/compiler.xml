@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="dpoo-ageroyale-c10" target="1.12" />
+      <module name="dpoo-ageroyale-c10" target="12" />
     </bytecodeTargetLevel>
   </component>
 </project>
