@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class tropesDAO {
     private usuariTropaDAO usuariTropaDAO;
 
-    //OBTENIR INFORMACIO
+    //OBTENIR
     public ArrayList<Tropa> getAllTropes (){
         ArrayList<Tropa> tropas = new ArrayList<>();
         String query = "SELECT tropa.* FROM AgeRoyale.tropa;";
@@ -71,7 +71,7 @@ public class tropesDAO {
         return tropa;
     }
 
-    //ACTUALITZAR INFORMACIO
+    //ACTUALITZAR
     public void updateTropa (int idTropa, int newAtac, int newVida, int newCost, int newTipus){
         String query = "UPDATE AgeRoyale.tropa SET AgeRoyale.tropa.atac = " + newAtac +", AgeRoyale.tropa.vida = " + newVida + ", AgeRoyale.tropa.cost = " + newCost + ", AgeRoyale.tropa.tipus = " + newTipus + " WHERE AgeRoyale.tropa.idTropa = " + idTropa + ";";
         DBConnector.getInstance().updateQuery(query);
@@ -82,7 +82,7 @@ public class tropesDAO {
         DBConnector.getInstance().updateQuery(query);
     }
 
-    //AFEGIR INFORMACIO
+    //AFEGIR
     public void addTropa (int dany, int vida, int cost, boolean atac){
         String query = "INSERT INTO AgeRoyale.tropa (atac, vida, cost, tipus) VALUE (" + dany + ", " + vida + ", " + cost + ", " + atac +");";
         DBConnector.getInstance().insertQuery(query);
@@ -93,7 +93,7 @@ public class tropesDAO {
         DBConnector.getInstance().insertQuery(query);
     }
 
-    //BORRAR INFORMACIO
+    //BORRAR
     public void removeTropa (int idTropa){
         usuariTropaDAO.onRemoveTropa(idTropa);
         String query = "DELETE FROM AgeRoyale.tropa WHERE idTropa = " + idTropa + ";";

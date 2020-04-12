@@ -70,7 +70,7 @@ public class partidaDAO {
         int newPartidaPK = nextPartidaPK();
         partida.setIdPartida(newPartidaPK);
 
-        String query = "INSERT INTO AgeRoyale.partida (idPartida, duration, date, player1, player2) VALUE (" + partida.getIdPartida() + ", " + partida.getDuracio() + ", " + partida.getData() + ", " + partida.getJugadors().get(0).getIdUsuari() + ", " + partida.getJugadors().get(1).getIdUsuari() +");";
+        String query = "INSERT INTO AgeRoyale.partida (idPartida, duration, date, player1, player2) VALUE (" + partida.getIdPartida() + ", " + partida.getDuracio() + ", '" + partida.getData() + "', " + partida.getJugadors().get(0).getIdUsuari() + ", " + partida.getJugadors().get(1).getIdUsuari() +");";
         DBConnector.getInstance().insertQuery(query);
     }
 

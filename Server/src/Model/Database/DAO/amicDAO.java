@@ -12,7 +12,7 @@ public class amicDAO {
     private tropesDAO tropesDAO;
 
     //OBTENIR INFORMACIO
-    public ArrayList<Usuari> getAmics(Integer idUser){
+    public ArrayList<Usuari> getAmics(int idUser){
         ArrayList<Usuari> amics = new ArrayList<>();
         String query = "SELECT us.* FROM AgeRoyale.usuari as us, AgeRoyale.amic as am WHERE (us.idUser = am.id_u1 and " + idUser + " = am.id_u2) OR (us.idUser = am.id_u2 and " + idUser + " = am.id_u1);";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);

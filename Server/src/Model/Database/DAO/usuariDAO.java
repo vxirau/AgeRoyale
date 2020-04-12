@@ -19,7 +19,7 @@ public class usuariDAO {
     //OBTENIR INFORMACIO
     public ArrayList<Usuari> getAllUsers(){
         ArrayList<Usuari> usuaris = new ArrayList<>();
-        String query = "SELECT us.* FROM AgeRoyale.usuari as us;";
+        String query = "SELECT us.* FROM AgeRoyale.usuari AS us;";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
         try{
             while(rs.next()){
@@ -92,7 +92,7 @@ public class usuariDAO {
         if (amics != null)
             amicDAO.addAmic(newUserPK, amics);
 
-        String query = "INSERT INTO AgeRoyale.usuari (nickname, email, password, idStats) VALUE (" + nickname + ", " + email + ", " + password + ", " + statPK + ");";
+        String query = "INSERT INTO AgeRoyale.usuari (nickname, email, password, idStats) VALUE ('" + nickname + "', '" + email + "', '" + password + "', " + statPK + ");";
         DBConnector.getInstance().insertQuery(query);
 
         return newUserPK;
