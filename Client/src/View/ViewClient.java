@@ -19,6 +19,7 @@ public class ViewClient extends javax.swing.JFrame implements ActionListener {
         this.add(pnlFondo, BorderLayout.CENTER);
         this.pack();
     }
+		
     @Override
     public void actionPerformed(ActionEvent e) {
         //listeners dels jpanels
