@@ -1,8 +1,9 @@
 package src;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Usuari {
+public class Usuari implements Serializable {
     private int idUsuari;
     private String nickName;
     private String email;

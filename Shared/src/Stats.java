@@ -1,6 +1,8 @@
 package src;
 
-public class Stats {
+import java.io.Serializable;
+
+public class Stats implements Serializable {
     private int idStat;
     private int totalPartides;
     private int totalVictories;

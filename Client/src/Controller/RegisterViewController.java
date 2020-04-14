@@ -1,5 +1,6 @@
 package src.Controller;
 
+import src.Message;
 import src.Model.ComprovaClient;
 import src.Model.Network.UserService;
 import src.Usuari;
@@ -42,9 +43,9 @@ public class RegisterViewController implements ActionListener {
 						break;
 					case 5:
 						Usuari registro = new Usuari(view.getName(), view.getEmail(), view.getPassword());
+						Message missatge = new Message(registro, "register");
       			UserService message = new UserService(this);
-						message.sendRegister(registro);
-
+						message.sendRegister(missatge);
 						break;
 					default:
 						JOptionPane.showOptionDialog(new JFrame(), "Hi ha hagut algun error en processar la teva solicitud","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);

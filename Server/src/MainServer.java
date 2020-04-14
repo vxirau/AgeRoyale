@@ -2,7 +2,10 @@ package src;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import src.Controller.ControllerServer;
 import src.Controller.NetworkConfiguration;
+import src.Model.Network.Server;
+import src.View.ViewServer;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -22,6 +25,12 @@ public class MainServer {
             NetworkConfiguration config = gson.fromJson(reader, NetworkConfiguration.class);
             config.ompleStatic();
             System.out.println(NetworkConfiguration.staticIP);
+
+						ViewServer vServer = new ViewServer();
+						Server serv = new Server(vServer);
+            ControllerServer cServer = new ControllerServer(serv,vServer);
+            vServer.serverController(cServer);
+						vServer.setVisible(true);
 
         } catch (IOException e) {
             e.printStackTrace();
