@@ -1,8 +1,10 @@
 package src;
 
-import src.View.ViewClient;
+import src.Controller.RegisterViewController;
+import src.View.ViewRegistre;
 
-import javax.swing.text.View;
+import javax.swing.*;
+import java.io.IOException;
 
 public class MainClient{
 
@@ -10,11 +12,21 @@ public class MainClient{
 
     public static void main(String[] args) {
 
-        System.out.println("prova");
-        new ViewClient().setVisible(true);
-
 				if(login_registre){
-					//obre finestra registre
+          SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                ViewRegistre vista = null;
+                try {
+                    vista = new ViewRegistre();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                RegisterViewController controlador = new RegisterViewController(vista);
+                vista.registerController(controlador);
+                vista.setVisible(true);
+            }
+          });
 				}else{
 					//obre finestra login
 				}

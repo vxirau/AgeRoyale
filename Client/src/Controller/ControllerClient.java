@@ -1,7 +1,6 @@
 package src.Controller;
 
-import src.MainClient;
-import src.View.ViewClient;
+import src.View.ViewRegistre;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -10,11 +9,11 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 public class ControllerClient extends MouseAdapter implements WindowListener {
-    private ViewClient viewClient;
+    private ViewRegistre viewRegistre;
 
 
-    public ControllerClient(ViewClient vClient){
-        this.viewClient = vClient;
+    public ControllerClient(ViewRegistre vClient){
+        this.viewRegistre = vClient;
         //Comunicacio amb el server
     }
 
