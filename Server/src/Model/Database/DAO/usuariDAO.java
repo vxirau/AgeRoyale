@@ -167,13 +167,13 @@ public class usuariDAO {
             if (rs.next()) {
                 int id = rs.getInt("exist");
                 if (id == 1){
-                    return false;
+                    return true;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     public boolean existsRegistre (String nickname, String email){
@@ -183,12 +183,12 @@ public class usuariDAO {
             if (rs.next()) {
                 int id = rs.getInt("exist");
                 if (id == 1){
-                    return false;
+                    return true;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 }
