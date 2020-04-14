@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class UserService {
-  private Socket socket;
+    private Socket socket;
 	private ObjectOutputStream doStream;
 	private RegisterViewController controller;
 
@@ -18,7 +18,7 @@ public class UserService {
 		this.controller = controller;
 	}
 
-	public static void sendRegister(Usuari user) {
+	public void sendRegister(Usuari user) {
 		try {
 			// Establim la connexio amb el servidor i enviem el missatge
 			socket = new Socket(NetworkConfiguration.staticIP, NetworkConfiguration.staticPort);

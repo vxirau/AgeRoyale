@@ -42,7 +42,8 @@ public class RegisterViewController implements ActionListener {
 						break;
 					case 5:
 						Usuari registro = new Usuari(view.getName(), view.getEmail(), view.getPassword());
-      			UserService.sendRegister(registro);
+      			UserService message = new UserService(this);
+						message.sendRegister(registro);
 
 						break;
 					default:
