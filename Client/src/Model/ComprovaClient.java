@@ -23,13 +23,13 @@ public class ComprovaClient {
       boolean check = false;
       String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}";
 
-      if(!emilIsValid(email)){
-        return 1;
-      } else if(!password.equals(repass)){
-        return 2;
-      } else if(name.equals("") && email.equals("") && password.equals("") && repass.equals("")){
+      if(name.equals("") && email.equals("") && password.equals("") && repass.equals("")){
         return 3;
+      } else if(!emilIsValid(email)){
+        return 2;
       } else if(!password.matches(pattern)){
+        return 3;
+      } else if(!password.equals(repass)){
         return 4;
       } else {
         return 5;

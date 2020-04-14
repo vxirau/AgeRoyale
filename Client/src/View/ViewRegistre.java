@@ -58,7 +58,7 @@ public class ViewRegistre extends JFrame implements ActionListener {
 				panelPare.setOpaque(false);
 
 				JPanel jpAuxT = new JPanel(new BorderLayout());
-				JLabel titol = new JLabel("<html><font color='white'>Age Royale</font></html>");
+				JLabel titol = new JLabel("<html><font color='white'>AGE ROYALE</font></html>");
 				titol.setHorizontalAlignment(JLabel.CENTER);
 				jpAuxT.add(titol, BorderLayout.CENTER);
 				jpAuxT.setOpaque(false);
