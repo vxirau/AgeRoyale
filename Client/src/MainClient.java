@@ -1,6 +1,7 @@
 package src;
 
 import src.Controller.RegisterViewController;
+import src.Model.Network.UserService;
 import src.View.ViewRegistre;
 
 import javax.swing.*;
@@ -22,7 +23,8 @@ public class MainClient{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                RegisterViewController controlador = new RegisterViewController(vista);
+                UserService userService = new UserService();
+                RegisterViewController controlador = new RegisterViewController(vista,userService);
                 vista.registerController(controlador);
                 vista.setVisible(true);
             }

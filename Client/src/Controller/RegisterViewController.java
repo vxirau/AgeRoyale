@@ -9,14 +9,20 @@ import src.View.ViewRegistre;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
-public class RegisterViewController implements ActionListener {
+public class RegisterViewController implements ActionListener, WindowListener {
 	private ViewRegistre view;
+	private UserService uService;
 	private Object[] options = {"Entèsos"};
 
 
-    public RegisterViewController(ViewRegistre view) {
+    public RegisterViewController(ViewRegistre view, UserService uService) {
         this.view = view;
+        this.uService = uService;
+        uService.startServerComunication();
+
     }
 
 		public void showMessage(String alerta){
@@ -44,8 +50,7 @@ public class RegisterViewController implements ActionListener {
 					case 5:
 						Usuari registro = new Usuari(view.getName(), view.getEmail(), view.getPassword());
 						Message missatge = new Message(registro, "register");
-      			UserService message = new UserService(this);
-						message.sendRegister(missatge);
+      					uService.sendRegister(missatge);
 						break;
 					default:
 						JOptionPane.showOptionDialog(new JFrame(), "Hi ha hagut algun error en processar la teva solicitud","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
@@ -56,4 +61,39 @@ public class RegisterViewController implements ActionListener {
 			}
 
     }
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		uService.stopServerComunication();
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+
+	}
 }

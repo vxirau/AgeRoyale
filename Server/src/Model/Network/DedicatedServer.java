@@ -2,10 +2,7 @@ package src.Model.Network;
 
 import src.View.ViewServer;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.LinkedList;
 
@@ -14,6 +11,7 @@ public class DedicatedServer extends Thread {
 	private boolean isOn;
 	private Socket sClient;
 	private ObjectInputStream dataInput;
+	private DataOutputStream dataOut;
 	private ObjectOutputStream objectOut;
 	private LinkedList<DedicatedServer> clients;
 	private ViewServer vista;
@@ -45,12 +43,13 @@ public class DedicatedServer extends Thread {
 		try {
 			// creem els canals de comunicacio
 			dataInput = new ObjectInputStream(sClient.getInputStream());
-			objectOut = new ObjectOutputStream(sClient.getOutputStream());
+            objectOut = new ObjectOutputStream(sClient.getOutputStream());
+            dataOut = new DataOutputStream(sClient.getOutputStream());
 			// enviem estat de la grid al client
 			// NO ENVIEM EL MODEL, SINO EL SEU ESTAT, ALLO QUE ES RELLEVANT
 			// PELS CLIENTS (OBSERVAR Grid != GridState)
-			objectOut.writeObject("");
-			while (isOn) {
+			dataOut.writeUTF("hola");
+			/*while (isOn) {
 				// esperem rebre dades del client, es dona quan selecciona
 				// una cella de la graella
 				//in = dataInput.readUTF();
@@ -64,7 +63,7 @@ public class DedicatedServer extends Thread {
 				// aquesta tasca la podriem delegar al servidor, donat que aquest
 				// tambe mante una relacio amb tots els servidors dedicats
 				updateAllClients();
-			}
+			}*/
 		} catch (IOException e1) {
 			// en cas derror aturem el servidor dedicat
 			stopDedicatedServer();
