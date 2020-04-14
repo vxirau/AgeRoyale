@@ -164,6 +164,12 @@ SELECT us.idUser FROM AgeRoyale.usuari as us ORDER BY us.idUser DESC LIMIT 1;
 #remove
 DELETE FROM AgeRoyale.usuari WHERE idUser = 1;
 
+#exists login
+SELECT if(COUNT(*) = 1, us.idUser, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = 'VXGamez' AND us.password = 'contrasenya';
+
+#exist registre
+SELECT if(COUNT(*) = 1, 1, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = 'VGamez' OR us.email = 'victor.xirau@students.salle.url.edu';
+
 ###########################################     PARTIDA    ###############################################################################################
 #get partida from id
 SELECT par.* FROM AgeRoyale.partida AS par WHERE idPartida = 1;
