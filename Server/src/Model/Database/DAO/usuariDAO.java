@@ -84,6 +84,7 @@ public class usuariDAO {
             statsDAO.addStats(stats);
         } else {
             statsDAO.addStats(new Stats(statPK));
+            statsDAO.resetStats(statPK);
         }
 
         if (tropas != null)
@@ -124,5 +125,70 @@ public class usuariDAO {
             e.printStackTrace();
         }
         return ++nextPk;
+    }
+
+    //COMPROVAR EXISTENCIA
+    public Usuari existsLogin (Usuari usr){
+        String query = "SELECT if(COUNT(*) = 1, us.idUser, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = '" + usr.getNickName() + "' AND us.password = '" + usr.getPassword() + "';";
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try {
+            if (rs.next()) {
+                int id = rs.getInt("exist");
+                if (id != -1){
+                    return getUserFromId(id);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Usuari existsLogin (String nickname, String password){
+        String query = "SELECT if(COUNT(*) = 1, us.idUser, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = '" + nickname + "' AND us.password = '" + password + "';";
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try {
+            if (rs.next()) {
+                int id = rs.getInt("exist");
+                if (id != -1){
+                    return getUserFromId(id);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean existsRegistre (Usuari usr){
+        String query = "SELECT if(COUNT(*) = 1, 1, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = '" + usr.getNickName() + "' OR us.email = '" + usr.getEmail() + "';";
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try {
+            if (rs.next()) {
+                int id = rs.getInt("exist");
+                if (id == 1){
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public boolean existsRegistre (String nickname, String email){
+        String query = "SELECT if(COUNT(*) = 1, 1, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = '" + nickname + "' OR us.email = '" + email + "';";
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try {
+            if (rs.next()) {
+                int id = rs.getInt("exist");
+                if (id == 1){
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 }
