@@ -1,49 +1,35 @@
 package src.Controller;
 
+import src.Model.Network.DedicatedServer;
+import src.Model.Network.Server;
+import src.View.ViewServer;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
-public class ControllerServer {
+public class ControllerServer implements ActionListener {
 
-  private ServerSocket serverSocket;
-  private boolean isRunning;
-  private final ArrayList<DedicatedServer> dedicatedServers;
+    private Server server;
+    private ViewServer view;
 
-  public ControllerServer(){
-    this.serverSocket = null;
-    dedicatedServers = new ArrayList<>();
-  }
-
-  public void startServer(){
-    try {
-
-        this.serverSocket = new ServerSocket(NetworkConfiguration.staticPort);
-        this.isRunning = true;
-
-        while (this.isRunning) {
-            System.out.println("Waiting for a client...");
-            Socket socket = this.serverSocket.accept();
-            System.out.println("Client connected");
-            DedicatedServer dServer = new DedicatedServer(socket, dedicatedServers);
-            dedicatedServers.add(dServer);
-            dServer.start();
-        }
-    } catch (IOException e) {
-        System.err.println(e.getMessage());
-    } finally {
-        if (this.serverSocket != null && !this.serverSocket.isClosed()) {
-            try {
-                this.serverSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public ControllerServer(Server server, ViewServer view) {
+        this.server = server;
+        this.view = view;
     }
-  }
 
-  public void stopServer(){
-    isRunning = false;
-  }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+			String botoClicked = ((JButton)e.getSource()).getText();
+			if(botoClicked.equals("Start")){
+				server.startServer();
+			}else if(botoClicked.equals("Stop")){
+				server.stopServer();
+			}
+    }
 }

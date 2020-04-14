@@ -1,6 +1,8 @@
 package src;
 
-public class Tropa {
+import java.io.Serializable;
+
+public class Tropa implements Serializable {
     private int idTropa;
     private int vida;
     private int cost;

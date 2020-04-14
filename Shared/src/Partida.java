@@ -1,9 +1,10 @@
 package src;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Partida {
+public class Partida implements Serializable {
     private int idPartida;
     private Date data;
     private int duracio;
