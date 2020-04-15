@@ -75,25 +75,25 @@ public class usuariDAO {
     }
 
     //AFEGIR INFORMACIO
-    public synchronized int addUser(String nickname, String email, String password, Stats stats, ArrayList<Tropa> tropas, ArrayList<Usuari> amics){
+    public synchronized int addUser(Usuari usuari){
         int newUserPK = nextUserPK();
         int statPK = statsDAO.nextStatPK();
 
-        if (stats != null) {
-            stats.setIdStat(statPK);
-            statsDAO.addStats(stats);
+        if (usuari.getStats() != null) {
+            usuari.getStats().setIdStat(statPK);
+            statsDAO.addStats(usuari.getStats());
         } else {
             statsDAO.addStats(new Stats(statPK));
             statsDAO.resetStats(statPK);
         }
 
-        if (tropas != null)
-            usuariTropaDAO.addTropesToUsuari(newUserPK, tropas);
+        if (usuari.getTropes() != null)
+            usuariTropaDAO.addTropesToUsuari(newUserPK, usuari.getTropes());
 
-        if (amics != null)
-            amicDAO.addAmic(newUserPK, amics);
+        if (usuari.getAmics() != null)
+            amicDAO.addAmic(newUserPK, usuari.getAmics());
 
-        String query = "INSERT INTO AgeRoyale.usuari (nickname, email, password, idStats) VALUE ('" + nickname + "', '" + email + "', '" + password + "', " + statPK + ");";
+        String query = "INSERT INTO AgeRoyale.usuari (nickname, email, password, idStats) VALUE ('" + usuari.getNickName() + "', '" + usuari.getEmail() + "', '" + usuari.getPassword() + "', " + statPK + ");";
         DBConnector.getInstance().insertQuery(query);
 
         return newUserPK;
