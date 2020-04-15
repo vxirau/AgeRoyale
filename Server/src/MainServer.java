@@ -25,6 +25,7 @@ public class MainServer {
             NetworkConfiguration config = gson.fromJson(reader, NetworkConfiguration.class);
             config.ompleStatic();
             System.out.println(NetworkConfiguration.staticIP);
+            System.out.println("SERVER");
 
 						ViewServer vServer = new ViewServer();
 						Server serv = new Server(vServer);
