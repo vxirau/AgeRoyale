@@ -10,11 +10,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class usuariDAO {
-    private usuariTropaDAO usuariTropaDAO;
-    private tropesDAO tropesDAO;
-    private statsDAO statsDAO;
-    private amicDAO amicDAO;
-    private partidaDAO partidaDAO;
+    private usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
+    private tropesDAO tropesDAO = new tropesDAO();
+    private statsDAO statsDAO = new statsDAO();
+    private amicDAO amicDAO = new amicDAO();
+    private partidaDAO partidaDAO = new partidaDAO();
 
     //OBTENIR INFORMACIO
     public ArrayList<Usuari> getAllUsers(){

@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class tropesDAO {
-    private usuariTropaDAO usuariTropaDAO;
+    private usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
 
     //OBTENIR
     public ArrayList<Tropa> getAllTropes (){

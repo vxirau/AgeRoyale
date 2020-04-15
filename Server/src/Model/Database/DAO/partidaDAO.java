@@ -9,7 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class partidaDAO {
-    private usuariDAO usuariDAO;
+    private usuariDAO usuariDAO = new usuariDAO();
+
     //OBTENIR INFORMACIO
     public Partida getPartida(int idPartida){
         Partida partida = new Partida();

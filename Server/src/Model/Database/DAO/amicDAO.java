@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class amicDAO {
-    private statsDAO statsDAO;
-    private tropesDAO tropesDAO;
+    private statsDAO statsDAO = new statsDAO();
+    private tropesDAO tropesDAO = new tropesDAO();
 
     //OBTENIR INFORMACIO
     public ArrayList<Usuari> getAmics(int idUser){
