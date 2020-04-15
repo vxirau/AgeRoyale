@@ -1,7 +1,9 @@
 package src;
 
+import src.Controller.LoginViewController;
 import src.Controller.RegisterViewController;
 import src.Model.Network.UserService;
+import src.View.LoginView;
 import src.View.ViewRegistre;
 
 import javax.swing.*;
@@ -9,7 +11,7 @@ import java.io.IOException;
 
 public class MainClient{
 
-	private static boolean login_registre = true;
+	private static boolean login_registre = false;
 
     public static void main(String[] args) {
 
@@ -30,9 +32,16 @@ public class MainClient{
                 vista.setVisible(true);
             }
           });
-				}else{
-					//obre finestra login
-				}
+				}else {
+				    LoginView loginview = null;
+                    loginview = new LoginView();
+                    LoginViewController controller = new LoginViewController(loginview);
+                    loginview.loginViewsetListener(controller);
+                    loginview.setVisible(true);
+
+
+                }
+
 
 
     }
