@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class MainClient{
 
-	private static boolean login_registre = false;
+	private static boolean login_registre = true;
 
     public static void main(String[] args) {
 

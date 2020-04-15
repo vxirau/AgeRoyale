@@ -62,7 +62,7 @@ public class DedicatedServer extends Thread {
 				usuariDAO uDAO = new usuariDAO();
 				if(!uDAO.existsRegistre(u)){
 					objectOut.writeObject(new Message(null, "REGISTER_OK"));
-
+					uDAO.addUser(u);
 				}else{
 					objectOut.writeObject(new Message(null, "REGISTER_KO"));
 				}

@@ -9,8 +9,8 @@ import java.sql.SQLException;
 
 public class DBConnector {
     private static String userName = "root";
-    private static String password = "contrasenya";
-    private static String db = "ageroyale";
+    private static String password = "timador";
+    private static String db = "AgeRoyale";
     private static int port = 3306;
     private static String url = "jdbc:mysql://localhost";
     private static Connection conn;
@@ -19,7 +19,7 @@ public class DBConnector {
 
     private DBConnector() {
         this.url += ":"+port+"/";
-        this.url += db;
+        this.url += db + "?verifyServerCertificate=false&useSSL=false&serverTimezone=UTC";
         this.instance = this;
     }
 
