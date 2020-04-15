@@ -1,5 +1,7 @@
 package src.Model;
 
+import src.Model.Database.DAO.usuariDAO;
+
 import java.util.regex.Pattern;
 
 public class ComprovaClient {
@@ -36,4 +38,15 @@ public class ComprovaClient {
       }
 
     }
+
+    public static int checkLogin(String name, String password) {
+        usuariDAO u = new usuariDAO();
+        //Existeix el login i la contrasenya
+        if (u.existsLogin(name, password) != null) {
+            return 1;
+        }
+        return 2;
+    }
 }
+
+
