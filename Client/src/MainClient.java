@@ -30,8 +30,9 @@ public class MainClient{
             }
           });
 				}else{
-					//obre finestra login
+                    new LoginView().setVisible(true);
 				}
+
 
 
     }
