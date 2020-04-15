@@ -23,6 +23,7 @@ public class MainClient{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
                 UserService userService = new UserService();
                 RegisterViewController controlador = new RegisterViewController(vista,userService);
                 vista.registerController(controlador);

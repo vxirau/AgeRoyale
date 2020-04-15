@@ -87,4 +87,18 @@ public class Usuari implements Serializable {
     public void setAmics(ArrayList<Usuari> amics) {
         this.amics = amics;
     }
+
+
+    @Override
+    public String toString() {
+        return "Usuari{" +
+                "idUsuari=" + idUsuari +
+                ", nickName='" + nickName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", stats=" + stats +
+                ", tropes=" + tropes +
+                ", amics=" + amics +
+                '}';
+    }
 }

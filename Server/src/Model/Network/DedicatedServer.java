@@ -1,5 +1,8 @@
 package src.Model.Network;
 
+import src.Message;
+import src.Model.Database.DAO.usuariDAO;
+import src.Usuari;
 import src.View.ViewServer;
 
 import java.io.*;
@@ -43,13 +46,31 @@ public class DedicatedServer extends Thread {
 		try {
 			// creem els canals de comunicacio
 			dataInput = new ObjectInputStream(sClient.getInputStream());
-            objectOut = new ObjectOutputStream(sClient.getOutputStream());
-            dataOut = new DataOutputStream(sClient.getOutputStream());
+			objectOut = new ObjectOutputStream(sClient.getOutputStream());
+			//dataOut = new DataOutputStream(sClient.getOutputStream());
+
 			// enviem estat de la grid al client
 			// NO ENVIEM EL MODEL, SINO EL SEU ESTAT, ALLO QUE ES RELLEVANT
 			// PELS CLIENTS (OBSERVAR Grid != GridState)
-			dataOut.writeUTF("hola");
-			/*while (isOn) {
+			Message m = (Message) dataInput.readObject();
+			if (m.getType().equals("register")){
+				Usuari u = (Usuari)m.getObject();
+
+				System.out.println(u.toString());
+
+				objectOut.reset();
+				usuariDAO uDAO = new usuariDAO();
+				if(!uDAO.existsRegistre(u)){
+					objectOut.writeObject(new Message(null, "REGISTER_OK"));
+
+				}else{
+					objectOut.writeObject(new Message(null, "REGISTER_KO"));
+				}
+			}
+
+			// NO ENVIEM EL MODEL, SINO EL SEU ESTAT, ALLO QUE ES RELLEVANT
+			// PELS CLIENTS (OBSERVAR Grid != GridState)
+			//while (isOn) {
 				// esperem rebre dades del client, es dona quan selecciona
 				// una cella de la graella
 				//in = dataInput.readUTF();
@@ -62,9 +83,9 @@ public class DedicatedServer extends Thread {
 				// actualitzem tots els clients (veure el metode privat mes avall)
 				// aquesta tasca la podriem delegar al servidor, donat que aquest
 				// tambe mante una relacio amb tots els servidors dedicats
-				updateAllClients();
-			}*/
-		} catch (IOException e1) {
+				//updateAllClients();
+			//}
+		} catch (IOException | ClassNotFoundException e1) {
 			// en cas derror aturem el servidor dedicat
 			stopDedicatedServer();
 			// eliminem el servidor dedicat del conjunt de servidors dedicats
@@ -83,16 +104,21 @@ public class DedicatedServer extends Thread {
 		for (DedicatedServer dServer : clients) {
 			// recuperem el canal de sortida del servidor dedicat
 			// per tal de contactar amb el client
-			outStream = dServer.getOutChannel();
-			try {
-				// netejem el canal de sortida
-				outStream.reset();
-				// NO ENVIEM EL MODEL, SINO EL SEU ESTAT, ALLO QUE ES RELLEVANT
-				// PELS CLIENTS (OBSERVAR Grid != GridState)
-				outStream.writeObject("");
-			} catch (IOException e) {
-				e.printStackTrace();
+			if(dServer!=null){
+				outStream = dServer.getOutChannel();
+				try {
+					// netejem el canal de sortida
+					outStream.reset();
+					// NO ENVIEM EL MODEL, SINO EL SEU ESTAT, ALLO QUE ES RELLEVANT
+					// PELS CLIENTS (OBSERVAR Grid != GridState)
+					//dataOut.writeUTF("hola");
+					outStream.writeObject(new Message(null, "pilotes"));
+					//outStream.writeObject("");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
+
 		}
 	}
 

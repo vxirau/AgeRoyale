@@ -12,6 +12,7 @@ public class NetworkConfiguration {
 		private String ip;
 		private int port;
 
+		public static boolean Setup=false;
 		public static String staticIP;
 		public static int staticPort;
 
