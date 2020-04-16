@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class tropesDAO {
-    private usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
 
     //OBTENIR
     public ArrayList<Tropa> getAllTropes (){
@@ -95,12 +94,16 @@ public class tropesDAO {
 
     //BORRAR
     public void removeTropa (int idTropa){
+        usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
+
         usuariTropaDAO.onRemoveTropa(idTropa);
         String query = "DELETE FROM AgeRoyale.tropa WHERE idTropa = " + idTropa + ";";
         DBConnector.getInstance().deleteQuery(query);
     }
 
     public void removeTropa (Tropa tropa){
+        usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
+
         usuariTropaDAO.onRemoveTropa(tropa);
         String query = "DELETE FROM AgeRoyale.tropa WHERE idTropa = " + tropa.getIdTropa() + ";";
         DBConnector.getInstance().deleteQuery(query);

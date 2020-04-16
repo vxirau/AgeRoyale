@@ -9,10 +9,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class partidaDAO {
-    private usuariDAO usuariDAO = new usuariDAO();
 
     //OBTENIR INFORMACIO
     public Partida getPartida(int idPartida){
+        usuariDAO usuariDAO = new usuariDAO();
         Partida partida = new Partida();
         String query = "SELECT par.* FROM AgeRoyale.partida AS par WHERE idPartida = " + idPartida + ";";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
@@ -31,6 +31,7 @@ public class partidaDAO {
     }
 
     public ArrayList<Partida> getPartidesFromUserId (Usuari usuari){
+        usuariDAO usuariDAO = new usuariDAO();
         ArrayList<Partida> partides = new ArrayList<>();
         String query = "SELECT par.* FROM AgeRoyale.partida AS par WHERE player1 = " + usuari.getIdUsuari() + " OR player2 = " + usuari.getIdUsuari() + " ;";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
@@ -49,6 +50,7 @@ public class partidaDAO {
     }
 
     public ArrayList<Partida> getAllPartides (){
+        usuariDAO usuariDAO = new usuariDAO();
         ArrayList<Partida> partides = new ArrayList<>();
         String query = "SELECT par.* FROM AgeRoyale.partida AS par;";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);

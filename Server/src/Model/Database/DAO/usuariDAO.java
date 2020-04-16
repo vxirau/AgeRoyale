@@ -2,7 +2,6 @@ package src.Model.Database.DAO;
 
 import src.Model.Database.DBConnector;
 import src.Stats;
-import src.Tropa;
 import src.Usuari;
 
 import java.sql.ResultSet;
@@ -10,15 +9,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class usuariDAO {
-    private usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
-    private tropesDAO tropesDAO = new tropesDAO();
-    private statsDAO statsDAO = new statsDAO();
-    private amicDAO amicDAO = new amicDAO();
-    private partidaDAO partidaDAO = new partidaDAO();
 
     //OBTENIR INFORMACIO
     public ArrayList<Usuari> getAllUsers(){
+        tropesDAO tropesDAO = new tropesDAO();
+        statsDAO statsDAO = new statsDAO();
+        amicDAO amicDAO = new amicDAO();
         ArrayList<Usuari> usuaris = new ArrayList<>();
+
         String query = "SELECT us.* FROM AgeRoyale.usuari AS us;";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
         try{
@@ -41,6 +39,9 @@ public class usuariDAO {
     }
 
     public Usuari getUserFromId(Integer idUser) {
+        tropesDAO tropesDAO = new tropesDAO();
+        statsDAO statsDAO = new statsDAO();
+        amicDAO amicDAO = new amicDAO();
         Usuari usuari = new Usuari();
         String query = "SELECT us.* FROM AgeRoyale.usuari as us WHERE idUser = " + idUser + ";";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
@@ -62,6 +63,10 @@ public class usuariDAO {
 
     //ACTUALITZAR INFORMACIO
     public void updateUsuari (Usuari usuari){
+        statsDAO statsDAO = new statsDAO();
+        usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
+        amicDAO amicDAO = new amicDAO();
+
         statsDAO.updateStats(usuari.getStats());
 
         usuariTropaDAO.onRemoveUsuari(usuari);
@@ -76,6 +81,10 @@ public class usuariDAO {
 
     //AFEGIR INFORMACIO
     public synchronized int addUser(Usuari usuari){
+        statsDAO statsDAO = new statsDAO();
+        usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
+        amicDAO amicDAO = new amicDAO();
+
         int newUserPK = nextUserPK();
         int statPK = statsDAO.nextStatPK();
 
@@ -101,6 +110,11 @@ public class usuariDAO {
 
     //BORRAR INFORMACIO
     public void removeUsuari(Usuari usuari){
+        statsDAO statsDAO = new statsDAO();
+        usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
+        amicDAO amicDAO = new amicDAO();
+        partidaDAO partidaDAO = new partidaDAO();
+
         amicDAO.removeAmics(usuari);
         usuariTropaDAO.onRemoveUsuari(usuari);
         statsDAO.removeStats(usuari);

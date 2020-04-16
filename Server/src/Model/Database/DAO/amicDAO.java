@@ -8,12 +8,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class amicDAO {
-    private statsDAO statsDAO = new statsDAO();
-    private tropesDAO tropesDAO = new tropesDAO();
 
     //OBTENIR INFORMACIO
     public ArrayList<Usuari> getAmics(int idUser){
+        statsDAO statsDAO = new statsDAO();
+        tropesDAO tropesDAO = new tropesDAO();
         ArrayList<Usuari> amics = new ArrayList<>();
+
         String query = "SELECT us.* FROM AgeRoyale.usuari as us, AgeRoyale.amic as am WHERE (us.idUser = am.id_u1 and " + idUser + " = am.id_u2) OR (us.idUser = am.id_u2 and " + idUser + " = am.id_u1);";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
 
@@ -38,7 +39,10 @@ public class amicDAO {
     }
 
     public ArrayList<Usuari> getAmics(Usuari user){
+        statsDAO statsDAO = new statsDAO();
+        tropesDAO tropesDAO = new tropesDAO();
         ArrayList<Usuari> amics = new ArrayList<>();
+
         String query = "SELECT us.* FROM AgeRoyale.usuari as us, AgeRoyale.amic as am WHERE (us.idUser = am.id_u1 and " + user.getIdUsuari() + " = am.id_u2) OR (us.idUser = am.id_u2 and " + user.getIdUsuari() + " = am.id_u1);";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
 
