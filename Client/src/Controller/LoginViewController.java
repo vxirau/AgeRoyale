@@ -15,8 +15,12 @@ public class LoginViewController implements ActionListener {
     private LoginView view;
     private UserService uService;
 
-    public LoginViewController(LoginView view) {
+    public LoginViewController(LoginView view, UserService userService) {
+
         this.view = view;
+        this.uService = userService;
+        userService.startServerComunication();
+
     }
 
     @Override
@@ -24,7 +28,8 @@ public class LoginViewController implements ActionListener {
         String boto = ((JButton) e.getSource()).getText();
 
         if(boto.equals("INICIAR SESSIÓ")){
-            int estat = ComprovaClient.checkLogin(view.getName(), view.getPassword());
+            System.out.println("HOLA");
+            int estat = ControllerServer.checkLogin(view.getName(), view.getPassword());
             switch (estat){
                 case 1:
                     System.out.println("Existeix usuari");

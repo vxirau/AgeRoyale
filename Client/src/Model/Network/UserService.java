@@ -100,4 +100,8 @@ public class UserService extends Thread{
 			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
 		}
 	}
+
+
+
+
 }

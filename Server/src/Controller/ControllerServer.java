@@ -1,5 +1,6 @@
 package src.Controller;
 
+import src.Model.Database.DAO.usuariDAO;
 import src.Model.Network.DedicatedServer;
 import src.Model.Network.Server;
 import src.View.ViewServer;
@@ -31,5 +32,15 @@ public class ControllerServer implements ActionListener {
 			}else if(botoClicked.equals("Stop")){
 				server.stopServer();
 			}
+    }
+
+
+    public static int checkLogin(String name, String password) {
+        usuariDAO u = new usuariDAO();
+        //Existeix el login i la contrasenya
+        if (u.existsLogin(name, password) != null) {
+            return 1;
+        }
+        return 2;
     }
 }

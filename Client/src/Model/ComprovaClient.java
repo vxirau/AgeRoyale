@@ -39,14 +39,6 @@ public class ComprovaClient {
 
     }
 
-    public static int checkLogin(String name, String password) {
-        usuariDAO u = new usuariDAO();
-        //Existeix el login i la contrasenya
-        if (u.existsLogin(name, password) != null) {
-            return 1;
-        }
-        return 2;
-    }
 }
 
 
