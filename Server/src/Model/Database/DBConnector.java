@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class DBConnector {
     private static String userName = "root";
-    private static String password = "Ppam8212_mysql";
+    private static String password = "password";
     private static String db = "AgeRoyale";
     private static int port = 3306;
     private static String url = "jdbc:mysql://localhost";
