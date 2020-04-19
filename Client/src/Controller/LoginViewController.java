@@ -19,8 +19,9 @@ public class LoginViewController implements ActionListener {
 
         this.view = view;
         this.uService = userService;
-        userService.startServerComunication();
-
+				if(!userService.serviceStarted()){
+					userService.startServerComunication();
+				}
     }
 
     @Override
@@ -39,8 +40,17 @@ public class LoginViewController implements ActionListener {
                     break;
             }
         } else if(boto.equals("Registra't ara")){
-            System.out.println("holi");
+          SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+	            ViewRegistre rView = null;
+							rView = new ViewRegistre();
+							RegisterViewController controlador = new RegisterViewController(rView,uService);
+							rView.registerController(controlador);
+							view.setVisible(false);
+	            rView.setVisible(true);
+            }
+          });
         }
     }
 }
-

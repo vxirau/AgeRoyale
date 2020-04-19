@@ -4,6 +4,7 @@ import src.Message;
 import src.Model.ComprovaClient;
 import src.Model.Network.UserService;
 import src.Usuari;
+import src.View.LoginView;
 import src.View.ViewRegistre;
 
 import javax.swing.*;
@@ -21,8 +22,9 @@ public class RegisterViewController implements ActionListener, WindowListener {
     public RegisterViewController(ViewRegistre view, UserService uService) {
         this.view = view;
         this.uService = uService;
-        uService.startServerComunication();
-
+				if(!uService.serviceStarted()){
+					uService.startServerComunication();
+				}
     }
 
 		public void showMessage(String alerta){
@@ -32,7 +34,7 @@ public class RegisterViewController implements ActionListener, WindowListener {
 		public void actionPerformed(ActionEvent event) {
 			String boto = ((JButton) event.getSource()).getText();
 
-			if(boto.equals("Registra't")){
+			if(boto.equals("REGISTRAR-SE")){
 				int mal = ComprovaClient.checkRegistre(view.getName(), view.getEmail(), view.getPassword(), view.getRePass());
 				switch(mal){
 					case 1:
@@ -45,21 +47,34 @@ public class RegisterViewController implements ActionListener, WindowListener {
 						JOptionPane.showOptionDialog(new JFrame(), "La contrasenya no és vàlida. Ha tenir almenys:\n - Una majúscula\n - Una minúscula\n - 8 caràcters\n - 1 valor numèric","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
 						break;
 					case 4:
-					JOptionPane.showOptionDialog(new JFrame(), "Les contrasenyes no coincideixen","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+						JOptionPane.showOptionDialog(new JFrame(), "Les contrasenyes no coincideixen","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
 						break;
 					case 5:
+						uService.setRegisterView(view);
 						Usuari registro = new Usuari(view.getName(), view.getEmail(), view.getPassword());
 						Message missatge = new Message(registro, "register");
       					uService.sendRegister(missatge);
 						break;
 					default:
-						JOptionPane.showOptionDialog(new JFrame(), "Hi ha hagut algun error en processar la teva solicitud","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+						JOptionPane.showOptionDialog(new JFrame(), "Hi ha hagut algún error en processar la teva solicitud","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
 						break;
 				}
-			}else{
-      	System.out.println("pa tu PUTA casa");
-			}
+			}else if(boto.equals("ATRASH")){
+				SwingUtilities.invokeLater(new Runnable() {
+          @Override
+          public void run() {
+						LoginView lview = null;
+						lview = new LoginView();
+						LoginViewController controller = new LoginViewController(lview, uService);
+						lview.loginViewsetListener(controller);
+						view.setVisible(false);
+						lview.setVisible(true);
+					}
+				});
 
+			}else{
+				System.out.println("pa tu PUTA casa");
+			}
     }
 
 	@Override

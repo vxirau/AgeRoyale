@@ -13,155 +13,172 @@ import java.io.IOException;
 public class ViewRegistre extends JFrame implements ActionListener {
 
 
-		private JTextField loginText;
-		private JTextField passText;
-		private JTextField passConfirmText;
-		private JTextField emailText;
+		private JPanel jpPare;
+		private JTextField jtfusername;
+		private JTextField jtfpassword;
+		private JTextField jtfpassword2;
+		private JTextField jtfCorreu;
+		private JPanel jpRegisterView;
 		private JButton botoRegistre;
-
-    public ViewRegistre() throws IOException {
-
-
-				/*this.setContentPane(new JPanel() {
-					@Override
-					public void paintComponent(Graphics g){
-							System.out.println("paintComponent");
-							Dimension tamanio = getSize();
-              ImageIcon imagenFondo = new ImageIcon(getClass().
-											getResource("/resources/fondo-rojo-oscuro-marron_28629-798.png"));
-							g.drawImage(imagenFondo.getImage(), 0, 0,
-											tamanio.width, tamanio.height, null);
-							setOpaque(false);
-							super.paintComponent(g);
-					}
-				});
-
-      	ImagePanel image = new ImagePanel(new ImageIcon(getClass().
-              getResource("/resources/fondo-rojo-oscuro-marron_28629-798.png")).getImage());*/
-
-				/*JPanel panelPare=new JPanel(){
-					@Override
-	        protected void paintComponent(Graphics g) {
-	            super.paintComponent(g);
-	            // This is faking transparency, so the panelPareground color
-	            // will be see through
-	            Graphics2D g2d = (Graphics2D) g.create();
-	            Composite old = g2d.getComposite();
-	            g2d.setComposite(AlphaComposite.SrcOver.derive(0.5f));
-	            g2d.fillRect(0, 0, getWidth(), getHeight());
-	            g2d.setComposite(old);
-	        }
-				};*/
-
-				JPanel panelPare = new JPanel();
-				panelPare.setLayout(new GridLayout(9,1));
-				panelPare.setOpaque(false);
-
-				JPanel jpAuxT = new JPanel(new BorderLayout());
-				JLabel titol = new JLabel("<html><font color='white'>AGE ROYALE</font></html>");
-				titol.setHorizontalAlignment(JLabel.CENTER);
-				jpAuxT.add(titol, BorderLayout.CENTER);
-				jpAuxT.setOpaque(false);
+		private JButton jbRegistrat;
+		private JButton jbAtras;
 
 
-				JPanel jpAuxLogo = new JPanel();
-				jpAuxLogo.add(new JLabel(new ImageIcon(getClass().getResource("/resources/escut.png"))));
-				jpAuxLogo.setOpaque(false);
-				jpAuxLogo.setPreferredSize(new Dimension(50,50));
+		public ViewRegistre(){
+				setTitle("Register");
+				setLocationRelativeTo(null);
+				setResizable(false);
 
+				initComponents();
+				setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-				JPanel margen[] = new JPanel[15];
-				for(int i=0; i<15 ;i++){
-					margen[i] = new JPanel();
-					margen[i].setOpaque(false);
-				}
-
-				JPanel jpAux1 = new JPanel(new FlowLayout());
-				jpAux1.add(new JLabel("<html><font color='white'>"+ Utils.ferEspais(10) +" Nom d'usuari:"+ Utils.ferEspais(2) +"</font></html>"), BorderLayout.LINE_START);
-				loginText = new JTextField();
-			  loginText.setColumns(10);
-				jpAux1.add(loginText);
-				jpAux1.setOpaque(false);
-
-				JPanel jpAux2 = new JPanel(new FlowLayout());
-				jpAux2.add(new JLabel("<html><font color='white'>"+ Utils.ferEspais(21) +" Correu:"+ Utils.ferEspais(2) +"</font></html>"), BorderLayout.LINE_START);
-				emailText = new JTextField();
-			  emailText.setColumns(10);
-				jpAux2.add(emailText);
-				jpAux2.setOpaque(false);
-
-				JPanel jpAux3 = new JPanel(new FlowLayout());
-				jpAux3.add(new JLabel("<html><font color='white'>"+ Utils.ferEspais(12) +" Contrasenya:"+ Utils.ferEspais(2) +"</font></html>"), BorderLayout.LINE_START);
-				passText = new JPasswordField();
-			  passText.setColumns(10);
-				jpAux3.add(passText);
-				jpAux3.setOpaque(false);
-
-				JPanel jpAux5 = new JPanel(new FlowLayout());
-				jpAux5.add(new JLabel("<html><font color='white'>Repeteix Contrasenya:"+ Utils.ferEspais(1) +"</font></html>"), BorderLayout.LINE_START);
-				passConfirmText = new JPasswordField();
-			  passConfirmText.setColumns(10);
-				jpAux5.add(passConfirmText);
-				jpAux5.setOpaque(false);
-
-
-				JPanel jpAux4 = new JPanel(new GridLayout(3,3));
-				jpAux4.add(margen[1]);
-				jpAux4.add(margen[2]);
-				jpAux4.add(margen[3]);
-				jpAux4.add(margen[4]);
-				botoRegistre = new JButton("Registra't");
-				jpAux4.add(botoRegistre);
-				jpAux4.add(margen[5]);
-				jpAux4.add(margen[6]);
-				jpAux4.add(margen[7]);
-				jpAux4.add(margen[8]);
-				jpAux4.setOpaque(false);
-
-
-				panelPare.add(jpAuxT);
-				panelPare.add(jpAuxLogo);
-				panelPare.add(margen[0]);
-				panelPare.add(jpAux1);
-				panelPare.add(jpAux2);
-				panelPare.add(jpAux3);
-				panelPare.add(jpAux5);
-				panelPare.add(jpAux4);
-
-
-				//this.getContentPane().add(panelPare);
-				this.setContentPane(panelPare);
-				this.setBackground(Color.BLACK);
-    			this.setTitle("AgeRoyale - C10");
-    			this.setLocationRelativeTo(null);
-				this.setResizable(false);
-        		this.setSize(450, 800);
-        		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        //listeners dels jpanels
-    }
-
-		public void registerController(ActionListener controlador) {
-			botoRegistre.addActionListener(controlador);
 		}
 
+		private void initComponents() {
+				colocarPanel();
+				colocarElements();
+		}
+
+		private void colocarPanel(){
+				jpPare = new JPanel();
+				jpPare.setLayout(null);
+				jpPare.setOpaque(true);
+				this.getContentPane().add(jpPare);
+		}
+
+		private void colocarElements() {
+
+
+				JLabel jlTitol = new JLabel();
+				jlTitol.setText("AGE ROYALE");
+				jlTitol.setBounds(85, 30, 300, 80);
+				jlTitol.setHorizontalAlignment(SwingConstants.CENTER);
+				jlTitol.setOpaque(false);
+				jlTitol.setForeground(Color.WHITE);
+				jlTitol.setFont(new Font("Herculanum", Font.BOLD, 50));
+				jpPare.add(jlTitol);
+
+				ImageIcon imagen = new ImageIcon(this.getClass().getResource("/resources/escut.png"));
+				JLabel jlIcon = new JLabel(imagen);
+				jlIcon.setBounds(190, 115, 100, 100);
+				jpPare.add(jlIcon);
+
+				JLabel jlText1 = new JLabel();
+				jlText1.setText("REGISTRA'T");
+				jlText1.setBounds(70, 240, 200, 80);
+				jlText1.setOpaque(false);
+				jlText1.setForeground(Color.WHITE);
+				jlText1.setFont(new Font("Herculanum", 0, 30));
+				jpPare.add(jlText1);
+
+				JLabel jlText2 = new JLabel();
+				jlText2.setText("Nom d'usuari:");
+				jlText2.setBounds(70, 280, 200, 80);
+				jlText2.setOpaque(false);
+				jlText2.setForeground(Color.WHITE);
+				jlText2.setFont(new Font("Herculanum", 0, 15));
+				jpPare.add(jlText2);
+
+				jtfusername = new JTextField();
+				jtfusername.setBounds(70, 330, 310, 50);
+				jpPare.add(jtfusername);
+
+				JLabel jlTextCorreu = new JLabel();
+				jlTextCorreu.setText("Correu electrònic:");
+				jlTextCorreu.setBounds(70, 360, 200, 80); //+80
+				jlTextCorreu.setOpaque(false);
+				jlTextCorreu.setForeground(Color.WHITE);
+				jlTextCorreu.setFont(new Font("Herculanum", 0, 15));
+				jpPare.add(jlTextCorreu);
+
+				jtfCorreu = new JTextField();
+				jtfCorreu.setBounds(70, 410, 310, 50); //+50
+				jpPare.add(jtfCorreu);
+
+				JLabel jlcontra = new JLabel();
+				jlcontra.setText("Contrasenya:");
+				jlcontra.setBounds(70, 440, 200, 80);
+				jlcontra.setOpaque(false);
+				jlcontra.setForeground(Color.WHITE);
+				jlcontra.setFont(new Font("Herculanum", 0, 15));
+				jpPare.add(jlcontra);
+
+				jtfpassword = new JPasswordField();
+				jtfpassword.setBounds(70, 490, 310, 50);
+				jpPare.add(jtfpassword);
+
+				JLabel jlText4 = new JLabel();
+				jlText4.setText("Repeteix la contrasenya:");
+				jlText4.setBounds(70, 520, 200, 80);
+				jlText4.setOpaque(false);
+				jlText4.setForeground(Color.WHITE);
+				jlText4.setFont(new Font("Herculanum", 0, 15));
+				jpPare.add(jlText4);
+
+				jtfpassword2 = new JPasswordField();
+				jtfpassword2.setBounds(70, 570, 310, 50);
+				jpPare.add(jtfpassword2);
+
+				botoRegistre = new JButton();
+				botoRegistre.setText("REGISTRAR-SE");
+				botoRegistre.setEnabled(true);
+				botoRegistre.setBounds(130, 660, 200, 40);
+				botoRegistre.setFont(new Font("Herculanum", Font.BOLD, 20));
+				botoRegistre.setBackground(Color.decode("#FEAB24"));
+				botoRegistre.setOpaque(true);
+				jpPare.add(botoRegistre);
+
+				//setBounds(x, y, width, height)
+				jbAtras = new JButton();
+				jbAtras.setText("ATRASH");
+				jbAtras.setBounds(130, 710, 200, 35);
+				jbAtras.setOpaque(false);
+				jbAtras.setForeground(Color.WHITE);
+				jbAtras.setContentAreaFilled(false);
+				jbAtras.setBorderPainted(false);
+				jbAtras.setFont(new Font("Helvetica", Font.BOLD, 15));
+				jpPare.add(jbAtras);
+
+				ImageIcon imagen2 = new ImageIcon(this.getClass().getResource("/resources/fondo-rojo-oscuro-marron_28629-798.png"));
+				Icon icono = new ImageIcon(imagen2.getImage().getScaledInstance(450, 800, Image.SCALE_DEFAULT));
+				JLabel fondo = new JLabel();
+				fondo.setIcon(icono);
+				getLayeredPane().add(fondo, JLayeredPane.FRAME_CONTENT_LAYER);
+				fondo.setBounds(0, 0, 450, 800);
+				jpPare.add(fondo);
+
+				setSize(450, 800);
+
+				this.setContentPane(jpPare);
+
+		}
+
+
 		public String getName(){
-				return loginText.getText();
+			return jtfusername.getText().toString();
 		}
 
 		public String getEmail(){
-			return emailText.getText();
+			return jtfCorreu.getText().toString();
 		}
 
 		public String getPassword(){
-			return passText.getText();
+			return jtfpassword.getText().toString();
 		}
 
 		public String getRePass(){
-			return passConfirmText.getText();
+			return jtfpassword2.getText().toString();
+		}
+
+
+	  @Override
+	  public void actionPerformed(ActionEvent e) {
+
+	  }
+
+		public void registerController(ActionListener controlador) {
+			botoRegistre.addActionListener(controlador);
+			jbAtras.addActionListener(controlador);
 		}
 
 }

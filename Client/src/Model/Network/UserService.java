@@ -2,10 +2,13 @@ package src.Model.Network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import src.Controller.LoginViewController;
 import src.Controller.NetworkConfiguration;
 import src.Controller.RegisterViewController;
 import src.Message;
 import src.Usuari;
+import src.View.LoginView;
+import src.View.ViewRegistre;
 
 import javax.swing.*;
 import java.io.*;
@@ -23,12 +26,14 @@ public class UserService extends Thread{
 	private Object[] options = {"Entèsos"};
   	private Path current = Paths.get("./Server/resources/config.json");
   	private String arxiu = current.toAbsolutePath().toString();
+    private ViewRegistre vregistre;
+
+
 
 
 	public UserService() {
 		try {
 			this.isOn = false;
-			// connectem amb el servidor i obrim els canals de comunicacio
 			if(!NetworkConfiguration.Setup){
 				BufferedReader reader = new BufferedReader(new FileReader(arxiu));
 				Gson gson = new GsonBuilder().create();
@@ -47,10 +52,15 @@ public class UserService extends Thread{
 		}
 	}
 
+	public void setRegisterView(ViewRegistre vregistre){
+		this.vregistre = vregistre;
+	}
+
 	public void startServerComunication() {
 		// iniciem la comunicacio amb el servidor
 		isOn = true;
 		this.start();
+
 	}
 
 	public void stopServerComunication() {
@@ -63,23 +73,31 @@ public class UserService extends Thread{
 		JOptionPane.showOptionDialog(new JFrame(), alerta,"Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
 	}
 
+	public boolean serviceStarted(){
+		return isOn;
+	}
+
 
 	public void run() {
 		//while (isOn) {
 			try {
-				// escolta les actualizacions de lestat del model
-				// que envia el servidor quan algun client fa clic
-				// a alguna casella
 				Message jelow = (Message) doInput.readObject();
 				System.out.println(jelow.getType());
-
-				// actualiza la vista.
-				// Tambe es podria delegar la tasca dactualizar la vista
-				// al controlador.
-				//view.updateGrid(p.getMatrix());
+				if(jelow.getType().equals("REGISTER_OK")){
+					JOptionPane.showOptionDialog(new JFrame(), "DE SUPER PUTA MARE SOCI" , "Congratulacions", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null,options,options[0]);
+					LoginView lview = new LoginView();
+					LoginViewController controller = new LoginViewController(lview, UserService.this);
+					lview.loginViewsetListener(controller);
+					vregistre.setVisible(false);
+					lview.setVisible(true);
+					Usuari user = (Usuari) jelow.getObject();
+					lview.setUsuari(user.getNickName());
+					lview.setPassword(user.getPassword());
+				}else{
+					JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+				}
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
-				// si hi ha algun problema satura la comunicacio amb el servidor
 				stopServerComunication();
 				System.out.println("*** ESTA EL SERVIDOR EN EXECUCIO? ***");
 			}
@@ -89,13 +107,8 @@ public class UserService extends Thread{
 
 	public void sendRegister(Object user) {
 		try{
-			// Establim la connexio amb el servidor i enviem el missatge
 			this.doStream.writeObject(user);
-			// Tanquem el socket
-
 		} catch (IOException e) {
-			// Si hi ha algut algun problema informem al controlador, ell
-			// informara a la vista
 			stopServerComunication();
 			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
 		}

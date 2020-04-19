@@ -22,11 +22,10 @@ public class ComprovaClient {
 
 
     public static int checkRegistre(String name, String email, String password, String repass){
-      boolean check = false;
       String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}";
 
-      if(name.equals("") && email.equals("") && password.equals("") && repass.equals("")){
-        return 3;
+      if(name.equals("") || email.equals("") || password.equals("") || repass.equals("")){
+        return 1;
       } else if(!emilIsValid(email)){
         return 2;
       } else if(!password.matches(pattern)){
@@ -40,5 +39,3 @@ public class ComprovaClient {
     }
 
 }
-
-

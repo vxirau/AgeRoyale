@@ -92,7 +92,7 @@ public class LoginView extends JFrame implements ActionListener {
         jpPare.add(jlText3);
 
         //Rellenar contrasenya
-        jtfpassword = new JTextField();
+        jtfpassword = new JPasswordField();
         jtfpassword.setBounds(70, 410, 310, 50);
         jpPare.add(jtfpassword);
 
@@ -156,6 +156,14 @@ public class LoginView extends JFrame implements ActionListener {
 
     public String getPassword(){
         return jtfpassword.getText();
+    }
+
+		public void setUsuari(String us){
+        jtfusername.setText(us);
+    }
+
+    public void setPassword(String pass){
+        jtfpassword.setText(pass);
     }
 
     public void loginViewsetListener(ActionListener controlador) {
