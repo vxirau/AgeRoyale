@@ -29,8 +29,6 @@ public class UserService extends Thread{
     private ViewRegistre vregistre;
 
 
-
-
 	public UserService() {
 		try {
 			this.isOn = false;

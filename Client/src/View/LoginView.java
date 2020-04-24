@@ -136,7 +136,6 @@ public class LoginView extends JFrame implements ActionListener {
         fondo.setBounds(0, 0, 450, 800);
         jpPare.add(fondo);
 
-
         setSize(450, 800);
 
         this.setContentPane(jpPare);
