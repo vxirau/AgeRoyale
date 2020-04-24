@@ -28,6 +28,7 @@ public class MainClient{
               } else {
 
                   GameView gView = new GameView();
+                  gView.startGame();
                   GameController controller = new GameController(gView);
                   gView.registerController(controller);
                   gView.setVisible(true);
