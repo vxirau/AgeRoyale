@@ -55,9 +55,14 @@ CREATE TABLE UsuariTropa(
     FOREIGN KEY (idTropa)REFERENCES tropa(idTropa)
 );
 
+
+
 CREATE TABLE partida(
     idPartida   int not null auto_increment,
     duration    int,
+    publica 	boolean,
+    name		varchar(255),
+    host 		varchar(255),
     date        varchar(255),
     player1     int,
     player2     int,
@@ -66,6 +71,7 @@ CREATE TABLE partida(
     FOREIGN KEY (player2) REFERENCES usuari(idUser)
 );
 
+SELECT* FROM usuari;
 
 #Importacio basica de informació
 INSERT INTO stats(TOTALPARTIDES, TOTALVICTORIES, WINRATE, AVGDURATIONVICTORIES) VALUES
@@ -78,8 +84,8 @@ INSERT INTO usuari (nickname, email, password, idStats) values
     ('Marthin', 'marti.ejarque@students.salle.url.edu', '1234', 4),
     ('Bernat', 'bernat.segura@students.salle.url.edu', '1234', 5);
 
-INSERT INTO partida (duration, date, player1, player2) VALUES
-    (200, '20-05-2020', 1, 2), (150, '19-05-2020', 3, 4), (478, '18-05-2020', 5, 1);
+INSERT INTO partida (duration, publica, name, host, date, player1, player2) VALUES
+    (200, true, 'Prova1', 'admin', '20-05-2020', 1, 2), (150, true, 'Prova2', 'admin', '19-05-2020', 3, 4), (478, false, 'Prova3', 'admin',  '18-05-2020', 5, 1);
 
 INSERT INTO amic (id_u1, id_u2) VALUES
     (1, 2), (2, 3), (3, 4), (4, 5), (5, 1);
@@ -93,6 +99,8 @@ INSERT INTO UsuariTropa (idUser, idTropa) VALUES
     (3, 3), (3, 4),
     (4, 4), (4, 5),
     (5, 5), (5, 1);
+
+SELECT * FROM partida;
 
 ###########################################     AMIC    ###############################################################################################
 #get Amics

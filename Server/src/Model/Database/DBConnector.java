@@ -23,7 +23,7 @@ public class DBConnector {
         this.url += ":"+port+"/";
         this.url += db + "?verifyServerCertificate=false&useSSL=false&serverTimezone=UTC";
         DBConnector.userName = "root";
-        DBConnector.password = "Codepin1";
+        DBConnector.password = "password";
         this.instance = this;
     }
 
