@@ -18,12 +18,12 @@ public class Partida implements Serializable {
 
     }
 
-		public Partida(int idPartida, boolean publiques, String nom, String host) {
-      this.idPartida = idPartida;
-      this.publiques = publiques;
-      this.name = nom;
-			this.host = host;
-		}
+    public Partida(int idPartida, boolean publiques, String nom, String host) {
+        this.idPartida = idPartida;
+        this.publiques = publiques;
+        this.name = nom;
+		this.host = host;
+    }
 
     public Partida(int idPartida, Date data, int duracio, ArrayList<Usuari> jugadors, ArrayList<Usuari> espectadors) {
         this.idPartida = idPartida;

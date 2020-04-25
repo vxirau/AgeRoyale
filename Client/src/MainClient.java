@@ -32,13 +32,8 @@ public class MainClient{
                   GameController controller = new GameController(gView);
                   gView.registerController(controller);
                   gView.setVisible(true);
-
-
-
               }
           }
-
         });
-
     }
 }

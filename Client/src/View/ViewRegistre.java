@@ -32,6 +32,10 @@ public class ViewRegistre extends JFrame implements ActionListener {
 				initComponents();
 				setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+			Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+			int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
+			int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
+			setLocation(x, y);
 		}
 
 		private void initComponents() {
