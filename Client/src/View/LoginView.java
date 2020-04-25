@@ -28,6 +28,10 @@ public class LoginView extends JFrame implements ActionListener {
         //String imageURl = "/resources/fondo-rojo-oscuro-marron_28629-798.png";
         //BackView backView = new BackView(imageURl);
         //this.add(backView, BorderLayout.CENTER);
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
+        int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
+        setLocation(x, y);
     }
 
     private void initComponents() {

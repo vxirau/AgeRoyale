@@ -28,29 +28,12 @@ public class MainClient{
                   loginview.loginViewsetListener(controller);
                   loginview.setVisible(true);
               } else {
-                SwingUtilities.invokeLater(new Runnable() {
-                      @Override
-                      public void run() {
-                          MenuView rView = null;
-                          UserService userService = new UserService();
-                          try {
-                              rView = new MenuView(userService);
-                          } catch (InterruptedException e) {
-                              e.printStackTrace();
-                          }
-                          MenuController controlador = new MenuController(rView, userService);
-                          rView.registerController(controlador);
-                          rView.setVisible(true);
-                      }
-                  });
-                  /*GameView gView = new GameView();
+
+                 /* GameView gView = new GameView();
                   gView.startGame();
                   GameController controller = new GameController(gView);
                   gView.registerController(controller);
                   gView.setVisible(true);*/
-
-
-
               }
           }
 

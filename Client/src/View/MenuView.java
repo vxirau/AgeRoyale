@@ -30,7 +30,7 @@ public class MenuView extends JFrame implements ActionListener {
     private JLabel jlVictories;
     private JLabel jlTempsXVictoria;
     private JLabel jlTropaMesUtilitzada;
-    private static Object[] options = {"Entèsos"};
+
     //JPanel de tropes
     private JPanel jpTropes;
     private JLabel jlContingutTropes = new JLabel("provisional tropes");
@@ -43,6 +43,8 @@ public class MenuView extends JFrame implements ActionListener {
     private JPanel jpFriends;
     private JLabel jlContingutFriends = new JLabel("provisional firends");
 
+    //Jpanel de partida
+    private RoomListView roomListView;
 
     //Menu inferior
     private JPanel jpMenu;
@@ -107,6 +109,12 @@ public class MenuView extends JFrame implements ActionListener {
         initCrearPartida();
         //Marquem la primera vista que mostrarem al iniciar
         adjustViews("Main_");
+
+
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
+        int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
+        setLocation(x, y);
 
     }
 
@@ -176,7 +184,8 @@ public class MenuView extends JFrame implements ActionListener {
         this.add(jpMenu, BorderLayout.SOUTH);
     }
 
-    private void adjustViews(String name) throws InterruptedException {
+
+    private void adjustViews(String name) {
         String bgColor = "#282828";
         String bgColorSelected = "#361111";
 
@@ -253,65 +262,49 @@ public class MenuView extends JFrame implements ActionListener {
         String bgColorTop = "#85201F";
         String bgColorMid = "#232745";
 
-        JButton button = new JButton("hi");
-        jpMain = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
+        jpMain = new JPanel(null);
 
-        jpMainTopUser = new JButton();
-        //jpMainTopUser.setBounds(0, 0, 50, 50);
-        jpMainTopUser.setBackground(Color.decode(bgColorTop));
-        jpMainTopUser.add(new JLabel(new ImageIcon("Client/resources/main_logo_user.png"), SwingConstants.CENTER));
-
-        c.weightx = 0.5;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(20,20,0,10);  //top padding
-        c.gridx = 1;
-        c.gridy = 0;
-        jpMain.add(jpMainTopUser, c);
+        jpMainTopUser = new JButton("");
+        jpMainTopUser.setBounds(20, 20, 50, 50);
+        jpMainTopUser.setOpaque(false);
+        jpMainTopUser.setHorizontalTextPosition(JButton.CENTER);
+        jpMainTopUser.setVerticalTextPosition(JButton.CENTER);
+        //jpMainTopUser.setBackground(Color.decode(bgColorTop));
+        //jpMainTopUser.add(new JLabel(new ImageIcon("Client/resources/main_logo_user.png"), SwingConstants.CENTER));
+        jpMainTopUser.setContentAreaFilled(false);
+        jpMainTopUser.setBorderPainted(false);
+        ImageIcon fonsButton= new ImageIcon(this.getClass().getResource("/resources/main_logo_user.png"));
+        Icon iconoButton = new ImageIcon(fonsButton.getImage().getScaledInstance(50, 50, Image.SCALE_FAST));
+        jpMainTopUser.setIcon(iconoButton);
+        jpMain.add(jpMainTopUser);
 
         JPanel jpMainTopProgress = new JPanel(new GridLayout(2, 1));
-        //jpMainTopProgress.setBounds(80, 0, 290, 50);
+        jpMainTopProgress.setBounds(80, 20, 290, 50);
         jpMainTopProgress.setBackground(Color.decode(bgColorTop));
+        jpMainTopProgress.setBorder(BorderFactory.createLineBorder(Color.decode(bgColorTop), 11,true));
+
         jProgressBar = new JProgressBar(SwingConstants.HORIZONTAL);
-        //jProgressBar.setBounds(0,0,250, 20);
+        jProgressBar.setBounds(100,30,250, 20);
         jProgressBar.setMinimum(0);
         jProgressBar.setMaximum(100);
         jProgressBar.setValue(40);
-        //EmptyBorder eBorder = new EmptyBorder(0, 0, 0, 0);
-        //LineBorder lBorder = new LineBorder(Color.decode(bgColorTop));
-        //jProgressBar.setBorder(BorderFactory.createCompoundBorder(eBorder, lBorder));
+        jpMainTopProgress.add(jProgressBar);
+
         jlProgressBarPercent = new JLabel("40%", SwingConstants.CENTER);
         jlProgressBarPercent.setForeground(Color.white);
-        jpMainTopProgress.add(jProgressBar);
+        jlProgressBarPercent.setBounds(130, 60, 20, 20);
         jpMainTopProgress.add(jlProgressBarPercent);
+        jpMain.add(jpMainTopProgress);
 
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.gridx = 2;
-        c.gridwidth = 2;
-        c.gridy = 0;
-        jpMain.add(jpMainTopProgress, c);
 
         JPanel jpMainTopLvl = new JPanel(new BorderLayout());
-        //jpMainTopLvl.setBounds(0, 0, 50, 50);
+        jpMainTopLvl.setBounds(380, 20, 50, 50);
         jpMainTopLvl.setBackground(Color.decode(bgColorTop));
-        JLabel jlLvlTxt = new JLabel("Lvl. ", SwingConstants.CENTER);
-        jlLvlTxt.setForeground(Color.white);
-        jlLvl = new JLabel("0", SwingConstants.CENTER);
+        jlLvl = new JLabel("Lvl. 0");
         jlLvl.setForeground(Color.white);
-        JPanel jpLvl = new JPanel();
-        //jpLvl.setBounds(0, 0, 50, 50);
-        jpLvl.setBackground(Color.decode(bgColorTop));
-        jpLvl.add(jlLvlTxt);
-        jpLvl.add(jlLvl);
-        jpMainTopLvl.add(jpLvl);
+        jpMainTopLvl.add(jlLvl);
 
-        c.weightx = 0.5;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(20,10,0,20);  //top padding
-        c.gridx = 4;
-        c.gridy = 0;
-        jpMain.add(jpMainTopLvl, c);
+        jpMain.add(jpMainTopLvl);
 
 
     }
