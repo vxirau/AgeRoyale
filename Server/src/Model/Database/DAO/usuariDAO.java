@@ -115,13 +115,13 @@ public class usuariDAO {
         amicDAO amicDAO = new amicDAO();
         partidaDAO partidaDAO = new partidaDAO();
 
+        String query = "DELETE FROM AgeRoyale.usuari WHERE idUser = " + usuari.getIdUsuari() + ";";
+        DBConnector.getInstance().deleteQuery(query);
+
         amicDAO.removeAmics(usuari);
         usuariTropaDAO.onRemoveUsuari(usuari);
         statsDAO.removeStats(usuari);
         partidaDAO.removePartida(usuari);
-
-        String query = "DELETE FROM AgeRoyale.usuari WHERE idUser = " + usuari.getIdUsuari() + ";";
-        DBConnector.getInstance().deleteQuery(query);
     }
 
     //GESTIO DE PK

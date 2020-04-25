@@ -157,7 +157,7 @@ public class LoginView extends JFrame implements ActionListener {
         return jtfpassword.getText();
     }
 
-		public void setUsuari(String us){
+	public void setUsuari(String us){
         jtfusername.setText(us);
     }
 
