@@ -1,6 +1,10 @@
 package src.View;
 
+import src.Controller.RoomsController;
+import src.Message;
+import src.Model.Network.UserService;
 import src.Partida;
+import src.Usuari;
 import src.Utils;
 
 import javax.swing.*;
@@ -26,7 +30,7 @@ public class MenuView extends JFrame implements ActionListener {
     private JLabel jlVictories;
     private JLabel jlTempsXVictoria;
     private JLabel jlTropaMesUtilitzada;
-
+    private static Object[] options = {"Entèsos"};
     //JPanel de tropes
     private JPanel jpTropes;
     private JLabel jlContingutTropes = new JLabel("provisional tropes");
@@ -39,8 +43,6 @@ public class MenuView extends JFrame implements ActionListener {
     private JPanel jpFriends;
     private JLabel jlContingutFriends = new JLabel("provisional firends");
 
-    //Jpanel de partida
-    private RoomListView roomListView;
 
     //Menu inferior
     private JPanel jpMenu;
@@ -49,6 +51,10 @@ public class MenuView extends JFrame implements ActionListener {
     private JPanel jpMenuMain;
     private JPanel jpMenuCrearPartida;
     private JPanel jpMenuFriends;
+
+    private UserService uService;
+    private RoomListView roomListView;
+    private static ArrayList<Partida> allGames;
 
     private final MouseListener mouseActionMenu = new MouseAdapter() {
         /*
@@ -72,16 +78,21 @@ public class MenuView extends JFrame implements ActionListener {
         public void mouseClicked(MouseEvent e) {
             super.mouseClicked(e);
             JPanel item = (JPanel) e.getSource();
-            adjustViews(item.getName());
+            try {
+                adjustViews(item.getName());
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
         }
     };
 
-    public MenuView(){
+    public MenuView(UserService us) throws InterruptedException {
+			this.uService = us;
         init();
         basic();
     }
 
-    private void init() {
+    private void init() throws InterruptedException {
         this.setLayout(new BorderLayout());
         //jpPare.setOpaque(true);
 
@@ -93,8 +104,7 @@ public class MenuView extends JFrame implements ActionListener {
         initTropes();
         initMain();
         initFriends();
-        initCrearPartida(new ArrayList<>());
-
+        initCrearPartida();
         //Marquem la primera vista que mostrarem al iniciar
         adjustViews("Main_");
 
@@ -166,8 +176,7 @@ public class MenuView extends JFrame implements ActionListener {
         this.add(jpMenu, BorderLayout.SOUTH);
     }
 
-
-    private void adjustViews(String name) {
+    private void adjustViews(String name) throws InterruptedException {
         String bgColor = "#282828";
         String bgColorSelected = "#361111";
 
@@ -212,6 +221,10 @@ public class MenuView extends JFrame implements ActionListener {
             jpMenuFriends.setBackground(Color.decode(bgColorSelected));
         }
         if (name.equals("CrearPartida_")){
+            if(roomListView==null){
+                initCrearPartida();
+                adjustViews("CrearPartida_");
+            }
             jpActive = roomListView.getJpPare();
             jpActive.setVisible(true);
             jpMenuConfig.setBackground(Color.decode(bgColor));
@@ -308,8 +321,28 @@ public class MenuView extends JFrame implements ActionListener {
         jpFriends.add(jlContingutFriends);
     }
 
-    private void initCrearPartida(ArrayList<Partida> games) {
-        roomListView = new RoomListView(new ArrayList<>());
+    public static void setAllGames(ArrayList<Partida> partides){
+        if(partides!=null){
+            allGames = partides;
+            System.out.println("setAllGames");
+        }else{
+            JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+        }
+    }
+
+    private synchronized void initCrearPartida() throws InterruptedException {
+        Message m = new Message(null, "getAllGames");
+        uService.sendGetPartides(m);
+        //FALTA DETECTAR USUARI LOGUEJAT A LA MENU VIEW
+        if(allGames!=null){
+        //allGames = new ArrayList<>();
+            RoomsController controller = new RoomsController(this, new Usuari(), uService);
+            roomListView = new RoomListView(allGames);
+            roomListView.RegisterController(controller);
+        }
+
+
+
     }
 
     public void registerController(ActionListener controlador) {

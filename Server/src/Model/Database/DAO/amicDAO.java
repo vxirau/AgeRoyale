@@ -69,12 +69,12 @@ public class amicDAO {
     //AFEGIR INFORMACIO
     public void addAmic (int idUser, int idAmic){
         String query = "INSERT INTO AgeRoyale.amic (id_u1, id_u2) VALUE (" + idUser + ", " + idAmic + ");";
-        DBConnector.getInstance().insertQuery(query);
+        DBConnector.getInstance().insertQuery(query, null);
     }
 
     public void addAmic (Usuari usuari, Usuari amic){
         String query = "INSERT INTO AgeRoyale.amic (id_u1, id_u2) VALUE (" + usuari.getIdUsuari() + ", " + amic.getIdUsuari() + ");";
-        DBConnector.getInstance().insertQuery(query);
+        DBConnector.getInstance().insertQuery(query, null);
     }
 
     public void addAmic (int idUsuari, ArrayList<Usuari> amics){

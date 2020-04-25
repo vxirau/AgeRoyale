@@ -38,7 +38,11 @@ public class LoginViewController implements ActionListener {
                         @Override
                         public void run() {
                             MenuView rView = null;
-                            rView = new MenuView();
+                            try {
+                                rView = new MenuView(uService);
+                            } catch (InterruptedException interruptedException) {
+                                interruptedException.printStackTrace();
+                            }
                             MenuController controlador = new MenuController(rView, uService);
                             rView.registerController(controlador);
                             view.setVisible(false);

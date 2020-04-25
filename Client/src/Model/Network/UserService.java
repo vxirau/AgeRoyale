@@ -6,8 +6,10 @@ import src.Controller.LoginViewController;
 import src.Controller.NetworkConfiguration;
 import src.Controller.RegisterViewController;
 import src.Message;
+import src.Partida;
 import src.Usuari;
 import src.View.LoginView;
+import src.View.MenuView;
 import src.View.ViewRegistre;
 
 import javax.swing.*;
@@ -16,6 +18,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class UserService extends Thread{
   	private Socket socket;
@@ -42,8 +45,8 @@ public class UserService extends Thread{
 			this.socket = new Socket(NetworkConfiguration.staticIP, NetworkConfiguration.staticPort);
 			//this.socket = new Socket("192.168.86.31", 2003);
 			this.doStream = new ObjectOutputStream(socket.getOutputStream());
-      this.doInput = new ObjectInputStream(socket.getInputStream());
-      this.dInput = new DataInputStream(socket.getInputStream());
+			this.doInput = new ObjectInputStream(socket.getInputStream());
+			this.dInput = new DataInputStream(socket.getInputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("*** ESTA EL SERVIDOR EN EXECUCIO? ***");
@@ -79,6 +82,7 @@ public class UserService extends Thread{
 	public void run() {
 		//while (isOn) {
 			try {
+
 				Message jelow = (Message) doInput.readObject();
 				System.out.println(jelow.getType());
 				if(jelow.getType().equals("REGISTER_OK")){
@@ -91,6 +95,10 @@ public class UserService extends Thread{
 					Usuari user = (Usuari) jelow.getObject();
 					lview.setUsuari(user.getNickName());
 					lview.setPassword(user.getPassword());
+				}else if(jelow.getType().equals("allGamesReply")){
+					ArrayList<Partida> p = jelow.getObjectArray();
+					System.out.println("Arriba Resposta");
+					MenuView.setAllGames(p);
 				}else{
 					JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
 				}
@@ -105,6 +113,7 @@ public class UserService extends Thread{
 
 	public void sendRegister(Object user) {
 		try{
+			this.doStream.reset();
 			this.doStream.writeObject(user);
 		} catch (IOException e) {
 			stopServerComunication();
@@ -112,6 +121,25 @@ public class UserService extends Thread{
 		}
 	}
 
+	public void sendPartida(Object partida) {
+		try{
+			this.doStream.reset();
+			this.doStream.writeObject(partida);
+		} catch (IOException e) {
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
+
+	public void sendGetPartides(Object message) {
+		try{
+			this.doStream.reset();
+			this.doStream.writeObject(message);
+		} catch (IOException e) {
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
 
 
 

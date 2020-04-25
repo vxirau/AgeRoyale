@@ -1,7 +1,9 @@
 package src.Model.Network;
 
 import src.Message;
+import src.Model.Database.DAO.partidaDAO;
 import src.Model.Database.DAO.usuariDAO;
+import src.Partida;
 import src.Usuari;
 import src.View.ViewServer;
 
@@ -44,18 +46,14 @@ public class DedicatedServer extends Thread {
 		String in;
 		String[] aux;
 		try {
-			// creem els canals de comunicacio
+
 			dataInput = new ObjectInputStream(sClient.getInputStream());
 			objectOut = new ObjectOutputStream(sClient.getOutputStream());
-			//dataOut = new DataOutputStream(sClient.getOutputStream());
 
-			// enviem estat de la grid al client
-			// NO ENVIEM EL MODEL, SINO EL SEU ESTAT, ALLO QUE ES RELLEVANT
-			// PELS CLIENTS (OBSERVAR Grid != GridState)
 			Message m = (Message) dataInput.readObject();
+			System.out.println("ARRIBA: " + m.getType());
 			if (m.getType().equals("register")){
 				Usuari u = (Usuari)m.getObject();
-
 				System.out.println(u.toString());
 
 				objectOut.reset();
@@ -66,25 +64,17 @@ public class DedicatedServer extends Thread {
 				}else{
 					objectOut.writeObject(new Message(u, "REGISTER_KO"));
 				}
+			}else if(m.getType().equals("roomCreate")){
+				System.out.println("Crear partida amb nom: " + ((Partida)m.getObject()).getName());
+				System.out.println("HA ARRIBAAAAT");
+				partidaDAO pDao = new partidaDAO();
+				pDao.addPartida((Partida)m.getObject());
+			}else if(m.getType().equals("getAllGames")){
+				objectOut.reset();
+				partidaDAO pDao = new partidaDAO();
+				System.out.println("Envia Resposta");
+				objectOut.writeObject(new Message(0, pDao.getAllPartides(), "allGamesReply"));
 			}
-
-			// NO ENVIEM EL MODEL, SINO EL SEU ESTAT, ALLO QUE ES RELLEVANT
-			// PELS CLIENTS (OBSERVAR Grid != GridState)
-			//while (isOn) {
-				// esperem rebre dades del client, es dona quan selecciona
-				// una cella de la graella
-				//in = dataInput.readUTF();
-				// recuperem la fila i la columna i actualizem el model
-				//aux = in.split("-"); // fila - columna
-				//model.checkCell(Integer.valueOf(aux[0]), Integer.valueOf(aux[1]));
-				// actualitzem la vista, si existis un controlador podriem
-				// delegar latualitzacio de la vista al controlador
-				//vista.updateGrid(model.getMatrix());
-				// actualitzem tots els clients (veure el metode privat mes avall)
-				// aquesta tasca la podriem delegar al servidor, donat que aquest
-				// tambe mante una relacio amb tots els servidors dedicats
-				//updateAllClients();
-			//}
 		} catch (IOException | ClassNotFoundException e1) {
 			// en cas derror aturem el servidor dedicat
 			stopDedicatedServer();

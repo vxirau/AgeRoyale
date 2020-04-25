@@ -2,8 +2,10 @@ package src.Model.Database;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
+import src.Partida;
 
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -21,7 +23,7 @@ public class DBConnector {
         this.url += ":"+port+"/";
         this.url += db + "?verifyServerCertificate=false&useSSL=false&serverTimezone=UTC";
         DBConnector.userName = "root";
-        DBConnector.password = "contrasenya";
+        DBConnector.password = "Codepin1";
         this.instance = this;
     }
 
@@ -50,10 +52,23 @@ public class DBConnector {
 
     }
 
-    public void insertQuery(String query){
+    public void insertQuery(String query, Object p){
         try {
-            s =(Statement) conn.createStatement();
-            s.executeUpdate(query);
+            if(p!=null){
+                Partida part = (Partida)p;
+                PreparedStatement preparedStmt = conn.prepareStatement(query);
+
+                preparedStmt.setInt (1, part.getIdPartida());
+                preparedStmt.setBoolean (2, part.isPubliques());
+                preparedStmt.setString (3, part.getName());
+                preparedStmt.setString (4, part.getHost());
+                preparedStmt.setInt (5, part.getDuracio());
+                preparedStmt.setString (6, part.getData());
+                System.out.println(preparedStmt.toString());
+                preparedStmt.execute();
+            }
+
+
 
         } catch (SQLException ex) {
             System.out.println("Problema al Inserir --> " + ex.getSQLState());

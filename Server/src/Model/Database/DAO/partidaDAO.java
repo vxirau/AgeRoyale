@@ -4,6 +4,7 @@ import src.Model.Database.DBConnector;
 import src.Partida;
 import src.Usuari;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class partidaDAO {
         try{
             if (rs.next()){
                 partida.setDuracio(rs.getInt("duration"));
-                partida.setData(rs.getDate("date"));
+                partida.setData(rs.getString("date"));
                 partida.setJugadors(usuariDAO.getUserFromId(rs.getInt("player1")), usuariDAO.getUserFromId(rs.getInt("player2")));
             } else {
                 partida = null;
@@ -40,7 +41,10 @@ public class partidaDAO {
                 Partida partida = new Partida();
                 partida.setIdPartida(rs.getInt("idPartida"));
                 partida.setDuracio(rs.getInt("duration"));
-                partida.setData(rs.getDate("date"));
+                partida.setData(rs.getString("date"));
+                partida.setName(rs.getString("name"));
+                partida.setHost(rs.getString("host"));
+                partida.setPubliques(rs.getBoolean("publica"));
                 partida.setJugadors(usuariDAO.getUserFromId(rs.getInt("player1")), usuariDAO.getUserFromId(rs.getInt("player2")));
             }
         } catch (SQLException e) {
@@ -58,9 +62,13 @@ public class partidaDAO {
             while (rs.next()){
                 Partida partida = new Partida();
                 partida.setIdPartida(rs.getInt("idPartida"));
+                partida.setName(rs.getString("name"));
+                partida.setHost(rs.getString("host"));
+                partida.setPubliques(rs.getBoolean("publica"));
                 partida.setDuracio(rs.getInt("duration"));
-                partida.setData(rs.getDate("date"));
+                partida.setData(rs.getString("date"));
                 partida.setJugadors(usuariDAO.getUserFromId(rs.getInt("player1")), usuariDAO.getUserFromId(rs.getInt("player2")));
+                partides.add(partida);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -69,12 +77,13 @@ public class partidaDAO {
     }
 
     //AFEGIR INFORMACIO
-    public synchronized void addPatida (Partida partida){
+    public synchronized void addPartida (Partida partida){
         int newPartidaPK = nextPartidaPK();
         partida.setIdPartida(newPartidaPK);
 
-        String query = "INSERT INTO AgeRoyale.partida (idPartida, duration, date, player1, player2) VALUE (" + partida.getIdPartida() + ", " + partida.getDuracio() + ", '" + partida.getData() + "', " + partida.getJugadors().get(0).getIdUsuari() + ", " + partida.getJugadors().get(1).getIdUsuari() +");";
-        DBConnector.getInstance().insertQuery(query);
+        String query = " INSERT INTO AgeRoyale.partida (idPartida, publica, name, host, duration, date)"
+                + " VALUES (?, ?, ?, ?, ?, ?)";
+        DBConnector.getInstance().insertQuery(query, partida);
     }
 
     //BORRAR PARTIDA

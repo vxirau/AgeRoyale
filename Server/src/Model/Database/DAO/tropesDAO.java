@@ -84,12 +84,12 @@ public class tropesDAO {
     //AFEGIR
     public void addTropa (int dany, int vida, int cost, boolean atac){
         String query = "INSERT INTO AgeRoyale.tropa (atac, vida, cost, tipus) VALUE (" + dany + ", " + vida + ", " + cost + ", " + atac +");";
-        DBConnector.getInstance().insertQuery(query);
+        DBConnector.getInstance().insertQuery(query, null);
     }
 
     public void addTropa (Tropa tropa){
         String query = "INSERT INTO AgeRoyale.tropa (atac, vida, cost, tipus) VALUE (" + tropa.getAtac() + ", " + tropa.getVida() + ", " + tropa.getCost() + ", " + tropa.isOfensiva() +");";
-        DBConnector.getInstance().insertQuery(query);
+        DBConnector.getInstance().insertQuery(query, null);
     }
 
     //BORRAR

@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -243,4 +244,9 @@ public class RoomListView extends JFrame{
 		//setSize(450, 800);
 		//this.setContentPane(jpPare);
 	}
+
+	public void RegisterController(ActionListener controlador){
+		nova.addActionListener(controlador);
+	}
+
 }

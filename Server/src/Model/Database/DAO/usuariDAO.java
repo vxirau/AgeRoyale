@@ -103,7 +103,7 @@ public class usuariDAO {
             amicDAO.addAmic(newUserPK, usuari.getAmics());
 
         String query = "INSERT INTO AgeRoyale.usuari (nickname, email, password, idStats) VALUE ('" + usuari.getNickName() + "', '" + usuari.getEmail() + "', '" + usuari.getPassword() + "', " + statPK + ");";
-        DBConnector.getInstance().insertQuery(query);
+        DBConnector.getInstance().insertQuery(query, null);
 
         return newUserPK;
     }
@@ -168,6 +168,7 @@ public class usuariDAO {
                     return getUserFromId(id);
                 }
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
