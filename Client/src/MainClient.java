@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class MainClient{
 
-    private static boolean game = true;
+    private static boolean game = false;
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
           @Override

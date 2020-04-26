@@ -103,7 +103,7 @@ public class usuariDAO {
             amicDAO.addAmic(newUserPK, usuari.getAmics());
 
         String query = "INSERT INTO AgeRoyale.usuari (nickname, email, password, idStats) VALUE ('" + usuari.getNickName() + "', '" + usuari.getEmail() + "', '" + usuari.getPassword() + "', " + statPK + ");";
-        DBConnector.getInstance().insertQuery(query, null);
+        DBConnector.getInstance().insertQuery(query);
 
         return newUserPK;
     }

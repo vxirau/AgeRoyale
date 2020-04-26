@@ -27,11 +27,11 @@ public class MainServer {
             System.out.println(NetworkConfiguration.staticIP);
             System.out.println("SERVER");
 
-						ViewServer vServer = new ViewServer();
-						Server serv = new Server(vServer);
+            ViewServer vServer = new ViewServer();
+            Server serv = new Server(vServer);
             ControllerServer cServer = new ControllerServer(serv,vServer);
             vServer.serverController(cServer);
-						vServer.setVisible(true);
+            vServer.setVisible(true);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -63,12 +63,12 @@ public class statsDAO {
     //AFEGIR INFORMACIO
     public void addStats (Stats stat) {
         String query = "INSERT INTO AgeRoyale.stats (idStat, totalPartides, totalVictories, winrate, avgDurationVictories) VALUE (" + stat.getIdStat() + ", " + stat.getTotalPartides() + ", " + stat.getTotalVictories() + ", " + stat.getWinrate() + ", " + stat.getAvgDurationVictories() + ");";
-        DBConnector.getInstance().insertQuery(query, null);
+        DBConnector.getInstance().insertQuery(query);
     }
 
     public void addStats (int idStat, int totalPartides, int totalVictories, float winrate, int avgDurationVic) {
         String query = "INSERT INTO AgeRoyale.stats (idStat, totalPartides, totalVictories, winrate, avgDurationVictories) VALUE (" + idStat + ", " + totalPartides + ", " + totalVictories + ", " + winrate + ", " + avgDurationVic + ");";
-        DBConnector.getInstance().insertQuery(query, null);
+        DBConnector.getInstance().insertQuery(query);
     }
 
     //BORRAR INFORMACIO

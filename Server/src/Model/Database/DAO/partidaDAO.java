@@ -77,13 +77,27 @@ public class partidaDAO {
     }
 
     //AFEGIR INFORMACIO
-    public synchronized void addPartida (Partida partida){
+    public synchronized void addPartida (Partida partida)  {
         int newPartidaPK = nextPartidaPK();
         partida.setIdPartida(newPartidaPK);
 
-        String query = " INSERT INTO AgeRoyale.partida (idPartida, publica, name, host, duration, date)"
+        String query = "INSERT INTO AgeRoyale.partida (idPartida, publica, name, host, duration, date)"
                 + " VALUES (?, ?, ?, ?, ?, ?)";
-        DBConnector.getInstance().insertQuery(query, partida);
+
+        try{
+            PreparedStatement preparedStmt = DBConnector.getInstance().conn.prepareStatement(query);
+
+            preparedStmt.setInt (1, partida.getIdPartida());
+            preparedStmt.setBoolean (2, partida.isPubliques());
+            preparedStmt.setString (3, partida.getName());
+            preparedStmt.setString (4, partida.getHost());
+            preparedStmt.setInt (5, partida.getDuracio());
+            preparedStmt.setString (6, partida.getData());
+
+            DBConnector.getInstance().insertQuery(preparedStmt);
+        } catch (SQLException ex) {
+            System.out.println("Problema al preparar la insercio de --> " + ex.getSQLState());
+        }
     }
 
     //BORRAR PARTIDA

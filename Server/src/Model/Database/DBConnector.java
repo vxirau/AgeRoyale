@@ -8,22 +8,23 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public class DBConnector {
     private static String userName;
     private static String password;
-    private static String db = "AgeRoyale";
+    private static String db = "ageroyale";
     private static int port = 3306;
     private String url = "jdbc:mysql://localhost";
-    private static Connection conn;
+    public Connection conn;
     private static Statement s;
     private static DBConnector instance;
 
     private DBConnector() {
-        this.url += ":"+port+"/";
+        this.url += ":" + port + "/";
         this.url += db + "?verifyServerCertificate=false&useSSL=false&serverTimezone=UTC";
         DBConnector.userName = "root";
-        DBConnector.password = "password";
+        DBConnector.password = "contrasenya";
         this.instance = this;
     }
 
@@ -45,6 +46,10 @@ public class DBConnector {
         }
         catch(SQLException ex) {
             System.out.println("Problema al connecta-nos a la BBDD --> "+url);
+            System.out.println(ex.getMessage());
+            System.out.println(ex.getErrorCode());
+            System.out.println(ex.getSQLState());
+            System.out.println(Arrays.toString(ex.getStackTrace()));
         }
         catch(ClassNotFoundException ex) {
             System.out.println(ex);
@@ -52,24 +57,20 @@ public class DBConnector {
 
     }
 
-    public void insertQuery(String query, Object p){
+    public void insertQuery(String query){
         try {
-            if(p!=null){
-                Partida part = (Partida)p;
-                PreparedStatement preparedStmt = conn.prepareStatement(query);
+            s =(Statement) conn.createStatement();
+            s.executeUpdate(query);
 
-                preparedStmt.setInt (1, part.getIdPartida());
-                preparedStmt.setBoolean (2, part.isPubliques());
-                preparedStmt.setString (3, part.getName());
-                preparedStmt.setString (4, part.getHost());
-                preparedStmt.setInt (5, part.getDuracio());
-                preparedStmt.setString (6, part.getData());
-                System.out.println(preparedStmt.toString());
-                preparedStmt.execute();
-            }
+        } catch (SQLException ex) {
+            System.out.println("Problema al Inserir --> " + ex.getSQLState());
+        }
+    }
 
-
-
+    public void insertQuery(PreparedStatement preparedStatement){
+        try {
+            System.out.println(preparedStatement.toString());
+            preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Problema al Inserir --> " + ex.getSQLState());
         }

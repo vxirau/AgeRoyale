@@ -11,12 +11,12 @@ public class usuariTropaDAO {
     //AFEGIR INFORMACIO
     public void addTropaToUsuari(Usuari usuari, Tropa tropa){
         String query = "INSERT INTO AgeRoyale.UsuariTropa (idUser, idTropa) VALUES (" + usuari.getIdUsuari() + ", " + tropa.getIdTropa() + ");";
-        DBConnector.getInstance().insertQuery(query, null);
+        DBConnector.getInstance().insertQuery(query);
     }
 
     public void addTropaToUsuari(int idUsuari, int idTropa){
         String query = "INSERT INTO AgeRoyale.UsuariTropa (idUser, idTropa) VALUES (" + idUsuari + ", " + idTropa + ");";
-        DBConnector.getInstance().insertQuery(query, null);
+        DBConnector.getInstance().insertQuery(query);
     }
 
     public void addTropesToUsuari(Usuari usuari, ArrayList<Tropa> tropas){
