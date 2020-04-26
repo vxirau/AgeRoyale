@@ -18,6 +18,9 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 public class MenuView extends JFrame implements ActionListener {
+    private UserService uService;
+
+
     //Panell actual
     private JPanel jpActive;
 
@@ -45,6 +48,7 @@ public class MenuView extends JFrame implements ActionListener {
 
     //Jpanel de partida
     private RoomListView roomListView;
+    private static ArrayList<Partida> allGames;
 
     //Menu inferior
     private JPanel jpMenu;
@@ -53,10 +57,6 @@ public class MenuView extends JFrame implements ActionListener {
     private JPanel jpMenuMain;
     private JPanel jpMenuCrearPartida;
     private JPanel jpMenuFriends;
-
-    private UserService uService;
-    private RoomListView roomListView;
-    private static ArrayList<Partida> allGames;
 
     private final MouseListener mouseActionMenu = new MouseAdapter() {
         /*
@@ -80,11 +80,7 @@ public class MenuView extends JFrame implements ActionListener {
         public void mouseClicked(MouseEvent e) {
             super.mouseClicked(e);
             JPanel item = (JPanel) e.getSource();
-            try {
-                adjustViews(item.getName());
-            } catch (InterruptedException interruptedException) {
-                interruptedException.printStackTrace();
-            }
+            adjustViews(item.getName());
         }
     };
 
@@ -259,7 +255,6 @@ public class MenuView extends JFrame implements ActionListener {
     }
 
     private void initMain() {
-        String bgColorTop = "#85201F";
         String bgColorMid = "#232745";
 
         jpMain = new JPanel(null);
@@ -269,43 +264,61 @@ public class MenuView extends JFrame implements ActionListener {
         jpMainTopUser.setOpaque(false);
         jpMainTopUser.setHorizontalTextPosition(JButton.CENTER);
         jpMainTopUser.setVerticalTextPosition(JButton.CENTER);
-        //jpMainTopUser.setBackground(Color.decode(bgColorTop));
-        //jpMainTopUser.add(new JLabel(new ImageIcon("Client/resources/main_logo_user.png"), SwingConstants.CENTER));
         jpMainTopUser.setContentAreaFilled(false);
         jpMainTopUser.setBorderPainted(false);
-        ImageIcon fonsButton= new ImageIcon(this.getClass().getResource("/resources/main_logo_user.png"));
-        Icon iconoButton = new ImageIcon(fonsButton.getImage().getScaledInstance(50, 50, Image.SCALE_FAST));
-        jpMainTopUser.setIcon(iconoButton);
+        ImageIcon fonsButtonUser = new ImageIcon(this.getClass().getResource("/resources/main_logo_user.png"));
+        Icon iconoButtonUser = new ImageIcon(fonsButtonUser.getImage().getScaledInstance(50, 50, Image.SCALE_FAST));
+        jpMainTopUser.setIcon(iconoButtonUser);
         jpMain.add(jpMainTopUser);
 
-        JPanel jpMainTopProgress = new JPanel(new GridLayout(2, 1));
-        jpMainTopProgress.setBounds(80, 20, 290, 50);
-        jpMainTopProgress.setBackground(Color.decode(bgColorTop));
-        jpMainTopProgress.setBorder(BorderFactory.createLineBorder(Color.decode(bgColorTop), 11,true));
-
+        JButton jpMainTopProgress = new JButton();
+        jpMainTopProgress.setBounds(75, 20, 280, 50);
+        jpMainTopProgress.setOpaque(false);
+        jpMainTopProgress.setContentAreaFilled(false);
+        jpMainTopProgress.setBorderPainted(false);
+        ImageIcon fonsProgressBar = new ImageIcon(this.getClass().getResource("/resources/main_progress_bg.png"));
+        Icon iconoProgressBar = new ImageIcon(fonsProgressBar.getImage().getScaledInstance(290, 50, Image.SCALE_FAST));
+        jpMainTopProgress.setIcon(iconoProgressBar);
         jProgressBar = new JProgressBar(SwingConstants.HORIZONTAL);
-        jProgressBar.setBounds(100,30,250, 20);
         jProgressBar.setMinimum(0);
         jProgressBar.setMaximum(100);
         jProgressBar.setValue(40);
+        jProgressBar.setStringPainted(true);
         jpMainTopProgress.add(jProgressBar);
-
-        jlProgressBarPercent = new JLabel("40%", SwingConstants.CENTER);
-        jlProgressBarPercent.setForeground(Color.white);
-        jlProgressBarPercent.setBounds(130, 60, 20, 20);
-        jpMainTopProgress.add(jlProgressBarPercent);
         jpMain.add(jpMainTopProgress);
 
-
-        JPanel jpMainTopLvl = new JPanel(new BorderLayout());
-        jpMainTopLvl.setBounds(380, 20, 50, 50);
-        jpMainTopLvl.setBackground(Color.decode(bgColorTop));
-        jlLvl = new JLabel("Lvl. 0");
-        jlLvl.setForeground(Color.white);
-        jpMainTopLvl.add(jlLvl);
-
+        JButton jpMainTopLvl = new JButton("Lvl. 0");
+        jpMainTopLvl.setBounds(360, 20, 70, 50);
+        jpMainTopLvl.setOpaque(false);
+        jpMainTopLvl.setForeground(Color.white);
+        jpMainTopLvl.setHorizontalTextPosition(JButton.CENTER);
+        jpMainTopLvl.setVerticalTextPosition(JButton.CENTER);
+        jpMainTopLvl.setContentAreaFilled(false);
+        jpMainTopLvl.setBorderPainted(false);
+        ImageIcon fonsLvl = new ImageIcon(this.getClass().getResource("/resources/main_lvl_bg.png"));
+        Icon iconoLvl = new ImageIcon(fonsLvl.getImage().getScaledInstance(50, 50, Image.SCALE_FAST));
+        jpMainTopLvl.setIcon(iconoLvl);
         jpMain.add(jpMainTopLvl);
 
+        JPanel jpMainMiddle = new JPanel(new GridBagLayout());
+        jpMainMiddle.setBounds(75, 130, 280, 320);
+        jpMainMiddle.setBackground(Color.decode(bgColorMid));
+        jpMain.add(jpMainMiddle);
+
+        JButton jpMainBtnBatalla = new JButton();
+        jpMainBtnBatalla.setText("Batalla");
+        jpMainBtnBatalla.setBounds(75, 550, 280, 50);
+        jpMainBtnBatalla.setOpaque(false);
+        jpMainBtnBatalla.setHorizontalTextPosition(JButton.CENTER);
+        //jpMainBtnBatalla.setVerticalTextPosition(JButton.CENTER);
+        jpMainBtnBatalla.setFont(new Font("Helvetica", Font.BOLD, 30));
+        jpMainBtnBatalla.setForeground(Color.WHITE);
+        jpMainBtnBatalla.setContentAreaFilled(false);
+        jpMainBtnBatalla.setBorderPainted(false);
+        ImageIcon fonsButton= new ImageIcon(this.getClass().getResource("/resources/main_batallaButton.png"));
+        Icon iconoButton = new ImageIcon(fonsButton.getImage().getScaledInstance(280, 50, Image.SCALE_FAST));
+        jpMainBtnBatalla.setIcon(iconoButton);
+        jpMain.add(jpMainBtnBatalla);
 
     }
 
@@ -319,11 +332,11 @@ public class MenuView extends JFrame implements ActionListener {
             allGames = partides;
             System.out.println("setAllGames");
         }else{
-            JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+            //JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         }
     }
 
-    private synchronized void initCrearPartida() throws InterruptedException {
+    private synchronized void initCrearPartida() {
         Message m = new Message(null, "getAllGames");
         uService.sendGetPartides(m);
         //FALTA DETECTAR USUARI LOGUEJAT A LA MENU VIEW
@@ -333,9 +346,6 @@ public class MenuView extends JFrame implements ActionListener {
             roomListView = new RoomListView(allGames);
             roomListView.RegisterController(controller);
         }
-
-
-
     }
 
     public void registerController(ActionListener controlador) {

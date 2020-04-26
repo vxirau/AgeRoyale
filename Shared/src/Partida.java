@@ -24,22 +24,16 @@ public class Partida implements Serializable {
         this.name = nom;
 		this.host = host;
     }
+
     public Partida(String name, String date, Boolean publiques, String host) {
-			this.name = name;
-			this.data = date;
-			this.publiques = publiques;
-			this.host = host;
-			this.duracio = 0;
+        this.name = name;
+        this.data = date;
+        this.publiques = publiques;
+        this.host = host;
+        this.duracio = 0;
     }
 
-		public Partida(int idPartida, boolean publiques, String nom, String host) {
-      this.idPartida = idPartida;
-      this.publiques = publiques;
-      this.name = nom;
-			this.host = host;
-		}
-
-    public Partida(int idPartida, Date data, int duracio, ArrayList<Usuari> jugadors, ArrayList<Usuari> espectadors) {
+    public Partida(int idPartida, String data, int duracio, ArrayList<Usuari> jugadors, ArrayList<Usuari> espectadors) {
         this.idPartida = idPartida;
         this.data = data;
         this.duracio = duracio;
@@ -79,11 +73,11 @@ public class Partida implements Serializable {
         this.idPartida = idPartida;
     }
 
-    public Date getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(String data) {
         this.data = data;
     }
 
