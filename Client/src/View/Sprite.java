@@ -3,15 +3,20 @@ package src.View;
 public class Sprite {
 
 
-    private final int side;
-    private final SpritesSheet sheet;
-
-    //coordenades x i y de l'sprite que escollim
+    //coordenades x i y de l'sprite que escollim i pixels de l'sprite
     private int x;
     private int y;
+    public int[] pixels;
 
+    private final int side;
+    private SpritesSheet sheet;
 
-    private int[] pixels;
+    //Sprites
+    public static Sprite GRASS = new Sprite(32, 0, 0, SpritesSheet.arena);
+    public static Sprite KING;
+    public static Sprite TOWER;
+    public static Sprite RIVER;
+    public static Sprite BRIDGE;
 
 
     public Sprite(final int side, final int column, final int row, final SpritesSheet sheet){
@@ -33,4 +38,8 @@ public class Sprite {
 
     }
 
+
+    public int getSide() {
+        return side;
+    }
 }
