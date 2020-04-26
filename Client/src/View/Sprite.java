@@ -11,6 +11,8 @@ public class Sprite {
     private final int side;
     private SpritesSheet sheet;
 
+
+
     //Sprites
     public static Sprite GRASS = new Sprite(32, 0, 0, SpritesSheet.arena);
     public static Sprite KING;
