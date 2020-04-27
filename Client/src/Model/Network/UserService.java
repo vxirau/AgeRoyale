@@ -61,7 +61,6 @@ public class UserService extends Thread{
 		// iniciem la comunicacio amb el servidor
 		isOn = true;
 		this.start();
-
 	}
 
 	public void stopServerComunication() {

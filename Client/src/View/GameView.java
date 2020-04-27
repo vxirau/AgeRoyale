@@ -9,14 +9,17 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.IOException;
 
 public class GameView extends JFrame implements ActionListener, Runnable {
 
 
     private JPanel[][] panels;
     private JPanel player;
+
     private static int x = 0;
     private static int y = 0;
+
     private static Thread thread;
     private final int[] pixels;
     private final int width;
@@ -32,8 +35,13 @@ public class GameView extends JFrame implements ActionListener, Runnable {
     private static int[] pixelsImage;
     //Temporal
     private Sprite herba;
-    private final static int SPRITE_SIDE = 32;
-    private final static int SPRITE_MASK = SPRITE_SIDE - 1;
+    //private final static int SPRITE_SIDE = 32;
+    //private final static int SPRITE_MASK = SPRITE_SIDE - 1;
+
+
+    private static GameMap gameMap;
+
+
 
     @Override
     public int getWidth() {
@@ -45,12 +53,16 @@ public class GameView extends JFrame implements ActionListener, Runnable {
         return height;
     }
 
-    public GameView() {
-        this.width = 400;
-        this.height = 800;
+    public GameView() throws IOException {
+        this.width = 32 * COLUMNS;
+        this.height = 32 * ROWS;
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         this.pixelsImage = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
         pixels = new int[width * height];
+
+        //Creem el mapa i li donem la mesura en tiles ( en aquest cas, sera de 10 x 20)
+
+        gameMap = new ImageMap("/resources/pixels_map.png");
         /*panels = new JPanel[ROWS][COLUMNS];
         super.getContentPane().setLayout(new GridLayout(ROWS, COLUMNS));
         JPanel aux;
@@ -101,61 +113,41 @@ public class GameView extends JFrame implements ActionListener, Runnable {
 
 
         this.setVisible(true);
-        this.setLocationRelativeTo(null);
+
         this.setResizable(false);
         //this.getContentPane().setLayout(new GridLayout(ROWS,COLUMNS));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400,800);
+        this.setSize(width,height);
 
-	}
+        //this.setLayout(new BorderLayout());
+        //add(this, BorderLayout.CENTER);
+        this.setLocationRelativeTo(null);
+        //this.pack();
+
+    }
 
     public void clearScreen(){
-        //Donem el valor de negre a tots els pixels
+        //Donem el valor de negre a tots els pixels cada cop que esborrem els pixels de la pantalla
         for(int i = 0; i < pixels.length; i++){
             pixels[i] = 0;
         }
 
     }
 
-    //temporal. dibuixa els fgrafuic
-    public void drawGraphics(final int compensX, final int compensY){
-        for(int i = 0; i < height; i++){
-            int positionY = i;// + compensY;
-            //Vigilem que no ens sortim del mapa verticalment
-            if(positionY < 0 || positionY >= height){
-                continue;
-            }
-            for (int j = 0; j < width; j++){
-                int positionX = j;// + compensX;
-                //Vigilem que no ens sortim del mapa horitzontalment
-                if(positionX < 0 || positionX >= width){
-                    continue;
-                }
 
-                //Temporal
-                pixels[positionX + positionY * width] = Sprite.GRASS.pixels[(j & SPRITE_MASK) + (i & SPRITE_MASK) * SPRITE_SIDE];
-
-            }
-        }
-    }
-
-    public void showTile(int compensX, int compensY, Tile tile){
-
+    public void drawTile(int compensX, int compensY, Tile tile){
 
         for(int i = 0; i < tile.getSprite().getSide(); i++){
             int yPosition = i + compensY;
 
             for(int j = 0; j < tile.getSprite().getSide(); j++){
                 int xPosition = j + compensX;
+                if(xPosition < tile.getSprite().getSide() || xPosition >= width || yPosition < -tile.getSprite().getSide() || yPosition >= height){
+                    break;
+                }
                 pixels[xPosition + yPosition * width] = tile.getSprite().pixels[i + j * tile.getSprite().getSide()];
             }
         }
-
-
-
-
-
-
     }
 
     public void registerController(GameController controller) {
@@ -170,19 +162,19 @@ public class GameView extends JFrame implements ActionListener, Runnable {
 		this.addWindowListener(controller);*/
 
 
-		//this.addMouseListener(controller);
+        //this.addMouseListener(controller);
     }
 
     public void updateGrid(int i, int j) {
 
 
-      aux1 = i;
-      aux2 = j;
-      JLabel jl = new JLabel();
-      jl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/knight-removebg-preview.png")));
-      panels[aux1][aux2].add(jl);
-      revalidate();
-      repaint();
+        aux1 = i;
+        aux2 = j;
+        JLabel jl = new JLabel();
+        jl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/knight-removebg-preview.png")));
+        panels[aux1][aux2].add(jl);
+        revalidate();
+        repaint();
 
 
         /*JPanel panel = (JPanel)this.getContentPane();
@@ -232,9 +224,10 @@ public class GameView extends JFrame implements ActionListener, Runnable {
             createBufferStrategy(3);
             return;
         }
-        clearScreen();
-        drawGraphics(x, y);
 
+        //clearScreen();
+
+        gameMap.showMap(x, y, this);
         //Copiem els grafics al joc
         System.arraycopy(pixels, 0, pixelsImage, 0, pixelsImage.length);
 
@@ -245,9 +238,6 @@ public class GameView extends JFrame implements ActionListener, Runnable {
 
         //Mostrem el que tenim
         bufferStrategy.show();
-        /*for(int i = 0; i < pixels.length; i++){
-            pixelsImage[i] = pixels[i];
-        }*/
 
     }
     @Override

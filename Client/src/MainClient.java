@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class MainClient{
 
-    private static boolean game = false;
+    private static boolean game = true;
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
           @Override
@@ -29,11 +29,16 @@ public class MainClient{
                   loginview.setVisible(true);
               } else {
 
-                 /* GameView gView = new GameView();
+                  GameView gView = null;
+                  try {
+                      gView = new GameView();
+                  } catch (IOException e) {
+                      e.printStackTrace();
+                  }
                   gView.startGame();
                   GameController controller = new GameController(gView);
                   gView.registerController(controller);
-                  gView.setVisible(true);*/
+                  gView.setVisible(true);
               }
           }
 
