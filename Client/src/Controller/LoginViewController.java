@@ -30,7 +30,7 @@ public class LoginViewController implements ActionListener {
 
         if(boto.equals("INICIAR SESSIÓ")){
             System.out.println("HOLA");
-            int estat = ControllerServer.checkLogin(view.getUsuari(), view.getPassword());
+            int estat = ControllerServer.checkLogin(view.getUsuari(), view.getPassword());  //TODO: fer servir sockets, controllerserver pertany a server
             switch (estat){
                 case 1:
                     System.out.println("Existeix usuari");
@@ -39,7 +39,7 @@ public class LoginViewController implements ActionListener {
                         public void run() {
                             MenuView rView = null;
                             try {
-                                rView = new MenuView(uService);
+                                rView = new MenuView(uService, new Usuari());   //TODO: rebre el usuari de la db
                             } catch (InterruptedException interruptedException) {
                                 interruptedException.printStackTrace();
                             }

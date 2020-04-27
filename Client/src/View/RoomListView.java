@@ -128,13 +128,14 @@ public class RoomListView extends JFrame{
 		nom.setFont(new Font("Helvetica", 0, 15));
 		nom.setBounds(120, 180, 250, 15);
 		element.add(nom);
-		JLabel persones = new JLabel();
 
+		JLabel persones = new JLabel();
 		persones.setText("<html><font color='white'> " + Utils.ferEspais(28) + " Total Connected: " + (0)+ "</font></html>");
 		persones.setForeground(Color.WHITE);
 		persones.setBounds(120, 200, 250, 15);
 		persones.setFont(new Font("Helvetica", 0, 15));
 		element.add(persones);
+
 		JLabel create = new JLabel();
 		create.setText("<html><font color='white'> " + Utils.ferEspais(28) + "  Host: " + p.getHost() +  "</font></html>");
 		create.setForeground(Color.WHITE);
