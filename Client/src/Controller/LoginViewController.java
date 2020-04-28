@@ -28,8 +28,7 @@ public class LoginViewController implements ActionListener {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                MenuView rView = null;
-                rView = new MenuView();
+                MenuView rView = new MenuView();
                 view.setVisible(false);
                 rView.setVisible(true);
                 MenuController controlador = new MenuController(rView, uService, usr);

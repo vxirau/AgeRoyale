@@ -163,6 +163,15 @@ public class UserService extends Thread{
 		}
 	}
 
+	public void sendLogout(Object message){
+		try{
+			this.doStream.reset();
+			this.doStream.writeObject(message);
+		} catch (IOException e) {
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
 
 
 }

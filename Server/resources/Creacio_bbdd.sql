@@ -27,6 +27,7 @@ CREATE TABLE usuari(
     email       VARCHAR(255),
     password    VARCHAR(255),
     idStats     int,
+    isOnline    boolean,
     PRIMARY KEY (idUser),
     FOREIGN KEY (idStats) REFERENCES stats (idStat)
 );
@@ -55,8 +56,6 @@ CREATE TABLE UsuariTropa(
     FOREIGN KEY (idTropa)REFERENCES tropa(idTropa)
 );
 
-
-
 CREATE TABLE partida(
     idPartida   int not null auto_increment,
     duration    int,
@@ -77,12 +76,12 @@ SELECT* FROM usuari;
 INSERT INTO stats(TOTALPARTIDES, TOTALVICTORIES, WINRATE, AVGDURATIONVICTORIES) VALUES
     (10,  4, 30.2, 200), (15, 10, 70, 150), (28, 35, 65, 200), (25, 10, 40, 100), (248, 234, 21, 10);
 
-INSERT INTO usuari (nickname, email, password, idStats) values
-    ('VXGamez', 'victor.xirau@students.salle.url.edu', '1234', 1),
-    ('Lidia', 'lidia.figueras@students.salle.url.edu', '1234', 2),
-    ('Adria', 'adria.pajares@students.salle.url.edu', '1234', 3),
-    ('Marthin', 'marti.ejarque@students.salle.url.edu', '1234', 4),
-    ('Bernat', 'bernat.segura@students.salle.url.edu', '1234', 5);
+INSERT INTO usuari (nickname, email, password, idStats, isOnline) values
+    ('VXGamez', 'victor.xirau@students.salle.url.edu', '1234', 1, false),
+    ('Lidia', 'lidia.figueras@students.salle.url.edu', '1234', 2, false),
+    ('Adria', 'adria.pajares@students.salle.url.edu', '1234', 3, false),
+    ('Marthin', 'marti.ejarque@students.salle.url.edu', '1234', 4, false),
+    ('Bernat', 'bernat.segura@students.salle.url.edu', '1234', 5, false);
 
 INSERT INTO partida (duration, publica, name, host, date, player1, player2) VALUES
     (200, true, 'Prova1', 'admin', '20-05-2020', 1, 2), (150, true, 'Prova2', 'admin', '19-05-2020', 3, 4), (478, false, 'Prova3', 'admin',  '18-05-2020', 5, 1);
@@ -177,6 +176,13 @@ SELECT if(COUNT(*) = 1, us.idUser, -1) as exist FROM AgeRoyale.usuari AS us WHER
 
 #exist registre
 SELECT if(COUNT(*) = 1, 1, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = 'VGamez' OR us.email = 'victor.xirau@students.salle.url.edu';
+
+#exits al canvi de nom / email
+SELECT if(COUNT(*) > 1, 1, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = 'bernat' OR us.email = 'victor.xirau@students.salle.url.edu';
+SELECT us.* FROM AgeRoyale.usuari AS us WHERE us.nickname = 'bernat' OR us.email = 'victor.xirau@students.salle.url.edu';
+
+#
+UPDATE AgeRoyale.usuari SET isOnline = true WHERE idUser = 5;
 
 ###########################################     PARTIDA    ###############################################################################################
 #get partida from id

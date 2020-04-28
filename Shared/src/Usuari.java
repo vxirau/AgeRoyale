@@ -11,14 +11,21 @@ public class Usuari implements Serializable {
     private Stats stats;
     private ArrayList<Tropa> tropes;
     private ArrayList<Usuari> amics;
+    private boolean isOnline;
 
     public Usuari() {
 
     }
 
-    public Usuari(String nickName, String password) {
+    public Usuari(int idUsuari, String nickName, String email, String password, Stats stats, ArrayList<Tropa> tropes, ArrayList<Usuari> amics, boolean isOnline) {
+        this.idUsuari = idUsuari;
         this.nickName = nickName;
+        this.email = email;
         this.password = password;
+        this.stats = stats;
+        this.tropes = tropes;
+        this.amics = amics;
+        this.isOnline = isOnline;
     }
 
     public Usuari(int idUsuari, String nickName, String email, String password, Stats stats, ArrayList<Tropa> tropes, ArrayList<Usuari> amics) {
@@ -29,6 +36,11 @@ public class Usuari implements Serializable {
         this.stats = stats;
         this.tropes = tropes;
         this.amics = amics;
+    }
+
+    public Usuari(String nickName, String password) {
+        this.nickName = nickName;
+        this.password = password;
     }
 
     public Usuari(String nickName, String email, String password){
@@ -93,6 +105,13 @@ public class Usuari implements Serializable {
         this.amics = amics;
     }
 
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
+    }
 
     @Override
     public String toString() {

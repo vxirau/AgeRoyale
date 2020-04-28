@@ -27,7 +27,6 @@ public class MainClient{
                   loginview.loginViewsetListener(controller);
                   loginview.setVisible(true);
               } else if(game == 0){
-
                   GameView gView = null;
                   try {
                       gView = new GameView();
@@ -49,8 +48,6 @@ public class MainClient{
                   });
               }
           }
-
         });
-
     }
 }

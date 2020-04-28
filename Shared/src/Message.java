@@ -8,9 +8,9 @@ public class Message implements Serializable {
     private Object object;
     private ArrayList<Partida> objectArray;
 
-    public Message(Object user, String type){
+    public Message(Object obj, String type){
         this.type = type;
-        this.object =  user;
+        this.object =  obj;
     }
 
     public Message(int a, ArrayList<Partida> array, String type){

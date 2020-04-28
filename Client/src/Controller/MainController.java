@@ -34,7 +34,7 @@ public class MainController {
 
         if (usuari.getStats() != null) {
             mainView.getJlVictories().setText(usuari.getStats().getTotalVictories() + " victories");
-            mainView.getJlTempsXVictoria().setText("Avg" + usuari.getStats().getAvgDurationVictories() + " min per victoria");
+            mainView.getJlTempsXVictoria().setText("Avg " + usuari.getStats().getAvgDurationVictories() + " min per victoria");
         }
         mainView.getJlTropaMesUtilitzada().setText("Tropa: XY");
     }

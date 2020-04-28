@@ -29,6 +29,7 @@ public class usuariDAO {
                 usuari.setTropes(tropesDAO.getTropesFromUserId(usuari.getIdUsuari()));
                 usuari.setStats(statsDAO.getStatsFromStatsId(rs.getInt("idStats")));
                 usuari.setAmics(amicDAO.getAmics(usuari.getIdUsuari()));
+                usuari.setOnline(rs.getBoolean("isOnline"));
 
                 usuaris.add(usuari);
             }
@@ -54,6 +55,8 @@ public class usuariDAO {
                 usuari.setTropes(tropesDAO.getTropesFromUserId(usuari.getIdUsuari()));
                 usuari.setStats(statsDAO.getStatsFromStatsId(rs.getInt("idStats")));
                 usuari.setAmics(amicDAO.getAmics(usuari.getIdUsuari()));
+                usuari.setOnline(rs.getBoolean("isOnline"));
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -76,6 +79,11 @@ public class usuariDAO {
         amicDAO.addAmic(usuari, usuari.getAmics());
 
         String query = "UPDATE AgeRoyale.usuari SET nickname = '" + usuari.getNickName() + "' and email = '" + usuari.getEmail() + "' and password = '" + usuari.getPassword() + "' WHERE idUser = " + usuari.getIdUsuari() + ";";
+        DBConnector.getInstance().updateQuery(query);
+    }
+
+    public void updateState(Usuari usuari, boolean online){
+        String query = "UPDATE AgeRoyale.usuari SET isOnline = " + Boolean.toString(online) + " WHERE idUser = " + usuari.getIdUsuari() + ";";
         DBConnector.getInstance().updateQuery(query);
     }
 

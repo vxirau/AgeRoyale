@@ -1,10 +1,15 @@
 package src.Controller;
 
+import src.Message;
 import src.Model.Network.UserService;
 import src.Usuari;
 import src.View.MenuView;
 
-public class MenuController{
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
+public class MenuController {
 
     private MenuView view;
     private UserService uService;
@@ -16,6 +21,17 @@ public class MenuController{
     private MainController mainController;
     private FriendsController friendsController;
     private RoomsController roomsController;
+
+    //Listener
+    private WindowListener windowListener = new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            super.windowClosing(e);
+            System.out.println("closiing");
+            Message message = new Message(user, "Logout");
+            uService.sendLogout(message);
+        }
+    };
 
 
     public MenuController(MenuView view, UserService userService, Usuari usr) {
@@ -35,6 +51,7 @@ public class MenuController{
 
         view.setUsuari(usr);
         view.setuService(userService);
+        view.addWindowListener(windowListener);
     }
 
     private void initControllers() {
@@ -60,4 +77,5 @@ public class MenuController{
     public ConfigController getConfigController() {
         return configController;
     }
+
 }

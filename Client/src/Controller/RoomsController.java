@@ -67,8 +67,10 @@ public class RoomsController {
 	public void setAllGames(ArrayList<Partida> allGames) {
 		if (allGames != null) {
 			this.allGames = allGames;
-			vista.setAllGames(allGames);
+		} else {
+			this.allGames = new ArrayList<>();
 		}
+		vista.setAllGames(this.allGames);
 	}
 
 	public void setVista(RoomListView vista) {
