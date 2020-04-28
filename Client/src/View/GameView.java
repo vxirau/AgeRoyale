@@ -20,6 +20,9 @@ public class GameView extends JFrame implements ActionListener, Runnable {
     private static int x = 0;
     private static int y = 0;
 
+    private static int index1 = 60;
+    private static int index2 = 60;
+
     private static Thread thread;
     private final int[] pixels;
     private final int width;
@@ -29,6 +32,7 @@ public class GameView extends JFrame implements ActionListener, Runnable {
     private static int aux1 = 0;
     private static int aux2 = 0;
     private static volatile boolean gameIsRunning = false;
+    private static GameController gcontrol;
 
     private static BufferedImage image;
     //Variable per accedir a la imatge a partir dels seus pixels
@@ -54,6 +58,8 @@ public class GameView extends JFrame implements ActionListener, Runnable {
     }
 
     public GameView() throws IOException {
+        gcontrol = new GameController(this);
+        addKeyListener(gcontrol);
         this.width = 32 * COLUMNS;
         this.height = 32 * ROWS;
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -130,6 +136,23 @@ public class GameView extends JFrame implements ActionListener, Runnable {
         //Donem el valor de negre a tots els pixels cada cop que esborrem els pixels de la pantalla
         for(int i = 0; i < pixels.length; i++){
             pixels[i] = 0;
+        }
+
+    }
+
+    public void update(){
+        gcontrol.update();
+        if(gcontrol.up){
+            System.out.println("up");
+        }
+        if(gcontrol.down){
+            System.out.println("down");
+        }
+        if(gcontrol.left){
+            System.out.println("left");
+        }
+        if(gcontrol.right){
+            System.out.println("right");
         }
 
     }
@@ -234,6 +257,9 @@ public class GameView extends JFrame implements ActionListener, Runnable {
         //L'objecte g s'encarregara de dibuixar els grafics a la pantalla
         Graphics g = bufferStrategy.getDrawGraphics();
         g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+        //index1 = index1 + 20;
+        index2 = index2 + 1;
+        g.fillRect(index1,index2,32,32);
         g.dispose();
 
         //Mostrem el que tenim
@@ -256,10 +282,11 @@ public class GameView extends JFrame implements ActionListener, Runnable {
         double elapsedTime;
         double delta = 0;
 
-
         requestFocus();
 
         while(gameIsRunning){
+
+            update();
             final long loopStart = System.nanoTime();
 
             elapsedTime = loopStart - updateReference;
@@ -272,11 +299,7 @@ public class GameView extends JFrame implements ActionListener, Runnable {
                 delta--;
             }
 
-
             showGraphics();
-
-
-
 
         }
     }
