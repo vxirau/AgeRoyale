@@ -24,7 +24,7 @@ public class MenuController{
         this.user = usr;
 
         if(!userService.serviceStarted()){
-           // userService.startServerComunication(); //TODO: descomentar
+           //userService.startServerComunication(); //TODO: descomentar
         }
 
         initControllers();

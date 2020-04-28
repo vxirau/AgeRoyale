@@ -166,7 +166,7 @@ public class MenuView extends JFrame implements ActionListener {
             jpMenuFriends.setBackground(Color.decode(bgColorSelected));
         }
         if (name.equals(MenuView.CREAPARTIDA)){
-            jpActive = jpCrearPartida;
+            jpActive = roomListView.getJpPare();
 
             jpMenuConfig.setBackground(Color.decode(bgColor));
             jpMenuTropes.setBackground(Color.decode(bgColor));

@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class MainClient{
 
-    private static int game = 3;
+    private static int game = 1;
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
           @Override
@@ -42,14 +42,8 @@ public class MainClient{
                   SwingUtilities.invokeLater(new Runnable() {
                       @Override
                       public void run() {
-                          MenuView rView = null;
-                          try {
-                              rView = new MenuView(userService, new Usuari());
-                          } catch (InterruptedException interruptedException) {
-                              interruptedException.printStackTrace();
-                          }
-                          MenuController controlador = new MenuController(rView, userService);
-                          rView.registerController(controlador);
+                          MenuView rView = new MenuView();
+                          MenuController controlador = new MenuController(rView, userService, new Usuari() );
                           rView.setVisible(true);
                       }
                   });
