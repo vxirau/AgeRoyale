@@ -7,11 +7,19 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-public class GameController extends MouseAdapter implements WindowListener {
+public class GameController extends MouseAdapter implements KeyListener {
 
     private GameView view;
     private int aux1;
     private int aux2;
+    private static final int nTeclas = 120;
+    private final  boolean[] teclas = new boolean[nTeclas];
+
+    public boolean up;
+    public boolean down;
+    public boolean left;
+    public boolean right;
+
 
     public GameController(GameView view){
         this.view = view;
@@ -48,39 +56,27 @@ public class GameController extends MouseAdapter implements WindowListener {
 
     }
 
-
-    @Override
-    public void windowOpened(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowClosing(WindowEvent e) {
+    public void update(){
+        up = teclas[KeyEvent.VK_W];
+        down = teclas[KeyEvent.VK_S];
+        left = teclas[KeyEvent.VK_A];
+        right = teclas[KeyEvent.VK_D];
 
     }
 
     @Override
-    public void windowClosed(WindowEvent e) {
+    public void keyTyped(KeyEvent e) {
+
 
     }
 
     @Override
-    public void windowIconified(WindowEvent e) {
-
+    public void keyPressed(KeyEvent e) {
+        teclas[e.getKeyCode()] = true;
     }
 
     @Override
-    public void windowDeiconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-
+    public void keyReleased(KeyEvent e) {
+        teclas[e.getKeyCode()] = false;
     }
 }
