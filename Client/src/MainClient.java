@@ -15,19 +15,18 @@ import java.io.IOException;
 
 public class MainClient{
 
-    private static boolean game = false;
+    private static int game = 3;
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
           @Override
           public void run() {
-
-              if (!game) {
-                  UserService userService = new UserService();
+              UserService userService = new UserService();
+              if (game == 1) {
                   LoginView loginview = new LoginView();
                   LoginViewController controller = new LoginViewController(loginview, userService);
                   loginview.loginViewsetListener(controller);
                   loginview.setVisible(true);
-              } else {
+              } else if(game == 0){
 
                   GameView gView = null;
                   try {
@@ -39,6 +38,21 @@ public class MainClient{
                   GameController controller = new GameController(gView);
                   gView.registerController(controller);
                   gView.setVisible(true);
+              }else{
+                  SwingUtilities.invokeLater(new Runnable() {
+                      @Override
+                      public void run() {
+                          MenuView rView = null;
+                          try {
+                              rView = new MenuView(userService, new Usuari());
+                          } catch (InterruptedException interruptedException) {
+                              interruptedException.printStackTrace();
+                          }
+                          MenuController controlador = new MenuController(rView, userService);
+                          rView.registerController(controlador);
+                          rView.setVisible(true);
+                      }
+                  });
               }
           }
 
