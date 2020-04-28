@@ -87,6 +87,16 @@ public class usuariDAO {
         DBConnector.getInstance().updateQuery(query);
     }
 
+    public void updatePass(Usuari usuari) {
+        String query = "UPDATE AgeRoyale.usuari SET password = '"  + usuari.getPassword() + "' WHERE idUser = " + usuari.getIdUsuari() + ";";
+        DBConnector.getInstance().updateQuery(query);
+    }
+
+    public void updateNickEmail (Usuari usuari) {
+        String query = "UPDATE AgeRoyale.usuari SET nickname = '"  + usuari.getNickName() + "' and email = '" + usuari.getEmail() + "' WHERE idUser = " + usuari.getIdUsuari() + ";";
+        DBConnector.getInstance().updateQuery(query);
+    }
+
     //AFEGIR INFORMACIO
     public synchronized int addUser(Usuari usuari){
         statsDAO statsDAO = new statsDAO();

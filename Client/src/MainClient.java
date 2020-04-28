@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class MainClient{
 
-    private static int game = 1;
+    private static int game = 2;
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
           @Override
@@ -42,7 +42,8 @@ public class MainClient{
                       @Override
                       public void run() {
                           MenuView rView = new MenuView();
-                          MenuController controlador = new MenuController(rView, userService, new Usuari() );
+                          Usuari user = new Usuari(5, "bernat", "bernat@gmail.com", "1234", null, null, null);
+                          MenuController controlador = new MenuController(rView, userService, user);
                           rView.setVisible(true);
                       }
                   });

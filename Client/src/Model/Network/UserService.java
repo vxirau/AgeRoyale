@@ -2,10 +2,7 @@ package src.Model.Network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import src.Controller.LoginViewController;
-import src.Controller.NetworkConfiguration;
-import src.Controller.RegisterViewController;
-import src.Controller.RoomsController;
+import src.Controller.*;
 import src.Message;
 import src.Partida;
 import src.Usuari;
@@ -34,6 +31,7 @@ public class UserService extends Thread{
     private ViewRegistre vregistre;
     private RoomsController roomsController;
     private LoginViewController loginViewController;
+    private ConfigController configController;
 
 
 	public UserService() {
@@ -88,8 +86,8 @@ public class UserService extends Thread{
 
 				Message jelow = (Message) doInput.readObject();
 				System.out.println(jelow.getType());
-				if(jelow.getType().equals("REGISTER_OK")){
-					JOptionPane.showOptionDialog(new JFrame(), "DE SUPER PUTA MARE SOCI" , "Congratulacions", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null,options,options[0]);
+				if (jelow.getType().equals("REGISTER_OK")) {
+					JOptionPane.showOptionDialog(new JFrame(), "DE SUPER PUTA MARE SOCI", "Congratulacions", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 					LoginView lview = new LoginView();
 					LoginViewController controller = new LoginViewController(lview, UserService.this);
 					lview.loginViewsetListener(controller);
@@ -98,16 +96,23 @@ public class UserService extends Thread{
 					Usuari user = (Usuari) jelow.getObject();
 					lview.setUsuari(user.getNickName());
 					lview.setPassword(user.getPassword());
-				}else if(jelow.getType().equals("allGamesReply")) {
+				} else if (jelow.getType().equals("allGamesReply")) {
 					ArrayList<Partida> p = jelow.getObjectArray();
 					System.out.println("Arriba Resposta");
 					roomsController.setAllGames(p);
-				}else if (jelow.getType().equals("Login resposta")){
+				} else if (jelow.getType().equals("Login resposta")) {
 					System.out.println("Arriba resposta del login");
-					if (jelow.getObject() != null){
+					if (jelow.getObject() != null) {
 						loginViewController.loginSuccessful((Usuari) jelow.getObject());
 					} else {
 						loginViewController.loginNotSuccessful();
+					}
+				} else if(jelow.getType().equals("UserPKUpdatesResposta")){
+					String resposta = (String) jelow.getObject();
+					if (resposta.equals("UserPKUpdates_KO")){
+						configController.canviNotSuccessful();
+					} else if (resposta.equals("UserPKUpdates_OK")){
+						configController.canviSuccessful();
 					}
 				}else{
 					JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
@@ -174,4 +179,24 @@ public class UserService extends Thread{
 	}
 
 
+	public void sendPassUpdate(Object message) {
+		try{
+			this.doStream.reset();
+			this.doStream.writeObject(message);
+		} catch (IOException e) {
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
+
+	public void sendUserPKUpdate(Message message, ConfigController configCntroller) {
+		try{
+			this.configController = configCntroller;
+			this.doStream.reset();
+			this.doStream.writeObject(message);
+		} catch (IOException e) {
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
 }

@@ -80,4 +80,8 @@ public class RoomsController {
 	public ActionListener getActionListenerCreaPartida() {
 		return actionListenerCreaPartida;
 	}
+
+	public void setUsuari(Usuari usuari) {
+		this.usuari = usuari;
+	}
 }

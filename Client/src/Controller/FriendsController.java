@@ -19,4 +19,8 @@ public class FriendsController {
     public void setFriendView(FriendView friendView) {
         this.friendView = friendView;
     }
+
+    public void setUsuari(Usuari usuari) {
+        this.usuari = usuari;
+    }
 }

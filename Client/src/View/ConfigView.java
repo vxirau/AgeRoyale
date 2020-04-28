@@ -5,7 +5,6 @@ import src.Utils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -20,7 +19,10 @@ public class ConfigView extends JFrame {
 
     public ConfigView(ConfigController confiController) {
         this.configController = confiController;
+        initAll();
+    }
 
+    public void initAll(){
         jpConfig = new JPanel(null);
 
         JButton jpConfigTitle = new JButton("Configuració");
@@ -130,7 +132,7 @@ public class ConfigView extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                confiController.saveBtnClicked();
+                configController.saveBtnClicked();
             }
         });
         ImageIcon fonsButton= new ImageIcon(this.getClass().getResource("/resources/config_saveButton_bg.png"));
@@ -146,7 +148,6 @@ public class ConfigView extends JFrame {
         fondo.setBounds(0, 0, 450, 700);
         jpConfig.add(fondo);
     }
-
     public JPanel getJpConfig() {
         return jpConfig;
     }

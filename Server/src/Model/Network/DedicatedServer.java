@@ -90,6 +90,22 @@ public class DedicatedServer extends Thread {
 				Usuari usuari = (Usuari) m.getObject();
 				usuariDAO uDAO = new usuariDAO();
 				uDAO.updateState(usuari, false);
+			} else if(m.getType().equals("PasswordUpdate")){
+				Usuari usuari = (Usuari) m.getObject();
+				usuariDAO uDAO = new usuariDAO();
+				uDAO.updatePass(usuari);
+			} else if(m.getType().equals("UserPKUpdates")){
+				Usuari usuari = (Usuari) m.getObject();
+				usuariDAO uDAO = new usuariDAO();
+				String resposta = "";
+				if(uDAO.existsUsuariOnChange(usuari)){
+					resposta = "UserPKUpdates_KO";
+				} else {
+					uDAO.updateNickEmail(usuari);
+					resposta = "UserPKUpdates_OK";
+				}
+				Message messageResposta = new Message(resposta, "UserPKUpdatesResposta");
+				objectOut.writeObject(messageResposta);
 			}
 		} catch (IOException | ClassNotFoundException e1) {
 			// en cas derror aturem el servidor dedicat

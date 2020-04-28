@@ -38,4 +38,8 @@ public class MainController {
         }
         mainView.getJlTropaMesUtilitzada().setText("Tropa: XY");
     }
+
+    public void setUsuari(Usuari usuari) {
+        this.usuari = usuari;
+    }
 }

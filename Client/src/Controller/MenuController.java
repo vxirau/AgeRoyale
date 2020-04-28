@@ -40,7 +40,7 @@ public class MenuController {
         this.user = usr;
 
         if(!userService.serviceStarted()){
-           //userService.startServerComunication(); //TODO: descomentar
+           userService.startServerComunication(); //TODO: descomentar
         }
 
         initControllers();
@@ -55,7 +55,7 @@ public class MenuController {
     }
 
     private void initControllers() {
-        configController = new ConfigController(user, uService);
+        configController = new ConfigController(user, uService, this);
         tropesController = new TropesController(user);
         mainController = new MainController(user);
         friendsController = new FriendsController(user, uService);
@@ -70,6 +70,17 @@ public class MenuController {
         roomsController.setVista(view.getRoomListView());
     }
 
+
+/*
+    public void userUpdate(Usuari user){
+        configController.setUsuari(user);
+        tropesController.setUsuari(user);
+        mainController.setUsuari(user);
+        friendsController.setUsuari(user);
+        roomsController.setUsuari(user);
+    }
+
+ */
     public RoomsController getRoomsController() {
         return roomsController;
     }

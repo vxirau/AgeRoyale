@@ -38,4 +38,8 @@ public class TropesController {
             }
         }
     }
+
+    public void setUsuari(Usuari usuari) {
+        this.usuari = usuari;
+    }
 }
