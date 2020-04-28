@@ -7,7 +7,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class FriendView extends JFrame {
-
     private JPanel jpFriends;
     private JPanel jpAmics;
     private JPanel[] jpsAmics;
@@ -17,6 +16,7 @@ public class FriendView extends JFrame {
     private JTextField jtfSearchAmic;
 
     public FriendView(ArrayList<Usuari> amicsRecived) {
+
         jpFriends = new JPanel(null);
         jpFriends.setOpaque(false);
 
@@ -48,7 +48,6 @@ public class FriendView extends JFrame {
         jpFriendsTitle.setIcon(iconoProgressBar);
         jpFriends.add(jpFriendsTitle);
 
-        //TODO: Panell de cerca
 
         for (int i = 0; i < amics.size() ; i++) {
             jpsAmics[i] = new JPanel(new GridLayout(1, 3)){
@@ -69,11 +68,9 @@ public class FriendView extends JFrame {
             nomAmic.setBounds(0, 0, 100, 15);
             jpsAmics[i].add(nomAmic);
 
-            //TODO: crearfuncio que comprovi aixo per id de usuari
             //if (usuari.getAmics().contains(amics.get(i))){
             JLabel aux = new JLabel("BU");
             //} else {
-            //TODO: boto per afegir aquest a amics
             //}
 
             jpsAmics[i].add(aux);

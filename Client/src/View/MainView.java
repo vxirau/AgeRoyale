@@ -9,10 +9,10 @@ import java.awt.event.MouseListener;
 public class MainView extends JFrame{
     private MenuView menuView;
     private JPanel jpMain;
-    private JButton jpMainTopUser;
+
+    private JButton jbMainTopUser;
     private JProgressBar jProgressBar;
-    private JLabel jlProgressBarPercent;
-    private JLabel jlLvl;
+    private JButton jbMainTopLvl;
     private JLabel jlVictories;
     private JLabel jlTempsXVictoria;
     private JLabel jlTropaMesUtilitzada;
@@ -21,21 +21,35 @@ public class MainView extends JFrame{
     public MainView(MenuView menuView) {
         this.menuView = menuView;
 
+        jbMainTopUser = new JButton();
+        jProgressBar = new JProgressBar();
+        jbMainTopLvl = new JButton();
+        jlVictories = new JLabel();
+        jlTempsXVictoria = new JLabel();
+        jlTropaMesUtilitzada = new JLabel();
+
         String bgColorMid = "#232745";
 
         jpMain = new JPanel(null);
 
-        jpMainTopUser = new JButton("");
-        jpMainTopUser.setBounds(20, 20, 50, 50);
-        jpMainTopUser.setOpaque(false);
-        jpMainTopUser.setHorizontalTextPosition(JButton.CENTER);
-        jpMainTopUser.setVerticalTextPosition(JButton.CENTER);
-        jpMainTopUser.setContentAreaFilled(false);
-        jpMainTopUser.setBorderPainted(false);
+        jbMainTopUser.setText("");
+        jbMainTopUser.setBounds(20, 20, 50, 50);
+        jbMainTopUser.setOpaque(false);
+        jbMainTopUser.setHorizontalTextPosition(JButton.CENTER);
+        jbMainTopUser.setVerticalTextPosition(JButton.CENTER);
+        jbMainTopUser.setContentAreaFilled(false);
+        jbMainTopUser.setBorderPainted(false);
+        jbMainTopUser.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                menuView.invokeAdjustViews(MenuView.CONFIGURACIO);
+            }
+        });
         ImageIcon fonsButtonUser = new ImageIcon(this.getClass().getResource("/resources/main_logo_user.png"));
         Icon iconoButtonUser = new ImageIcon(fonsButtonUser.getImage().getScaledInstance(50, 50, Image.SCALE_FAST));
-        jpMainTopUser.setIcon(iconoButtonUser);
-        jpMain.add(jpMainTopUser);
+        jbMainTopUser.setIcon(iconoButtonUser);
+        jpMain.add(jbMainTopUser);
 
         JButton jpMainTopProgress = new JButton();
         jpMainTopProgress.setBounds(80, 20, 280, 50);
@@ -45,26 +59,26 @@ public class MainView extends JFrame{
         ImageIcon fonsProgressBar = new ImageIcon(this.getClass().getResource("/resources/main_progress_bg.png"));
         Icon iconoProgressBar = new ImageIcon(fonsProgressBar.getImage().getScaledInstance(290, 50, Image.SCALE_FAST));
         jpMainTopProgress.setIcon(iconoProgressBar);
-        jProgressBar = new JProgressBar(SwingConstants.HORIZONTAL);
+        jProgressBar.setOrientation(SwingConstants.HORIZONTAL);
         jProgressBar.setMinimum(0);
         jProgressBar.setMaximum(100);
-        jProgressBar.setValue(40);
+        jProgressBar.setValue(0);
         jProgressBar.setStringPainted(true);
         jpMainTopProgress.add(jProgressBar);
         jpMain.add(jpMainTopProgress);
 
-        JButton jpMainTopLvl = new JButton("Lvl. 0");
-        jpMainTopLvl.setBounds(360, 20, 70, 50);
-        jpMainTopLvl.setOpaque(false);
-        jpMainTopLvl.setForeground(Color.white);
-        jpMainTopLvl.setHorizontalTextPosition(JButton.CENTER);
-        jpMainTopLvl.setVerticalTextPosition(JButton.CENTER);
-        jpMainTopLvl.setContentAreaFilled(false);
-        jpMainTopLvl.setBorderPainted(false);
+        jbMainTopLvl.setText("Lvl. X");
+        jbMainTopLvl.setBounds(360, 20, 70, 50);
+        jbMainTopLvl.setOpaque(false);
+        jbMainTopLvl.setForeground(Color.white);
+        jbMainTopLvl.setHorizontalTextPosition(JButton.CENTER);
+        jbMainTopLvl.setVerticalTextPosition(JButton.CENTER);
+        jbMainTopLvl.setContentAreaFilled(false);
+        jbMainTopLvl.setBorderPainted(false);
         ImageIcon fonsLvl = new ImageIcon(this.getClass().getResource("/resources/main_lvl_bg.png"));
         Icon iconoLvl = new ImageIcon(fonsLvl.getImage().getScaledInstance(50, 50, Image.SCALE_FAST));
-        jpMainTopLvl.setIcon(iconoLvl);
-        jpMain.add(jpMainTopLvl);
+        jbMainTopLvl.setIcon(iconoLvl);
+        jpMain.add(jbMainTopLvl);
 
         JPanel jpMainMiddle = new JPanel(new GridBagLayout());
         jpMainMiddle.setBounds(80, 130, 280, 320);
@@ -86,7 +100,6 @@ public class MainView extends JFrame{
         c.gridx = 1;
         c.gridwidth = 2;
         c.gridy = 0;
-        jlVictories = new JLabel();
         jlVictories.setText("X VICTORIES");
         jlVictories.setForeground(Color.WHITE);
         jlVictories.setVerticalAlignment(SwingConstants.CENTER);
@@ -106,7 +119,6 @@ public class MainView extends JFrame{
         c.gridx = 1;
         c.gridwidth = 2;
         c.gridy = 1;
-        jlTempsXVictoria = new JLabel();
         jlTempsXVictoria.setText("AVG de X min per vicoria");
         jlTempsXVictoria.setForeground(Color.white);
         jlTempsXVictoria.setVerticalAlignment(SwingConstants.CENTER);
@@ -126,7 +138,6 @@ public class MainView extends JFrame{
         c.gridx = 1;
         c.gridwidth = 2;
         c.gridy = 2;
-        jlTropaMesUtilitzada = new JLabel();
         jlTropaMesUtilitzada.setText("AVG de X min per vicoria");
         jlTropaMesUtilitzada.setForeground(Color.white);
         jlTropaMesUtilitzada.setVerticalAlignment(SwingConstants.CENTER);
@@ -164,10 +175,6 @@ public class MainView extends JFrame{
         jpMain.add(fondo);
     }
 
-    public JPanel getJpMain() {
-        return jpMain;
-    }
-
     public MenuView getMenuView() {
         return menuView;
     }
@@ -176,16 +183,20 @@ public class MainView extends JFrame{
         this.menuView = menuView;
     }
 
+    public JPanel getJpMain() {
+        return jpMain;
+    }
+
     public void setJpMain(JPanel jpMain) {
         this.jpMain = jpMain;
     }
 
     public JButton getJpMainTopUser() {
-        return jpMainTopUser;
+        return jbMainTopUser;
     }
 
-    public void setJpMainTopUser(JButton jpMainTopUser) {
-        this.jpMainTopUser = jpMainTopUser;
+    public void setJpMainTopUser(JButton jbMainTopUser) {
+        this.jbMainTopUser = jbMainTopUser;
     }
 
     public JProgressBar getjProgressBar() {
@@ -196,20 +207,12 @@ public class MainView extends JFrame{
         this.jProgressBar = jProgressBar;
     }
 
-    public JLabel getJlProgressBarPercent() {
-        return jlProgressBarPercent;
+    public JButton getJbMainTopLvl() {
+        return jbMainTopLvl;
     }
 
-    public void setJlProgressBarPercent(JLabel jlProgressBarPercent) {
-        this.jlProgressBarPercent = jlProgressBarPercent;
-    }
-
-    public JLabel getJlLvl() {
-        return jlLvl;
-    }
-
-    public void setJlLvl(JLabel jlLvl) {
-        this.jlLvl = jlLvl;
+    public void setJbMainTopLvl(JButton jbMainTopLvl) {
+        this.jbMainTopLvl = jbMainTopLvl;
     }
 
     public JLabel getJlVictories() {

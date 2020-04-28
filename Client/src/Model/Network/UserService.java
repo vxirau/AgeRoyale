@@ -5,11 +5,13 @@ import com.google.gson.GsonBuilder;
 import src.Controller.LoginViewController;
 import src.Controller.NetworkConfiguration;
 import src.Controller.RegisterViewController;
+import src.Controller.RoomsController;
 import src.Message;
 import src.Partida;
 import src.Usuari;
 import src.View.LoginView;
 import src.View.MenuView;
+import src.View.RoomListView;
 import src.View.ViewRegistre;
 
 import javax.swing.*;
@@ -30,6 +32,8 @@ public class UserService extends Thread{
   	private Path current = Paths.get("./Server/resources/config.json");
   	private String arxiu = current.toAbsolutePath().toString();
     private ViewRegistre vregistre;
+    private RoomsController roomsController;
+    private LoginViewController loginViewController;
 
 
 	public UserService() {
@@ -59,8 +63,8 @@ public class UserService extends Thread{
 
 	public void startServerComunication() {
 		// iniciem la comunicacio amb el servidor
-		isOn = true;
 		this.start();
+		isOn = true;
 	}
 
 	public void stopServerComunication() {
@@ -94,10 +98,17 @@ public class UserService extends Thread{
 					Usuari user = (Usuari) jelow.getObject();
 					lview.setUsuari(user.getNickName());
 					lview.setPassword(user.getPassword());
-				}else if(jelow.getType().equals("allGamesReply")){
+				}else if(jelow.getType().equals("allGamesReply")) {
 					ArrayList<Partida> p = jelow.getObjectArray();
 					System.out.println("Arriba Resposta");
-					MenuView.setAllGames(p);
+					roomsController.setAllGames(p);
+				}else if (jelow.getType().equals("Login resposta")){
+					System.out.println("Arriba resposta del login");
+					if (jelow.getObject() != null){
+						loginViewController.loginSuccessful((Usuari) jelow.getObject());
+					} else {
+						loginViewController.loginNotSuccessful();
+					}
 				}else{
 					JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
 				}
@@ -106,8 +117,8 @@ public class UserService extends Thread{
 				stopServerComunication();
 				System.out.println("*** ESTA EL SERVIDOR EN EXECUCIO? ***");
 			}
-		//}
 		stopServerComunication();
+		//}
 	}
 
 	public void sendRegister(Object user) {
@@ -130,8 +141,20 @@ public class UserService extends Thread{
 		}
 	}
 
-	public void sendGetPartides(Object message) {
+	public void sendGetPartides(Object message, RoomsController roomsController) {
+		this.roomsController = roomsController;
 		try{
+			this.doStream.reset();
+			this.doStream.writeObject(message);
+		} catch (IOException e) {
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
+
+	public void sendLogin(Object message, LoginViewController loginViewController) {
+		try{
+			this.loginViewController = loginViewController;
 			this.doStream.reset();
 			this.doStream.writeObject(message);
 		} catch (IOException e) {

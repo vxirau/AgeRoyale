@@ -175,10 +175,10 @@ public class ViewRegistre extends JFrame implements ActionListener {
 		}
 
 
-	  @Override
-	  public void actionPerformed(ActionEvent e) {
+		@Override
+		public void actionPerformed(ActionEvent e) {
 
-	  }
+		}
 
 		public void registerController(ActionListener controlador) {
 			botoRegistre.addActionListener(controlador);

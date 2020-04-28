@@ -1,7 +1,6 @@
 package src.Controller;
 
 import src.Message;
-import src.Model.ComprovaClient;
 import src.Model.Network.UserService;
 import src.Usuari;
 import src.View.LoginView;
@@ -24,36 +23,34 @@ public class LoginViewController implements ActionListener {
         }
     }
 
+    public void loginSuccessful(Usuari usr){
+        System.out.println("Existeix usuari");
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                MenuView rView = null;
+                rView = new MenuView();
+                view.setVisible(false);
+                rView.setVisible(true);
+                MenuController controlador = new MenuController(rView, uService, usr);
+            }
+        });
+    }
+
+    public void loginNotSuccessful(){
+        System.out.println("No existeix. Registra't!");
+
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String boto = ((JButton) e.getSource()).getText();
 
         if(boto.equals("INICIAR SESSIÓ")){
             System.out.println("HOLA");
-            int estat = ControllerServer.checkLogin(view.getUsuari(), view.getPassword());  //TODO: fer servir sockets, controllerserver pertany a server
-            switch (estat){
-                case 1:
-                    System.out.println("Existeix usuari");
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            MenuView rView = null;
-                            try {
-                                rView = new MenuView(uService, new Usuari());   //TODO: rebre el usuari de la db
-                            } catch (InterruptedException interruptedException) {
-                                interruptedException.printStackTrace();
-                            }
-                            MenuController controlador = new MenuController(rView, uService);
-                            rView.registerController(controlador);
-                            view.setVisible(false);
-                            rView.setVisible(true);
-                        }
-                    });
-                    break;
-                case 2:
-                    System.out.println("No existeix. Registra't!");
-                    break;
-            }
+            Message message = new Message(new Usuari(view.getUsuari(), view.getPassword()), "Login");
+            uService.sendLogin(message, this);
+
         } else if(boto.equals("Registra't ara")){
             SwingUtilities.invokeLater(new Runnable() {
             @Override

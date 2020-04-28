@@ -196,8 +196,24 @@ public class usuariDAO {
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
         try {
             if (rs.next()) {
-                int id = rs.getInt("exist");
-                if (id == 1){
+                int result = rs.getInt("exist");
+                if (result == 1){
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean existsUsuariOnChange(Usuari usuari){
+        String query = "SELECT if(COUNT(*) > 1, 1, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = '" + usuari.getNickName() + "' OR us.email = '" + usuari.getEmail() + "';";
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try {
+            if (rs.next()) {
+                int result = rs.getInt("exist");
+                if (result == 1){
                     return true;
                 }
             }

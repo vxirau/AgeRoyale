@@ -46,7 +46,7 @@ public class MenuView extends JFrame implements ActionListener {
 
     //Jpanel de partida
     private RoomListView roomListView;
-    private static ArrayList<Partida> allGames;
+    private JPanel jpCrearPartida;
 
     //Menu inferior
     private JPanel jpMenu;
@@ -65,14 +65,17 @@ public class MenuView extends JFrame implements ActionListener {
         }
     };
 
-    public MenuView(UserService userService, Usuari usr) throws InterruptedException {
-		this.uService = userService;
-		this.usuari = usr;
+    public MenuView() {
+
+    }
+
+    public void setMenuController(MenuController menuController) {
+        this.menuController = menuController;
         init();
         basic();
     }
 
-    private void init() throws InterruptedException {
+    private void init() {
         this.setLayout(new BorderLayout());
         //jpPare.setOpaque(true);
 
@@ -84,7 +87,6 @@ public class MenuView extends JFrame implements ActionListener {
         initTropes();
         initMain();
 
-        /*
         Usuari main = new Usuari();
         main.setNickName("hola");
         main.setAmics(new ArrayList<Usuari>());
@@ -97,13 +99,12 @@ public class MenuView extends JFrame implements ActionListener {
         amics.add(d);
         amics.add(u);
         initFriends(amics);
-         */
-        initFriends(new ArrayList<>());
 
+        initFriends(amics);
         initCrearPartida();
 
         //Marquem la primera vista que mostrarem al iniciar
-        adjustViews(MenuView.AMICS);
+        adjustViews(MenuView.MAIN);
     }
 
     private void basic() {
@@ -165,12 +166,8 @@ public class MenuView extends JFrame implements ActionListener {
             jpMenuFriends.setBackground(Color.decode(bgColorSelected));
         }
         if (name.equals(MenuView.CREAPARTIDA)){
-            if(roomListView==null){
-                initCrearPartida();
-                adjustViews(MenuView.CREAPARTIDA);
-            }
-            jpActive = roomListView.getJpPare();
-            jpActive.setVisible(true);
+            jpActive = jpCrearPartida;
+
             jpMenuConfig.setBackground(Color.decode(bgColor));
             jpMenuTropes.setBackground(Color.decode(bgColor));
             jpMenuMain.setBackground(Color.decode(bgColor));
@@ -178,7 +175,9 @@ public class MenuView extends JFrame implements ActionListener {
             jpMenuFriends.setBackground(Color.decode(bgColor));
         }
 
-        this.add(jpActive, BorderLayout.CENTER);
+        if (jpActive != null) {
+            this.add(jpActive, BorderLayout.CENTER);
+        }
         this.revalidate();
         this.repaint();
     }
@@ -242,7 +241,7 @@ public class MenuView extends JFrame implements ActionListener {
     }
 
     private void initConfig() {
-        configView = new ConfigView();
+        configView = new ConfigView(menuController.getConfigController());
         jpConfig = configView.getJpConfig();
     }
 
@@ -261,25 +260,9 @@ public class MenuView extends JFrame implements ActionListener {
         jpFriends = friendView.getJpFriends();
     }
 
-    private synchronized void initCrearPartida() {
-        Message m = new Message(null, "getAllGames");
-        uService.sendGetPartides(m);
-        //FALTA DETECTAR USUARI LOGUEJAT A LA MENU VIEW
-        if(allGames!=null){
-            //allGames = new ArrayList<>();
-            RoomsController controller = new RoomsController(this, new Usuari(), uService);
-            roomListView = new RoomListView(allGames);
-            roomListView.RegisterController(controller);
-        }
-    }
-
-    public static void setAllGames(ArrayList<Partida> partides){
-        if(partides!=null){
-            allGames = partides;
-            System.out.println("setAllGames");
-        }else{
-            //JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-        }
+    private void initCrearPartida() {
+        roomListView = new RoomListView(menuController.getRoomsController());
+        jpCrearPartida = roomListView.getJpPare();
     }
 
     @Override
@@ -295,7 +278,27 @@ public class MenuView extends JFrame implements ActionListener {
         adjustViews(view);
     }
 
-    public void registerController(MenuController controlador) {
-        this.menuController = controlador;
+    public void setuService(UserService uService) {
+        this.uService = uService;
+    }
+
+    public MainView getMainView() {
+        return mainView;
+    }
+
+    public TropesView getTropesView() {
+        return tropesView;
+    }
+
+    public ConfigView getConfigView() {
+        return configView;
+    }
+
+    public FriendView getFriendView() {
+        return friendView;
+    }
+
+    public RoomListView getRoomListView() {
+        return roomListView;
     }
 }

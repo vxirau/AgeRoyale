@@ -74,6 +74,14 @@ public class DedicatedServer extends Thread {
 				partidaDAO pDao = new partidaDAO();
 				System.out.println("Envia Resposta");
 				objectOut.writeObject(new Message(0, pDao.getAllPartides(), "allGamesReply"));
+			} else if(m.getType().equals("Login")){
+				System.out.println("Arriba a la peticio del login al server");
+				Usuari usuari = (Usuari) m.getObject();
+				usuariDAO uDAO = new usuariDAO();
+				Usuari usr = uDAO.existsLogin(usuari);
+				Message messageResposta = new Message(usr, "Login resposta");
+				objectOut.writeObject(messageResposta);
+				System.out.println("Senvia la resposta al login");
 			}
 		} catch (IOException | ClassNotFoundException e1) {
 			// en cas derror aturem el servidor dedicat

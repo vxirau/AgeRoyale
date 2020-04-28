@@ -1,5 +1,6 @@
 package src.View;
 
+import src.Controller.RoomsController;
 import src.Partida;
 import src.Utils;
 
@@ -8,6 +9,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ public class RoomListView extends JFrame{
 	private boolean visible=false;
 	private Object[] options = {"Entèsos"};
 
+	private RoomsController roomsController;
+
 	private void dividirPartides(){
 		for(Partida p : allGames){
 			if(p.isPublic()){
@@ -43,8 +47,12 @@ public class RoomListView extends JFrame{
 		return jpPare;
 	}
 
-	public RoomListView(ArrayList<Partida> games){
-		allGames = games;
+	public RoomListView(RoomsController roomsController){
+		this.roomsController = roomsController;
+		roomsController.initMessage();
+	}
+
+	private void initAll(){
 		dividirPartides();
 		partidesPubliques = new JPanel[pPubliques.size()];
 		partidesPrivades = new JPanel[pPrivades.size()];
@@ -95,30 +103,10 @@ public class RoomListView extends JFrame{
 			}
 		};
 		element.setOpaque(false);
-		element.addMouseListener(new MouseListener() {
+		element.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				JOptionPane.showOptionDialog(new JFrame(), "OBRIR PARTIDA: " + total,"Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-
 			}
 		});
 
@@ -159,6 +147,7 @@ public class RoomListView extends JFrame{
 		nova.setForeground(Color.WHITE);
 		nova.setContentAreaFilled(false);
 		nova.setBorderPainted(false);
+		nova.addActionListener(roomsController.getActionListenerCreaPartida());
 		ImageIcon fonsButton= new ImageIcon(this.getClass().getResource("/resources/newGameBanner.png"));
 		Icon iconoButton = new ImageIcon(fonsButton.getImage().getScaledInstance(400, 70, Image.SCALE_FAST));
 		nova.setIcon(iconoButton);
@@ -246,8 +235,14 @@ public class RoomListView extends JFrame{
 		//this.setContentPane(jpPare);
 	}
 
-	public void RegisterController(ActionListener controlador){
-		nova.addActionListener(controlador);
+	public void setAllGames(ArrayList<Partida> partides){
+		if(partides!=null){
+			allGames = partides;
+			initAll();
+			System.out.println("setAllGames");
+		}else{
+			JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+		}
 	}
 
 }

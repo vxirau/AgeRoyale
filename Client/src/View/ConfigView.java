@@ -1,19 +1,26 @@
 package src.View;
 
+import src.Controller.ConfigController;
 import src.Utils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ConfigView extends JFrame {
 
+    private ConfigController configController;
     private JPanel jpConfig;
     private JTextField jtfConfigNickname;
     private JTextField jtfConfigCorreu;
     private JTextField jtfConfigContrasenya;
     private JButton jbConfigSave;
 
-    public ConfigView() {
+    public ConfigView(ConfigController confiController) {
+        this.configController = confiController;
+
         jpConfig = new JPanel(null);
 
         JButton jpConfigTitle = new JButton("Configuració");
@@ -110,6 +117,7 @@ public class ConfigView extends JFrame {
         jpConfig.add(jpConfigContrasenya);
 
         jbConfigSave = new JButton();
+        jbConfigSave.setName("SAVE");
         jbConfigSave.setText("Guardar");
         jbConfigSave.setBounds(110, 615, 200,30);
         jbConfigSave.setOpaque(false);
@@ -118,7 +126,13 @@ public class ConfigView extends JFrame {
         jbConfigSave.setForeground(Color.BLACK);
         jbConfigSave.setContentAreaFilled(false);
         jbConfigSave.setBorderPainted(false);
-        jbConfigSave.addMouseListener(null); //TODO: onClick save
+        jbConfigSave.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                confiController.saveBtnClicked();
+            }
+        });
         ImageIcon fonsButton= new ImageIcon(this.getClass().getResource("/resources/config_saveButton_bg.png"));
         Icon iconoButton = new ImageIcon(fonsButton.getImage().getScaledInstance(200, 30, Image.SCALE_FAST));
         jbConfigSave.setIcon(iconoButton);
@@ -172,4 +186,5 @@ public class ConfigView extends JFrame {
     public void setJbConfigSave(JButton jbConfigSave) {
         this.jbConfigSave = jbConfigSave;
     }
+
 }

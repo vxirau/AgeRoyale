@@ -1,86 +1,63 @@
 package src.Controller;
 
 import src.Model.Network.UserService;
+import src.Usuari;
 import src.View.MenuView;
 
-import java.awt.event.*;
-
-public class MenuController implements ActionListener, WindowListener, MouseListener {
+public class MenuController{
 
     private MenuView view;
     private UserService uService;
+    private Usuari user;
 
-    public MenuController(MenuView view, UserService userService) {
+    //Controllers
+    private ConfigController configController;
+    private TropesController tropesController;
+    private MainController mainController;
+    private FriendsController friendsController;
+    private RoomsController roomsController;
+
+
+    public MenuController(MenuView view, UserService userService, Usuari usr) {
         this.view = view;
         this.uService = userService;
+        this.user = usr;
+
         if(!userService.serviceStarted()){
-            userService.startServerComunication();
+           // userService.startServerComunication(); //TODO: descomentar
         }
+
+        initControllers();
+
+        view.setMenuController(this);
+
+        initControllersViews();
+
+        view.setUsuari(usr);
+        view.setuService(userService);
     }
 
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
+    private void initControllers() {
+        configController = new ConfigController(user, uService);
+        tropesController = new TropesController(user);
+        mainController = new MainController(user);
+        friendsController = new FriendsController(user, uService);
+        roomsController = new RoomsController(user, uService);
     }
 
-    @Override
-    public void windowOpened(WindowEvent e) {
-
+    private void initControllersViews() {
+        configController.setConfigView(view.getConfigView());
+        tropesController.setTropesView(view.getTropesView());
+        mainController.setMainView(view.getMainView());
+        friendsController.setFriendView(view.getFriendView());
+        roomsController.setVista(view.getRoomListView());
     }
 
-    @Override
-    public void windowClosing(WindowEvent e) {
-
+    public RoomsController getRoomsController() {
+        return roomsController;
     }
 
-    @Override
-    public void windowClosed(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
+    public ConfigController getConfigController() {
+        return configController;
     }
 }
