@@ -1,6 +1,7 @@
 package src.View;
 
 import src.Controller.GameController;
+import src.Tropa;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +11,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GameView extends JFrame implements ActionListener, Runnable {
 
@@ -17,18 +19,20 @@ public class GameView extends JFrame implements ActionListener, Runnable {
     private JPanel[][] panels;
     private JPanel player;
 
+
+
     private static int x = 0;
     private static int y = 0;
 
     private static int index1 = 60;
-    private static int index2 = 60;
+    private static double index2 = 60;
 
     private static Thread thread;
     private final int[] pixels;
     private final int width;
     private final int height;
     public static final int ROWS = 20;
-    public static final int COLUMNS = 12;
+    public static final int COLUMNS = 10;
     private static int aux1 = 0;
     private static int aux2 = 0;
     private static volatile boolean gameIsRunning = false;
@@ -42,7 +46,8 @@ public class GameView extends JFrame implements ActionListener, Runnable {
     //private final static int SPRITE_SIDE = 32;
     //private final static int SPRITE_MASK = SPRITE_SIDE - 1;
 
-
+    private ArrayList<Tropa> tropes;
+    private Tropa tropa;
     private static GameMap gameMap;
 
 
@@ -58,17 +63,21 @@ public class GameView extends JFrame implements ActionListener, Runnable {
     }
 
     public GameView() throws IOException {
+
+        initViews();
         gcontrol = new GameController(this);
         addKeyListener(gcontrol);
         this.width = 32 * COLUMNS;
         this.height = 32 * ROWS;
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         this.pixelsImage = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
-        pixels = new int[width * height];
+        this.pixels = new int[width * height];
+        this.tropes = new ArrayList<>();
 
         //Creem el mapa i li donem la mesura en tiles ( en aquest cas, sera de 10 x 20)
 
         gameMap = new ImageMap("/resources/pixels_map.png");
+        this.tropa = new Tropa( 30, 140, Sprite.PERSONA_FRONT);
         /*panels = new JPanel[ROWS][COLUMNS];
         super.getContentPane().setLayout(new GridLayout(ROWS, COLUMNS));
         JPanel aux;
@@ -123,12 +132,16 @@ public class GameView extends JFrame implements ActionListener, Runnable {
         this.setResizable(false);
         //this.getContentPane().setLayout(new GridLayout(ROWS,COLUMNS));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(width,height);
+        this.setSize(width, height);
 
         //this.setLayout(new BorderLayout());
         //add(this, BorderLayout.CENTER);
         this.setLocationRelativeTo(null);
         //this.pack();
+
+    }
+
+    private void initViews(){
 
     }
 
@@ -141,23 +154,13 @@ public class GameView extends JFrame implements ActionListener, Runnable {
     }
 
     public void update(){
-        gcontrol.update();
-        if(gcontrol.up){
-            System.out.println("up");
-        }
-        if(gcontrol.down){
-            System.out.println("down");
-        }
-        if(gcontrol.left){
-            System.out.println("left");
-        }
-        if(gcontrol.right){
-            System.out.println("right");
-        }
-
+        /*for(int i = 0; i < tropes.size(); i++){
+            tropes.get(i).update();
+        }*/
+        tropa.update();
     }
 
-
+    //Metode que ens dibuixa els tiles del nostre mapa
     public void drawTile(int compensX, int compensY, Tile tile){
 
         for(int i = 0; i < tile.getSprite().getSide(); i++){
@@ -165,13 +168,31 @@ public class GameView extends JFrame implements ActionListener, Runnable {
 
             for(int j = 0; j < tile.getSprite().getSide(); j++){
                 int xPosition = j + compensX;
-                if(xPosition < tile.getSprite().getSide() || xPosition >= width || yPosition < -tile.getSprite().getSide() || yPosition >= height){
+                if(xPosition < -tile.getSprite().getSide() || xPosition >= width || yPosition < -tile.getSprite().getSide() || yPosition >= height){
                     break;
                 }
                 pixels[xPosition + yPosition * width] = tile.getSprite().pixels[i + j * tile.getSprite().getSide()];
             }
         }
     }
+
+
+    //Metode que ens dibuixa les tropes al nostre mapa
+    public void drawTroop(int compensX, int compensY, Tropa troop){
+
+
+        for(int i = 0; i < troop.getSprite().getSide(); i++){
+            int yPosition = i + compensY;
+            for(int j = 0; j < troop.getSprite().getSide(); j++){
+                int xPosition = j + compensX;
+                if(xPosition < -troop.getSprite().getSide() || xPosition >= width || yPosition < -troop.getSprite().getSide() || yPosition >= height){
+                    break;
+                }
+                pixels[xPosition + yPosition * width] = troop.getSprite().pixels[i + j * troop.getSprite().getSide()];
+            }
+        }
+    }
+
 
     public void registerController(GameController controller) {
 
@@ -250,16 +271,15 @@ public class GameView extends JFrame implements ActionListener, Runnable {
 
         //clearScreen();
 
-        gameMap.showMap(x, y, this);
+        gameMap.showMap(0, 0, this);
+        tropa.show(this);
         //Copiem els grafics al joc
         System.arraycopy(pixels, 0, pixelsImage, 0, pixelsImage.length);
 
         //L'objecte g s'encarregara de dibuixar els grafics a la pantalla
         Graphics g = bufferStrategy.getDrawGraphics();
         g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-        //index1 = index1 + 20;
-        index2 = index2 + 1;
-        g.fillRect(index1,index2,32,32);
+
         g.dispose();
 
         //Mostrem el que tenim

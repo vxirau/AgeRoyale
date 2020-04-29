@@ -10,10 +10,19 @@ public class SpritesSheet {
     private final int width;
     private final int height;
     public static SpritesSheet arena;
+    public static SpritesSheet troops;
 
     static {
         try {
             arena = new SpritesSheet("/resources/SpritesSheet.png", 320, 320);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static {
+        try {
+            troops = new SpritesSheet("/resources/playersSheet.png", 320, 320);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -11,9 +11,14 @@ public class Sprite {
     private final int side;
     private SpritesSheet sheet;
 
+    //Sprites tropes
+    public static final Sprite PERSONA_FRONT = new Sprite(32, 0, 0, 0, SpritesSheet.troops);
+    public static final Sprite PERSONA_BACK = new Sprite(32, 1, 0, 0, SpritesSheet.troops);
+    public static final Sprite PERSONA_RIGHT = new Sprite(32, 2, 0, 0, SpritesSheet.troops);
+    public static final Sprite PERSONA_LEFT = new Sprite(32, 3, 0, 0, SpritesSheet.troops);
 
 
-    //Sprites
+    //Sprites de l'arena
     public static Sprite GRASS = new Sprite(32, 0, 0, 0, SpritesSheet.arena);
     public static Sprite WATER = new Sprite(32, 1, 0, 0, SpritesSheet.arena);
     public static Sprite BRIDGE = new Sprite(32, 2, 0, 0, SpritesSheet.arena);

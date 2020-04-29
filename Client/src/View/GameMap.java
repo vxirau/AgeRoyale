@@ -18,12 +18,7 @@ public class GameMap {
 
     //Metode que omplira el conjunt de tiles del mapa en funcio del tipus de tile que li correspon
     protected void generateGameMap(){
-       /* for(int i = 0; i < mapHeight; i++){
-            for(int j = 0; j < mapWidth; j++){
-                //EN AQUEST PUNT LI DIEM A CADA TILE DEL MAPA DEL JOC QUIN TIPUS DE TILE ES
-                mapTiles[j + i * mapWidth] = 0;
-            }
-        }*/
+
     }
 
     protected void loadMap(String path) throws IOException {
@@ -44,7 +39,7 @@ public class GameMap {
         for(int i = north; i < south; i++){
             for(int j = west; j < east; j++){
                 //En aquest sentit, dibuixem cada tile que toca cridant al metode drawTile()
-                //getTile(i, j).drawTile(j, i, gameView);
+
                 if(j < 0 || i < 0 || j >= mapWidth ||  i >= mapHeight){
                     Tile.GRASS.drawTile(j, i, gameView);
                 }else{
