@@ -29,7 +29,6 @@ public class GameMap {
     }
     //Metode que traduira el conjunt de tiles del nostre mapa a pixels
     public void showMap(int compensX, int compensY, GameView gameView){
-
         //Utilitzarem bit shifting per tal d'optimitzar memoria (movem cinc bits cap a la dreta, es a dir, >> 5 es el mateix que / 32), i aixi passarem els tiles a pixels
         int north = compensY >> 5;
         int south = (compensY + gameView.getHeight() + Tile.SIDE) >> 5;
@@ -47,45 +46,8 @@ public class GameMap {
                 }
             }
         }
-
     }
-    //Metode que ens retornara un tile especific del nostre array de tiles
-    //TEMPORAL
-    public Tile getTile(int x, int y){
 
-        int tilePosition = mapTiles[x + y * mapWidth];
-
-        switch (tilePosition){
-            case 0:
-                return Tile.GRASS;
-            case 1:
-                return Tile.WATER;
-            case 2:
-                return Tile.BRIDGE;
-            case 3:
-                return Tile.CASTLE_WALL;
-            case 4:
-                return Tile.TOWER_DOWN_LEFT;
-            case 5:
-                return Tile.TOWER_DOWN_RIGHT;
-            case 6:
-                return Tile.TOWER_UP_LEFT;
-            case 7:
-                return Tile.TOWER_UP_RIGHT;
-            case 8:
-                return Tile.CASTLE_UP;
-            case 9:
-                return Tile.CASTLE_DOWN_LEFT;
-            case 10:
-                return Tile.CASTLE_DOWN_RIGHT;
-
-            default:
-                return null;
-        }
-
-
-
-    }
 
 
 }

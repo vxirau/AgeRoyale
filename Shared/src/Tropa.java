@@ -18,7 +18,7 @@ public class Tropa extends Entity implements Serializable {
     private int atac;
     private int alcance;
     private boolean ofensiva;
-    private boolean isPlaying;
+    private boolean isPlaying = true;
 
     public Sprite getSprite() {
         return sprite;
@@ -46,9 +46,8 @@ public class Tropa extends Entity implements Serializable {
     }
 
     public void update(){
-
         if(isPlaying){
-            moveTroop(0, 0.2);
+            moveTroop(0, 0);
         }
     }
 
@@ -56,23 +55,43 @@ public class Tropa extends Entity implements Serializable {
         gameView.drawTroop(xPosition, yPosition, this);
     }
 
-    private void moveTroop(double xVariation, double yVariation){
+    private void moveTroop(int xVariation, int yVariation){
         //Es mou cap a la dreta (east)
         if(xVariation > 0){
             troopDirection = 'e';
+            this.xPosition += xVariation;
         }
         //Es mou cap a l'esquerra (west)
         if(xVariation < 0){
             troopDirection = 'w';
+            this.xPosition += xVariation;
         }
         //Es mou cap abaix (south)
         if(yVariation > 0){
             troopDirection = 's';
+            this.yPosition += yVariation;
         }
         //Es mou cap adalt (north)
         if(yVariation < 0){
             troopDirection = 'n';
+            this.yPosition += yVariation;
         }
+        /*if (xVariation != 0 || yVariation != 0){
+            if(troopDirection == 'n'){
+                sprite = Sprite.PERSONA_BACK;
+            }
+            if(troopDirection == 's'){
+                sprite = Sprite.PERSONA_FRONT;
+            }
+            if(troopDirection == 'w'){
+                sprite = Sprite.PERSONA_LEFT;
+            }
+            if(troopDirection == 'e'){
+                sprite = Sprite.PERSONA_RIGHT;
+            }
+
+        }*/
+
 
         //Si la tropa no ha estat destruida, la movem
         if(!entityIsDestroyed()){

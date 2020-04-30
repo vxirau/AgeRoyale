@@ -16,6 +16,37 @@ public class Sprite {
     public static final Sprite PERSONA_BACK = new Sprite(32, 1, 0, 0, SpritesSheet.troops);
     public static final Sprite PERSONA_RIGHT = new Sprite(32, 2, 0, 0, SpritesSheet.troops);
     public static final Sprite PERSONA_LEFT = new Sprite(32, 3, 0, 0, SpritesSheet.troops);
+    public static final Sprite GOBLIN_BACK = new Sprite(32, 4, 0, 0, SpritesSheet.troops);
+    public static final Sprite GOBLIN_BACK_RIGHT_FOOT = new Sprite(32, 5, 0, 0, SpritesSheet.troops);
+    public static final Sprite GOBLIN_BACK_LEFT_FOOT = new Sprite(32, 6, 0, 0, SpritesSheet.troops);
+    public static final Sprite GOBLIN_LEFT = new Sprite(32, 4, 1, 0, SpritesSheet.troops);
+    public static final Sprite GOBLIN_LEFT_RIGHT_FOOT = new Sprite(32, 5, 1, 0, SpritesSheet.troops);
+    public static final Sprite GOBLIN_LEFT_LEFT_FOOT = new Sprite(32, 6, 1, 0, SpritesSheet.troops);
+    public static final Sprite GOBLIN_FRONT = new Sprite(32, 4, 2, 0, SpritesSheet.troops);
+    public static final Sprite GOBLIN_FRONT_LEFT_FOOT = new Sprite(32, 5, 2, 0, SpritesSheet.troops);
+    public static final Sprite GOBLIN_FRONT_RIGHT_FOOT = new Sprite(32, 6, 2, 0, SpritesSheet.troops);
+    public static final Sprite GOBLIN_RIGHT = new Sprite(32, 4, 3, 0, SpritesSheet.troops);
+    public static final Sprite GOBLIN_RIGHT_LEFT_FOOT = new Sprite(32, 5, 3, 0, SpritesSheet.troops);
+    public static final Sprite GOBLIN_RIGHT_RIGHT_FOOT = new Sprite(32, 6, 3, 0, SpritesSheet.troops);
+    public static final Sprite SKELETON_BACK = new Sprite(32, 0, 5, 0, SpritesSheet.troops);
+    public static final Sprite SKELETON_BACK_LEFT_FOOT = new Sprite(32, 1, 5, 0, SpritesSheet.troops);
+    public static final Sprite SKELETON_BACK_RIGHT_FOOT = new Sprite(32, 2, 5, 0, SpritesSheet.troops);
+    public static final Sprite SKELETON_LEFT = new Sprite(32, 0, 6, 0, SpritesSheet.troops);
+    public static final Sprite SKELETON_LEFT_RIGHT_FOOT = new Sprite(32, 1, 6, 0, SpritesSheet.troops);
+    public static final Sprite SKELETON_LEFT_LEFT_FOOT = new Sprite(32, 2, 6, 0, SpritesSheet.troops);
+    public static final Sprite SKELETON_FRONT = new Sprite(32, 0, 7, 0, SpritesSheet.troops);
+    public static final Sprite SKELETON_FRONT_LEFT_FOOT = new Sprite(32, 1, 7, 0, SpritesSheet.troops);
+    public static final Sprite SKELETON_FRONT_RIGHT_FOOT = new Sprite(32, 2, 7, 0, SpritesSheet.troops);
+    public static final Sprite SKELETON_RIGHT = new Sprite(32, 0, 8, 0, SpritesSheet.troops);
+    public static final Sprite SKELETON_RIGHT_LEFT_FOOT = new Sprite(32, 1, 8, 0, SpritesSheet.troops);
+    public static final Sprite SKELETON_RIGHT_RIGHT_FOOT = new Sprite(32, 2, 8, 0, SpritesSheet.troops);
+    public static final Sprite MAGIC_TOWER = new Sprite(32, 8, 0, 0, SpritesSheet.troops);
+    public static final Sprite BOMB = new Sprite(32, 9, 0, 0, SpritesSheet.troops);
+    public static final Sprite BOMB_PHASE_1 = new Sprite(32, 9, 1, 0, SpritesSheet.troops);
+    public static final Sprite BOMB_PHASE_2 = new Sprite(32, 9, 2, 0, SpritesSheet.troops);
+    public static final Sprite BOMB_PHASE_3 = new Sprite(32, 9, 3, 0, SpritesSheet.troops);
+    public static final Sprite BOMB_PHASE_4 = new Sprite(32, 9, 4, 0, SpritesSheet.troops);
+
 
 
     //Sprites de l'arena

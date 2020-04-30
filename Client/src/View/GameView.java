@@ -77,7 +77,7 @@ public class GameView extends JFrame implements ActionListener, Runnable {
         //Creem el mapa i li donem la mesura en tiles ( en aquest cas, sera de 10 x 20)
 
         gameMap = new ImageMap("/resources/pixels_map.png");
-        this.tropa = new Tropa( 30, 140, Sprite.PERSONA_FRONT);
+        this.tropa = new Tropa( 30, 100, Sprite.SKELETON_BACK);
         /*panels = new JPanel[ROWS][COLUMNS];
         super.getContentPane().setLayout(new GridLayout(ROWS, COLUMNS));
         JPanel aux;
@@ -179,16 +179,20 @@ public class GameView extends JFrame implements ActionListener, Runnable {
 
     //Metode que ens dibuixa les tropes al nostre mapa
     public void drawTroop(int compensX, int compensY, Tropa troop){
-
-
         for(int i = 0; i < troop.getSprite().getSide(); i++){
             int yPosition = i + compensY;
+            int count = 0;
             for(int j = 0; j < troop.getSprite().getSide(); j++){
                 int xPosition = j + compensX;
                 if(xPosition < -troop.getSprite().getSide() || xPosition >= width || yPosition < -troop.getSprite().getSide() || yPosition >= height){
                     break;
                 }
-                pixels[xPosition + yPosition * width] = troop.getSprite().pixels[i + j * troop.getSprite().getSide()];
+                int troopPixelColor = troop.getSprite().pixels[i + j * troop.getSprite().getSide()];
+                //Si el color del pixel del jugador es diferent que el rosa utilitzat de fons al spritesheet, el dibuixem
+                if(troopPixelColor != 0xffff00ff){
+                    pixels[xPosition + yPosition * width] = troopPixelColor;
+                }
+
             }
         }
     }
@@ -272,6 +276,7 @@ public class GameView extends JFrame implements ActionListener, Runnable {
         //clearScreen();
 
         gameMap.showMap(0, 0, this);
+
         tropa.show(this);
         //Copiem els grafics al joc
         System.arraycopy(pixels, 0, pixelsImage, 0, pixelsImage.length);
