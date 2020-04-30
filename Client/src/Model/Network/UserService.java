@@ -65,10 +65,15 @@ public class UserService extends Thread{
 		isOn = true;
 	}
 
-	public void stopServerComunication() {
+	public void stopServerComunication()  {
 		// aturem la comunicacio amb el servidor
 		this.isOn = false;
 		this.interrupt();
+		try {
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void showMessage(String alerta){
@@ -81,7 +86,7 @@ public class UserService extends Thread{
 
 
 	public void run() {
-		//while (isOn) {
+		while (isOn) {
 			try {
 
 				Message jelow = (Message) doInput.readObject();
@@ -117,13 +122,15 @@ public class UserService extends Thread{
 				}else{
 					JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
 				}
-			} catch (IOException | ClassNotFoundException e) {
+			} catch (IOException | ClassNotFoundException e ) {
 				e.printStackTrace();
-				stopServerComunication();
+
+					stopServerComunication();
+
 				System.out.println("*** ESTA EL SERVIDOR EN EXECUCIO? ***");
 			}
-		stopServerComunication();
-		//}
+
+		}
 	}
 
 	public void sendRegister(Object user) {

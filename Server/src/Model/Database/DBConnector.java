@@ -24,7 +24,7 @@ public class DBConnector {
         this.url += ":" + port + "/";
         this.url += db + "?verifyServerCertificate=false&useSSL=false&serverTimezone=UTC";
         DBConnector.userName = "root";
-        DBConnector.password = "contrasenya";
+        DBConnector.password = "timador";
         this.instance = this;
     }
 
@@ -105,6 +105,10 @@ public class DBConnector {
 
         } catch (SQLException ex) {
             System.out.println("Problema al Recuperar les dades --> " + ex.getSQLState());
+            System.out.println(ex.getMessage());
+            System.out.println(ex.getErrorCode());
+            System.out.println(ex.getSQLState());
+            System.out.println(Arrays.toString(ex.getStackTrace()));
         }
         return rs;
     }

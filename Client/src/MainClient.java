@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class MainClient{
 
-    private static int game = 0;
+    private static int game = 1;
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
           @Override

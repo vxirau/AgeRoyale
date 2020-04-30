@@ -22,12 +22,14 @@ public class DedicatedServer extends Thread {
 	private ViewServer vista;
 	private Server server;
 
-	public DedicatedServer(Socket sClient, ViewServer vista, LinkedList<DedicatedServer> clients, Server server) {
+	public DedicatedServer(Socket sClient, ViewServer vista, LinkedList<DedicatedServer> clients, Server server) throws IOException {
 		this.isOn = false;
 		this.sClient = sClient;
 		this.vista = vista;
 		this.clients = clients;
 		this.server = server;
+		dataInput = new ObjectInputStream(sClient.getInputStream());
+		objectOut = new ObjectOutputStream(sClient.getOutputStream());
 	}
 
 	public void startDedicatedServer() {
@@ -45,76 +47,78 @@ public class DedicatedServer extends Thread {
 	public void run() {
 		String in;
 		String[] aux;
+
 		try {
 
-			dataInput = new ObjectInputStream(sClient.getInputStream());
-			objectOut = new ObjectOutputStream(sClient.getOutputStream());
+			while(isOn) {
 
-			Message m = (Message) dataInput.readObject();
-			System.out.println("ARRIBA: " + m.getType());
-			if (m.getType().equals("register")){
-				Usuari u = (Usuari)m.getObject();
-				System.out.println(u.toString());
+				Message m = (Message) dataInput.readObject();
+				System.out.println("ARRIBA: " + m.getType());
+				if (m.getType().equals("register")) {
+					Usuari u = (Usuari) m.getObject();
+					System.out.println(u.toString());
 
-				objectOut.reset();
-				usuariDAO uDAO = new usuariDAO();
-				if(!uDAO.existsRegistre(u)){
-					objectOut.writeObject(new Message(u, "REGISTER_OK"));
-					uDAO.addUser(u);
-				}else{
-					objectOut.writeObject(new Message(u, "REGISTER_KO"));
-				}
-			}else if(m.getType().equals("roomCreate")){
-				System.out.println("Crear partida amb nom: " + ((Partida)m.getObject()).getName());
-				System.out.println("HA ARRIBAAAAT");
-				partidaDAO pDao = new partidaDAO();
-				pDao.addPartida((Partida)m.getObject());
-			}else if(m.getType().equals("getAllGames")){
-				objectOut.reset();
-				partidaDAO pDao = new partidaDAO();
-				System.out.println("Envia Resposta");
-				objectOut.writeObject(new Message(0, pDao.getAllPartides(), "allGamesReply"));
-			} else if(m.getType().equals("Login")){
-				System.out.println("Arriba a la peticio del login al server");
-				Usuari usuari = (Usuari) m.getObject();
-				usuariDAO uDAO = new usuariDAO();
-				Usuari usr = uDAO.existsLogin(usuari);
-				Message messageResposta = new Message(usr, "Login resposta");
-				objectOut.writeObject(messageResposta);
-				System.out.println("Senvia la resposta al login");
+					objectOut.reset();
+					usuariDAO uDAO = new usuariDAO();
+					if (!uDAO.existsRegistre(u)) {
+						objectOut.writeObject(new Message(u, "REGISTER_OK"));
+						uDAO.addUser(u);
+					} else {
+						objectOut.writeObject(new Message(u, "REGISTER_KO"));
+					}
+				} else if (m.getType().equals("roomCreate")) {
+					System.out.println("Crear partida amb nom: " + ((Partida) m.getObject()).getName());
+					System.out.println("HA ARRIBAAAAT");
+					partidaDAO pDao = new partidaDAO();
+					pDao.addPartida((Partida) m.getObject());
+				} else if (m.getType().equals("getAllGames")) {
+					objectOut.reset();
+					partidaDAO pDao = new partidaDAO();
+					System.out.println("Envia Resposta");
+					objectOut.writeObject(new Message(0, pDao.getAllPartides(), "allGamesReply"));
+				} else if (m.getType().equals("Login")) {
+					System.out.println("Arriba a la peticio del login al server");
+					Usuari usuari = (Usuari) m.getObject();
+					usuariDAO uDAO = new usuariDAO();
+					Usuari usr = uDAO.existsLogin(usuari);
+					Message messageResposta = new Message(usr, "Login resposta");
+					objectOut.writeObject(messageResposta);
+					System.out.println("Senvia la resposta al login");
 
-				if (usr != null){
-					uDAO.updateState(usr, true);
+					if (usr != null) {
+						uDAO.updateState(usr, true);
+					}
+				} else if (m.getType().equals("Logout")) {
+					Usuari usuari = (Usuari) m.getObject();
+					usuariDAO uDAO = new usuariDAO();
+					uDAO.updateState(usuari, false);
+				} else if (m.getType().equals("PasswordUpdate")) {
+					Usuari usuari = (Usuari) m.getObject();
+					usuariDAO uDAO = new usuariDAO();
+					uDAO.updatePass(usuari);
+				} else if (m.getType().equals("UserPKUpdates")) {
+					Usuari usuari = (Usuari) m.getObject();
+					usuariDAO uDAO = new usuariDAO();
+					String resposta = "";
+					if (uDAO.existsUsuariOnChange(usuari)) {
+						resposta = "UserPKUpdates_KO";
+					} else {
+						uDAO.updateNickEmail(usuari);
+						resposta = "UserPKUpdates_OK";
+					}
+					Message messageResposta = new Message(resposta, "UserPKUpdatesResposta");
+					objectOut.writeObject(messageResposta);
 				}
-			} else if(m.getType().equals("Logout")){
-				Usuari usuari = (Usuari) m.getObject();
-				usuariDAO uDAO = new usuariDAO();
-				uDAO.updateState(usuari, false);
-			} else if(m.getType().equals("PasswordUpdate")){
-				Usuari usuari = (Usuari) m.getObject();
-				usuariDAO uDAO = new usuariDAO();
-				uDAO.updatePass(usuari);
-			} else if(m.getType().equals("UserPKUpdates")){
-				Usuari usuari = (Usuari) m.getObject();
-				usuariDAO uDAO = new usuariDAO();
-				String resposta = "";
-				if(uDAO.existsUsuariOnChange(usuari)){
-					resposta = "UserPKUpdates_KO";
-				} else {
-					uDAO.updateNickEmail(usuari);
-					resposta = "UserPKUpdates_OK";
-				}
-				Message messageResposta = new Message(resposta, "UserPKUpdatesResposta");
-				objectOut.writeObject(messageResposta);
 			}
-		} catch (IOException | ClassNotFoundException e1) {
-			// en cas derror aturem el servidor dedicat
-			stopDedicatedServer();
-			// eliminem el servidor dedicat del conjunt de servidors dedicats
-			clients.remove(this);
-			// invoquem el metode del servidor que mostra els servidors dedicats actuals
-			server.showClients();
-		}
+		} catch (IOException | ClassNotFoundException e1){
+				// en cas derror aturem el servidor dedicat
+				stopDedicatedServer();
+				// eliminem el servidor dedicat del conjunt de servidors dedicats
+				clients.remove(this);
+				// invoquem el metode del servidor que mostra els servidors dedicats actuals
+				server.showClients();
+			}
+
 	}
 
 	private ObjectOutputStream getOutChannel() {
