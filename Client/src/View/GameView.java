@@ -77,7 +77,7 @@ public class GameView extends JFrame implements ActionListener, Runnable {
         //Creem el mapa i li donem la mesura en tiles ( en aquest cas, sera de 10 x 20)
 
         gameMap = new ImageMap("/resources/pixels_map.png");
-        this.tropa = new Tropa( 30, 100, Sprite.SKELETON_BACK);
+        this.tropa = new Tropa(gameMap, 100, 100, Sprite.SKELETON_BACK);
         /*panels = new JPanel[ROWS][COLUMNS];
         super.getContentPane().setLayout(new GridLayout(ROWS, COLUMNS));
         JPanel aux;

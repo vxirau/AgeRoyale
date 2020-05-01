@@ -21,6 +21,14 @@ public class GameMap {
 
     }
 
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public Tile getSpecificTile(int position) {
+        return tilesArray[position];
+    }
+
     protected void loadMap(String path) throws IOException {
 
     }

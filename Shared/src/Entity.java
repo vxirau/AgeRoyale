@@ -20,11 +20,11 @@ public class Entity {
 
     }
 
-    public void updatexPosition(double xVariation){
+    public void updatexPosition(int xVariation){
         xPosition += xVariation;
     }
 
-    public void updateyPosition(double yVariation){
+    public void updateyPosition(int yVariation){
         yPosition += yVariation;
     }
 
