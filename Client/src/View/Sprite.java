@@ -50,7 +50,7 @@ public class Sprite {
 
 
     //Sprites de l'arena
-    public static Sprite GRASS = new Sprite(32, 0, 0, 0, SpritesSheet.arena);
+    public static  Sprite GRASS = new Sprite(32, 0, 0, 0, SpritesSheet.arena);
     public static Sprite WATER = new Sprite(32, 1, 0, 0, SpritesSheet.arena);
     public static Sprite BRIDGE = new Sprite(32, 2, 0, 0, SpritesSheet.arena);
     public static Sprite CASTLE_WALL = new Sprite(32, 3, 0, 0, SpritesSheet.arena);

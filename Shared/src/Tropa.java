@@ -12,8 +12,8 @@ public class Tropa extends Entity implements Serializable {
     private char troopDirection = 'n';
     private boolean isMoving = false;
     private GameMap gameMap;
-    private int xVariation;
-    private int yVariation;
+    private float xVariation;
+    private float yVariation;
 
     private int idTropa;
     private int vida;
@@ -22,6 +22,7 @@ public class Tropa extends Entity implements Serializable {
     private int alcance;
     private boolean ofensiva;
     private boolean isPlaying = true;
+    private static int cont = 0;
 
     public Sprite getSprite() {
         return sprite;
@@ -31,14 +32,13 @@ public class Tropa extends Entity implements Serializable {
 
     }
 
-    public Tropa(GameMap gameMap, int xPosition, int yPosition, Sprite sprite) {
+    public Tropa(GameMap gameMap, float xPosition, float yPosition, Sprite sprite) {
         this.gameMap = gameMap;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.sprite = sprite;
         xVariation = 0;
-
-        yVariation = 1;
+        yVariation = (float) 0.05;
     }
 
 
@@ -55,7 +55,8 @@ public class Tropa extends Entity implements Serializable {
 
     public void update(){
         if(isPlaying){
-            moveTroop(xVariation, yVariation);
+            moveTroop(xVariation, yVariation, cont);
+            cont++;
         }
     }
 
@@ -63,7 +64,7 @@ public class Tropa extends Entity implements Serializable {
         gameView.drawTroop(xPosition, yPosition, this);
     }
 
-    private void moveTroop(int xVariation, int yVariation){
+    private void moveTroop(float xVariation, float yVariation, int cont){
         //Es mou cap a la dreta (east)
         if(xVariation > 0){
             troopDirection = 'e';
@@ -78,23 +79,39 @@ public class Tropa extends Entity implements Serializable {
         if(yVariation > 0){
             troopDirection = 's';
             this.yPosition += yVariation;
+            switch(cont){
+                case 0:
+                    this.sprite = Sprite.SKELETON_FRONT;
+                    break;
+                case 1:
+                    this.sprite = Sprite.SKELETON_FRONT_LEFT_FOOT;
+                    break;
+                case 2:
+                    this.sprite = Sprite.SKELETON_FRONT_RIGHT_FOOT;
+                     this.cont = -1;
+                    break;
+                default:
+                    break;
+            }
+
         }
         //Es mou cap adalt (north)
         if(yVariation < 0){
             troopDirection = 'n';
             this.yPosition += yVariation;
+
         }
 
 
 
         //Si la tropa no ha estat destruida, la movem
         if(!entityIsDestroyed()){
-            if(!onCollision(xVariation,0)){
+            if(!onCollision((int) xVariation,0)){
                 updatexPosition(xVariation);
             }else{
                 xVariation = 0;
             }
-            if(!onCollision(0,yVariation)){
+            if(!onCollision(0, (int) yVariation)){
                 updateyPosition(yVariation);
             }else{
                 yVariation = 0;
@@ -106,8 +123,8 @@ public class Tropa extends Entity implements Serializable {
     private boolean onCollision(int xVariation, int yVariation){
         boolean collision = false;
 
-        int xPosition = this.getxPosition() + xVariation;
-        int yPosition = this.getyPosition() + yVariation;
+        int xPosition = (int) (this.getxPosition() + xVariation);
+        int yPosition = (int) (this.getyPosition() + yVariation);
 
         int leftMargin = -6;
         int rightMargin = 18;
