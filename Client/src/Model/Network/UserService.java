@@ -90,7 +90,6 @@ public class UserService extends Thread{
 			try {
 
 				Message jelow = (Message) doInput.readObject();
-				System.out.println(jelow.getType());
 				if (jelow.getType().equals("REGISTER_OK")) {
 					JOptionPane.showOptionDialog(new JFrame(), "DE SUPER PUTA MARE SOCI", "Congratulacions", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 					LoginView lview = new LoginView();
@@ -103,10 +102,8 @@ public class UserService extends Thread{
 					lview.setPassword(user.getPassword());
 				} else if (jelow.getType().equals("allGamesReply")) {
 					ArrayList<Partida> p = jelow.getObjectArray();
-					System.out.println("Arriba Resposta");
 					roomsController.setAllGames(p);
 				} else if (jelow.getType().equals("Login resposta")) {
-					System.out.println("Arriba resposta del login");
 					if (jelow.getObject() != null) {
 						loginViewController.loginSuccessful((Usuari) jelow.getObject());
 					} else {

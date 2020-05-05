@@ -239,7 +239,6 @@ public class RoomListView extends JFrame{
 		if(partides!=null){
 			allGames = partides;
 			initAll();
-			System.out.println("setAllGames");
 		}else{
 			JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 		}

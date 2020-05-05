@@ -67,24 +67,18 @@ public class DedicatedServer extends Thread {
 						objectOut.writeObject(new Message(u, "REGISTER_KO"));
 					}
 				} else if (m.getType().equals("roomCreate")) {
-					System.out.println("Crear partida amb nom: " + ((Partida) m.getObject()).getName());
-					System.out.println("HA ARRIBAAAAT");
 					partidaDAO pDao = new partidaDAO();
 					pDao.addPartida((Partida) m.getObject());
 				} else if (m.getType().equals("getAllGames")) {
 					objectOut.reset();
 					partidaDAO pDao = new partidaDAO();
-					System.out.println("Envia Resposta");
 					objectOut.writeObject(new Message(0, pDao.getAllPartides(), "allGamesReply"));
 				} else if (m.getType().equals("Login")) {
-					System.out.println("Arriba a la peticio del login al server");
 					Usuari usuari = (Usuari) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
 					Usuari usr = uDAO.existsLogin(usuari);
 					Message messageResposta = new Message(usr, "Login resposta");
 					objectOut.writeObject(messageResposta);
-					System.out.println("Senvia la resposta al login");
-
 					if (usr != null) {
 						uDAO.updateState(usr, true);
 					}
