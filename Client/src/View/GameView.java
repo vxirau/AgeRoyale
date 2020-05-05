@@ -77,7 +77,8 @@ public class GameView extends JFrame implements ActionListener, Runnable {
         //Creem el mapa i li donem la mesura en tiles ( en aquest cas, sera de 10 x 20)
 
         gameMap = new ImageMap("/resources/pixels_map.png");
-        this.tropa = new Tropa(gameMap, 100, 100, Sprite.SKELETON_BACK);
+        this.tropa = new Tropa(gameMap, 100, 100, Sprite.SKELETON_FRONT);
+
         /*panels = new JPanel[ROWS][COLUMNS];
         super.getContentPane().setLayout(new GridLayout(ROWS, COLUMNS));
         JPanel aux;
@@ -178,12 +179,12 @@ public class GameView extends JFrame implements ActionListener, Runnable {
 
 
     //Metode que ens dibuixa les tropes al nostre mapa
-    public void drawTroop(int compensX, int compensY, Tropa troop){
+    public void drawTroop(float compensX, float compensY, Tropa troop){
         for(int i = 0; i < troop.getSprite().getSide(); i++){
-            int yPosition = i + compensY;
+            int yPosition = (int) (i + compensY);
             int count = 0;
             for(int j = 0; j < troop.getSprite().getSide(); j++){
-                int xPosition = j + compensX;
+                int xPosition = (int) (j + compensX);
                 if(xPosition < -troop.getSprite().getSide() || xPosition >= width || yPosition < -troop.getSprite().getSide() || yPosition >= height){
                     break;
                 }

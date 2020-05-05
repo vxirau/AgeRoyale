@@ -4,8 +4,8 @@ import src.View.GameView;
 
 public class Entity {
 
-    protected int xPosition;
-    protected int yPosition;
+    protected float xPosition;
+    protected float yPosition;
     private boolean entityIsDestroyed = false;
 
 
@@ -20,11 +20,11 @@ public class Entity {
 
     }
 
-    public void updatexPosition(int xVariation){
+    public void updatexPosition(float xVariation){
         xPosition += xVariation;
     }
 
-    public void updateyPosition(int yVariation){
+    public void updateyPosition(float yVariation){
         yPosition += yVariation;
     }
 
@@ -32,19 +32,19 @@ public class Entity {
         entityIsDestroyed = true;
     }
 
-    public int getxPosition() {
+    public float getxPosition() {
         return xPosition;
     }
 
-    public void setxPosition(int xPosition) {
+    public void setxPosition(float xPosition) {
         this.xPosition = xPosition;
     }
 
-    public int getyPosition() {
+    public float getyPosition() {
         return yPosition;
     }
 
-    public void setyPosition(int yPosition) {
+    public void setyPosition(float yPosition) {
         this.yPosition = yPosition;
     }
 
