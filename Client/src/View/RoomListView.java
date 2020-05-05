@@ -1,5 +1,6 @@
 package src.View;
 
+import src.Controller.GameController;
 import src.Controller.RoomsController;
 import src.Partida;
 import src.Utils;
@@ -12,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class RoomListView extends JFrame{
@@ -106,7 +108,8 @@ public class RoomListView extends JFrame{
 		element.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				JOptionPane.showOptionDialog(new JFrame(), "OBRIR PARTIDA: " + total,"Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+				RoomListView.this.setVisible(false);
+				RoomsController.startGame(total,0, new Partida());
 			}
 		});
 
@@ -239,7 +242,6 @@ public class RoomListView extends JFrame{
 		if(partides!=null){
 			allGames = partides;
 			initAll();
-			System.out.println("setAllGames");
 		}else{
 			JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 		}

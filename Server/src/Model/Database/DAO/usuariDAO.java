@@ -78,7 +78,7 @@ public class usuariDAO {
         amicDAO.removeAmics(usuari);
         amicDAO.addAmic(usuari, usuari.getAmics());
 
-        String query = "UPDATE AgeRoyale.usuari SET nickname = '" + usuari.getNickName() + "' and email = '" + usuari.getEmail() + "' and password = '" + usuari.getPassword() + "' WHERE idUser = " + usuari.getIdUsuari() + ";";
+        String query = "UPDATE AgeRoyale.usuari SET nickname = '" + usuari.getNickName() + "' , email = '" + usuari.getEmail() + "' , password = '" + usuari.getPassword() + "' WHERE idUser = " + usuari.getIdUsuari() + ";";
         DBConnector.getInstance().updateQuery(query);
     }
 
@@ -93,7 +93,7 @@ public class usuariDAO {
     }
 
     public void updateNickEmail (Usuari usuari) {
-        String query = "UPDATE AgeRoyale.usuari SET nickname = '"  + usuari.getNickName() + "' and email = '" + usuari.getEmail() + "' WHERE idUser = " + usuari.getIdUsuari() + ";";
+        String query = "UPDATE AgeRoyale.usuari SET nickname = '"  + usuari.getNickName() + "' , email = '" + usuari.getEmail() + "' WHERE idUser = " + usuari.getIdUsuari() + ";";
         DBConnector.getInstance().updateQuery(query);
     }
 

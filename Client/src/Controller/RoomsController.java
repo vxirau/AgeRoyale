@@ -4,12 +4,16 @@ import src.Message;
 import src.Model.Network.UserService;
 import src.Partida;
 import src.Usuari;
+import src.View.GameView;
 import src.View.MenuView;
 import src.View.RoomListView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -64,6 +68,19 @@ public class RoomsController {
 		uService.sendGetPartides(m, this);
 	}
 
+	public static void startGame(int num, int privacitat, Partida p){
+		GameView gView = null;
+		try {
+			gView = new GameView();
+		} catch (IOException rer) {
+			rer.printStackTrace();
+		}
+		gView.startGame();
+		GameController controller = new GameController(gView);
+		gView.registerController(controller);
+		gView.setVisible(true);
+	}
+
 	public void setAllGames(ArrayList<Partida> allGames) {
 		if (allGames != null) {
 			this.allGames = allGames;
@@ -72,6 +89,7 @@ public class RoomsController {
 		}
 		vista.setAllGames(this.allGames);
 	}
+
 
 	public void setVista(RoomListView vista) {
 		this.vista = vista;

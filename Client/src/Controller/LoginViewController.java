@@ -24,7 +24,6 @@ public class LoginViewController implements ActionListener {
     }
 
     public void loginSuccessful(Usuari usr){
-        System.out.println("Existeix usuari");
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -46,7 +45,6 @@ public class LoginViewController implements ActionListener {
         String boto = ((JButton) e.getSource()).getText();
 
         if(boto.equals("INICIAR SESSIÓ")){
-            System.out.println("HOLA");
             Message message = new Message(new Usuari(view.getUsuari(), view.getPassword()), "Login");
             uService.sendLogin(message, this);
 
