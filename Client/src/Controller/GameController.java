@@ -7,7 +7,7 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-public class GameController extends MouseAdapter implements KeyListener {
+public class GameController extends MouseAdapter implements KeyListener, MouseListener {
 
     private GameView view;
     private int aux1;
@@ -45,6 +45,7 @@ public class GameController extends MouseAdapter implements KeyListener {
             }
         });
         timer.start();
+        System.out.println("PUTA");
 
         /*System.out.println(event.getX());
         System.out.println(event.getY());
@@ -79,4 +80,6 @@ public class GameController extends MouseAdapter implements KeyListener {
     public void keyReleased(KeyEvent e) {
         teclas[e.getKeyCode()] = false;
     }
+
+
 }

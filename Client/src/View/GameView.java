@@ -5,8 +5,7 @@ import src.Tropa;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -37,7 +36,8 @@ public class GameView extends JFrame implements ActionListener, Runnable {
     private static int aux2 = 0;
     private static volatile boolean gameIsRunning = false;
     private static GameController gcontrol;
-
+    private static int xMousePosition;
+    private static int yMousePosition;
     private static BufferedImage image;
     //Variable per accedir a la imatge a partir dels seus pixels
     private static int[] pixelsImage;
@@ -49,7 +49,11 @@ public class GameView extends JFrame implements ActionListener, Runnable {
     private ArrayList<Tropa> tropes;
     private Tropa tropa;
     private static GameMap gameMap;
+    private boolean mouseIsClicked;
 
+    private Deck deck;
+
+    private static final String IMAGE_MAP_PATH  = "/resources/pixels_map.png";
 
 
     @Override
@@ -68,15 +72,48 @@ public class GameView extends JFrame implements ActionListener, Runnable {
         gcontrol = new GameController(this);
         addKeyListener(gcontrol);
         this.width = 32 * COLUMNS;
-        this.height = 32 * ROWS;
+        this.height = 32 * ROWS + 64;
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         this.pixelsImage = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
         this.pixels = new int[width * height];
         this.tropes = new ArrayList<>();
+        mouseIsClicked = false;
+
+
+
+        this.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                mouseIsClicked = true;
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                mouseIsClicked = false;
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+        this.deck = new Deck(this, width, height);
+
 
         //Creem el mapa i li donem la mesura en tiles ( en aquest cas, sera de 10 x 20)
 
-        gameMap = new ImageMap("/resources/pixels_map.png");
+        gameMap = new ImageMap(IMAGE_MAP_PATH);
         this.tropa = new Tropa(gameMap, 100, 100, Sprite.SKELETON_FRONT);
 
         /*panels = new JPanel[ROWS][COLUMNS];
@@ -274,17 +311,20 @@ public class GameView extends JFrame implements ActionListener, Runnable {
             return;
         }
 
-        //clearScreen();
+
 
         gameMap.showMap(0, 0, this);
 
         tropa.show(this);
+
+
         //Copiem els grafics al joc
         System.arraycopy(pixels, 0, pixelsImage, 0, pixelsImage.length);
 
         //L'objecte g s'encarregara de dibuixar els grafics a la pantalla
         Graphics g = bufferStrategy.getDrawGraphics();
         g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+        deck.showDeck(g, xMousePosition, yMousePosition, mouseIsClicked);
 
         g.dispose();
 
@@ -303,7 +343,6 @@ public class GameView extends JFrame implements ActionListener, Runnable {
         final int NS_PER_SECOND = 1000000000;
         final byte FPS = 60;
         final double NS_PER_FRAME = NS_PER_SECOND/FPS;
-
         long updateReference = System.nanoTime();
         double elapsedTime;
         double delta = 0;
@@ -329,4 +368,8 @@ public class GameView extends JFrame implements ActionListener, Runnable {
 
         }
     }
+
+
+
+
 }

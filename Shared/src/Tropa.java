@@ -88,7 +88,7 @@ public class Tropa extends Entity implements Serializable {
                     break;
                 case 2:
                     this.sprite = Sprite.SKELETON_FRONT_RIGHT_FOOT;
-                     this.cont = -1;
+                    this.cont = -1;
                     break;
                 default:
                     break;

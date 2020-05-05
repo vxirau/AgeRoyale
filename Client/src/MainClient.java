@@ -11,9 +11,11 @@ import src.View.MenuView;
 import src.View.ViewRegistre;
 
 import javax.swing.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 
-public class MainClient{
+public class MainClient {
 
     private static int game = 0;
     public static void main(String[] args) {
@@ -36,6 +38,7 @@ public class MainClient{
                   gView.startGame();
                   GameController controller = new GameController(gView);
                   gView.registerController(controller);
+
                   gView.setVisible(true);
               }else{
                   SwingUtilities.invokeLater(new Runnable() {
@@ -50,4 +53,5 @@ public class MainClient{
           }
         });
     }
+
 }
