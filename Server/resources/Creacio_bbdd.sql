@@ -1,4 +1,5 @@
 #CREACIO DE LA BASE DE DADES
+SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 DROP DATABASE IF EXISTS AgeRoyale;
 CREATE DATABASE AgeRoyale;
 USE AgeRoyale;
@@ -181,7 +182,10 @@ SELECT if(COUNT(*) = 1, 1, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nic
 SELECT if(COUNT(*) > 1, 1, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = 'bernat' OR us.email = 'victor.xirau@students.salle.url.edu';
 SELECT us.* FROM AgeRoyale.usuari AS us WHERE us.nickname = 'bernat' OR us.email = 'victor.xirau@students.salle.url.edu';
 
-#
+#update nickname-email
+UPDATE AgeRoyale.usuari SET nickname = 'pepito', email = 'bernat.segura@students.salle.url.' WHERE idUser = 5;
+
+#login / logout
 UPDATE AgeRoyale.usuari SET isOnline = true WHERE idUser = 5;
 
 ###########################################     PARTIDA    ###############################################################################################
