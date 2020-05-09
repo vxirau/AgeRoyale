@@ -3,83 +3,100 @@ package src.Controller;
 import src.View.GameView;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferStrategy;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-public class GameController extends MouseAdapter implements KeyListener, MouseListener {
+public class GameController implements MouseListener, MouseMotionListener, Runnable {
 
-    private GameView view;
-    private int aux1;
-    private int aux2;
-    private static final int nTeclas = 120;
-    private final  boolean[] teclas = new boolean[nTeclas];
-
-    public boolean up;
-    public boolean down;
-    public boolean left;
-    public boolean right;
-
-
-    public GameController(GameView view){
-        this.view = view;
+    private GameView gameView;
+    private boolean mouseIsClicked;
+    public GameController(GameView gameView){
+        this.gameView = gameView;
+        this.mouseIsClicked = false;
     }
 
 
-    public void mouseClicked(MouseEvent event) {
 
-        String[] aux;
-        String quin = ((JPanel)event.getSource()).getName();
-        aux = quin.split("-");
-        aux1 = Integer.parseInt(aux[0]);
-        aux2 = Integer.parseInt(aux[1]);
-        Timer timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (aux1 >= 19) {
-                    ((Timer)e.getSource()).stop();
+    @Override
+    public void run() {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+        int troopX = 0;
+        int whichTroop = 0;
+
+        if(e.getY() > 630) {
+            if(!mouseIsClicked){
+                System.out.println("AHORA ESTA CLICADO");
+                mouseIsClicked = true;
+                troopX = e.getX();
+                if(troopX >= 0 && troopX < 80){
+                    whichTroop = 0;
+
                 }
-                view.updateGrid(aux1,aux2);
-                aux1++;
+                if(troopX >= 80 && troopX < 1600){
+                    whichTroop = 1;
+                }
+                if(troopX >= 160 && troopX < 240){
+                    whichTroop = 2;
+                }
+                if(troopX >= 240 && troopX < 320){
+                    whichTroop = 3;
+                }
+                gameView.updateMouse(e.getX(), e.getY(), mouseIsClicked);
+                gameView.selectTroopFromDeck(whichTroop);
+            }
+        }
+        if(mouseIsClicked){
+
+            if(e.getY() <= 630){
+                System.out.println("INVOCO TROPA BRO");
+                gameView.invokeTroop(whichTroop);
+                mouseIsClicked = false;
 
             }
-        });
-        timer.start();
-        System.out.println("PUTA");
 
-        /*System.out.println(event.getX());
-        System.out.println(event.getY());
-        try {
-            view.updateGrid(event.getX(),event.getY());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
 
-    }
-
-    public void update(){
-        up = teclas[KeyEvent.VK_W];
-        down = teclas[KeyEvent.VK_S];
-        left = teclas[KeyEvent.VK_A];
-        right = teclas[KeyEvent.VK_D];
+        }
 
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void mousePressed(MouseEvent e) {
 
 
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-        teclas[e.getKeyCode()] = true;
+    public void mouseReleased(MouseEvent e) {
+
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        teclas[e.getKeyCode()] = false;
+    public void mouseEntered(MouseEvent e) {
+
     }
 
+    @Override
+    public void mouseExited(MouseEvent e) {
 
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+        System.out.println(e.getX() + ", " + e.getY());
+        gameView.updateMouse(e.getX(), e.getY(), mouseIsClicked);
+    }
 }

@@ -81,6 +81,7 @@ public class Tropa extends Entity implements Serializable {
             this.yPosition += yVariation;
             switch(cont){
                 case 0:
+
                     this.sprite = Sprite.SKELETON_FRONT;
                     break;
                 case 1:
