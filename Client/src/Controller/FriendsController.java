@@ -22,8 +22,8 @@ public class FriendsController {
     }
 
 
-		public void removeFriend(int i){
-			boolean eliminar=false, ok=false;
+		public void removeFriend(Usuari user){
+			boolean eliminar=false, ok=true;
 			int a= JOptionPane.showConfirmDialog(friendView, "Vols eliminar aquest amic?");
 			if(a==JOptionPane.YES_OPTION){
 				eliminar=true;
@@ -33,9 +33,12 @@ public class FriendsController {
 				ok=false;
 			}
 
-			if(ok){
-				Message mes = new Message(i, "removeFriend");
-				uService.sendPartida(mes);
+			if(ok && eliminar){
+				ArrayList<Usuari> parella = new ArrayList<>();
+				parella.add(usuari);
+				parella.add(user);
+				Message mes = new Message(parella, "removeFriend");
+				uService.sendGetFriends(mes, this);
 			}
 		}
 
@@ -48,7 +51,7 @@ public class FriendsController {
     }
 
     public synchronized void resetMessage() {
-            Message m = new Message(usuari, "Friends");
+        Message m = new Message(usuari, "Friends");
 		    uService.sendGetFriends(m, this);
     }
 

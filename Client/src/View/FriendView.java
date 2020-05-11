@@ -5,6 +5,7 @@ import src.Usuari;
 import src.Utils;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -34,11 +35,13 @@ public class FriendView extends JFrame {
 
         jpsAmics = new JPanel[amics.size()];
 
-        jpAmics = new JPanel(null);
+        jpAmics = new JPanel();
+				jpAmics.setLayout(new GridLayout(amics.size(), 1, 0, 1));
         jpAmics.setOpaque(false);
 
         scrollPaneAmics = new JScrollPane();
-        scrollPaneAmics.setBounds(0, 200, 450, 520);
+        scrollPaneAmics.setBounds(0, 200, 430, 500);
+				scrollPaneAmics.setEnabled(true);
         scrollPaneAmics.setOpaque(false);
 
         JButton jpFriendsTitle = new JButton("Amics");
@@ -60,7 +63,9 @@ public class FriendView extends JFrame {
         jpFriends.add(jpFriendsTitle);
 			//--------------------------------------------------------------------------------------------------------------
 
-
+        for(int i=0; i < jpsAmics.length; i++){
+          jpsAmics[i] = null;
+        }
 
         for (int i = 0; i < amics.size() ; i++) {
             jpsAmics[i] = new JPanel(new GridLayout(3, 1)){
@@ -74,18 +79,20 @@ public class FriendView extends JFrame {
             jpsAmics[i].addMouseListener(new MouseAdapter() {
 							@Override
 							public void mouseClicked(MouseEvent e) {
-                                friendsController.removeFriend(finalI);
+								friendsController.removeFriend(amics.get(finalI));
 							}
 						});
 
             jpsAmics[i].setOpaque(false);
             jpsAmics[i].setVisible(true);
 
-						JLabel nomAmic = new JLabel();
-						nomAmic.setText("<html><font color='white'>" + Utils.ferEspais(10) + " "+ amics.get(i).getNickName() + "</font></html>");
+            JLabel nomAmic = new JLabel();
+						nomAmic.setText("<html><font color='white'>" + Utils.ferEspais(14) + " "+ amics.get(i).getNickName() + "</font></html>");
             nomAmic.setForeground(Color.WHITE);
+            nomAmic.setBorder(new EmptyBorder(10,0,0,0));//top,left,bottom,right
+
             nomAmic.setFont(new Font("Helvetica", 0, 20));
-            nomAmic.setBounds(300, 270, 100, 15);
+            nomAmic.setBounds(300, 290, 100, 15);
             jpsAmics[i].add(nomAmic);
 
 						/*JLabel aux = null;
@@ -113,26 +120,30 @@ public class FriendView extends JFrame {
 						if(amics.get(i).isOnline()){
 							online.setText("<html><font color='white'>" + Utils.ferEspais(22) + " Online" +  "</font></html>");
 							online.setForeground(Color.WHITE);
-						}else{
+
+                        }else{
 							online.setText("<html><font color='white'>" + Utils.ferEspais(22) + " Offline" + "</font></html>");
 							online.setForeground(Color.GRAY);
 						}
-						online.setBounds(300, 300, 100, 15);
+
+            online.setBounds(300, 320, 100, 15);
 						jpsAmics[i].add(online);
 
 
 						jpsAmics[i].setBounds(15, 60 + (110 * i), 410, 90);
 
             jpAmics.add(jpsAmics[i]);
+
+						//jpAmics.add(separator);
         }
 
 
 
 				//------------------------------------------------------OK------------------------------------------------------
-				jpAmics.setBounds(0, 0, 300, 500);
+				//jpAmics.setBounds(0, 0, 300, 500);
 				jpAmics.setVisible(true);
 				scrollPaneAmics.setViewportView(jpAmics);
-				scrollPaneAmics.getViewport().setOpaque(false);
+        scrollPaneAmics.getViewport().setOpaque(false);
         jpFriends.add(scrollPaneAmics);
         ImageIcon img = new ImageIcon(this.getClass().getResource("/resources/fondoMadera.png"));
         Icon icono = new ImageIcon(img.getImage().getScaledInstance(450, 700, Image.SCALE_DEFAULT));

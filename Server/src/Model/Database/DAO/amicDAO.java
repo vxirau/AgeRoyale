@@ -96,7 +96,7 @@ public class amicDAO {
     }
 
     public void removeAmic (Usuari usuari, Usuari amic){
-        String query = "DELETE FROM AgeRoyale.amic WHERE (" + usuari.getIdUsuari() + " = id_u1 AND " + amic.getIdUsuari() + " = id_u2) OR (" + amic.getIdUsuari() + " = id_u1 and " + amic.getIdUsuari() + " = id_u2);";
+        String query = "DELETE FROM AgeRoyale.amic WHERE (" + usuari.getIdUsuari() + " = id_u1 AND " + amic.getIdUsuari() + " = id_u2) OR (" + amic.getIdUsuari() + " = id_u1 and " + usuari.getIdUsuari() + " = id_u2);";
         DBConnector.getInstance().deleteQuery(query);
     }
 

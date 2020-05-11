@@ -14,6 +14,7 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainClient {
 
@@ -52,7 +53,16 @@ public class MainClient {
                       @Override
                       public void run() {
                           MenuView rView = new MenuView();
-                          //MenuController controlador = new MenuController(rView, userService, new Usuari() );
+                          ArrayList<Usuari> amics = new ArrayList<>();
+                          amics.add(new Usuari(5, "Bernat", "1234"));
+                          amics.add(new Usuari(4, "Lidia", "1234"));
+                          amics.add(new Usuari(3, "Marti", "1234"));
+                          amics.add(new Usuari(2, "Adri", "1234"));
+                          amics.add(new Usuari(5, "Bernat", "1234"));
+                          amics.add(new Usuari(4, "Lidia", "1234"));
+                          amics.add(new Usuari(3, "Marti", "1234"));
+                          amics.add(new Usuari(2, "Adri", "1234"));
+                          MenuController controlador = new MenuController(rView, userService, new Usuari(1, "Victor", "1234", amics));
                           rView.setVisible(true);
                       }
                   });

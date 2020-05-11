@@ -157,6 +157,16 @@ public class UserService extends Thread{
 		}
 	}
 
+	public void sendObject(Object object) {
+		try{
+			this.doStream.reset();
+			this.doStream.writeObject(object);
+		} catch (IOException e) {
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
+
 	public void sendGetPartides(Object message, RoomsController roomsController) {
 		this.roomsController = roomsController;
 		try{

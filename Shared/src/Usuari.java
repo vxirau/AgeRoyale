@@ -38,6 +38,19 @@ public class Usuari implements Serializable {
         this.amics = amics;
     }
 
+    public Usuari(int id, String nickName, String password) {
+        this.idUsuari = id;
+        this.amics = amics;
+        this.nickName = nickName;
+    }
+
+    public Usuari(int id, String nickName, String password, ArrayList<Usuari> amics) {
+        this.idUsuari = id;
+        this.amics = amics;
+        this.nickName = nickName;
+        this.password = password;
+    }
+
     public Usuari(String nickName, String password) {
         this.nickName = nickName;
         this.password = password;

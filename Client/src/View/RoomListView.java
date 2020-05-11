@@ -80,16 +80,22 @@ public class RoomListView extends JFrame{
 		jpPare.setOpaque(true);
 		jpPartidesPubliques =new JPanel();
 		jpPartidesPubliques.setOpaque(false);
-		jpPartidesPubliques.setLayout(null);
+		jpPartidesPubliques.setLayout(new BoxLayout(jpPartidesPubliques, BoxLayout.Y_AXIS));
 		jpPartidesPrivades = new JPanel();
+
+		jpPartidesPrivades.setLayout(new BoxLayout(jpPartidesPrivades, BoxLayout.Y_AXIS));
+
+
+
+
+
 		jpPartidesPrivades.setOpaque(false);
-		jpPartidesPrivades.setLayout(null);
 
 		scrollPubliques = new JScrollPane();
-		scrollPubliques.setBounds(0,200, 450, 520);
+		scrollPubliques.setBounds(0,200, 450, 480);
 		scrollPubliques.setOpaque(false);
 		scrollPrivades= new JScrollPane();
-		scrollPrivades.setBounds(0,200, 450, 520);
+		scrollPrivades.setBounds(0,200, 450, 480);
 		scrollPrivades.setOpaque(false);
 		//this.getContentPane().add(jpPare);
 
@@ -134,7 +140,7 @@ public class RoomListView extends JFrame{
 		create.setFont(new Font("Helvetica", 0, 15));
 		element.add(create);
 
-		element.setBounds(20, 20+(total*110), 410, 90);
+		element.setBounds(20, 20+(total*210), 410, 300);
 
 		return element;
 	}
@@ -195,6 +201,10 @@ public class RoomListView extends JFrame{
 			for(int i=0; i<pPubliques.size() ;i++){
 				partidesPubliques[i] = crearElement(pPubliques.get(i), i);
 				jpPartidesPubliques.add(partidesPubliques[i]);
+				Dimension minSize = new Dimension(5, 20);
+				Dimension prefSize = new Dimension(5, 20);
+				Dimension maxSize = new Dimension(Short.MAX_VALUE, 20);
+				jpPartidesPubliques.add(new Box.Filler(minSize, prefSize, maxSize));
 			}
 
 			for(int i =0; i<pPrivades.size(); i++){

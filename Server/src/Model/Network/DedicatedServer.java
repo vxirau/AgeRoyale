@@ -117,6 +117,13 @@ public class DedicatedServer extends Thread {
 					ArrayList<Usuari> a = aDAO.getAmics(usuari);
 					Message messageResposta = new Message(a, "FriendsResposta");
 					objectOut.writeObject(messageResposta);
+				} else if (m.getType().equals("removeFriend")){
+					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
+					amicDAO aDAO = new amicDAO();
+					aDAO.removeAmic(users.get(0), users.get(1));
+					ArrayList<Usuari> a = aDAO.getAmics(users.get(0));
+					Message messageResposta = new Message(a, "FriendsResposta");
+					objectOut.writeObject(messageResposta);
 				}
 			}
 		} catch (IOException | ClassNotFoundException e1){
