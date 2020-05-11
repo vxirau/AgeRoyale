@@ -47,10 +47,10 @@ public class FriendsController {
         this.usuari = usuari;
     }
 
-    public synchronized void initMessage() {
+    public synchronized void resetMessage() {
             Message m = new Message(usuari, "Friends");
 		    uService.sendGetFriends(m, this);
-	   }
+    }
 
      public void setFriends(ArrayList<Usuari> amics) {
         this.friends = amics;

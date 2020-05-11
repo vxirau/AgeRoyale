@@ -86,7 +86,6 @@ public class MenuView extends JFrame implements ActionListener {
         initConfig();
         initTropes();
         initMain();
-
         initFriends();
         initCrearPartida();
 
@@ -257,7 +256,7 @@ public class MenuView extends JFrame implements ActionListener {
         amics.add(d);
         amics.add(u);
 
-        friendView.setAmics(amics);
+        //friendView.setAmics(amics);
         jpFriends = friendView.getJpFriends();
     }
 

@@ -23,8 +23,8 @@ public class FriendView extends JFrame {
 
     public FriendView(Usuari usr, FriendsController friendsCtrl) {
         this.usuari = usr;
+        setAmics(usr.getAmics());
         this.friendsController = friendsCtrl;
-        //friendsController.initMessage();
     }
     public void initAll(){
 
