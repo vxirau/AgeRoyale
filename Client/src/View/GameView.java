@@ -1,6 +1,8 @@
 package src.View;
 
 import src.Controller.GameController;
+import src.Controller.TroopController;
+import src.Message;
 import src.Tropa;
 
 import javax.swing.*;
@@ -14,41 +16,38 @@ import java.util.ArrayList;
 
 public class GameView extends JFrame implements Runnable {
 
-
-    private JPanel[][] panels;
-    private JPanel player;
-
-
-
-    private static int x = 0;
-    private static int y = 0;
-
-    private static int index1 = 60;
-    private static double index2 = 60;
-
     private static Thread thread;
     private final int[] pixels;
     private final int width;
     private final int height;
     public static final int ROWS = 20;
     public static final int COLUMNS = 10;
-    private static int aux1 = 0;
-    private static int aux2 = 0;
     private static volatile boolean gameIsRunning = false;
-    private static GameController gcontrol;
+    private static GameController gameController;
+    private static TroopController troopController;
     private static int xMousePosition;
     private static int yMousePosition;
     private static BufferedImage image;
     //Variable per accedir a la imatge a partir dels seus pixels
     private static int[] pixelsImage;
 
+
+
     private ArrayList<Tropa> tropes;
-    private Tropa tropa;
+
     private static GameMap gameMap;
     private boolean mouseIsClicked;
 
     private Deck deck;
     private int whichTroop;
+
+    public ArrayList<Tropa> getTropes() {
+        return tropes;
+    }
+
+    public void setTropes(ArrayList<Tropa> tropes) {
+        this.tropes = tropes;
+    }
 
     private static final String IMAGE_MAP_PATH  = "/resources/pixels_map.png";
 
@@ -66,8 +65,8 @@ public class GameView extends JFrame implements Runnable {
     public GameView() throws IOException {
 
 
-        gcontrol = new GameController(this);
-
+        gameController = new GameController(this);
+        troopController = new TroopController(this);
         this.width = 32 * COLUMNS;
         this.height = 32 * ROWS + 64;
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -102,22 +101,16 @@ public class GameView extends JFrame implements Runnable {
 
 
 
-    public void clearScreen(){
-        //Donem el valor de negre a tots els pixels cada cop que esborrem els pixels de la pantalla
-        for(int i = 0; i < pixels.length; i++){
-            pixels[i] = 0;
-        }
 
-    }
 
-    public void update(){
+    /*public void update(){
         if(tropes.size() > 0){
             for(int i = 0; i < tropes.size(); i++){
                 tropes.get(i).update();
             }
         }
 
-    }
+    }*/
 
     //Metode que ens dibuixa els tiles del nostre mapa
     public void drawTile(int compensX, int compensY, Tile tile){
@@ -151,7 +144,6 @@ public class GameView extends JFrame implements Runnable {
                 if(troopPixelColor != 0xffff00ff){
                     pixels[xPosition + yPosition * width] = troopPixelColor;
                 }
-
             }
         }
     }
@@ -214,7 +206,7 @@ public class GameView extends JFrame implements Runnable {
     public void run() {
 
         final int NS_PER_SECOND = 1000000000;
-        final byte FPS = 60;
+        final byte FPS = 30;
         final double NS_PER_FRAME = NS_PER_SECOND/FPS;
         long updateReference = System.nanoTime();
         double elapsedTime;
@@ -224,7 +216,8 @@ public class GameView extends JFrame implements Runnable {
 
         while(gameIsRunning){
 
-            update();
+            troopController.update();
+            //Message message = new Message(this, "Game Refresh");
             final long loopStart = System.nanoTime();
 
             elapsedTime = loopStart - updateReference;
@@ -247,13 +240,29 @@ public class GameView extends JFrame implements Runnable {
         this.addMouseListener(gameController);
     }
 
+    public  int getxMousePosition() {
+        return xMousePosition;
+    }
+
+    public  void setxMousePosition(int xMousePosition) {
+        GameView.xMousePosition = xMousePosition;
+    }
+
+    public  int getyMousePosition() {
+        return yMousePosition;
+    }
+
+    public  void setyMousePosition(int yMousePosition) {
+        GameView.yMousePosition = yMousePosition;
+    }
+
     public void updateMouse(int xMousePosition, int yMousePosition, boolean mouseIsClicked){
         this.xMousePosition = xMousePosition;
         this.yMousePosition = yMousePosition;
         this.mouseIsClicked = mouseIsClicked;
     }
 
-    public void invokeTroop(int whichTroop){
+    /*public void invokeTroop(int whichTroop){
         switch (whichTroop){
             case 0:
                 Tropa skeleton = new Tropa(gameMap, xMousePosition, yMousePosition, Sprite.SKELETON_BACK);
@@ -274,10 +283,36 @@ public class GameView extends JFrame implements Runnable {
             default:
                 break;
         }
+    }*/
+
+    public GameMap getGameMap() {
+        return gameMap;
     }
 
-    public void selectTroopFromDeck(int whichTroop){
+    public void setGameMap(GameMap gameMap) {
+        GameView.gameMap = gameMap;
+    }
+
+    public int getWhichTroop() {
+        return whichTroop;
+    }
+
+    public void setWhichTroop(int whichTroop) {
+        this.whichTroop = whichTroop;
+    }
+
+    /*public void selectTroopFromDeck(int whichTroop){
         this.whichTroop = whichTroop;
         deck.selectTroop(whichTroop);
+    }*/
+
+
+
+    private void updateServer(){
+
+
+
+
     }
+
 }

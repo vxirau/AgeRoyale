@@ -115,7 +115,11 @@ public class RoomListView extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				RoomListView.this.setVisible(false);
-				RoomsController.startGame(total,0, new Partida());
+				try {
+					RoomsController.startGame(total,0, new Partida());
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
 			}
 		});
 

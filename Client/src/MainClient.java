@@ -14,20 +14,19 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class MainClient {
 
-    private static int game = 1;
+    private static int game = 0;
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
           @Override
           public void run() {
-             UserService userService = new UserService();
+             // UserService userService = new UserService();
               if (game == 1) {
                   LoginView loginview = new LoginView();
-                  LoginViewController controller = new LoginViewController(loginview, userService);
-                  loginview.loginViewsetListener(controller);
+                  //LoginViewController controller = new LoginViewController(loginview, userService);
+                  //loginview.loginViewsetListener(controller);
                   loginview.setVisible(true);
               } else if(game == 0){
                   GameView gView = null;
@@ -53,16 +52,7 @@ public class MainClient {
                       @Override
                       public void run() {
                           MenuView rView = new MenuView();
-                          ArrayList<Usuari> amics = new ArrayList<>();
-                          amics.add(new Usuari(5, "Bernat", "1234"));
-                          amics.add(new Usuari(4, "Lidia", "1234"));
-                          amics.add(new Usuari(3, "Marti", "1234"));
-                          amics.add(new Usuari(2, "Adri", "1234"));
-                          amics.add(new Usuari(5, "Bernat", "1234"));
-                          amics.add(new Usuari(4, "Lidia", "1234"));
-                          amics.add(new Usuari(3, "Marti", "1234"));
-                          amics.add(new Usuari(2, "Adri", "1234"));
-                          MenuController controlador = new MenuController(rView, userService, new Usuari(1, "Victor", "1234", amics));
+                          //MenuController controlador = new MenuController(rView, userService, new Usuari() );
                           rView.setVisible(true);
                       }
                   });

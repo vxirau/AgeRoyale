@@ -19,12 +19,30 @@ public class Tropa extends Entity implements Serializable {
     private float xVariation;
     private float yVariation;
 
+    private int troopType;
     private int idTropa;
     private int vida;
     private int cost;
     private int atac;
     private int alcance;
     private boolean ofensiva;
+
+    public int getTroopType() {
+        return troopType;
+    }
+
+    public void setTroopType(int troopType) {
+        this.troopType = troopType;
+    }
+
+    public boolean isPlaying() {
+        return isPlaying;
+    }
+
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
+    }
+
     private boolean isPlaying = true;
     private static int cont = 0;
     private ArrayList<Sprite> mov = new ArrayList<>();
@@ -44,11 +62,12 @@ public class Tropa extends Entity implements Serializable {
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.sprite = sprite;
+        this.troopType = -1;
         xVariation = 0;
         yVariation = (float) -2;
 
         if(sprite.equals(Sprite.SKELETON_BACK)){
-
+            this.troopType = 0;
             mov.add(Sprite.SKELETON_RIGHT);
             mov.add(Sprite.SKELETON_RIGHT_LEFT_FOOT);
             mov.add(Sprite.SKELETON_RIGHT_RIGHT_FOOT);
@@ -57,13 +76,24 @@ public class Tropa extends Entity implements Serializable {
             mov.add(Sprite.SKELETON_BACK_RIGHT_FOOT);
 
         } else if(sprite.equals(Sprite.GOBLIN_BACK)){
-
+            this.troopType = 1;
             mov.add(Sprite.GOBLIN_RIGHT);
             mov.add(Sprite.GOBLIN_RIGHT_LEFT_FOOT);
             mov.add(Sprite.GOBLIN_RIGHT_RIGHT_FOOT);
             mov.add(Sprite.GOBLIN_BACK);
             mov.add(Sprite.GOBLIN_BACK_LEFT_FOOT);
             mov.add(Sprite.GOBLIN_BACK_RIGHT_FOOT);
+
+        }else if(sprite.equals(Sprite.BOMB)){
+            this.troopType = 2;
+            mov.add(Sprite.BOMB);
+            mov.add(Sprite.BOMB_PHASE_1);
+            mov.add(Sprite.BOMB_PHASE_2);
+            mov.add(Sprite.BOMB_PHASE_3);
+            mov.add(Sprite.BOMB_PHASE_4);
+
+
+        }else{
 
         }
     }
@@ -80,219 +110,86 @@ public class Tropa extends Entity implements Serializable {
         this.ofensiva = ofensiva;
     }
 
-    public void update(){
-
+    /*public void update(){
         if(isPlaying) {
+            if(this.troopType == 0 || this.troopType == 1){
+                moveOffensiveTroop(xVariation, yVariation, cont);
+            }else if(troopType == 2){
+                bombExplosion(cont);
+            }else{
 
-            moveTroop(xVariation, yVariation, cont);
-
+            }
             cont++;
         }
-    }
+    }*/
 
 
     public void show(GameView gameView){
         gameView.drawTroop(xPosition, yPosition, this);
     }
 
-    private void moveTroop(float xVariation, float yVariation, int cont) {
-        //Es mou cap a la dreta (east)
-
-            if (xVariation > 0) {
-                troopDirection = 'e';
-                this.xPosition += xVariation;
-                switch (cont) {
-                    case 0:
-                        //this.sprite = Sprite.SKELETON_RIGHT;
-                        this.sprite = mov.get(0);
-
-                        try {
-                            Thread.sleep(160);
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        break;
-                    case 1:
-                        //this.sprite = Sprite.SKELETON_RIGHT_LEFT_FOOT;
-                        this.sprite = mov.get(1);
-                        try {
-                            Thread.sleep(160);
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        break;
-                    case 2:
-                        //this.sprite = Sprite.SKELETON_RIGHT_RIGHT_FOOT;
-                        this.sprite = mov.get(2);
-                        try {
-                            Thread.sleep(160);
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        this.cont = -1;
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-            //Es mou cap a l'esquerra (west)
-            if (xVariation < 0) {
-                troopDirection = 'w';
-                this.xPosition += xVariation;
-            }
-            //Es mou cap abaix (south)
-            if (yVariation > 0) {
-                troopDirection = 's';
-                this.yPosition += yVariation;
-                switch (cont) {
-                    case 0:
-
-                        //this.sprite = Sprite.SKELETON_FRONT;
-                        this.sprite = mov.get(3);
-                        try {
-                            Thread.sleep(160);
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        break;
-                    case 1:
-                        //this.sprite = Sprite.SKELETON_FRONT_LEFT_FOOT;
-                        this.sprite = mov.get(4);
-                        try {
-                            Thread.sleep(160);
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        break;
-                    case 2:
-                        //this.sprite = Sprite.SKELETON_FRONT_RIGHT_FOOT;
-                        this.sprite = mov.get(5);
-                        this.cont = -1;
-                        try {
-                            Thread.sleep(160);
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        this.cont = -1;
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-            //Es mou cap adalt (north)
-            if (yVariation < 0) {
-                troopDirection = 'n';
-                this.yPosition += yVariation;
-                switch (cont) {
-                    case 0:
-                        //this.sprite = Sprite.SKELETON_FRONT;
-                        this.sprite = mov.get(3);
-                        try {
-                            Thread.sleep(160);
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        break;
-                    case 1:
-                        //this.sprite = Sprite.SKELETON_FRONT_LEFT_FOOT;
-                        this.sprite = mov.get(4);
-                        try {
-                            Thread.sleep(160);
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        break;
-                    case 2:
-                        //this.sprite = Sprite.SKELETON_FRONT_RIGHT_FOOT;
-                        this.sprite = mov.get(5);
-                        this.cont = -1;
-                        try {
-                            Thread.sleep(160);
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        this.cont = -1;
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            //Si la tropa no ha estat destruida, la movem
-            if (!entityIsDestroyed()) {
-                if (onCollision((int) xVariation, 0)) {
-                    //updatexPosition(xVariation);
-
-                    this.xPosition += xVariation;
-                } else {
-                    xVariation = 0;
-                }
-                if (onCollision(0, (int) yVariation)) {
-                    //updateyPosition(yVariation);
-                    this.yPosition += yVariation;
-                } else {
-                    yVariation = 0;
-                }
-            }
-
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
     }
 
-    //Metode per detectar si col·lisionem amb alguna cosa al mapa
-    private boolean onCollision(int xVariation, int yVariation){
-        boolean collision = false;
-
-        int xPosition = (int) (this.getxPosition() + xVariation);
-        int yPosition = (int) (this.getyPosition() + yVariation);
-
-        int leftMargin = -6;
-        int rightMargin = 18;
-        int supMargin = -4;
-        int infMargin = 31;
-
-        int leftBorder = (xPosition + rightMargin) / sprite.getSide();
-        int rightBorder = (xPosition + rightMargin + leftMargin) / sprite.getSide();
-        int supBorder = (yPosition + infMargin) / sprite.getSide();
-        int infBorder = (yPosition + infMargin + supMargin) / sprite.getSide();
-
-        if(gameMap.getSpecificTile(leftBorder + supBorder * gameMap.getMapWidth()).isSolid()){
-
-            if(gameMap.getSpecificTile(leftBorder + supBorder * gameMap.getMapWidth()).getSprite() == Sprite.BRIDGE){
-                this.yVariation = 2;
-                collision = false;
-                this.xVariation = 0;
-            } else {
-                collision = true;
-                this.xVariation = 2;
-                this.yVariation = 0;
-            }
-
-        }
-        if(gameMap.getSpecificTile(leftBorder + infBorder * gameMap.getMapWidth()).isSolid()){
-            this.yVariation = 0;
-            collision = true;
-        }
-        if(gameMap.getSpecificTile(rightBorder + supBorder * gameMap.getMapWidth()).isSolid()){
-
-            if(gameMap.getSpecificTile(leftBorder + supBorder * gameMap.getMapWidth()).getSprite() == Sprite.BRIDGE){
-                this.yVariation = 2;
-                collision = false;
-                this.xVariation = 0;
-            } else {
-                collision = true;
-                this.xVariation = 2;
-                this.yVariation = 0;
-            }
-
-        }
-        if(gameMap.getSpecificTile(rightBorder + infBorder * gameMap.getMapWidth()).isSolid()){
-            //this.yVariation = 0;
-            collision = true;
-        }
-
-        return collision;
+    public char getTroopDirection() {
+        return troopDirection;
     }
+
+    public void setTroopDirection(char troopDirection) {
+        this.troopDirection = troopDirection;
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
+    }
+
+    public GameMap getGameMap() {
+        return gameMap;
+    }
+
+    public void setGameMap(GameMap gameMap) {
+        this.gameMap = gameMap;
+    }
+
+    public float getxVariation() {
+        return xVariation;
+    }
+
+    public void setxVariation(float xVariation) {
+        this.xVariation = xVariation;
+    }
+
+    public float getyVariation() {
+        return yVariation;
+    }
+
+    public void setyVariation(float yVariation) {
+        this.yVariation = yVariation;
+    }
+
+    public static int getCont() {
+        return cont;
+    }
+
+    public static void setCont(int cont) {
+        Tropa.cont = cont;
+    }
+
+    public ArrayList<Sprite> getMov() {
+        return mov;
+    }
+
+    public void setMov(ArrayList<Sprite> mov) {
+        this.mov = mov;
+    }
+
+
+
 
 
     public int getIdTropa() {

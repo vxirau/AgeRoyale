@@ -24,7 +24,7 @@ public class DBConnector {
         this.url += ":" + port + "/";
         this.url += db + "?verifyServerCertificate=false&useSSL=false&serverTimezone=UTC";
         DBConnector.userName = "root";
-        DBConnector.password = "timador";
+        DBConnector.password = "Ppam8212_mysql";
         this.instance = this;
     }
 

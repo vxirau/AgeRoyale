@@ -1,6 +1,9 @@
 package src.Controller;
 
+import src.Tropa;
+import src.View.Deck;
 import src.View.GameView;
+import src.View.Sprite;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,16 +12,17 @@ import java.awt.image.BufferStrategy;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-public class GameController implements MouseListener, MouseMotionListener, Runnable {
+public class GameController implements MouseListener, MouseMotionListener, Runnable, ActionListener {
 
     private GameView gameView;
     private boolean mouseIsClicked;
     private int whichTroop;
+    private Deck deck;
 
-    public GameController(GameView gameView){
+    public GameController(GameView gameView) throws IOException {
         this.gameView = gameView;
         this.mouseIsClicked = false;
-
+        this.deck = new Deck(this.gameView, this.gameView.getWidth(), this.gameView.getHeight());
     }
 
 
@@ -52,11 +56,12 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
                 }
 
                 gameView.updateMouse(e.getX(), e.getY(), mouseIsClicked);
-                gameView.selectTroopFromDeck(this.whichTroop);
+                selectTroopFromDeck(whichTroop);
+                //gameView.selectTroopFromDeck(this.whichTroop);
             }
         }
-        if(mouseIsClicked){
 
+        if(mouseIsClicked){
             if(e.getY() <= 630){
                 System.out.println("INVOCO TROPA BRO");
                 if(e.getY() <= 355){
@@ -65,12 +70,9 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
                     y = e.getY();
                 }
                 gameView.updateMouse(e.getX(), y, mouseIsClicked);
-                gameView.invokeTroop(this.whichTroop);
+                invokeTroop(this.whichTroop);
                 mouseIsClicked = false;
-
             }
-
-
         }
 
     }
@@ -103,8 +105,43 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
-        System.out.println(e.getX() + ", " + e.getY());
         gameView.updateMouse(e.getX(), e.getY(), mouseIsClicked);
+    }
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+
+
+    public void selectTroopFromDeck(int whichTroop){
+        gameView.setWhichTroop(whichTroop);
+        deck.selectTroop(whichTroop);
+    }
+
+
+
+    public void invokeTroop(int whichTroop){
+        switch (whichTroop){
+            case 0:
+                Tropa skeleton = new Tropa(gameView.getGameMap(), gameView.getxMousePosition(), gameView.getyMousePosition(), Sprite.SKELETON_BACK);
+                gameView.getTropes().add(skeleton);
+                break;
+            case 1:
+                Tropa goblin = new Tropa(gameView.getGameMap(), gameView.getxMousePosition(), gameView.getyMousePosition(), Sprite.GOBLIN_BACK);
+                gameView.getTropes().add(goblin);
+                break;
+            case 2:
+                Tropa wizard = new Tropa(gameView.getGameMap(), gameView.getxMousePosition(), gameView.getyMousePosition(), Sprite.MAGIC_TOWER);
+                gameView.getTropes().add(wizard);
+                break;
+            case 3:
+                Tropa bomb = new Tropa(gameView.getGameMap(), gameView.getxMousePosition(), gameView.getyMousePosition(), Sprite.BOMB);
+                gameView.getTropes().add(bomb);
+                break;
+            default:
+                break;
+        }
     }
 }

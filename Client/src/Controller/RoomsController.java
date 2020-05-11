@@ -3,6 +3,7 @@ package src.Controller;
 import src.Message;
 import src.Model.Network.UserService;
 import src.Partida;
+import src.Tropa;
 import src.Usuari;
 import src.View.GameView;
 import src.View.MenuView;
@@ -25,6 +26,7 @@ public class RoomsController {
 	private Usuari usuari;
 	private UserService uService;
 	private ArrayList<Partida> allGames;
+	private ArrayList<Tropa> tropes;
 	private ActionListener actionListenerCreaPartida = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -50,6 +52,11 @@ public class RoomsController {
 					DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 					LocalDateTime now = LocalDateTime.now();
 					Partida p = new Partida(m, dtf.format(now), privacitat, usuari.getNickName());
+					try {
+						p.startPartida();
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
 					Message mes = new Message(p, "roomCreate");
 					uService.sendPartida(mes);
 				}
@@ -68,7 +75,7 @@ public class RoomsController {
 		uService.sendGetPartides(m, this);
 	}
 
-	public static void startGame(int num, int privacitat, Partida p){
+	public static void startGame(int num, int privacitat, Partida p) throws IOException {
 		GameView gView = null;
 		try {
 			gView = new GameView();
@@ -79,6 +86,7 @@ public class RoomsController {
 		GameController controller = new GameController(gView);
 		gView.registerController(controller);
 		gView.setVisible(true);
+		p.setGameView(gView);
 	}
 
 	public void setAllGames(ArrayList<Partida> allGames) {

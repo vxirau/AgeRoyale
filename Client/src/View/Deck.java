@@ -51,7 +51,7 @@ public class Deck {
     }
 
     private void drawDeck(final Graphics g, int xMousePosition, int yMousePosition, boolean mouseIsClicked, int whichTroop){
-        drawFilledRect(g, deckRectangle, DECK_RECTANGLE_COLOR, xMousePosition, yMousePosition, mouseIsClicked,whichTroop);
+        drawFilledRect(g, deckRectangle, DECK_RECTANGLE_COLOR, xMousePosition, yMousePosition, mouseIsClicked, whichTroop);
         drawFilledRect(g, deckRectangleBorder, Color.WHITE, xMousePosition, yMousePosition, mouseIsClicked, whichTroop);
     }
     private void drawFilledRect(final Graphics g, final Rectangle r, final Color c, int xMousePosition, int yMousePosition, boolean mouseIsClicked, int whichTroop){

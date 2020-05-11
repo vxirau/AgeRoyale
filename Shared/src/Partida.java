@@ -1,10 +1,14 @@
 package src;
 
+import src.Controller.RoomsController;
+import src.View.GameView;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Partida implements Serializable {
+public class Partida implements Serializable{
     private Integer idPartida;
     private String data;
     private int duracio;
@@ -13,6 +17,9 @@ public class Partida implements Serializable {
     private String host;
     private ArrayList<Usuari> jugadors;
     private ArrayList<Usuari> espectadors;
+    private GameView gameView;
+    private static volatile boolean gameIsRunning = false;
+
 
     public Partida() {
 
@@ -120,4 +127,32 @@ public class Partida implements Serializable {
     public void setEspectadors(ArrayList<Usuari> espectadors) {
         this.espectadors = espectadors;
     }
+
+    public GameView getGameView() {
+        return gameView;
+    }
+
+    public void setGameView(GameView gameView) {
+        this.gameView = gameView;
+    }
+
+    public void startPartida() throws IOException {
+        RoomsController.startGame(0, 0, this);
+    }
+
+
+
+    /*
+    //Actualitzem l'estat de les tropes
+    public void update(){
+        if(tropes.size() > 0){
+            for(int i = 0; i < tropes.size(); i++){
+                tropes.get(i).update();
+            }
+        }
+
+    }*/
+
+
+
 }
