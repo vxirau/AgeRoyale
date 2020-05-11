@@ -129,4 +129,9 @@ public class Sprite {
     public int getSide() {
         return side;
     }
+
+    public Sprite getRight(Sprite sprite){
+
+        return sprite;
+    }
 }

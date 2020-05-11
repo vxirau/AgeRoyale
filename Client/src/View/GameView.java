@@ -256,11 +256,11 @@ public class GameView extends JFrame implements Runnable {
     public void invokeTroop(int whichTroop){
         switch (whichTroop){
             case 0:
-                Tropa skeleton = new Tropa(gameMap, xMousePosition, yMousePosition, Sprite.SKELETON_FRONT);
+                Tropa skeleton = new Tropa(gameMap, xMousePosition, yMousePosition, Sprite.SKELETON_BACK);
                 tropes.add(skeleton);
                 break;
             case 1:
-                Tropa goblin = new Tropa(gameMap, xMousePosition, yMousePosition, Sprite.GOBLIN_FRONT);
+                Tropa goblin = new Tropa(gameMap, xMousePosition, yMousePosition, Sprite.GOBLIN_BACK);
                 tropes.add(goblin);
                 break;
             case 2:
