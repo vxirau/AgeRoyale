@@ -32,9 +32,9 @@ public class RoomsController {
 			boolean privacitat=false;
 
 			if(((JButton)e.getSource()).getText().equals("Crear nova partida")){
-				String m = JOptionPane.showInputDialog("Enter game name:");
+				String m = JOptionPane.showInputDialog("Introduir nom de la partida: ");
 				if(m!=null){
-					int a=JOptionPane.showConfirmDialog(vista, "Do you want your game to be private?");
+					int a=JOptionPane.showConfirmDialog(vista, "Vols que la teva partida sigui privada?");
 					if(a==JOptionPane.YES_OPTION){
 						privacitat=false;
 					}else if(a==JOptionPane.NO_OPTION){

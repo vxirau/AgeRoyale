@@ -1,6 +1,7 @@
 package src.Model.Network;
 
 import src.Message;
+import src.Model.Database.DAO.amicDAO;
 import src.Model.Database.DAO.partidaDAO;
 import src.Model.Database.DAO.usuariDAO;
 import src.Partida;
@@ -9,6 +10,7 @@ import src.View.ViewServer;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class DedicatedServer extends Thread {
@@ -72,7 +74,8 @@ public class DedicatedServer extends Thread {
 				} else if (m.getType().equals("getAllGames")) {
 					objectOut.reset();
 					partidaDAO pDao = new partidaDAO();
-					objectOut.writeObject(new Message(0, pDao.getAllPartides(), "allGamesReply"));
+					ArrayList<Partida> p = pDao.getAllPartides();
+					objectOut.writeObject(new Message(p, "allGamesReply"));
 				} else if (m.getType().equals("Login")) {
 					Usuari usuari = (Usuari) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
@@ -101,6 +104,12 @@ public class DedicatedServer extends Thread {
 						resposta = "UserPKUpdates_OK";
 					}
 					Message messageResposta = new Message(resposta, "UserPKUpdatesResposta");
+					objectOut.writeObject(messageResposta);
+				} else if (m.getType().equals("Friends")){
+					Usuari usuari = (Usuari) m.getObject();
+					amicDAO aDAO = new amicDAO();
+					ArrayList<Usuari> a = aDAO.getAmics(usuari);
+					Message messageResposta = new Message(a, "FriendsResposta");
 					objectOut.writeObject(messageResposta);
 				}
 			}

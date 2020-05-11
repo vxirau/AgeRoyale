@@ -32,6 +32,7 @@ public class UserService extends Thread{
     private RoomsController roomsController;
     private LoginViewController loginViewController;
     private ConfigController configController;
+    private FriendsController friendsController;
 
 
 	public UserService() {
@@ -85,11 +86,14 @@ public class UserService extends Thread{
 	}
 
 
+
+
 	public void run() {
 		while (isOn) {
 			try {
 
 				Message jelow = (Message) doInput.readObject();
+				System.out.println("Arriba a client: " + jelow.getType());
 				if (jelow.getType().equals("REGISTER_OK")) {
 					JOptionPane.showOptionDialog(new JFrame(), "DE SUPER PUTA MARE SOCI", "Congratulacions", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 					LoginView lview = new LoginView();
@@ -101,7 +105,7 @@ public class UserService extends Thread{
 					lview.setUsuari(user.getNickName());
 					lview.setPassword(user.getPassword());
 				} else if (jelow.getType().equals("allGamesReply")) {
-					ArrayList<Partida> p = jelow.getObjectArray();
+					ArrayList<Partida> p = (ArrayList<Partida>)jelow.getObject();
 					roomsController.setAllGames(p);
 				} else if (jelow.getType().equals("Login resposta")) {
 					if (jelow.getObject() != null) {
@@ -116,7 +120,10 @@ public class UserService extends Thread{
 					} else if (resposta.equals("UserPKUpdates_OK")){
 						configController.canviSuccessful();
 					}
-				}else{
+				} else if(jelow.getType().equals("FriendsResposta")){
+					ArrayList<Usuari> amics = (ArrayList<Usuari>) jelow.getObject();
+					friendsController.setFriends(amics);
+        } else{
 					JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
 				}
 			} catch (IOException | ClassNotFoundException e ) {
@@ -203,4 +210,16 @@ public class UserService extends Thread{
 			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
 		}
 	}
+
+  public void sendGetFriends(Message message, FriendsController friendsCtrl) {
+		try{
+			this.friendsController = friendsCtrl;
+			this.doStream.reset();
+			this.doStream.writeObject(message);
+		} catch (IOException e) {
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
+
 }

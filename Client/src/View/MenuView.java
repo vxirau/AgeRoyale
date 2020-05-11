@@ -87,20 +87,7 @@ public class MenuView extends JFrame implements ActionListener {
         initTropes();
         initMain();
 
-        Usuari main = new Usuari();
-        main.setNickName("hola");
-        main.setAmics(new ArrayList<Usuari>());
-        setUsuari(main);
-        Usuari u = new Usuari();
-        u.setNickName("Uno");
-        Usuari d = new Usuari();
-        d.setNickName("Dos");
-        ArrayList<Usuari> amics = new ArrayList<>();
-        amics.add(d);
-        amics.add(u);
-        initFriends(amics);
-
-        initFriends(amics);
+        initFriends();
         initCrearPartida();
 
         //Marquem la primera vista que mostrarem al iniciar
@@ -255,8 +242,22 @@ public class MenuView extends JFrame implements ActionListener {
         jpMain = mainView.getJpMain();
     }
 
-    public void initFriends(ArrayList<Usuari> amicsRecived) {
-        friendView = new FriendView(amicsRecived);
+    public void initFriends() {
+        friendView = new FriendView(usuari, menuController.getFriendsController());
+
+        Usuari main = new Usuari();
+        main.setNickName("hola");
+        main.setAmics(new ArrayList<Usuari>());
+        setUsuari(main);
+        Usuari u = new Usuari();
+        u.setNickName("Uno");
+        Usuari d = new Usuari();
+        d.setNickName("Dos");
+        ArrayList<Usuari> amics = new ArrayList<>();
+        amics.add(d);
+        amics.add(u);
+
+        friendView.setAmics(amics);
         jpFriends = friendView.getJpFriends();
     }
 

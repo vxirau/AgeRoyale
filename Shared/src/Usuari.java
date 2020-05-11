@@ -125,4 +125,5 @@ public class Usuari implements Serializable {
                 ", amics=" + amics +
                 '}';
     }
+
 }

@@ -89,4 +89,8 @@ public class MenuController {
         return configController;
     }
 
+    public FriendsController getFriendsController() {
+        return friendsController;
+    }
+
 }

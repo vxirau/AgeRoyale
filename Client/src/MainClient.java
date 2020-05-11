@@ -17,16 +17,16 @@ import java.io.IOException;
 
 public class MainClient {
 
-    private static int game = 0;
+    private static int game = 1;
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
           @Override
           public void run() {
-             // UserService userService = new UserService();
+             UserService userService = new UserService();
               if (game == 1) {
                   LoginView loginview = new LoginView();
-                  //LoginViewController controller = new LoginViewController(loginview, userService);
-                  //loginview.loginViewsetListener(controller);
+                  LoginViewController controller = new LoginViewController(loginview, userService);
+                  loginview.loginViewsetListener(controller);
                   loginview.setVisible(true);
               } else if(game == 0){
                   GameView gView = null;

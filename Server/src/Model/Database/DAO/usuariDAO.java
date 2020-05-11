@@ -161,7 +161,7 @@ public class usuariDAO {
 
     //COMPROVAR EXISTENCIA
     public Usuari existsLogin (Usuari usr){
-        String query = "SELECT if(COUNT(*) = 1, us.idUser, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = '" + usr.getNickName() + "' AND us.password = '" + usr.getPassword() + "' ;";
+        String query = "SELECT if(COUNT(*) = 1, us.idUser, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = '" + usr.getNickName() + "' AND us.password = '" + usr.getPassword() + "';";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
         try {
             if (rs.next()) {
