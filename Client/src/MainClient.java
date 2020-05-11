@@ -36,12 +36,18 @@ public class MainClient {
                       e.printStackTrace();
                   }
                   gView.startGame();
-                  GameController gameController = new GameController(gView);
+                  GameController gameController = null;
+                  try {
+                      gameController = new GameController(gView);
+                  } catch (IOException e) {
+                      e.printStackTrace();
+                  }
                   GameView finalGView = gView;
+                  GameController finalGameController = gameController;
                   SwingUtilities.invokeLater(new Runnable() {
                       @Override
                       public void run() {
-                          finalGView.registerController(gameController);
+                          finalGView.registerController(finalGameController);
 
                           finalGView.setVisible(true);
                       }
