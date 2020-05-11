@@ -83,6 +83,10 @@ public class DBConnector {
 
         } catch (SQLException ex) {
             System.out.println("Problema al Modificar --> " + ex.getSQLState());
+            System.out.println(ex.getMessage());
+            System.out.println(ex.getErrorCode());
+            System.out.println(ex.getSQLState());
+            System.out.println(Arrays.toString(ex.getStackTrace()));
         }
     }
 

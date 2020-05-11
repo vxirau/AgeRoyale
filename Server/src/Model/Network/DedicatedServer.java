@@ -89,6 +89,12 @@ public class DedicatedServer extends Thread {
 					Usuari usuari = (Usuari) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
 					uDAO.updateState(usuari, false);
+					isOn = false;
+					Message messageResposta = new Message(null, "Logout_OK");
+					objectOut.writeObject(messageResposta);
+					stopDedicatedServer();
+					clients.remove(this);
+					server.showClients();
 				} else if (m.getType().equals("PasswordUpdate")) {
 					Usuari usuari = (Usuari) m.getObject();
 					usuariDAO uDAO = new usuariDAO();

@@ -79,6 +79,7 @@ public class ConfigController {
                     } else {
                         JOptionPane.showMessageDialog(new JFrame(), "La contrasenya NO s'ha actualitzat.\nLa contrasenya no és vàlida. Ha tenir almenys:\n - Una majúscula\n - Una minúscula\n - 8 caràcters\n - 1 valor numèric","Males noticies", JOptionPane.ERROR_MESSAGE);
                     }
+                    password = ConfigController.NO_CANVI;
                     resetFlags();
                 }
             }
@@ -98,7 +99,7 @@ public class ConfigController {
             JOptionPane.showMessageDialog(new JFrame(), "NO TAN FANTASTIC COM ESPERAVEM\n El nom d'usuari i el correu s'han actualitzat satisfactoriament. Pero la contrasenya no s'ha pogut actualitzar.\nLa contrasenya no és vàlida. Ha tenir almenys:\n - Una majúscula\n - Una minúscula\n - 8 caràcters\n - 1 valor numèric","Bones i males noticies", JOptionPane.WARNING_MESSAGE);
             configView.getJtfConfigContrasenya().setText(usuari.getPassword());
         }
-
+        password = ConfigController.NO_CANVI;
     }
 
     public void canviNotSuccessful(){
@@ -115,6 +116,7 @@ public class ConfigController {
             JOptionPane.showMessageDialog(new JFrame(), "FATAL\n El nom d'usuari i el correu NO s'han actualitzat. Aixo es deu a que algun altre usuari ja fa us d'aquest nom d'usuari o d'aquest correu.\nLa contrasenya no és vàlida. Ha tenir almenys:\n - Una majúscula\n - Una minúscula\n - 8 caràcters\n - 1 valor numèric","Males i molt males noticies", JOptionPane.ERROR_MESSAGE);
             configView.getJtfConfigContrasenya().setText(usuari.getPassword());
         }
+        password = ConfigController.NO_CANVI;
     }
 
     private void resetFlags(){

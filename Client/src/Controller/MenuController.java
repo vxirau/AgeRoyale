@@ -43,15 +43,16 @@ public class MenuController {
            userService.startServerComunication(); //TODO: descomentar
         }
 
+        view.setUsuari(user);
+        view.setuService(userService);
+        view.addWindowListener(windowListener);
+
         initControllers();
 
         view.setMenuController(this);
 
         initControllersViews();
 
-        view.setUsuari(usr);
-        view.setuService(userService);
-        view.addWindowListener(windowListener);
     }
 
     private void initControllers() {
@@ -70,17 +71,6 @@ public class MenuController {
         roomsController.setVista(view.getRoomListView());
     }
 
-
-/*
-    public void userUpdate(Usuari user){
-        configController.setUsuari(user);
-        tropesController.setUsuari(user);
-        mainController.setUsuari(user);
-        friendsController.setUsuari(user);
-        roomsController.setUsuari(user);
-    }
-
- */
     public RoomsController getRoomsController() {
         return roomsController;
     }
