@@ -91,6 +91,8 @@ INSERT INTO stats(TOTALPARTIDES, TOTALVICTORIES, WINRATE, AVGDURATIONVICTORIES) 
 SELECT if(COUNT(*) > 0, req.originId, -1) as exist FROM AgeRoyale.requests AS req WHERE destinationId = 1;
 SELECT req.originId FROM AgeRoyale.requests AS req WHERE destinationId = 1;
 
+INSERT INTO requests(originId, destinationId) VALUES (1, 2), (1, 4), (1, 3), (2, 1), (2, 5), (2, 4);
+
 INSERT INTO usuari (nickname, email, password, idStats, isOnline) values
     ('VXGamez', 'victor.xirau@students.salle.url.edu', '1234', 1, false),
     ('Lidia', 'lidia.figueras@students.salle.url.edu', '1234', 2, false),
