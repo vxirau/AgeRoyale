@@ -24,8 +24,6 @@ public class RoomListView extends JFrame{
 	private JPanel jpPare;
 	private JPanel jpPartidesPubliques;
 	private JPanel jpPartidesPrivades;
-	private JPanel[] partidesPubliques;
-	private JPanel[] partidesPrivades;
 	private JButton nova;
 	private JToggleButton visibilitat;
 	private JScrollPane scrollPubliquesF;
@@ -56,8 +54,8 @@ public class RoomListView extends JFrame{
 
 	private void initAll(){
 		dividirPartides();
-		partidesPubliques = new JPanel[pPubliques.size()];
-		partidesPrivades = new JPanel[pPrivades.size()];
+		//partidesPubliques = new JPanel[pPubliques.size()];
+		//partidesPrivades = new JPanel[pPrivades.size()];
 		if((pPrivades.size() + pPubliques.size()) != allGames.size()){
 			JOptionPane.showOptionDialog(new JFrame(), "Alguna cosa no ha funcionat","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
 		}
@@ -75,17 +73,32 @@ public class RoomListView extends JFrame{
 	}
 
 	private void colocarPanel(){
+		this.removeAll();
+
 		jpPare = new JPanel();
 		jpPare.setLayout(null);
 		jpPare.setOpaque(true);
-		jpPartidesPubliques =new JPanel();
+
+		jpPartidesPubliques =new JPanel(new GridLayout(pPubliques.size(), 1));
 		jpPartidesPubliques.setOpaque(false);
-		jpPartidesPubliques.setLayout(null);
-		jpPartidesPrivades = new JPanel();
+		//jpPartidesPubliques.setLayout(null);
 
-		jpPartidesPrivades.setLayout(null);
-
+		jpPartidesPrivades = new JPanel(new GridLayout(pPrivades.size(), 1));
+		//jpPartidesPrivades.setLayout(null);
 		jpPartidesPrivades.setOpaque(false);
+
+		scrollPrivadesF = new JScrollPane();
+		scrollPubliquesF = new JScrollPane();
+		scrollPrivadesF.setBounds(0, 200, 450, 500);
+		scrollPrivadesF.setEnabled(true);
+		scrollPrivadesF.setOpaque(false);
+		scrollPrivadesF.getViewport().setOpaque(false);
+
+		scrollPubliquesF.setBounds(0, 200, 450, 500);
+		scrollPubliquesF.setEnabled(true);
+		scrollPubliquesF.setOpaque(false);
+		scrollPubliquesF.getViewport().setOpaque(false);
+
 	}
 
 	private JPanel crearElement(Partida p, int total){
@@ -97,11 +110,11 @@ public class RoomListView extends JFrame{
 			}
 		};
 		element.setOpaque(false);
-		//element.setLayout(null);
 		element.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				RoomListView.this.setVisible(false);
+				System.out.println("Game pressed");
 				try {
 					RoomsController.startGame(total,0, new Partida());
 				} catch (IOException ex) {
@@ -114,24 +127,24 @@ public class RoomListView extends JFrame{
 		nom.setText("<html><font color='white'>" + Utils.ferEspais(28) + " Room Name: " + p.getName() + "</font></html>");
 		nom.setForeground(Color.WHITE);
 		nom.setFont(new Font("Helvetica", 0, 15));
-		nom.setBounds(120, 180, 250, 15);
+		//nom.setBounds(120, 180, 250, 15);
 		element.add(nom);
 
 		JLabel persones = new JLabel();
 		persones.setText("<html><font color='white'> " + Utils.ferEspais(28) + " Total Connected: " + (0)+ "</font></html>");
 		persones.setForeground(Color.WHITE);
-		persones.setBounds(120, 200, 250, 15);
+		//persones.setBounds(120, 190, 250, 15);
 		persones.setFont(new Font("Helvetica", 0, 15));
 		element.add(persones);
 
 		JLabel create = new JLabel();
 		create.setText("<html><font color='white'> " + Utils.ferEspais(28) + "  Host: " + p.getHost() +  "</font></html>");
 		create.setForeground(Color.WHITE);
-		create.setBounds(120, 220, 250, 15);
+		//create.setBounds(120, 200, 250, 15);
 		create.setFont(new Font("Helvetica", 0, 15));
 		element.add(create);
 
-		element.setBounds(20, 20+(total*210), 410, 300);
+		element.setPreferredSize(new Dimension(430,100));
 
 		return element;
 	}
@@ -190,24 +203,13 @@ public class RoomListView extends JFrame{
 
 			//------------------------------ELEMENT------------------------------
 			for(int i=0; i<pPubliques.size() ;i++){
-				partidesPubliques[i] = crearElement(pPubliques.get(i), i);
-				jpPartidesPubliques.add(partidesPubliques[i]);
+				jpPartidesPubliques.add(crearElement(pPubliques.get(i), i));
 			}
 
 			for(int i =0; i<pPrivades.size(); i++){
-				partidesPrivades[i] = crearElement(pPrivades.get(i), i);
-				jpPartidesPrivades.add(partidesPrivades[i]);
+				jpPartidesPrivades.add(crearElement(pPrivades.get(i), i));
 			}
-			scrollPrivadesF = new JScrollPane(jpPartidesPrivades);
-			scrollPubliquesF = new JScrollPane(jpPartidesPubliques);
-			scrollPrivadesF.setBounds(0, 200, 430, 500);
-			scrollPrivadesF.setEnabled(true);
-			scrollPrivadesF.setOpaque(false);
-			scrollPrivadesF.getViewport().setOpaque(false);
-			scrollPubliquesF.setBounds(0, 200, 430, 500);
-			scrollPubliquesF.setEnabled(true);
-			scrollPubliquesF.setOpaque(false);
-			scrollPubliquesF.getViewport().setOpaque(false);
+
 
 			if(!visible){
 				visible = false;
@@ -219,12 +221,11 @@ public class RoomListView extends JFrame{
 				scrollPubliquesF.setVisible(false);
 			}
 
-
-
+			scrollPrivadesF.setViewportView(jpPartidesPrivades);
+			scrollPubliquesF.setViewportView(jpPartidesPubliques);
 
 			jpPare.add(scrollPrivadesF);
 			jpPare.add(scrollPubliquesF);
-			//jpPare.add(element);
 		}
 
 		//Fons fusta
@@ -235,8 +236,9 @@ public class RoomListView extends JFrame{
 		getLayeredPane().add(fondo, JLayeredPane.FRAME_CONTENT_LAYER);
 		fondo.setBounds(0, 0, 450, 700);
 		jpPare.add(fondo);
-		//setSize(450, 800);
-		//this.setContentPane(jpPare);
+
+		revalidate();
+		repaint();
 	}
 
 	public JScrollPane getScrollPubliques(){
