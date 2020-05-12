@@ -92,14 +92,6 @@ public class FriendView extends JFrame {
             nomAmic.setBounds(300, 290, 100, 15);
             jpsAmics[i].add(nomAmic);
 
-						/*JLabel aux = null;
-            if (teComAmic(amics.get(i))){
-              aux = new JLabel("No tiene amigosh");
-            } else {
-              aux = new JLabel("No tiene amigosh");
-            }
-						jpsAmics[i].add(aux);
-            */
 
             JLabel jlLvl = new JLabel("Lvl 0.");
             if (usuari.getStats() != null) {

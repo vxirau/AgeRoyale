@@ -72,22 +72,22 @@ public class RoomListView extends JFrame{
 		jpPare.setLayout(null);
 		jpPare.setOpaque(true);
 
-		jpPartidesPubliques =new JPanel(new GridLayout(pPubliques.size(), 1, 0, 5));
+		jpPartidesPubliques =new JPanel(new GridLayout(pPubliques.size()*2, 1));
 		jpPartidesPubliques.setOpaque(false);
 		//jpPartidesPubliques.setLayout(null);
 
-		jpPartidesPrivades = new JPanel(new GridLayout(pPrivades.size(), 1, 0, 5));
+		jpPartidesPrivades = new JPanel(new GridLayout(pPrivades.size()*2, 1));
 		//jpPartidesPrivades.setLayout(null);
 		jpPartidesPrivades.setOpaque(false);
 
 		scrollPrivadesF = new JScrollPane();
 		scrollPubliquesF = new JScrollPane();
-		scrollPrivadesF.setBounds(0, 200, 450, 500);
+		scrollPrivadesF.setBounds(0, 200, 450, 490);
 		scrollPrivadesF.setEnabled(true);
 		scrollPrivadesF.setOpaque(false);
 		scrollPrivadesF.getViewport().setOpaque(false);
 
-		scrollPubliquesF.setBounds(0, 200, 450, 500);
+		scrollPubliquesF.setBounds(0, 200, 450, 490);
 		scrollPubliquesF.setEnabled(true);
 		scrollPubliquesF.setOpaque(false);
 		scrollPubliquesF.getViewport().setOpaque(false);
