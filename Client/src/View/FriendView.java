@@ -37,7 +37,7 @@ public class FriendView extends JFrame {
         jpsAmics = new JPanel[amics.size()];
 
         jpAmics = new JPanel();
-        jpAmics.setLayout(new GridLayout(amics.size(), 1, 0, 1));
+        jpAmics.setLayout(null);
         jpAmics.setOpaque(false);
 /*
         scrollPaneAmics = new JScrollPane();
@@ -123,15 +123,10 @@ public class FriendView extends JFrame {
 							online.setForeground(Color.GRAY);
 						}
 
-            online.setBounds(300, 320, 100, 15);
+						online.setBounds(300, 320, 100, 15);
 						jpsAmics[i].add(online);
-
-
 						jpsAmics[i].setBounds(15, 60 + (110 * i), 410, 90);
-
-            jpAmics.add(jpsAmics[i]);
-
-						//jpAmics.add(separator);
+                        jpAmics.add(jpsAmics[i]);
         }
 
 
@@ -140,11 +135,11 @@ public class FriendView extends JFrame {
 		//jpAmics.setBounds(0, 0, 300, 500);
 		jpAmics.setVisible(true);
 		//scrollPaneAmics.setViewportView(jpAmics);
-		Component table;
 		JScrollPane amics = new JScrollPane(jpAmics);
         amics.setBounds(0, 200, 430, 500);
         amics.setEnabled(true);
         amics.setOpaque(false);
+        amics.getViewport().setOpaque(false);
         //scrollPaneAmics.getViewport().setOpaque(false);
         jpFriends.add(amics);
         ImageIcon img = new ImageIcon(this.getClass().getResource("/resources/fondoMadera.png"));
