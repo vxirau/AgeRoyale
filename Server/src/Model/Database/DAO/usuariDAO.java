@@ -39,6 +39,34 @@ public class usuariDAO {
         return usuaris;
     }
 
+    public ArrayList<Usuari> getUsersByName(String name){
+        tropesDAO tropesDAO = new tropesDAO();
+        statsDAO statsDAO = new statsDAO();
+        amicDAO amicDAO = new amicDAO();
+        ArrayList<Usuari> usuaris = new ArrayList<>();
+
+        String query = "SELECT us.* FROM AgeRoyale.usuari AS us WHERE nickname LIKE '%" + name + "%';";
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try{
+            while(rs.next()){
+                Usuari usuari = new Usuari();
+                usuari.setIdUsuari(rs.getInt("idUser"));
+                usuari.setNickName(rs.getString("nickname"));
+                usuari.setEmail(rs.getString("email"));
+                usuari.setPassword(rs.getString("password"));
+                usuari.setTropes(tropesDAO.getTropesFromUserId(usuari.getIdUsuari()));
+                usuari.setStats(statsDAO.getStatsFromStatsId(rs.getInt("idStats")));
+                usuari.setAmics(amicDAO.getAmics(usuari.getIdUsuari()));
+                usuari.setOnline(rs.getBoolean("isOnline"));
+
+                usuaris.add(usuari);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return usuaris;
+    }
+
     public Usuari getUserFromId(Integer idUser) {
         tropesDAO tropesDAO = new tropesDAO();
         statsDAO statsDAO = new statsDAO();

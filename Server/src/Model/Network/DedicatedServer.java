@@ -124,6 +124,12 @@ public class DedicatedServer extends Thread {
 					ArrayList<Usuari> a = aDAO.getAmics(users.get(0));
 					Message messageResposta = new Message(a, "FriendsResposta");
 					objectOut.writeObject(messageResposta);
+				} else if (m.getType().equals("FindFriend")){
+					String nom = (String) m.getObject();
+					usuariDAO uDAO = new usuariDAO();
+					ArrayList<Usuari> auz = uDAO.getUsersByName(nom);
+					Message messageResposta = new Message(auz, "FindFriendResposta");
+					objectOut.writeObject(messageResposta);
 				}
 			}
 		} catch (IOException | ClassNotFoundException e1){
