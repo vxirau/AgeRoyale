@@ -54,17 +54,10 @@ public class RoomListView extends JFrame{
 
 	private void initAll(){
 		dividirPartides();
-		//partidesPubliques = new JPanel[pPubliques.size()];
-		//partidesPrivades = new JPanel[pPrivades.size()];
 		if((pPrivades.size() + pPubliques.size()) != allGames.size()){
 			JOptionPane.showOptionDialog(new JFrame(), "Alguna cosa no ha funcionat","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
 		}
-		//setTitle("AGE ROYALE");
-		//setLocationRelativeTo(null);
-		//setResizable(false);
-
 		initComponents();
-		//setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
 	private void initComponents() {
@@ -79,11 +72,11 @@ public class RoomListView extends JFrame{
 		jpPare.setLayout(null);
 		jpPare.setOpaque(true);
 
-		jpPartidesPubliques =new JPanel(new GridLayout(pPubliques.size(), 1));
+		jpPartidesPubliques =new JPanel(new GridLayout(pPubliques.size(), 1, 0, 5));
 		jpPartidesPubliques.setOpaque(false);
 		//jpPartidesPubliques.setLayout(null);
 
-		jpPartidesPrivades = new JPanel(new GridLayout(pPrivades.size(), 1));
+		jpPartidesPrivades = new JPanel(new GridLayout(pPrivades.size(), 1, 0, 5));
 		//jpPartidesPrivades.setLayout(null);
 		jpPartidesPrivades.setOpaque(false);
 

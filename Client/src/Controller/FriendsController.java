@@ -17,11 +17,13 @@ public class FriendsController {
     private Usuari usuari;
     private UserService uService;
     private ArrayList<Usuari> friends;
+    private ArrayList<Usuari> requests;
 
-    public FriendsController(Usuari usr, UserService userService, MenuController menuCtrl) {
+    public FriendsController(Usuari usr, UserService userService, MenuController menuCtrl, ArrayList<Usuari> requests) {
         this.usuari = usr;
         this.uService = userService;
         this.menuController = menuCtrl;
+        this.requests = requests;
     }
 
 

@@ -71,7 +71,7 @@ public class MainClient {
                           amics.add(new Usuari("amigo9", "password9"));
                           amics.add(new Usuari("amigo10", "password10"));
                           Usuari u  = new Usuari(0, "victor", "password", amics);
-                          MenuController controlador = new MenuController(rView, userService, u);
+                          MenuController controlador = new MenuController(rView, userService, u, null);
                           rView.setVisible(true);
                       }
                   });

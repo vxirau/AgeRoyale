@@ -120,7 +120,9 @@ public class UserService extends Thread{
 					} else if (resposta.equals("UserPKUpdates_OK")){
 						configController.canviSuccessful();
 					}
-				} else if(jelow.getType().equals("FriendsResposta")){
+				}else if(jelow.getType().equals("requestsReply")){
+					loginViewController.onRequestsRecieved((ArrayList<Usuari>) jelow.getObject());
+				}else if(jelow.getType().equals("FriendsResposta")){
 					ArrayList<Usuari> amics = (ArrayList<Usuari>) jelow.getObject();
 					friendsController.setFriends(amics);
         } else{
