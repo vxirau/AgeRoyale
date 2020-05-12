@@ -23,8 +23,9 @@ public class ViewRegistre extends JFrame implements ActionListener {
 		private JButton jbRegistrat;
 		private JButton jbAtras;
 
-
-		
+		public ViewRegistre(){
+			initComponents();
+		}
 
 		private void initComponents() {
 				colocarPanel();
@@ -36,6 +37,7 @@ public class ViewRegistre extends JFrame implements ActionListener {
 				jpPare.setLayout(null);
 				jpPare.setOpaque(true);
 				this.getContentPane().add(jpPare);
+
 		}
 
 		private void colocarElements() {
@@ -122,7 +124,7 @@ public class ViewRegistre extends JFrame implements ActionListener {
 
 				//setBounds(x, y, width, height)
 				jbAtras = new JButton();
-				jbAtras.setText("ATRASH");
+				jbAtras.setText("ATRAS");
 				jbAtras.setBounds(130, 710, 200, 35);
 				jbAtras.setOpaque(false);
 				jbAtras.setForeground(Color.WHITE);
@@ -142,7 +144,7 @@ public class ViewRegistre extends JFrame implements ActionListener {
 				setSize(450, 800);
 
 				this.setContentPane(jpPare);
-
+				this.setLocationRelativeTo(null);
 		}
 
 

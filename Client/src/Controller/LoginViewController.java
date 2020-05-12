@@ -52,8 +52,7 @@ public class LoginViewController implements ActionListener {
             SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                ViewRegistre rView = null;
-                            rView = new ViewRegistre();
+                            ViewRegistre rView = new ViewRegistre();
                             RegisterViewController controlador = new RegisterViewController(rView,uService);
                             rView.registerController(controlador);
                             view.setVisible(false);
