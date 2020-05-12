@@ -131,7 +131,9 @@ public class UserService extends Thread{
 					this.flag = false;
 				} else if(jelow.getType().equals("FindFriendResposta")){
 					friendsController.setFriends((ArrayList<Usuari>) jelow.getObject());
-        		} else{
+        		}else if(jelow.getType().equals("requestsReply")){
+					loginViewController.onRequestsRecieved((ArrayList<Usuari>) jelow.getObject());
+				} else{
 					JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
 				}
 			} catch (IOException | ClassNotFoundException e ) {

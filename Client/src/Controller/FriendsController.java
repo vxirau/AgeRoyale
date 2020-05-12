@@ -18,6 +18,7 @@ public class FriendsController {
     private Usuari usuari;
     private UserService uService;
     private ArrayList<Usuari> friends;
+    private ArrayList<Usuari> requests;
 
     private String cerca;
 
@@ -41,10 +42,11 @@ public class FriendsController {
         }
     };
 
-    public FriendsController(Usuari usr, UserService userService, MenuController menuCtrl) {
+    public FriendsController(Usuari usr, UserService userService, MenuController menuCtrl, ArrayList<Usuari> requests) {
         this.usuari = usr;
         this.uService = userService;
         this.menuController = menuCtrl;
+        this.requests = requests;
     }
 
 

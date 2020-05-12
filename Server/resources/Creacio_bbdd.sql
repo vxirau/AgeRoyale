@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS tropa CASCADE;
 DROP TABLE IF EXISTS amic CASCADE;
 DROP TABLE IF EXISTS usuari CASCADE;
 DROP TABLE IF EXISTS stats CASCADE;
+DROP TABLE IF EXISTS requests CASCADE;
 
 #CREACIO DE LES TAULES
 CREATE TABLE stats(
@@ -22,6 +23,7 @@ CREATE TABLE stats(
     PRIMARY KEY (idStat)
 );
 
+
 CREATE TABLE usuari(
     idUser      int not null auto_increment,
     nickname    VARCHAR(255),
@@ -32,6 +34,15 @@ CREATE TABLE usuari(
     PRIMARY KEY (idUser),
     FOREIGN KEY (idStats) REFERENCES stats (idStat)
 );
+
+CREATE TABLE requests(
+     destinationId    int not null,
+     originId     int not null,
+     PRIMARY KEY (destinationId, originId),
+     FOREIGN KEY (destinationId) REFERENCES usuari(idUser),
+     FOREIGN KEY (originId) REFERENCES usuari(idUser)
+);
+
 
 CREATE TABLE amic(
   id_u1     int not null,
@@ -76,6 +87,11 @@ SELECT* FROM usuari;
 #Importacio basica de informació
 INSERT INTO stats(TOTALPARTIDES, TOTALVICTORIES, WINRATE, AVGDURATIONVICTORIES) VALUES
     (10,  4, 30.2, 200), (15, 10, 70, 150), (28, 35, 65, 200), (25, 10, 40, 100), (248, 234, 21, 10);
+
+SELECT if(COUNT(*) > 0, req.originId, -1) as exist FROM AgeRoyale.requests AS req WHERE destinationId = 1;
+SELECT req.originId FROM AgeRoyale.requests AS req WHERE destinationId = 1;
+
+INSERT INTO requests(originId, destinationId) VALUES (1, 2), (1, 4), (1, 3), (2, 1), (2, 5), (2, 4);
 
 INSERT INTO usuari (nickname, email, password, idStats, isOnline) values
     ('VXGamez', 'victor.xirau@students.salle.url.edu', '1234', 1, false),
