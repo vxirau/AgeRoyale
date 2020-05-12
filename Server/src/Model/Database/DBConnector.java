@@ -2,7 +2,6 @@ package src.Model.Database;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
-import src.Partida;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

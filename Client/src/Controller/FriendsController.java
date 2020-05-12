@@ -12,35 +12,38 @@ public class FriendsController {
 
     private FriendView friendView;
 
+    private MenuController menuController;
+
     private Usuari usuari;
     private UserService uService;
     private ArrayList<Usuari> friends;
 
-    public FriendsController(Usuari usr, UserService userService) {
+    public FriendsController(Usuari usr, UserService userService, MenuController menuCtrl) {
         this.usuari = usr;
         this.uService = userService;
+        this.menuController = menuCtrl;
     }
 
 
-		public void removeFriend(Usuari user){
-			boolean eliminar=false, ok=true;
-			int a= JOptionPane.showConfirmDialog(friendView, "Vols eliminar aquest amic?");
-			if(a==JOptionPane.YES_OPTION){
-				eliminar=true;
-			}else if(a==JOptionPane.NO_OPTION){
-				eliminar=false;
-			}else{
-				ok=false;
-			}
+    public void removeFriend(Usuari user){
+        boolean eliminar=false, ok=true;
+        int a= JOptionPane.showConfirmDialog(friendView, "Vols eliminar aquest amic?");
+        if(a==JOptionPane.YES_OPTION){
+            eliminar=true;
+        }else if(a==JOptionPane.NO_OPTION){
+            eliminar=false;
+        }else{
+            ok=false;
+        }
 
-			if(ok && eliminar){
-				ArrayList<Usuari> parella = new ArrayList<>();
-				parella.add(usuari);
-				parella.add(user);
-				Message mes = new Message(parella, "removeFriend");
-				uService.sendGetFriends(mes, this);
-			}
-		}
+        if(ok && eliminar){
+            ArrayList<Usuari> parella = new ArrayList<>();
+            parella.add(usuari);
+            parella.add(user);
+            Message mes = new Message(parella, "removeFriend");
+            uService.sendGetFriends(mes, this);
+        }
+    }
 
     public void setFriendView(FriendView friendView) {
         this.friendView = friendView;
@@ -58,6 +61,7 @@ public class FriendsController {
      public void setFriends(ArrayList<Usuari> amics) {
         this.friends = amics;
         friendView.setAmics(amics);
+        menuController.updateViews();
      }
 
 

@@ -59,8 +59,8 @@ public class MenuController {
         configController = new ConfigController(user, uService, this);
         tropesController = new TropesController(user);
         mainController = new MainController(user);
-        friendsController = new FriendsController(user, uService);
-        roomsController = new RoomsController(user, uService);
+        friendsController = new FriendsController(user, uService, this);
+        roomsController = new RoomsController(user, uService); //todo: this
     }
 
     private void initControllersViews() {
@@ -69,6 +69,7 @@ public class MenuController {
         mainController.setMainView(view.getMainView());
         friendsController.setFriendView(view.getFriendView());
         roomsController.setVista(view.getRoomListView());
+        roomsController.setAllGames(roomsController.getAllGames());
     }
 
     public RoomsController getRoomsController() {
@@ -83,4 +84,7 @@ public class MenuController {
         return friendsController;
     }
 
+    public void updateViews(){
+        view.updateViews();
+    }
 }

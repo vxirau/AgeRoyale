@@ -28,6 +28,7 @@ public class FriendView extends JFrame {
         this.friendsController = friendsCtrl;
     }
     public void initAll(){
+        this.removeAll();
 
 			//------------------------------------------------------OK------------------------------------------------------
         jpFriends = new JPanel(null);
@@ -36,18 +37,18 @@ public class FriendView extends JFrame {
         jpsAmics = new JPanel[amics.size()];
 
         jpAmics = new JPanel();
-				jpAmics.setLayout(new GridLayout(amics.size(), 1, 0, 1));
+        jpAmics.setLayout(new GridLayout(amics.size(), 1, 0, 1));
         jpAmics.setOpaque(false);
-
+/*
         scrollPaneAmics = new JScrollPane();
         scrollPaneAmics.setBounds(0, 200, 430, 500);
-				scrollPaneAmics.setEnabled(true);
+        scrollPaneAmics.setEnabled(true);
         scrollPaneAmics.setOpaque(false);
-
+*/
         JButton jpFriendsTitle = new JButton("Amics");
         jpFriendsTitle.setBounds(70, 40, 300, 100);
         jpFriendsTitle.setOpaque(false);
-				jpFriendsTitle.setContentAreaFilled(false);
+        jpFriendsTitle.setContentAreaFilled(false);
         jpFriendsTitle.setBorderPainted(false);
         jpFriendsTitle.setForeground(Color.WHITE);
         jpFriendsTitle.setFont(new Font("Helvetica", Font.BOLD, 30));
@@ -62,10 +63,6 @@ public class FriendView extends JFrame {
         jpFriendsTitle.setIcon(iconoProgressBar);
         jpFriends.add(jpFriendsTitle);
 			//--------------------------------------------------------------------------------------------------------------
-
-        for(int i=0; i < jpsAmics.length; i++){
-          jpsAmics[i] = null;
-        }
 
         for (int i = 0; i < amics.size() ; i++) {
             jpsAmics[i] = new JPanel(new GridLayout(3, 1)){
@@ -139,12 +136,17 @@ public class FriendView extends JFrame {
 
 
 
-				//------------------------------------------------------OK------------------------------------------------------
-				//jpAmics.setBounds(0, 0, 300, 500);
-				jpAmics.setVisible(true);
-				scrollPaneAmics.setViewportView(jpAmics);
-        scrollPaneAmics.getViewport().setOpaque(false);
-        jpFriends.add(scrollPaneAmics);
+		//------------------------------------------------------OK------------------------------------------------------
+		//jpAmics.setBounds(0, 0, 300, 500);
+		jpAmics.setVisible(true);
+		//scrollPaneAmics.setViewportView(jpAmics);
+		Component table;
+		JScrollPane amics = new JScrollPane(jpAmics);
+        amics.setBounds(0, 200, 430, 500);
+        amics.setEnabled(true);
+        amics.setOpaque(false);
+        //scrollPaneAmics.getViewport().setOpaque(false);
+        jpFriends.add(amics);
         ImageIcon img = new ImageIcon(this.getClass().getResource("/resources/fondoMadera.png"));
         Icon icono = new ImageIcon(img.getImage().getScaledInstance(450, 700, Image.SCALE_DEFAULT));
         JLabel fondo = new JLabel();
@@ -153,7 +155,8 @@ public class FriendView extends JFrame {
         fondo.setBounds(0, 0, 450, 700);
         jpFriends.add(fondo);
 				//--------------------------------------------------------------------------------------------------------------
-
+        revalidate();
+        repaint();
     }
 
     private boolean teComAmic(Usuari amic){

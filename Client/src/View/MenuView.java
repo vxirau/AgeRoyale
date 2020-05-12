@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class MenuView extends JFrame implements ActionListener {
 
+    public static String actualView = "";
     public static final String MAIN = "Main_";
     public static final String CONFIGURACIO = "Config_";
     public static final String TROPES = "Tropes_";
@@ -77,7 +78,6 @@ public class MenuView extends JFrame implements ActionListener {
 
     private void init() {
         this.setLayout(new BorderLayout());
-        //jpPare.setOpaque(true);
 
         //iniciem el menu
         initMenu();
@@ -108,6 +108,7 @@ public class MenuView extends JFrame implements ActionListener {
     }
 
     private void adjustViews(String name) {
+        actualView = name;
         String bgColor = "#282828";
         String bgColorSelected = "#361111";
 
@@ -143,7 +144,7 @@ public class MenuView extends JFrame implements ActionListener {
             jpMenuFriends.setBackground(Color.decode(bgColor));
         }
         if (name.equals(MenuView.AMICS)){
-            jpActive = jpFriends;
+            jpActive = friendView.getJpFriends();
 
             jpMenuConfig.setBackground(Color.decode(bgColor));
             jpMenuTropes.setBackground(Color.decode(bgColor));
@@ -300,5 +301,9 @@ public class MenuView extends JFrame implements ActionListener {
 
     public RoomListView getRoomListView() {
         return roomListView;
+    }
+
+    public void updateViews(){
+        adjustViews(actualView);
     }
 }
