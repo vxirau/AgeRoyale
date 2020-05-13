@@ -1,11 +1,13 @@
 package src.Model.Network;
 
+import src.Controller.TroopSController;
 import src.Message;
 import src.Model.Database.DAO.amicDAO;
 import src.Model.Database.DAO.partidaDAO;
 import src.Model.Database.DAO.requestsDAO;
 import src.Model.Database.DAO.usuariDAO;
 import src.Partida;
+import src.Tropa;
 import src.Usuari;
 import src.View.ViewServer;
 
@@ -23,7 +25,10 @@ public class DedicatedServer extends Thread {
 	private ObjectOutputStream objectOut;
 	private LinkedList<DedicatedServer> clients;
 	private ViewServer vista;
+	private TroopSController troopSController;
 	private Server server;
+	public static int cont = 0;
+
 
 	public DedicatedServer(Socket sClient, ViewServer vista, LinkedList<DedicatedServer> clients, Server server) throws IOException {
 		this.isOn = false;
@@ -33,6 +38,7 @@ public class DedicatedServer extends Thread {
 		this.server = server;
 		dataInput = new ObjectInputStream(sClient.getInputStream());
 		objectOut = new ObjectOutputStream(sClient.getOutputStream());
+		this.troopSController = new TroopSController();
 	}
 
 	public void startDedicatedServer() {
@@ -130,9 +136,27 @@ public class DedicatedServer extends Thread {
 					ArrayList<Usuari> a = aDAO.getAmics(users.get(0));
 					Message messageResposta = new Message(a, "FriendsResposta");
 					objectOut.writeObject(messageResposta);
+				} else if(m.getType().equals("Tropa update")){
+
+
+					Tropa t = (Tropa) m.getObject();
+					t = troopSController.moveOffensiveTroop(t,t.getxVariation(),t.getyVariation(),cont);
+					cont++;
+
+                    objectOut.reset();
+					Message mresposta = new Message(t,"Tropa resposta");
+					objectOut.writeObject(mresposta);
+
+				} else if (m.getType().equals("FindFriend")){
+					String nom = (String) m.getObject();
+					usuariDAO uDAO = new usuariDAO();
+					ArrayList<Usuari> auz = uDAO.getUsersByName(nom);
+					Message messageResposta = new Message(auz, "FindFriendResposta");
+					objectOut.writeObject(messageResposta);
 				}
 			}
 		} catch (IOException | ClassNotFoundException e1){
+			System.out.println("ESTAS JODIO BRO");
 				// en cas derror aturem el servidor dedicat
 				stopDedicatedServer();
 				// eliminem el servidor dedicat del conjunt de servidors dedicats

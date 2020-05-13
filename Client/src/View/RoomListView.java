@@ -2,6 +2,8 @@ package src.View;
 
 import src.Controller.GameController;
 import src.Controller.RoomsController;
+import src.Model.Database.DAO.partidaDAO;
+import src.Model.Network.UserService;
 import src.Partida;
 import src.Utils;
 
@@ -110,13 +112,14 @@ public class RoomListView extends JFrame{
 		element.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				RoomListView.this.setVisible(false);
+		RoomListView.this.setVisible(false);
 				System.out.println("Game pressed");
 				try {
-					RoomsController.startGame(total,0, new Partida());
+					RoomsController.startGame(total,0, p);
 				} catch (IOException ex) {
 					ex.printStackTrace();
 				}
+
 			}
 		});
 

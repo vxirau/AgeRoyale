@@ -2,6 +2,7 @@ package src.Model.Database;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
+import src.Partida;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -23,7 +24,7 @@ public class DBConnector {
         this.url += ":" + port + "/";
         this.url += db + "?verifyServerCertificate=false&useSSL=false&serverTimezone=UTC";
         DBConnector.userName = "root";
-        DBConnector.password = "Ppam8212_mysql";
+        DBConnector.password = "timador";
         this.instance = this;
     }
 

@@ -3,8 +3,9 @@ package src.View;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.Serializable;
 
-public class SpritesSheet {
+public class SpritesSheet implements Serializable {
 
     public  final int[] pixels;
     private final int width;

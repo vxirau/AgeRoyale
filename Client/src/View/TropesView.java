@@ -22,6 +22,28 @@ public class TropesView extends JFrame{
     private JLabel jlTropes4_vida;
     private JLabel jlTropes4_dany;
 
+    private ImageIcon tropa1_foto;
+    private ImageIcon tropa2_foto;
+    private ImageIcon tropa3_foto;
+    private ImageIcon tropa4_foto;
+
+    private Icon iconotropa1foto;
+    private Icon iconotropa2foto;
+    private Icon iconotropa3foto;
+    private Icon iconotropa4foto;
+
+    public static final String SKELETON_FRONT = "/resources/skeleton_deck.png";
+    public static final String SKELETON_FRONT_RIGHT = "/resources/skeleton_right_deck.png";
+    public static final String SKELETON_FRONT_LEFT = "/resources/skeleton_left_deck.png";
+    public static final String GOBLIN_FRONT = "/resources/goblin_deck.png";
+    public static final String GOBLIN_FRONT_RIGHT = "/resources/goblin_right_deck.png";
+    public static final String GOBLIN_FRONT_LEFT = "/resources/goblin_left_deck.png";
+    public static final String WIZARD = "/resources/wizard_deck.png";
+    public static final String BOMB = "/resources/bomb_deck.png";
+    public static final String BOMB_PHASE1 = "/resources/bomb_phase1_deck.png";
+    public static final String BOMB_PHASE2 = "/resources/bomb_phase2_deck.png";
+
+
     public TropesView() {
         String bgColor = "#85201F";
         String borderColor = "#979797";
@@ -38,8 +60,8 @@ public class TropesView extends JFrame{
         jlTropes1_foto.setOpaque(false);
         jlTropes1_foto.setContentAreaFilled(false);
         jlTropes1_foto.setBorderPainted(false);
-        ImageIcon tropa1_foto = new ImageIcon(this.getClass().getResource("/resources/tropes_foto_default.png"));
-        Icon iconotropa1foto = new ImageIcon(tropa1_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+        tropa1_foto = new ImageIcon(this.getClass().getResource(SKELETON_FRONT));
+        iconotropa1foto = new ImageIcon(tropa1_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
         jlTropes1_foto.setIcon(iconotropa1foto);
         jpTropes1.add(jlTropes1_foto);
         jpTropes1.add(new JLabel(""));
@@ -81,8 +103,8 @@ public class TropesView extends JFrame{
         jlTropes2_foto.setOpaque(false);
         jlTropes2_foto.setContentAreaFilled(false);
         jlTropes2_foto.setBorderPainted(false);
-        ImageIcon tropa2_foto = new ImageIcon(this.getClass().getResource("/resources/tropes_foto_default.png"));
-        Icon iconotropa2foto = new ImageIcon(tropa2_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+        tropa2_foto = new ImageIcon(this.getClass().getResource(GOBLIN_FRONT));
+        iconotropa2foto = new ImageIcon(tropa2_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
         jlTropes2_foto.setIcon(iconotropa2foto);
         jpTropes2.add(jlTropes2_foto);
         jpTropes2.add(new JLabel(""));
@@ -124,8 +146,8 @@ public class TropesView extends JFrame{
         jlTropes3_foto.setOpaque(false);
         jlTropes3_foto.setContentAreaFilled(false);
         jlTropes3_foto.setBorderPainted(false);
-        ImageIcon tropa3_foto = new ImageIcon(this.getClass().getResource("/resources/tropes_foto_default.png"));
-        Icon iconotropa3foto = new ImageIcon(tropa3_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+        tropa3_foto = new ImageIcon(this.getClass().getResource(WIZARD));
+        iconotropa3foto = new ImageIcon(tropa3_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
         jlTropes3_foto.setIcon(iconotropa3foto);
         jpTropes3.add(jlTropes3_foto);
         jpTropes3.add(new JLabel(""));
@@ -167,8 +189,8 @@ public class TropesView extends JFrame{
         jlTropes4_foto.setOpaque(false);
         jlTropes4_foto.setContentAreaFilled(false);
         jlTropes4_foto.setBorderPainted(false);
-        ImageIcon tropa4_foto = new ImageIcon(this.getClass().getResource("/resources/tropes_foto_default.png"));
-        Icon iconotropa4foto = new ImageIcon(tropa4_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+        tropa4_foto = new ImageIcon(this.getClass().getResource(BOMB));
+        iconotropa4foto = new ImageIcon(tropa4_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
         jlTropes4_foto.setIcon(iconotropa4foto);
         jpTropes4.add(jlTropes4_foto);
         jpTropes4.add(new JLabel(""));
@@ -208,6 +230,79 @@ public class TropesView extends JFrame{
         getLayeredPane().add(fondo, JLayeredPane.FRAME_CONTENT_LAYER);
         fondo.setBounds(0, 0, 450, 700);
         jpTropes.add(fondo);
+    }
+
+    public void updateTropes(long elapsedTime){
+        if(elapsedTime < 300){
+
+            //TROPA 1 UPDATE
+            tropa1_foto = new ImageIcon(this.getClass().getResource(SKELETON_FRONT));
+            iconotropa1foto = new ImageIcon(tropa1_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+            jlTropes1_foto.setIcon(iconotropa1foto);
+
+
+            //TROPA 2 UPDATE
+            tropa2_foto = new ImageIcon(this.getClass().getResource(GOBLIN_FRONT));
+            iconotropa2foto = new ImageIcon(tropa2_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+            jlTropes2_foto.setIcon(iconotropa2foto);
+
+            //TROPA 3 UPDATE
+            tropa3_foto = new ImageIcon(this.getClass().getResource(WIZARD));
+            iconotropa3foto = new ImageIcon(tropa3_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+            jlTropes3_foto.setIcon(iconotropa3foto);
+
+            //TROPA 4 UPDATE
+            tropa4_foto = new ImageIcon(this.getClass().getResource(BOMB));
+            iconotropa4foto = new ImageIcon(tropa4_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+            jlTropes4_foto.setIcon(iconotropa4foto);
+
+        } else if(elapsedTime < 600 && elapsedTime > 300){
+            //TROPA 1 UPDATE
+            tropa1_foto = new ImageIcon(this.getClass().getResource(SKELETON_FRONT_LEFT));
+            iconotropa1foto = new ImageIcon(tropa1_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+            jlTropes1_foto.setIcon(iconotropa1foto);
+
+
+            //TROPA 2 UPDATE
+            tropa2_foto = new ImageIcon(this.getClass().getResource(GOBLIN_FRONT_LEFT));
+            iconotropa2foto = new ImageIcon(tropa2_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+            jlTropes2_foto.setIcon(iconotropa2foto);
+            //jpTropes2.add(jlTropes2_foto);
+            //jpTropes2.add(new JLabel(""));
+            //TROPA 3 UPDATE
+            tropa3_foto = new ImageIcon(this.getClass().getResource(WIZARD));
+            iconotropa3foto = new ImageIcon(tropa3_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+            jlTropes3_foto.setIcon(iconotropa3foto);
+
+            //TROPA 4 UPDATE
+            tropa4_foto = new ImageIcon(this.getClass().getResource(BOMB_PHASE1));
+            iconotropa4foto = new ImageIcon(tropa4_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+            jlTropes4_foto.setIcon(iconotropa4foto);
+
+        }else if(elapsedTime < 900 && elapsedTime > 600){
+            //TROPA 1 UPDATE
+            tropa1_foto = new ImageIcon(this.getClass().getResource(SKELETON_FRONT_RIGHT));
+            iconotropa1foto = new ImageIcon(tropa1_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+            jlTropes1_foto.setIcon(iconotropa1foto);
+
+
+            //TROPA 2 UPDATE
+            tropa2_foto = new ImageIcon(this.getClass().getResource(GOBLIN_FRONT_RIGHT));
+            iconotropa2foto = new ImageIcon(tropa2_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+            jlTropes2_foto.setIcon(iconotropa2foto);
+            //jpTropes2.add(jlTropes2_foto);
+            //jpTropes2.add(new JLabel(""));
+            //TROPA 3 UPDATE
+            tropa3_foto = new ImageIcon(this.getClass().getResource(WIZARD));
+            iconotropa3foto = new ImageIcon(tropa3_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+            jlTropes3_foto.setIcon(iconotropa3foto);
+
+            //TROPA 4 UPDATE
+            tropa4_foto = new ImageIcon(this.getClass().getResource(BOMB_PHASE2));
+            iconotropa4foto = new ImageIcon(tropa4_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
+            jlTropes4_foto.setIcon(iconotropa4foto);
+
+        }
     }
 
     public JPanel getJpTropes() {

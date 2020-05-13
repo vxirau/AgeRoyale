@@ -3,8 +3,9 @@ package src.View;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.Serializable;
 
-public class ImageMap extends GameMap {
+public class ImageMap extends GameMap implements Serializable {
 
     private int[] pixelArray;
 

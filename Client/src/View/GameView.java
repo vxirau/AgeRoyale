@@ -1,8 +1,10 @@
 package src.View;
 
 import src.Controller.GameController;
+import src.Controller.MenuController;
 import src.Controller.TroopController;
 import src.Message;
+import src.Model.Network.UserService;
 import src.Tropa;
 
 import javax.swing.*;
@@ -12,9 +14,10 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GameView extends JFrame implements Runnable {
+public class GameView extends JFrame implements Runnable, Serializable {
 
     private static Thread thread;
     private final int[] pixels;
@@ -23,17 +26,23 @@ public class GameView extends JFrame implements Runnable {
     public static final int ROWS = 20;
     public static final int COLUMNS = 10;
     private static volatile boolean gameIsRunning = false;
-    private static GameController gameController;
-    private static TroopController troopController;
+    private  GameController gameController;
+
+
+
+    private  TroopController troopController;
     private static int xMousePosition;
     private static int yMousePosition;
+    private  boolean rebut = false;
+    private  boolean trobat = false;
     private static BufferedImage image;
+    private static Tropa tropa;
+
     //Variable per accedir a la imatge a partir dels seus pixels
     private static int[] pixelsImage;
 
-
-
     private ArrayList<Tropa> tropes;
+    private ArrayList<Tropa> troops;
 
     private static GameMap gameMap;
     private boolean mouseIsClicked;
@@ -41,13 +50,7 @@ public class GameView extends JFrame implements Runnable {
     private Deck deck;
     private int whichTroop;
 
-    public ArrayList<Tropa> getTropes() {
-        return tropes;
-    }
 
-    public void setTropes(ArrayList<Tropa> tropes) {
-        this.tropes = tropes;
-    }
 
     private static final String IMAGE_MAP_PATH  = "/resources/pixels_map.png";
 
@@ -65,14 +68,15 @@ public class GameView extends JFrame implements Runnable {
     public GameView() throws IOException {
 
 
-        gameController = new GameController(this);
-        troopController = new TroopController(this);
+
         this.width = 32 * COLUMNS;
         this.height = 32 * ROWS + 64;
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         this.pixelsImage = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
         this.pixels = new int[width * height];
         this.tropes = new ArrayList<>();
+        this.troops = new ArrayList<>();
+        this.tropa = new Tropa();
         mouseIsClicked = false;
         whichTroop = 10;
         this.deck = new Deck(this, width, height);
@@ -81,9 +85,6 @@ public class GameView extends JFrame implements Runnable {
         //Creem el mapa i li donem la mesura en tiles ( en aquest cas, sera de 10 x 20)
 
         gameMap = new ImageMap(IMAGE_MAP_PATH);
-
-
-
 
 
         this.setVisible(true);
@@ -155,7 +156,6 @@ public class GameView extends JFrame implements Runnable {
         gameIsRunning = true;
         thread = new Thread(this, "GameGraphics");
         thread.start();
-
     }
 
     public synchronized void stopGame() throws InterruptedException {
@@ -167,6 +167,14 @@ public class GameView extends JFrame implements Runnable {
 
     }
 
+    public ArrayList<Tropa> getTroops() {
+        return troops;
+    }
+
+    public void setTroops(ArrayList<Tropa> troops) {
+        this.troops = troops;
+    }
+
     public void showGraphics(){
         //Creem un buffer per tal de dibuixar els grafics en segon pla
         BufferStrategy bufferStrategy = getBufferStrategy();
@@ -175,12 +183,63 @@ public class GameView extends JFrame implements Runnable {
             return;
         }
 
-
-
         gameMap.showMap(0, 0, this);
-        if(tropes.size() > 0){
-            for(int i = 0; i < tropes.size(); i++){
-                tropes.get(i).show(this);
+
+
+        if(tropes.size() > 0) {
+
+            for (int i = 0; i < tropes.size(); i++) {
+
+
+                //VERSIÓ 1
+                try {
+                    Thread.sleep(160/tropes.size());
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                troopController.update(tropes.get(i), i);
+
+                //VERSIÓ 2
+               /*if (troops.size() > 0) {
+                    for(Tropa t: troops){
+                        if(t.equals(tropes.get(i))){
+                           trobat = true;
+                        } /*else {
+
+                            troopController.update(tropes.get(i), i);
+                            trobat = false;
+                        }
+                    }
+
+                    if(!trobat) {
+                        try {
+                            Thread.sleep(3000);
+                        } catch (Exception e) {
+                            System.out.println(e);
+                        }
+                        troopController.update(tropes.get(i), i);
+                        //trobat = false;
+                        troops.add(tropes.get(i));
+                    } else {
+                        trobat = false;
+                    }
+
+                } else {
+                    troopController.update(tropes.get(i), i);
+                    troops.add(tropes.get(i));
+                }
+
+               //VERSIO 3
+                /*if(tropa == null){
+                    troopController.update(tropes.get(i), i);
+                    tropa = tropes.get(i);
+                } else {
+                    if(rebut){
+                        troopController.update(tropes.get(i), i);
+                        rebut = false;
+                        tropa = tropes.get(i);
+                    }
+                }*/
             }
         }
 
@@ -216,7 +275,7 @@ public class GameView extends JFrame implements Runnable {
 
         while(gameIsRunning){
 
-            troopController.update();
+
             //Message message = new Message(this, "Game Refresh");
             final long loopStart = System.nanoTime();
 
@@ -231,6 +290,7 @@ public class GameView extends JFrame implements Runnable {
             }
 
             showGraphics();
+
 
         }
     }
@@ -301,16 +361,40 @@ public class GameView extends JFrame implements Runnable {
         this.whichTroop = whichTroop;
     }
 
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
+
+    }
+
+    public void setTroopController(TroopController troopController) {
+        this.troopController = troopController;
+
+    }
+
     /*public void selectTroopFromDeck(int whichTroop){
         this.whichTroop = whichTroop;
         deck.selectTroop(whichTroop);
     }*/
 
+    public ArrayList<Tropa> getTropes() {
+        return tropes;
+    }
+
+    public void setTropes(ArrayList<Tropa> tropes) {
+        this.tropes = tropes;
+    }
+
+    public  boolean isRebut() {
+        return rebut;
+    }
+
+    public void setRebut(boolean rebut) {
+        this.rebut = rebut;
+    }
 
 
     private void updateServer(){
-
-
 
 
     }

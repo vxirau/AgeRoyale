@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class RoomsController {
 	private RoomListView vista;
 	private Usuari usuari;
-	private UserService uService;
+	private static UserService uService;
 	private ArrayList<Partida> allGames;
 	private ArrayList<Tropa> tropes;
 	private ActionListener actionListenerCreaPartida = new ActionListener() {
@@ -68,6 +68,10 @@ public class RoomsController {
 	public RoomsController(Usuari u, UserService uService) {
 		this.usuari = u;
 		this.uService = uService;
+		if(!uService.serviceStarted()){
+			uService.startServerComunication();
+		}
+
 	}
 
 	public synchronized void initMessage() {
@@ -83,11 +87,25 @@ public class RoomsController {
 			rer.printStackTrace();
 		}
 		gView.startGame();
-		GameController controller = new GameController(gView);
+		GameController controller = new GameController(gView,uService);
 		gView.registerController(controller);
-		gView.setVisible(true);
-		p.setGameView(gView);
+		TroopController tcontrol = new TroopController(gView,uService);
+
+		GameView finalGView = gView;
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				finalGView.registerController(controller);
+				finalGView.setTroopController(tcontrol);
+
+				finalGView.setVisible(true);
+			}
+		});
+
+		//gView.setVisible(true);
+
 	}
+
 
 	public void setAllGames(ArrayList<Partida> allGames) {
 		if (allGames != null) {

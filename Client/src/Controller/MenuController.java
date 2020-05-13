@@ -36,7 +36,7 @@ public class MenuController {
     };
 
 
-    public MenuController(MenuView view, UserService userService, Usuari usr, ArrayList<Usuari> requests) {
+    public MenuController(MenuView view, UserService userService, Usuari usr, ArrayList<Usuari> requests) throws InterruptedException {
         this.view = view;
         this.uService = userService;
         this.user = usr;
@@ -87,7 +87,7 @@ public class MenuController {
         return friendsController;
     }
 
-    public void updateViews(){
+    public void updateViews() throws InterruptedException {
         view.updateViews();
     }
 

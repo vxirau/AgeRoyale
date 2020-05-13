@@ -6,6 +6,7 @@ import src.Usuari;
 import src.View.FriendView;
 
 import javax.swing.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class FriendsController {
@@ -18,6 +19,28 @@ public class FriendsController {
     private UserService uService;
     private ArrayList<Usuari> friends;
     private ArrayList<Usuari> requests;
+
+    private String cerca;
+
+    public MouseListener listenerCercaAmic = new MouseAdapter(){
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            super.mouseClicked(e);
+            Message mes = new Message(friendView.getJtfSearchAmic().getText(), "FindFriend");
+            uService.sendFriendSearch(mes, FriendsController.this);
+        }
+    };
+
+    public KeyListener listenerDelTextField = new KeyAdapter() {
+        @Override
+        public void keyReleased(KeyEvent e) {
+            cerca = FriendsController.this.friendView.getJtfSearchAmic().getText();
+            if (cerca.equals("")){
+                resetMessage();
+                System.out.println("Vas liat");
+            }
+        }
+    };
 
     public FriendsController(Usuari usr, UserService userService, MenuController menuCtrl, ArrayList<Usuari> requests) {
         this.usuari = usr;
@@ -43,12 +66,13 @@ public class FriendsController {
             parella.add(usuari);
             parella.add(user);
             Message mes = new Message(parella, "removeFriend");
-            uService.sendGetFriends(mes, this);
+            uService.sendGetFriends(mes, this, false);
         }
     }
 
     public void setFriendView(FriendView friendView) {
         this.friendView = friendView;
+        friendView.setControllers(listenerDelTextField, listenerCercaAmic);
     }
 
     public void setUsuari(Usuari usuari) {
@@ -57,14 +81,19 @@ public class FriendsController {
 
     public synchronized void resetMessage() {
         Message m = new Message(usuari, "Friends");
-		    uService.sendGetFriends(m, this);
+        uService.sendGetFriends(m, this, true);
     }
 
-     public void setFriends(ArrayList<Usuari> amics) {
+     public void setFriends(ArrayList<Usuari> amics) throws InterruptedException {
         this.friends = amics;
         friendView.setAmics(amics);
         menuController.updateViews();
+        friendView.setControllers(listenerDelTextField, listenerCercaAmic);
+        friendView.getJtfSearchAmic().setText(cerca);
      }
 
-
+    public void setAmicsUsuari(ArrayList<Usuari> amicsUsuari) {
+        usuari.setAmics(amicsUsuari);
+        friendView.setAmicsUsuari(amicsUsuari);
+    }
 }

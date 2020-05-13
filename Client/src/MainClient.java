@@ -1,9 +1,6 @@
 package src;
 
-import src.Controller.GameController;
-import src.Controller.LoginViewController;
-import src.Controller.MenuController;
-import src.Controller.RegisterViewController;
+import src.Controller.*;
 import src.Model.Network.UserService;
 import src.View.GameView;
 import src.View.LoginView;
@@ -38,17 +35,22 @@ public class MainClient {
                   }
                   gView.startGame();
                   GameController gameController = null;
+                  TroopController troopController = null;
                   try {
-                      gameController = new GameController(gView);
+                      gameController = new GameController(gView,userService);
+                      troopController = new TroopController(gView,userService);
                   } catch (IOException e) {
                       e.printStackTrace();
                   }
+
                   GameView finalGView = gView;
                   GameController finalGameController = gameController;
+                  TroopController finalTroopController = troopController;
                   SwingUtilities.invokeLater(new Runnable() {
                       @Override
                       public void run() {
                           finalGView.registerController(finalGameController);
+                          finalGView.setTroopController(finalTroopController);
 
                           finalGView.setVisible(true);
                       }
@@ -71,7 +73,11 @@ public class MainClient {
                           amics.add(new Usuari("amigo9", "password9"));
                           amics.add(new Usuari("amigo10", "password10"));
                           Usuari u  = new Usuari(0, "victor", "password", amics);
-                          MenuController controlador = new MenuController(rView, userService, u, null);
+                          try {
+                              MenuController controlador = new MenuController(rView, userService, u, null);
+                          } catch (InterruptedException e) {
+                              e.printStackTrace();
+                          }
                           rView.setVisible(true);
                       }
                   });
