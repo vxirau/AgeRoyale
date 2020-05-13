@@ -113,9 +113,10 @@ public class RoomsController {
 		} else {
 			this.allGames = new ArrayList<>();
 		}
-		vista.setAllGames(this.allGames);
+		if (vista != null) {
+			vista.setAllGames(this.allGames);
+		}
 	}
-
 
 	public void setVista(RoomListView vista) {
 		this.vista = vista;
@@ -127,5 +128,9 @@ public class RoomsController {
 
 	public void setUsuari(Usuari usuari) {
 		this.usuari = usuari;
+	}
+
+	public ArrayList<Partida> getAllGames() {
+		return allGames;
 	}
 }

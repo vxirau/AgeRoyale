@@ -8,6 +8,7 @@ import src.View.MenuView;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
 
 public class MenuController {
 
@@ -21,6 +22,7 @@ public class MenuController {
     private MainController mainController;
     private FriendsController friendsController;
     private RoomsController roomsController;
+    private ArrayList<Usuari> requests;
 
     //Listener
     private WindowListener windowListener = new WindowAdapter() {
@@ -34,10 +36,11 @@ public class MenuController {
     };
 
 
-    public MenuController(MenuView view, UserService userService, Usuari usr) {
+    public MenuController(MenuView view, UserService userService, Usuari usr, ArrayList<Usuari> requests) throws InterruptedException {
         this.view = view;
         this.uService = userService;
         this.user = usr;
+        this.requests = requests;
 
         if(!userService.serviceStarted()){
            userService.startServerComunication(); //TODO: descomentar
@@ -59,8 +62,8 @@ public class MenuController {
         configController = new ConfigController(user, uService, this);
         tropesController = new TropesController(user);
         mainController = new MainController(user);
-        friendsController = new FriendsController(user, uService);
-        roomsController = new RoomsController(user, uService);
+        friendsController = new FriendsController(user, uService, this, requests);
+        roomsController = new RoomsController(user, uService); //todo: this
     }
 
     private void initControllersViews() {
@@ -69,6 +72,7 @@ public class MenuController {
         mainController.setMainView(view.getMainView());
         friendsController.setFriendView(view.getFriendView());
         roomsController.setVista(view.getRoomListView());
+        roomsController.setAllGames(roomsController.getAllGames());
     }
 
     public RoomsController getRoomsController() {
@@ -83,4 +87,7 @@ public class MenuController {
         return friendsController;
     }
 
+    public void updateViews() throws InterruptedException {
+        view.updateViews();
+    }
 }

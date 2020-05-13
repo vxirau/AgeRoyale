@@ -13,6 +13,7 @@ import src.View.RoomListView;
 import src.View.ViewRegistre;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -35,6 +36,7 @@ public class UserService extends Thread{
     private ConfigController configController;
     private FriendsController friendsController;
     private TroopController troopController;
+    private boolean flag;
 
 
 	public UserService() {
@@ -122,24 +124,31 @@ public class UserService extends Thread{
 					} else if (resposta.equals("UserPKUpdates_OK")){
 						configController.canviSuccessful();
 					}
-				} else if(jelow.getType().equals("FriendsResposta")){
+				} else if(jelow.getType().equals("FriendsResposta")) {
 					ArrayList<Usuari> amics = (ArrayList<Usuari>) jelow.getObject();
 					friendsController.setFriends(amics);
+                    if (flag) {
+                        friendsController.setAmicsUsuari(amics);
+                    }
+                    this.flag = false;
         		} else if(jelow.getType().equals("Tropa resposta")){
 					Tropa t = (Tropa) jelow.getObject();
 					//troopController.setTropa(t);
 					troopController.getTropa(t);
 					troopController.show(t);
 					System.out.println("RECIBIMOS TROPA BRO");
-				}
-				else{
-					JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
-				}
-			} catch (IOException | ClassNotFoundException e ) {
+				} else if(jelow.getType().equals("FindFriendResposta")){
+                friendsController.setFriends((ArrayList<Usuari>) jelow.getObject());
+            }else if(jelow.getType().equals("requestsReply")){
+                loginViewController.onRequestsRecieved((ArrayList<Usuari>) jelow.getObject());
+            } else{
+                JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+            }
+
+
+			} catch (IOException | ClassNotFoundException | InterruptedException e ) {
 				e.printStackTrace();
-
 				stopServerComunication();
-
 				System.out.println("*** ESTA EL SERVIDOR EN EXECUCIO? ***");
 			}
 
@@ -230,7 +239,19 @@ public class UserService extends Thread{
 		}
 	}
 
-  public void sendGetFriends(Message message, FriendsController friendsCtrl) {
+  public void sendGetFriends(Message message, FriendsController friendsCtrl, boolean flag) {
+		try{
+			this.flag = flag;
+			this.friendsController = friendsCtrl;
+			this.doStream.reset();
+			this.doStream.writeObject(message);
+		} catch (IOException e) {
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
+
+	public void sendFriendSearch(Message message, FriendsController friendsCtrl) {
 		try{
 			this.friendsController = friendsCtrl;
 			this.doStream.reset();

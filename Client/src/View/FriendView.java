@@ -5,10 +5,13 @@ import src.Usuari;
 import src.Utils;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class FriendView extends JFrame {
@@ -28,26 +31,28 @@ public class FriendView extends JFrame {
         this.friendsController = friendsCtrl;
     }
     public void initAll(){
+        this.removeAll();
 
 			//------------------------------------------------------OK------------------------------------------------------
         jpFriends = new JPanel(null);
         jpFriends.setOpaque(false);
 
+        jpsAmics = null;
         jpsAmics = new JPanel[amics.size()];
 
-        jpAmics = new JPanel();
-				jpAmics.setLayout(new GridLayout(amics.size(), 1, 0, 1));
+        jpAmics = new JPanel(new GridLayout(amics.size(), 1));
         jpAmics.setOpaque(false);
 
         scrollPaneAmics = new JScrollPane();
-        scrollPaneAmics.setBounds(0, 200, 430, 500);
-				scrollPaneAmics.setEnabled(true);
+        scrollPaneAmics.setBounds(0, 200, 450, 500);
+        scrollPaneAmics.setEnabled(true);
         scrollPaneAmics.setOpaque(false);
+        scrollPaneAmics.getViewport().setOpaque(false);
 
         JButton jpFriendsTitle = new JButton("Amics");
         jpFriendsTitle.setBounds(70, 40, 300, 100);
         jpFriendsTitle.setOpaque(false);
-				jpFriendsTitle.setContentAreaFilled(false);
+        jpFriendsTitle.setContentAreaFilled(false);
         jpFriendsTitle.setBorderPainted(false);
         jpFriendsTitle.setForeground(Color.WHITE);
         jpFriendsTitle.setFont(new Font("Helvetica", Font.BOLD, 30));
@@ -61,11 +66,40 @@ public class FriendView extends JFrame {
         Icon iconoProgressBar = new ImageIcon(fonsProgressBar.getImage().getScaledInstance(300, 100, Image.SCALE_FAST));
         jpFriendsTitle.setIcon(iconoProgressBar);
         jpFriends.add(jpFriendsTitle);
-			//--------------------------------------------------------------------------------------------------------------
 
-        for(int i=0; i < jpsAmics.length; i++){
-          jpsAmics[i] = null;
-        }
+        //JPanel jpSearchAmic = new JPanel(new FlowLayout(FlowLayout.LEFT)) {
+        JPanel jpSearchAmic = new JPanel(new GridLayout(1, 1)) {
+            protected void paintComponent(Graphics g) {
+                ImageIcon elementButton = new ImageIcon(this.getClass().getResource("/resources/busqueda_amic.png"));
+                g.drawImage(elementButton.getImage(), 0, 0, null);
+                super.paintComponent(g);
+            }
+        };
+
+        jpSearchAmic.setBounds(30, 140, 263, 37);
+        jpSearchAmic.setOpaque(false);
+
+        jtfSearchAmic = new JTextField();
+        jtfSearchAmic.setOpaque(false);
+        jtfSearchAmic.setBounds(20, 10, 100, 15);
+        jtfSearchAmic.setBorder(BorderFactory.createEmptyBorder());
+        jpSearchAmic.add(jtfSearchAmic);
+        jpFriends.add(jpSearchAmic);
+
+        jbSearchAmic = new JButton("");
+        jbSearchAmic.setBounds(330, 140, 60, 40);
+        jbSearchAmic.setOpaque(false);
+        jbSearchAmic.setHorizontalTextPosition(JButton.CENTER);
+        jbSearchAmic.setVerticalTextPosition(JButton.CENTER);
+        jbSearchAmic.setContentAreaFilled(false);
+        jbSearchAmic.setBorderPainted(false);
+
+        ImageIcon fonsButtonUser = new ImageIcon(this.getClass().getResource("/resources/boto_cerca_amic.png"));
+        Icon iconoButtonUser = new ImageIcon(fonsButtonUser.getImage().getScaledInstance(50, 50, Image.SCALE_FAST));
+        jbSearchAmic.setIcon(iconoButtonUser);
+        jpFriends.add(jbSearchAmic);
+        //--------------------------------------------------------------------------------------------------------------
+
 
         for (int i = 0; i < amics.size() ; i++) {
             jpsAmics[i] = new JPanel(new GridLayout(3, 1)){
@@ -95,14 +129,6 @@ public class FriendView extends JFrame {
             nomAmic.setBounds(300, 290, 100, 15);
             jpsAmics[i].add(nomAmic);
 
-						/*JLabel aux = null;
-            if (teComAmic(amics.get(i))){
-              aux = new JLabel("No tiene amigosh");
-            } else {
-              aux = new JLabel("No tiene amigosh");
-            }
-						jpsAmics[i].add(aux);
-            */
 
             JLabel jlLvl = new JLabel("Lvl 0.");
             if (usuari.getStats() != null) {
@@ -126,24 +152,17 @@ public class FriendView extends JFrame {
 							online.setForeground(Color.GRAY);
 						}
 
-            online.setBounds(300, 320, 100, 15);
+						online.setBounds(300, 320, 100, 15);
 						jpsAmics[i].add(online);
-
-
 						jpsAmics[i].setBounds(15, 60 + (110 * i), 410, 90);
-
-            jpAmics.add(jpsAmics[i]);
-
-						//jpAmics.add(separator);
+                        jpAmics.add(jpsAmics[i]);
         }
 
 
 
-				//------------------------------------------------------OK------------------------------------------------------
-				//jpAmics.setBounds(0, 0, 300, 500);
-				jpAmics.setVisible(true);
-				scrollPaneAmics.setViewportView(jpAmics);
-        scrollPaneAmics.getViewport().setOpaque(false);
+		//------------------------------------------------------OK------------------------------------------------------
+		jpAmics.setVisible(true);
+        scrollPaneAmics.setViewportView(jpAmics);
         jpFriends.add(scrollPaneAmics);
         ImageIcon img = new ImageIcon(this.getClass().getResource("/resources/fondoMadera.png"));
         Icon icono = new ImageIcon(img.getImage().getScaledInstance(450, 700, Image.SCALE_DEFAULT));
@@ -153,7 +172,8 @@ public class FriendView extends JFrame {
         fondo.setBounds(0, 0, 450, 700);
         jpFriends.add(fondo);
 				//--------------------------------------------------------------------------------------------------------------
-
+        revalidate();
+        repaint();
     }
 
     private boolean teComAmic(Usuari amic){
@@ -220,5 +240,15 @@ public class FriendView extends JFrame {
 
     public void setJtfSearchAmic(JTextField jtfSearchAmic) {
         this.jtfSearchAmic = jtfSearchAmic;
+    }
+
+
+    public void setControllers(KeyListener listenerDelTextField, MouseListener listenerCercaAmic) {
+        jtfSearchAmic.addKeyListener(listenerDelTextField);
+        jbSearchAmic.addMouseListener(listenerCercaAmic);
+    }
+
+    public void setAmicsUsuari(ArrayList<Usuari> update) {
+        this.usuari.setAmics(update);
     }
 }

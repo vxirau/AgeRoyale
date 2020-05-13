@@ -43,7 +43,11 @@ public class MainView extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                menuView.invokeAdjustViews(MenuView.CONFIGURACIO);
+                try {
+                    menuView.invokeAdjustViews(MenuView.CONFIGURACIO);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         ImageIcon fonsButtonUser = new ImageIcon(this.getClass().getResource("/resources/main_logo_user.png"));
@@ -158,7 +162,11 @@ public class MainView extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                menuView.invokeAdjustViews(MenuView.CREAPARTIDA);
+                try {
+                    menuView.invokeAdjustViews(MenuView.CREAPARTIDA);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         ImageIcon fonsButton= new ImageIcon(this.getClass().getResource("/resources/main_batallaButton.png"));

@@ -156,7 +156,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
         gameIsRunning = true;
         thread = new Thread(this, "GameGraphics");
         thread.start();
-
     }
 
     public synchronized void stopGame() throws InterruptedException {

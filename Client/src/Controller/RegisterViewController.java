@@ -59,7 +59,7 @@ public class RegisterViewController implements ActionListener, WindowListener {
 						JOptionPane.showOptionDialog(new JFrame(), "Hi ha hagut algún error en processar la teva solicitud","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
 						break;
 				}
-			}else if(boto.equals("ATRASH")){
+			}else if(boto.equals("ATRAS")){
 				SwingUtilities.invokeLater(new Runnable() {
           @Override
           public void run() {
@@ -72,8 +72,6 @@ public class RegisterViewController implements ActionListener, WindowListener {
 					}
 				});
 
-			}else{
-				System.out.println("pa tu PUTA casa");
 			}
     }
 

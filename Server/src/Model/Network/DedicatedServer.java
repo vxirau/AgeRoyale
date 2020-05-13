@@ -4,6 +4,7 @@ import src.Controller.TroopSController;
 import src.Message;
 import src.Model.Database.DAO.amicDAO;
 import src.Model.Database.DAO.partidaDAO;
+import src.Model.Database.DAO.requestsDAO;
 import src.Model.Database.DAO.usuariDAO;
 import src.Partida;
 import src.Tropa;
@@ -105,6 +106,11 @@ public class DedicatedServer extends Thread {
 					Usuari usuari = (Usuari) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
 					uDAO.updatePass(usuari);
+				} else if (m.getType().equals("getRequests")) {
+					Usuari usuari = (Usuari) m.getObject();
+					requestsDAO aDAO = new requestsDAO();
+					Message messageResposta = new Message(aDAO.getFriendRequests(usuari), "requestsReply");
+					objectOut.writeObject(messageResposta);
 				} else if (m.getType().equals("UserPKUpdates")) {
 					Usuari usuari = (Usuari) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
@@ -141,6 +147,12 @@ public class DedicatedServer extends Thread {
 					Message mresposta = new Message(t,"Tropa resposta");
 					objectOut.writeObject(mresposta);
 
+				} else if (m.getType().equals("FindFriend")){
+					String nom = (String) m.getObject();
+					usuariDAO uDAO = new usuariDAO();
+					ArrayList<Usuari> auz = uDAO.getUsersByName(nom);
+					Message messageResposta = new Message(auz, "FindFriendResposta");
+					objectOut.writeObject(messageResposta);
 				}
 			}
 		} catch (IOException | ClassNotFoundException e1){
