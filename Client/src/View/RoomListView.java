@@ -6,6 +6,7 @@ import src.Partida;
 import src.Utils;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
@@ -72,11 +73,11 @@ public class RoomListView extends JFrame{
 		jpPare.setLayout(null);
 		jpPare.setOpaque(true);
 
-		jpPartidesPubliques =new JPanel(new GridLayout(pPubliques.size(), 1));
+		jpPartidesPubliques =new JPanel(new GridLayout(pPubliques.size()*2, 1,0, 10));
 		jpPartidesPubliques.setOpaque(false);
 		//jpPartidesPubliques.setLayout(null);
 
-		jpPartidesPrivades = new JPanel(new GridLayout(pPrivades.size(), 1));
+		jpPartidesPrivades = new JPanel(new GridLayout(pPrivades.size()*2, 1, 0, 10));
 		//jpPartidesPrivades.setLayout(null);
 		jpPartidesPrivades.setOpaque(false);
 
@@ -102,6 +103,9 @@ public class RoomListView extends JFrame{
 				super.paintComponent(g);
 			}
 		};
+		Border blackline = BorderFactory.createLineBorder(Color.black);
+		element.setBorder(blackline);
+
 		element.setOpaque(false);
 		element.addMouseListener(new MouseAdapter() {
 			@Override
@@ -124,7 +128,7 @@ public class RoomListView extends JFrame{
 		element.add(nom);
 
 		JLabel persones = new JLabel();
-		persones.setText("<html><font color='white'> " + Utils.ferEspais(28) + " Total Connected: " + (0)+ "</font></html>");
+		persones.setText("<html><font color='white'> " + Utils.ferEspais(28) + " Total Connected: " + (0) + "</font></html>");
 		persones.setForeground(Color.WHITE);
 		persones.setPreferredSize(new Dimension(250,15));
 		persones.setFont(new Font("Helvetica", 0, 15));
@@ -138,7 +142,8 @@ public class RoomListView extends JFrame{
 		element.add(create);
 
 		element.setPreferredSize(new Dimension(430,100));
-
+		element.setMaximumSize(new Dimension(430,100));
+		element.setSize(430, 100);
 		return element;
 	}
 
