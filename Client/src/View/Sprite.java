@@ -1,6 +1,8 @@
 package src.View;
 
-public class Sprite {
+import java.io.Serializable;
+
+public class Sprite implements Serializable {
 
 
     //coordenades x i y de l'sprite que escollim i pixels de l'sprite

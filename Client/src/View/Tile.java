@@ -1,6 +1,9 @@
 package src.View;
+
+import java.io.Serializable;
+
 //La classe Tile representara cada quadre on es carreagara cada sprite del joc
-public class Tile {
+public class Tile implements Serializable {
 
     private int x;
     private int y;

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import src.Controller.*;
 import src.Message;
 import src.Partida;
+import src.Tropa;
 import src.Usuari;
 import src.View.LoginView;
 import src.View.MenuView;
@@ -33,6 +34,7 @@ public class UserService extends Thread{
     private LoginViewController loginViewController;
     private ConfigController configController;
     private FriendsController friendsController;
+    private TroopController troopController;
 
 
 	public UserService() {
@@ -123,13 +125,20 @@ public class UserService extends Thread{
 				} else if(jelow.getType().equals("FriendsResposta")){
 					ArrayList<Usuari> amics = (ArrayList<Usuari>) jelow.getObject();
 					friendsController.setFriends(amics);
-        } else{
+        		} else if(jelow.getType().equals("Tropa resposta")){
+					Tropa t = (Tropa) jelow.getObject();
+					//troopController.setTropa(t);
+					troopController.getTropa(t);
+					troopController.show(t);
+					System.out.println("RECIBIMOS TROPA BRO");
+				}
+				else{
 					JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
 				}
 			} catch (IOException | ClassNotFoundException e ) {
 				e.printStackTrace();
 
-					stopServerComunication();
+				stopServerComunication();
 
 				System.out.println("*** ESTA EL SERVIDOR EN EXECUCIO? ***");
 			}
@@ -227,6 +236,19 @@ public class UserService extends Thread{
 			this.doStream.reset();
 			this.doStream.writeObject(message);
 		} catch (IOException e) {
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
+
+	public void sendTropa(Message message, TroopController troopController){
+		try{
+
+			this.troopController = troopController;
+			this.doStream.reset();
+			this.doStream.writeObject(message);
+		} catch (IOException e) {
+			e.printStackTrace();
 			stopServerComunication();
 			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
 		}

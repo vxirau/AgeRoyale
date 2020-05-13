@@ -1,6 +1,9 @@
 package src.Controller;
 
+import src.Message;
+import src.Model.Network.UserService;
 import src.Tropa;
+import src.Usuari;
 import src.View.Deck;
 import src.View.GameView;
 import src.View.Sprite;
@@ -18,12 +21,21 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
     private boolean mouseIsClicked;
     private int whichTroop;
     private Deck deck;
+    private UserService uService;
 
-    public GameController(GameView gameView) throws IOException {
+    public GameController(GameView gameView,UserService userService) throws IOException {
         this.gameView = gameView;
         this.mouseIsClicked = false;
         this.deck = new Deck(this.gameView, this.gameView.getWidth(), this.gameView.getHeight());
+        this.uService = userService;
+
+        //userService.startServerComunication();//TODO: comentar
+
+        gameView.setGameController(this);
+
     }
+
+
 
 
     @Override
@@ -144,4 +156,5 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
                 break;
         }
     }
+
 }

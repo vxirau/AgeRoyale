@@ -19,7 +19,7 @@ public class BackView extends javax.swing.JPanel{
         System.out.println("paintComponent");
         Dimension tamanio = getSize();
         ImageIcon imagenFondo = new ImageIcon(getClass().
-                getResource("/resources/fondo-rojo-oscuro-marron_28629-798.png"));
+                getResource("/resources/SE_MAMO_WEY.png"));
         g.drawImage(imagenFondo.getImage(), 0, 0,
                 tamanio.width, tamanio.height, null);
         setOpaque(false);

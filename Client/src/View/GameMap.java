@@ -1,8 +1,9 @@
 package src.View;
 
 import java.io.IOException;
+import java.io.Serializable;
 
-public class GameMap {
+public class GameMap implements Serializable {
 
     protected int mapWidth;
     protected int mapHeight;

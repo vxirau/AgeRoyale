@@ -6,8 +6,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.Serializable;
 
-public class Deck {
+public class Deck implements Serializable {
 
     private Rectangle deckRectangle;
     private Rectangle deckRectangleBorder;
