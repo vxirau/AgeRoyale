@@ -88,17 +88,19 @@ SELECT* FROM usuari;
 INSERT INTO stats(TOTALPARTIDES, TOTALVICTORIES, WINRATE, AVGDURATIONVICTORIES) VALUES
     (10,  4, 30.2, 200), (15, 10, 70, 150), (28, 35, 65, 200), (25, 10, 40, 100), (248, 234, 21, 10);
 
-SELECT if(COUNT(*) > 0, req.originId, -1) as exist FROM AgeRoyale.requests AS req WHERE destinationId = 1;
-SELECT req.originId FROM AgeRoyale.requests AS req WHERE destinationId = 1;
+#SELECT if(COUNT(*) > 0, req.originId, -1) as exist FROM AgeRoyale.requests AS req WHERE destinationId = 1;
+#SELECT req.originId FROM AgeRoyale.requests AS req WHERE destinationId = 1;
 
-INSERT INTO requests(originId, destinationId) VALUES (1, 2), (1, 4), (1, 3), (2, 1), (2, 5), (2, 4);
 
 INSERT INTO usuari (nickname, email, password, idStats, isOnline) values
-    ('VXGamez', 'victor.xirau@students.salle.url.edu', '1234', 1, false),
+    ('Victor', 'victor.xirau@students.salle.url.edu', '1234', 1, false),
     ('Lidia', 'lidia.figueras@students.salle.url.edu', '1234', 2, false),
     ('Adria', 'adria.pajares@students.salle.url.edu', '1234', 3, false),
     ('Marthin', 'marti.ejarque@students.salle.url.edu', '1234', 4, false),
     ('Bernat', 'bernat.segura@students.salle.url.edu', '1234', 5, false);
+
+INSERT INTO requests(originId, destinationId) VALUES  (1, 4), (1, 3), (2, 1), (2, 5), (2, 4);
+
 
 INSERT INTO partida (duration, publica, name, host, date, player1, player2) VALUES
     (200, true, 'Prova1', 'admin', '20-05-2020', 1, 2), (150, true, 'Prova2', 'admin', '19-05-2020', 3, 4), (478, false, 'Prova3', 'admin',  '18-05-2020', 5, 1);
@@ -146,8 +148,8 @@ UPDATE AgeRoyale.stats SET AgeRoyale.stats.totalPartides = 31, AgeRoyale.stats.t
 SELECT st.idStat FROM AgeRoyale.stats as st ORDER BY st.idStat DESC LIMIT 1;
 
 #remove stats
-DELETE FROM AgeRoyale.stats WHERE idStat = 6;
-DELETE FROM AgeRoyale.stats where AgeRoyale.usuari.idUser = 1 AND AgeRoyale.usuari.idStats = AgeRoyale.stats.idStat;
+#DELETE FROM AgeRoyale.stats WHERE idStat = 6;
+#DELETE FROM AgeRoyale.stats where AgeRoyale.usuari.idUser = 1 AND AgeRoyale.usuari.idStats = AgeRoyale.stats.idStat;
 
 #reset stats
 UPDATE AgeRoyale.stats SET AgeRoyale.stats.totalPartides = 0, AgeRoyale.stats.totalVictories = 0, AgeRoyale.stats.winrate = 0, AgeRoyale.stats.avgDurationVictories = 0 WHERE AgeRoyale.stats.idStat = 6;

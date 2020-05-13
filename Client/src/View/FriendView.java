@@ -36,8 +36,10 @@ public class FriendView extends JFrame {
 
         jpsAmics = new JPanel[amics.size()];
 
-        jpAmics = new JPanel(new GridLayout(amics.size(), 1));
+        jpAmics = new JPanel(new GridLayout(amics.size()*2, 1));
         jpAmics.setOpaque(false);
+
+
 
         scrollPaneAmics = new JScrollPane();
         scrollPaneAmics.setBounds(0, 200, 450, 500);
@@ -89,7 +91,7 @@ public class FriendView extends JFrame {
             nomAmic.setBorder(new EmptyBorder(10,0,0,0));//top,left,bottom,right
 
             nomAmic.setFont(new Font("Helvetica", 0, 20));
-            nomAmic.setBounds(300, 290, 100, 15);
+            //nomAmic.setBounds(300, 290, 100, 15);
             jpsAmics[i].add(nomAmic);
 
 
@@ -115,9 +117,10 @@ public class FriendView extends JFrame {
 							online.setForeground(Color.GRAY);
 						}
 
-						online.setBounds(300, 320, 100, 15);
+						//online.setBounds(300, 320, 100, 15);
 						jpsAmics[i].add(online);
-						jpsAmics[i].setBounds(15, 60 + (110 * i), 410, 90);
+                        jpsAmics[i].setPreferredSize(new Dimension(410,90));
+						//jpsAmics[i].setBounds(15, 60 + (110 * i), 410, 90);
                         jpAmics.add(jpsAmics[i]);
         }
 

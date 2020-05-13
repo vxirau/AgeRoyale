@@ -72,11 +72,11 @@ public class RoomListView extends JFrame{
 		jpPare.setLayout(null);
 		jpPare.setOpaque(true);
 
-		jpPartidesPubliques =new JPanel(new GridLayout(pPubliques.size()*2, 1));
+		jpPartidesPubliques =new JPanel(new GridLayout(pPubliques.size(), 1));
 		jpPartidesPubliques.setOpaque(false);
 		//jpPartidesPubliques.setLayout(null);
 
-		jpPartidesPrivades = new JPanel(new GridLayout(pPrivades.size()*2, 1));
+		jpPartidesPrivades = new JPanel(new GridLayout(pPrivades.size(), 1));
 		//jpPartidesPrivades.setLayout(null);
 		jpPartidesPrivades.setOpaque(false);
 
@@ -120,20 +120,20 @@ public class RoomListView extends JFrame{
 		nom.setText("<html><font color='white'>" + Utils.ferEspais(28) + " Room Name: " + p.getName() + "</font></html>");
 		nom.setForeground(Color.WHITE);
 		nom.setFont(new Font("Helvetica", 0, 15));
-		//nom.setBounds(120, 180, 250, 15);
+		nom.setPreferredSize(new Dimension(250,15));
 		element.add(nom);
 
 		JLabel persones = new JLabel();
 		persones.setText("<html><font color='white'> " + Utils.ferEspais(28) + " Total Connected: " + (0)+ "</font></html>");
 		persones.setForeground(Color.WHITE);
-		//persones.setBounds(120, 190, 250, 15);
+		persones.setPreferredSize(new Dimension(250,15));
 		persones.setFont(new Font("Helvetica", 0, 15));
 		element.add(persones);
 
 		JLabel create = new JLabel();
 		create.setText("<html><font color='white'> " + Utils.ferEspais(28) + "  Host: " + p.getHost() +  "</font></html>");
 		create.setForeground(Color.WHITE);
-		//create.setBounds(120, 200, 250, 15);
+		create.setPreferredSize(new Dimension(250,15));
 		create.setFont(new Font("Helvetica", 0, 15));
 		element.add(create);
 
@@ -163,7 +163,7 @@ public class RoomListView extends JFrame{
 			JPanel showPrivate = new JPanel();
 			JLabel mostrar = new JLabel();
 			showPrivate.setOpaque(false);
-			mostrar.setText("Mostrar solo privadas");
+			mostrar.setText("Mostrar només privades");
 			mostrar.setForeground(Color.WHITE);
 			mostrar.setFont(new Font("Helvetica", Font.BOLD, 20));
 			mostrar.setBounds(35, 165, 250, 15);

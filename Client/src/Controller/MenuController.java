@@ -90,4 +90,8 @@ public class MenuController {
     public void updateViews(){
         view.updateViews();
     }
+
+    public int getRequestSize() {
+        return requests.size();
+    }
 }

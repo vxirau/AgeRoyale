@@ -56,6 +56,7 @@ public class MenuView extends JFrame implements ActionListener {
     private JPanel jpMenuMain;
     private JPanel jpMenuCrearPartida;
     private JPanel jpMenuFriends;
+    private boolean shown = false;
 
     private final MouseListener mouseActionMenu = new MouseAdapter() {
         @Override
@@ -145,6 +146,10 @@ public class MenuView extends JFrame implements ActionListener {
         }
         if (name.equals(MenuView.AMICS)){
             jpActive = friendView.getJpFriends();
+            if(menuController.getRequestSize()>0 && !shown){
+                shown = true;
+                JOptionPane.showMessageDialog(this, "Tens solicituds d'amistat pendents!", "Recorda!", JOptionPane.INFORMATION_MESSAGE);
+            }
 
             jpMenuConfig.setBackground(Color.decode(bgColor));
             jpMenuTropes.setBackground(Color.decode(bgColor));
