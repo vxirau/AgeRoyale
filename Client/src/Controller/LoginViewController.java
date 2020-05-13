@@ -38,7 +38,11 @@ public class LoginViewController implements ActionListener {
                 MenuView rView = new MenuView();
                 view.setVisible(false);
                 rView.setVisible(true);
-                MenuController controlador = new MenuController(rView, uService, LoginViewController.this.user, requests);
+                try {
+                    MenuController controlador = new MenuController(rView, uService, LoginViewController.this.user, requests);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

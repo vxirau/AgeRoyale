@@ -84,7 +84,7 @@ public class FriendsController {
         uService.sendGetFriends(m, this, true);
     }
 
-     public void setFriends(ArrayList<Usuari> amics) {
+     public void setFriends(ArrayList<Usuari> amics) throws InterruptedException {
         this.friends = amics;
         friendView.setAmics(amics);
         menuController.updateViews();

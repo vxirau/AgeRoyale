@@ -136,7 +136,7 @@ public class UserService extends Thread{
 				} else{
 					JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
 				}
-			} catch (IOException | ClassNotFoundException e ) {
+			} catch (IOException | ClassNotFoundException | InterruptedException e ) {
 				e.printStackTrace();
 				stopServerComunication();
 				System.out.println("*** ESTA EL SERVIDOR EN EXECUCIO? ***");

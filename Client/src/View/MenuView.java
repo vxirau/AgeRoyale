@@ -13,7 +13,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 
-public class MenuView extends JFrame implements ActionListener {
+public class MenuView extends JFrame implements ActionListener, Runnable {
 
     public static String actualView = "";
     public static final String MAIN = "Main_";
@@ -22,10 +22,14 @@ public class MenuView extends JFrame implements ActionListener {
     public static final String AMICS = "Friends_";
     public static final String CREAPARTIDA = "CrearPartida_";
 
+
     private UserService uService;
     private Usuari usuari;
     private MenuController menuController;
 
+    private static Thread thread;
+    private static volatile boolean onTroopsView = false;
+    private boolean firstTimeOnThread = true;
     //Panell actual
     private JPanel jpActive;
 
@@ -62,7 +66,11 @@ public class MenuView extends JFrame implements ActionListener {
         public void mouseClicked(MouseEvent e) {
             super.mouseClicked(e);
             JPanel item = (JPanel) e.getSource();
-            adjustViews(item.getName());
+            try {
+                adjustViews(item.getName());
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
         }
     };
 
@@ -70,13 +78,13 @@ public class MenuView extends JFrame implements ActionListener {
 
     }
 
-    public void setMenuController(MenuController menuController) {
+    public void setMenuController(MenuController menuController) throws InterruptedException {
         this.menuController = menuController;
         init();
         basic();
     }
 
-    private void init() {
+    private void init() throws InterruptedException {
         this.setLayout(new BorderLayout());
 
         //iniciem el menu
@@ -88,7 +96,7 @@ public class MenuView extends JFrame implements ActionListener {
         initMain();
         initFriends();
         initCrearPartida();
-
+        thread = new Thread(this, "Troop Selection Timer");
         //Marquem la primera vista que mostrarem al iniciar
         adjustViews(MenuView.MAIN);
     }
@@ -107,7 +115,7 @@ public class MenuView extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    private void adjustViews(String name) {
+    private void adjustViews(String name) throws InterruptedException {
         actualView = name;
         String bgColor = "#282828";
         String bgColorSelected = "#361111";
@@ -117,6 +125,8 @@ public class MenuView extends JFrame implements ActionListener {
         }
 
         if (name.equals(MenuView.CONFIGURACIO)){
+            if(thread.isAlive()) stopTimer();
+
             jpActive = jpConfig;
 
             jpMenuConfig.setBackground(Color.decode(bgColorSelected));
@@ -126,6 +136,7 @@ public class MenuView extends JFrame implements ActionListener {
             jpMenuFriends.setBackground(Color.decode(bgColor));
         }
         if (name.equals(MenuView.TROPES)){
+            startTimer();
             jpActive = jpTropes;
 
             jpMenuConfig.setBackground(Color.decode(bgColor));
@@ -135,6 +146,7 @@ public class MenuView extends JFrame implements ActionListener {
             jpMenuFriends.setBackground(Color.decode(bgColor));
         }
         if (name.equals(MenuView.MAIN)){
+            if(thread.isAlive()) stopTimer();
             jpActive = jpMain;
 
             jpMenuConfig.setBackground(Color.decode(bgColor));
@@ -144,6 +156,7 @@ public class MenuView extends JFrame implements ActionListener {
             jpMenuFriends.setBackground(Color.decode(bgColor));
         }
         if (name.equals(MenuView.AMICS)){
+            if(thread.isAlive()) stopTimer();
             jpActive = friendView.getJpFriends();
 
             jpMenuConfig.setBackground(Color.decode(bgColor));
@@ -153,6 +166,7 @@ public class MenuView extends JFrame implements ActionListener {
             jpMenuFriends.setBackground(Color.decode(bgColorSelected));
         }
         if (name.equals(MenuView.CREAPARTIDA)){
+            if(thread.isAlive()) stopTimer();
             jpActive = roomListView.getJpPare();
 
             jpMenuConfig.setBackground(Color.decode(bgColor));
@@ -169,7 +183,7 @@ public class MenuView extends JFrame implements ActionListener {
         this.repaint();
     }
 
-    private void initMenu() {
+    private synchronized void initMenu() {
         int width = 81;
         int height = 90;
         String bgColor = "#282828";
@@ -237,6 +251,9 @@ public class MenuView extends JFrame implements ActionListener {
         jpTropes = tropesView.getJpTropes();
     }
 
+
+
+
     private void initMain() {
         mainView = new MainView(this);
         jpMain = mainView.getJpMain();
@@ -275,7 +292,7 @@ public class MenuView extends JFrame implements ActionListener {
         this.usuari = usuari;
     }
 
-    public void invokeAdjustViews(String view){
+    public void invokeAdjustViews(String view) throws InterruptedException {
         adjustViews(view);
     }
 
@@ -303,7 +320,47 @@ public class MenuView extends JFrame implements ActionListener {
         return roomListView;
     }
 
-    public void updateViews(){
+    public void updateViews() throws InterruptedException {
         adjustViews(actualView);
     }
+
+
+
+
+    @Override
+    public void run() {
+        final long[] startTime = {System.currentTimeMillis()};
+        while(onTroopsView){
+            long elapsedTime = System.currentTimeMillis() - startTime[0];
+
+            if(elapsedTime > 900){
+                startTime[0] = System.currentTimeMillis();
+                //elapsedSeconds = 0;
+            }
+
+            tropesView.updateTropes(elapsedTime);
+
+            System.out.println(elapsedTime);
+        }
+
+
+    }
+
+    public synchronized void startTimer() throws InterruptedException {
+        onTroopsView = true;
+        thread = new Thread(this, "Troop Selection Timer");
+        thread.start();
+
+    }
+    public synchronized void stopTimer() throws InterruptedException {
+        onTroopsView = false;
+        thread.interrupt();
+        thread.stop();
+        //thread.join();
+
+    }
 }
+
+
+
+
