@@ -35,6 +35,7 @@ CREATE TABLE usuari(
     FOREIGN KEY (idStats) REFERENCES stats (idStat)
 );
 
+
 CREATE TABLE requests(
      destinationId    int not null,
      originId     int not null,
@@ -119,6 +120,12 @@ INSERT INTO UsuariTropa (idUser, idTropa) VALUES
     (5, 5), (5, 1);
 
 SELECT * FROM partida;
+
+SELECT u.* FROM usuari as u, stats as s WHERE s.idStat = u.idStats ORDER BY s.totalVictories DESC LIMIT 10;
+
+SELECT * FROM stats as s ORDER BY totalVictories DESC LIMIT 10;
+
+
 
 ###########################################     AMIC    ###############################################################################################
 #get Amics

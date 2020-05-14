@@ -15,8 +15,15 @@ import java.util.ArrayList;
 
 public class MainClient {
 
+
+
     private static int game = 1;
     public static void main(String[] args) {
+        try {
+            javax.swing.UIManager.setLookAndFeel( "javax.swing.plaf.nimbus.NimbusLookAndFeel" );
+        } catch( Exception e ) {
+            e.printStackTrace();
+        }
         SwingUtilities.invokeLater(new Runnable() {
           @Override
           public void run() {

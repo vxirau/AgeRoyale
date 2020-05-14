@@ -24,6 +24,7 @@ public class FriendView extends JFrame {
     private JTextField jtfSearchAmic;
     private Usuari usuari;
     private JButton jpFriendsTitle;
+    private JButton request;
     private FriendsController friendsController;
 
     public FriendView(Usuari usr, FriendsController friendsCtrl) {
@@ -52,23 +53,37 @@ public class FriendView extends JFrame {
         scrollPaneAmics.setOpaque(false);
         scrollPaneAmics.getViewport().setOpaque(false);
 
+        JPanel titol = new JPanel();
+        titol.setBounds(20, 30, 400, 300);
+        titol.setOpaque(false);
+        titol.setLayout(null);
         jpFriendsTitle = new JButton("Amics");
-        jpFriendsTitle.setBounds(70, 40, 300, 100);
+        jpFriendsTitle.setBounds(45, 20, 300, 30);
         jpFriendsTitle.setOpaque(false);
         jpFriendsTitle.setContentAreaFilled(false);
         jpFriendsTitle.setBorderPainted(false);
         jpFriendsTitle.setForeground(Color.WHITE);
         jpFriendsTitle.setFont(new Font("Helvetica", Font.BOLD, 30));
-        jpFriendsTitle.setAlignmentX(SwingConstants.CENTER);
-        jpFriendsTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        jpFriendsTitle.setHorizontalTextPosition(SwingConstants.CENTER);
-        jpFriendsTitle.setAlignmentY(SwingConstants.CENTER);
-        jpFriendsTitle.setVerticalAlignment(SwingConstants.CENTER);
-        jpFriendsTitle.setVerticalTextPosition(SwingConstants.CENTER);
+        titol.add(jpFriendsTitle);
+
+        request = new JButton();
+        request.setText("Friend Request");
+        request.setBackground(Color.decode("#4F1900"));
+        request.setOpaque(true);
+        request.setEnabled(true);
+        request.setBounds(130, 55, 120, 30);
+        request.setForeground(Color.WHITE);
+
+        titol.add(request);
+
         ImageIcon fonsProgressBar = new ImageIcon(this.getClass().getResource("/resources/friends_title_bg.png"));
         Icon iconoProgressBar = new ImageIcon(fonsProgressBar.getImage().getScaledInstance(300, 100, Image.SCALE_FAST));
-        jpFriendsTitle.setIcon(iconoProgressBar);
-        jpFriends.add(jpFriendsTitle);
+        JLabel fondo_petit= new JLabel();
+        fondo_petit.setIcon(iconoProgressBar);
+        getLayeredPane().add(fondo_petit, JLayeredPane.FRAME_CONTENT_LAYER);
+        fondo_petit.setBounds(50, 5, 300, 100);
+        titol.add(fondo_petit);
+        jpFriends.add(titol);
 
         //JPanel jpSearchAmic = new JPanel(new FlowLayout(FlowLayout.LEFT)) {
         JPanel jpSearchAmic = new JPanel(new GridLayout(1, 1)) {
@@ -252,6 +267,7 @@ public class FriendView extends JFrame {
         jtfSearchAmic.addKeyListener(listenerDelTextField);
         jbSearchAmic.addMouseListener(listenerCercaAmic);
         jpFriendsTitle.addActionListener(controller);
+        request.addActionListener(controller);
     }
 
     public void setAmicsUsuari(ArrayList<Usuari> update) {

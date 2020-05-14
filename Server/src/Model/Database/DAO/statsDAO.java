@@ -6,6 +6,7 @@ import src.Usuari;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class statsDAO {
     //OBTENIR INFORMACIO
@@ -27,6 +28,41 @@ public class statsDAO {
             e.printStackTrace();
         }
         return stat;
+    }
+
+    public ArrayList<Usuari> getTopUsers(){
+        ArrayList<Usuari> topUsers = new ArrayList<>();
+
+        String query = "SELECT * FROM stats as s ORDER BY totalVictories DESC LIMIT 10;";
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try{
+            while (rs.next()) {
+                Stats stat = new Stats();
+                stat.setIdStat(rs.getInt("idStat"));
+                stat.setTotalPartides(rs.getInt("totalPartides"));
+                stat.setTotalVictories(rs.getInt("totalVictories"));
+                stat.setWinrate(rs.getFloat("winrate"));
+                stat.setAvgDurationVictories(rs.getFloat("avgDurationVictories"));
+
+                String query2 = "SELECT u.* FROM usuari as u, stats as s WHERE "+ stat.getIdStat() + " = u.idStats ORDER BY s.totalVictories DESC LIMIT 10;";
+                ResultSet rs2 = DBConnector.getInstance().selectQuery(query2);
+                if (rs2.next()) {
+                    Usuari u = new Usuari();
+                    u.setStats(stat);
+                    u.setIdUsuari(rs2.getInt("idUser"));
+                    u.setNickName(rs2.getString("nickname"));
+                    u.setEmail(rs2.getString("email"));
+                    u.setPassword(rs2.getString("password"));
+                    u.setOnline(rs2.getBoolean("isOnline"));
+                    topUsers.add(u);
+                }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return topUsers;
     }
 
     public Stats getStatsFromUserId(int idUser) {
