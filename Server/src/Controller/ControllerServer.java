@@ -10,6 +10,8 @@ import src.Usuari;
 import src.View.ViewServer;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -37,12 +39,21 @@ public class ControllerServer implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
-
         if(e.getSource() instanceof  JComboBox){
             JComboBox cb = (JComboBox)e.getSource();
             String item = (String)cb.getSelectedItem();
-            view.setTableRange(item);
+            int index=0;
+            if(item.equals("Mes")){
+                index = 1;
+            }else if(item.equals("Any")){
+                index = 2;
+            }
+            JTabbedPane p = view.getTabbedPane();
+            if(p.getTabCount()>2){
+                p.setComponentAt(2, view.makePanellPartides(index));
+                p.setSelectedIndex(2);
+                view.refresh(p);
+            }
         }else if(e.getSource() instanceof  JButton){
             String botoClicked = ((JButton)e.getSource()).getText();
             if(botoClicked.equals("Start")){
@@ -50,6 +61,8 @@ public class ControllerServer implements ActionListener {
             }else if(botoClicked.equals("Stop")){
                 server.stopServer();
             }
+        }else if(e.getSource() instanceof  JToggleButton){
+
         }
 
 
@@ -65,4 +78,6 @@ public class ControllerServer implements ActionListener {
         }
         return 2;
     }
+
+
 }
