@@ -26,7 +26,7 @@ public class FriendsController implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         String boto = ((JButton) e.getSource()).getText();
-        if(boto.equals("Amics")){
+        if(boto.equals("Friend Request")){
             FriendRequest r = new FriendRequest(this, requests);
             r.setVisible(true);
         }
