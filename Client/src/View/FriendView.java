@@ -40,9 +40,9 @@ public class FriendView extends JFrame {
         jpsAmics = null;
         jpsAmics = new JPanel[amics.size()];
 
-        jpAmics = new JPanel(new GridLayout(amics.size()*2, 1));
+        jpAmics = new JPanel();
+        jpAmics.setLayout(new BoxLayout(jpAmics, BoxLayout.Y_AXIS));
         jpAmics.setOpaque(false);
-
 
 
         scrollPaneAmics = new JScrollPane();
@@ -157,7 +157,8 @@ public class FriendView extends JFrame {
 						//online.setBounds(300, 320, 100, 15);
 						jpsAmics[i].add(online);
                         jpsAmics[i].setPreferredSize(new Dimension(410,90));
-						//jpsAmics[i].setBounds(15, 60 + (110 * i), 410, 90);
+                        jpsAmics[i].setMaximumSize(new Dimension(430,90));
+                        jpsAmics[i].setSize(430, 90);
                         jpAmics.add(jpsAmics[i]);
         }
 

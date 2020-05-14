@@ -84,12 +84,12 @@ public class RoomListView extends JFrame{
 		jpPare.setLayout(null);
 		jpPare.setOpaque(true);
 
-		jpPartidesPubliques =new JPanel(new GridLayout(pPubliques.size()*2, 1,0, 10));
+		jpPartidesPubliques =new JPanel();
+		jpPartidesPubliques.setLayout(new BoxLayout(jpPartidesPubliques, BoxLayout.Y_AXIS));
 		jpPartidesPubliques.setOpaque(false);
-		//jpPartidesPubliques.setLayout(null);
 
-		jpPartidesPrivades = new JPanel(new GridLayout(pPrivades.size()*2, 1, 0, 10));
-		//jpPartidesPrivades.setLayout(null);
+		jpPartidesPrivades = new JPanel();
+		jpPartidesPrivades.setLayout(new BoxLayout(jpPartidesPubliques, BoxLayout.Y_AXIS));
 		jpPartidesPrivades.setOpaque(false);
 
 		scrollPrivadesF = new JScrollPane();
@@ -114,8 +114,6 @@ public class RoomListView extends JFrame{
 				super.paintComponent(g);
 			}
 		};
-		Border blackline = BorderFactory.createLineBorder(Color.black);
-		element.setBorder(blackline);
 
 		element.setOpaque(false);
 		element.addMouseListener(new MouseAdapter() {
@@ -214,10 +212,12 @@ public class RoomListView extends JFrame{
 			//------------------------------ELEMENT------------------------------
 			for(int i=0; i<pPubliques.size() ;i++){
 				jpPartidesPubliques.add(crearElement(pPubliques.get(i), i));
+				jpPartidesPubliques.add(addSeparator());
 			}
 
 			for(int i =0; i<pPrivades.size(); i++){
 				jpPartidesPrivades.add(crearElement(pPrivades.get(i), i));
+				jpPartidesPrivades.add(addSeparator());
 			}
 
 
@@ -258,6 +258,15 @@ public class RoomListView extends JFrame{
 
 	public JScrollPane getScrollPrivades(){
 		return this.scrollPrivadesF;
+	}
+
+	public JPanel addSeparator(){
+		JPanel separator = new JPanel();
+		separator.setPreferredSize(new Dimension(430, 10));
+		separator.setOpaque(false);
+		separator.setMaximumSize(new Dimension(430,10));
+		separator.setSize(430, 10);
+		return separator;
 	}
 
 	public void setAllGames(ArrayList<Partida> partides){

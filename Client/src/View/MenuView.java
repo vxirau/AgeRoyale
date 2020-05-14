@@ -284,7 +284,7 @@ public class MenuView extends JFrame implements ActionListener, Runnable {
     }
 
     private void initCrearPartida() {
-        roomListView = new RoomListView(menuController.getRoomsController());
+        roomListView = new RoomListView(menuController.getRoomsController(), this.usuari);
         jpCrearPartida = roomListView.getJpPare();
     }
 
