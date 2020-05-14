@@ -8,6 +8,20 @@ public class Entity implements Serializable {
 
     protected float xPosition;
     protected float yPosition;
+    private int entityLife;
+
+    public int getEntityLife() {
+        return entityLife;
+    }
+
+    public void setEntityLife(int entityLife) {
+        this.entityLife = entityLife;
+    }
+
+    public boolean isEntityIsDestroyed() {
+        return entityIsDestroyed;
+    }
+
     private boolean entityIsDestroyed = false;
 
 
