@@ -123,7 +123,7 @@ public class MainView extends JFrame{
         c.gridx = 1;
         c.gridwidth = 2;
         c.gridy = 1;
-        jlTempsXVictoria.setText("AVG de X min per vicoria");
+        jlTempsXVictoria.setText("AVG de X min per victoria");
         jlTempsXVictoria.setForeground(Color.white);
         jlTempsXVictoria.setVerticalAlignment(SwingConstants.CENTER);
         jpMainMiddle.add(jlTempsXVictoria, c);

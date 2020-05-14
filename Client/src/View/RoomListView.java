@@ -66,9 +66,6 @@ public class RoomListView extends JFrame{
 
 	private void initAll(){
 		dividirPartides();
-		if((pPrivades.size() + pPubliques.size()) != allGames.size()){
-			JOptionPane.showOptionDialog(new JFrame(), "Alguna cosa no ha funcionat","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
-		}
 		initComponents();
 	}
 
@@ -89,7 +86,7 @@ public class RoomListView extends JFrame{
 		jpPartidesPubliques.setOpaque(false);
 
 		jpPartidesPrivades = new JPanel();
-		jpPartidesPrivades.setLayout(new BoxLayout(jpPartidesPubliques, BoxLayout.Y_AXIS));
+		jpPartidesPrivades.setLayout(new BoxLayout(jpPartidesPrivades, BoxLayout.Y_AXIS));
 		jpPartidesPrivades.setOpaque(false);
 
 		scrollPrivadesF = new JScrollPane();

@@ -136,7 +136,6 @@ public class UserService extends Thread{
 					//troopController.setTropa(t);
 					troopController.getTropa(t);
 					troopController.show(t);
-					System.out.println("RECIBIMOS TROPA BRO");
 				} else if(jelow.getType().equals("FindFriendResposta")){
                 	friendsController.setFriends((ArrayList<Usuari>) jelow.getObject());
 				}else if(jelow.getType().equals("requestsReply")){

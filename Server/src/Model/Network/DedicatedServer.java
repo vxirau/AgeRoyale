@@ -167,7 +167,6 @@ public class DedicatedServer extends Thread {
 				}
 			}
 		} catch (IOException | ClassNotFoundException e1){
-			System.out.println("ESTAS JODIO BRO");
 				// en cas derror aturem el servidor dedicat
 				stopDedicatedServer();
 				// eliminem el servidor dedicat del conjunt de servidors dedicats

@@ -31,7 +31,6 @@ public class FriendRequest extends JFrame {
         setLayout(null);
 
         initComponents();
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);

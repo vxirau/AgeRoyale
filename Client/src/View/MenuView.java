@@ -340,12 +340,8 @@ public class MenuView extends JFrame implements ActionListener, Runnable {
 
             if(elapsedTime > 900){
                 startTime[0] = System.currentTimeMillis();
-                //elapsedSeconds = 0;
             }
-
             tropesView.updateTropes(elapsedTime);
-
-            System.out.println(elapsedTime);
         }
 
 

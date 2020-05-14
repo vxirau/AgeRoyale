@@ -39,7 +39,6 @@ public class TroopController {
                     updateTropa(t);
                     index = i;
                     // es pot mirar de fer a un altre lloc
-                    System.out.println("ACTUALIZAO BRO");
                 //}
             }
         }
