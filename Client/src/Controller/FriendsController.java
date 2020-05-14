@@ -3,13 +3,14 @@ package src.Controller;
 import src.Message;
 import src.Model.Network.UserService;
 import src.Usuari;
+import src.View.FriendRequest;
 import src.View.FriendView;
 
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class FriendsController {
+public class FriendsController implements ActionListener{
 
     private FriendView friendView;
 
@@ -21,6 +22,16 @@ public class FriendsController {
     private ArrayList<Usuari> requests;
 
     private String cerca;
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String boto = ((JButton) e.getSource()).getText();
+        System.out.println("ENTRA");
+        if(boto.equals("Amics")){
+            FriendRequest r = new FriendRequest(this, requests);
+            r.setVisible(true);
+        }
+    }
 
     public MouseListener listenerCercaAmic = new MouseAdapter(){
         @Override
@@ -72,7 +83,7 @@ public class FriendsController {
 
     public void setFriendView(FriendView friendView) {
         this.friendView = friendView;
-        friendView.setControllers(listenerDelTextField, listenerCercaAmic);
+        friendView.setControllers(listenerDelTextField, listenerCercaAmic, this);
     }
 
     public void setUsuari(Usuari usuari) {
@@ -88,7 +99,7 @@ public class FriendsController {
         this.friends = amics;
         friendView.setAmics(amics);
         menuController.updateViews();
-        friendView.setControllers(listenerDelTextField, listenerCercaAmic);
+        friendView.setControllers(listenerDelTextField, listenerCercaAmic, this);
         friendView.getJtfSearchAmic().setText(cerca);
      }
 
@@ -96,4 +107,22 @@ public class FriendsController {
         usuari.setAmics(amicsUsuari);
         friendView.setAmicsUsuari(amicsUsuari);
     }
+
+    public void requestFriend(Usuari u){
+        ArrayList<Usuari> users = new ArrayList<>();
+        users.add(this.usuari);
+        users.add(u);
+        int a= JOptionPane.showConfirmDialog(friendView, "Vols acceptar aquesta solicitud?");
+        if(a==JOptionPane.YES_OPTION){
+            Message m = new Message(users, "acceptRequest");
+            uService.sendFriendSearch(m, this);
+        }else if(a==JOptionPane.NO_OPTION){
+            Message m = new Message(users, "removeRequest");
+            uService.sendFriendSearch(m, this);
+        }
+
+
+    }
+
+
 }

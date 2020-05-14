@@ -138,12 +138,12 @@ public class UserService extends Thread{
 					troopController.show(t);
 					System.out.println("RECIBIMOS TROPA BRO");
 				} else if(jelow.getType().equals("FindFriendResposta")){
-                friendsController.setFriends((ArrayList<Usuari>) jelow.getObject());
-            }else if(jelow.getType().equals("requestsReply")){
-                loginViewController.onRequestsRecieved((ArrayList<Usuari>) jelow.getObject());
-            } else{
-                JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
-            }
+                	friendsController.setFriends((ArrayList<Usuari>) jelow.getObject());
+				}else if(jelow.getType().equals("requestsReply")){
+					loginViewController.onRequestsRecieved((ArrayList<Usuari>) jelow.getObject());
+				} else{
+					JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+				}
 
 
 			} catch (IOException | ClassNotFoundException | InterruptedException e ) {

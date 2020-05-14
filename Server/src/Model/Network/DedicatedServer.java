@@ -137,22 +137,33 @@ public class DedicatedServer extends Thread {
 					Message messageResposta = new Message(a, "FriendsResposta");
 					objectOut.writeObject(messageResposta);
 				} else if(m.getType().equals("Tropa update")){
-
-
 					Tropa t = (Tropa) m.getObject();
 					t = troopSController.moveOffensiveTroop(t,t.getxVariation(),t.getyVariation(),cont);
 					cont++;
-
                     objectOut.reset();
 					Message mresposta = new Message(t,"Tropa resposta");
 					objectOut.writeObject(mresposta);
-
 				} else if (m.getType().equals("FindFriend")){
 					String nom = (String) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
 					ArrayList<Usuari> auz = uDAO.getUsersByName(nom);
 					Message messageResposta = new Message(auz, "FindFriendResposta");
 					objectOut.writeObject(messageResposta);
+				}else if(m.getType().equals("acceptRequest")){
+					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
+					requestsDAO rDAO = new requestsDAO();
+					amicDAO aDAO = new amicDAO();
+					rDAO.removeRequest(users.get(0), users.get(1));
+					aDAO.addAmic(users.get(0), users.get(1));
+					ArrayList<Usuari> a = aDAO.getAmics(users.get(0));
+					Message messageResposta = new Message(a, "FriendsResposta");
+					objectOut.writeObject(messageResposta);
+					Message messageResposta2 = new Message(rDAO.getFriendRequests(users.get(0)), "requestsReply");
+					objectOut.writeObject(messageResposta2);
+				}else if(m.getType().equals("removeRequest")){
+					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
+					requestsDAO rDAO = new requestsDAO();
+					rDAO.removeRequest(users.get(0), users.get(1));
 				}
 			}
 		} catch (IOException | ClassNotFoundException e1){

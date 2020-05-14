@@ -33,5 +33,10 @@ public class requestsDAO {
         return allRequests;
     }
 
+    public void removeRequest(Usuari u1, Usuari u2){
+        String query = "DELETE FROM AgeRoyale.requests WHERE originId=" + u2.getIdUsuari() + " AND destinationId =" + u1.getIdUsuari() +";";
+        DBConnector.getInstance().deleteQuery(query);
+    }
+
 
 } 

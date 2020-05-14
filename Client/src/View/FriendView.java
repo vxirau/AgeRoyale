@@ -23,6 +23,7 @@ public class FriendView extends JFrame {
     private JButton jbSearchAmic;
     private JTextField jtfSearchAmic;
     private Usuari usuari;
+    private JButton jpFriendsTitle;
     private FriendsController friendsController;
 
     public FriendView(Usuari usr, FriendsController friendsCtrl) {
@@ -51,7 +52,7 @@ public class FriendView extends JFrame {
         scrollPaneAmics.setOpaque(false);
         scrollPaneAmics.getViewport().setOpaque(false);
 
-        JButton jpFriendsTitle = new JButton("Amics");
+        jpFriendsTitle = new JButton("Amics");
         jpFriendsTitle.setBounds(70, 40, 300, 100);
         jpFriendsTitle.setOpaque(false);
         jpFriendsTitle.setContentAreaFilled(false);
@@ -113,11 +114,11 @@ public class FriendView extends JFrame {
             };
             int finalI = i;
             jpsAmics[i].addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseClicked(MouseEvent e) {
-								friendsController.removeFriend(amics.get(finalI));
-							}
-						});
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    friendsController.removeFriend(amics.get(finalI));
+                }
+            });
 
             jpsAmics[i].setOpaque(false);
             jpsAmics[i].setVisible(true);
@@ -247,9 +248,10 @@ public class FriendView extends JFrame {
     }
 
 
-    public void setControllers(KeyListener listenerDelTextField, MouseListener listenerCercaAmic) {
+    public void setControllers(KeyListener listenerDelTextField, MouseListener listenerCercaAmic, FriendsController controller) {
         jtfSearchAmic.addKeyListener(listenerDelTextField);
         jbSearchAmic.addMouseListener(listenerCercaAmic);
+        jpFriendsTitle.addActionListener(controller);
     }
 
     public void setAmicsUsuari(ArrayList<Usuari> update) {
