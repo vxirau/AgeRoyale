@@ -1,8 +1,10 @@
 package src.Controller;
 
+import src.Model.Database.DAO.statsDAO;
 import src.Model.Database.DAO.usuariDAO;
 import src.Model.Network.DedicatedServer;
 import src.Model.Network.Server;
+import src.Usuari;
 import src.View.ViewServer;
 
 import javax.swing.*;
@@ -22,16 +24,31 @@ public class ControllerServer implements ActionListener {
     public ControllerServer(Server server, ViewServer view) {
         this.server = server;
         this.view = view;
+        statsDAO sDAO = new statsDAO();
+        ArrayList<Usuari> r = sDAO.getTopUsers();
+        view.setTableContents(r);
+        view.initAll();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-			String botoClicked = ((JButton)e.getSource()).getText();
-			if(botoClicked.equals("Start")){
-				server.startServer();
-			}else if(botoClicked.equals("Stop")){
-				server.stopServer();
-			}
+
+
+        if(e.getSource() instanceof  JComboBox){
+            JComboBox cb = (JComboBox)e.getSource();
+            String item = (String)cb.getSelectedItem();
+            view.setTableRange(item);
+        }else if(e.getSource() instanceof  JButton){
+            String botoClicked = ((JButton)e.getSource()).getText();
+            if(botoClicked.equals("Start")){
+                server.startServer();
+            }else if(botoClicked.equals("Stop")){
+                server.stopServer();
+            }
+        }
+
+
+
     }
 
 
