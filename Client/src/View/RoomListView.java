@@ -5,6 +5,7 @@ import src.Controller.RoomsController;
 import src.Model.Database.DAO.partidaDAO;
 import src.Model.Network.UserService;
 import src.Partida;
+import src.Usuari;
 import src.Utils;
 
 import javax.swing.*;
@@ -32,6 +33,7 @@ public class RoomListView extends JFrame{
 	private JScrollPane scrollPubliquesF;
 	private JScrollPane scrollPrivadesF;
 	private boolean visible=false;
+	private Usuari usuari;
 	private Object[] options = {"Entèsos"};
 
 	private RoomsController roomsController;
@@ -41,17 +43,24 @@ public class RoomListView extends JFrame{
 			if(p.isPublic()){
 				pPubliques.add(p);
 			}else{
-				pPrivades.add(p);
+				if(isFriendGame(p)){
+					pPrivades.add(p);
+				}
 			}
 		}
+	}
+
+	private boolean isFriendGame(Partida game){
+		return game.getHost().equals(this.usuari.getNickName());
 	}
 
 	public JPanel getJpPare(){
 		return jpPare;
 	}
 
-	public RoomListView(RoomsController roomsController){
+	public RoomListView(RoomsController roomsController, Usuari user){
 		this.roomsController = roomsController;
+		this.usuari = user;
 		roomsController.initMessage();
 	}
 
