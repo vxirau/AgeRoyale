@@ -69,14 +69,26 @@ public class FriendRequest extends JFrame {
 
 
         //Titol
+        JPanel titol = new JPanel();
+        titol.setBounds(10, 40, 600, 300);
+        titol.setOpaque(false);
+        titol.setLayout(null);
         JLabel jlTitol = new JLabel();
-        jlTitol.setText("Request Friend");
-        jlTitol.setBounds(20, 30, 400, 80);
+        jlTitol.setText("Friend Request");
+        jlTitol.setBounds(10, 40, 400, 80);
         jlTitol.setHorizontalAlignment(SwingConstants.CENTER);
         jlTitol.setOpaque(false);
-        jlTitol.setForeground(Color.WHITE);
-        jlTitol.setFont(new Font("Herculanum", Font.BOLD, 40));
-        jpPare.add(jlTitol);
+        jlTitol.setForeground(Color.decode("#4F1900"));
+        jlTitol.setFont(new Font("Herculanum", Font.BOLD, 30));
+        titol.add(jlTitol);
+        ImageIcon fonsProgressBar = new ImageIcon(this.getClass().getResource("/resources/friends_title_bg.png"));
+        Icon iconoProgressBar = new ImageIcon(fonsProgressBar.getImage().getScaledInstance(350, 100, Image.SCALE_FAST));
+        JLabel fondo_petit= new JLabel();
+        fondo_petit.setIcon(iconoProgressBar);
+        getLayeredPane().add(fondo_petit, JLayeredPane.FRAME_CONTENT_LAYER);
+        fondo_petit.setBounds(40, 30, 500, 100);
+        titol.add(fondo_petit);
+        jpPare.add(titol);
 
 
 
@@ -97,8 +109,9 @@ public class FriendRequest extends JFrame {
             nomAmic.setText(requests.get(i).getNickName());
             nomAmic.setLayout(null);
             nomAmic.setForeground(Color.WHITE);
-            nomAmic.setBorder(new EmptyBorder(20, 120, 0, 0));//top,left,bottom,right
-            nomAmic.setFont(new Font("Helvetica", 0, 20));
+            nomAmic.setHorizontalAlignment(SwingConstants.CENTER);
+            nomAmic.setBorder(new EmptyBorder(20, 0, 0, 0));//top,left,bottom,right
+            nomAmic.setFont(new Font("Helvetica", Font.BOLD, 25));
             jpsRequest[i].add(nomAmic);
 
             int finalI = i;
