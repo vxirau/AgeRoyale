@@ -3,10 +3,23 @@ package src.View;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.labels.ItemLabelAnchor;
+import org.jfree.chart.labels.ItemLabelPosition;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StackedBarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
+import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import src.Controller.ControllerServer;
+import src.Partida;
 import src.Usuari;
 
 import javax.swing.*;
@@ -15,8 +28,15 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static java.awt.font.TextAttribute.FONT;
 
@@ -25,7 +45,8 @@ public class ViewServer extends JFrame {
 	private JButton btnStart;
 	private JButton btnStop;
 	private Object[][] data;
-	private JComboBox petList;
+	private JComboBox selector;
+	private ArrayList<Partida> games;
 
 	public ViewServer(){
 
@@ -121,6 +142,9 @@ public class ViewServer extends JFrame {
 		bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
 		return bd.floatValue();
 	}
+	public void setAllGames(ArrayList<Partida> all){
+		this.games = all;
+	}
 
 	public void setTableContents(ArrayList<Usuari> all){
 		Object[][] data = new Object[all.size()][3];
@@ -139,47 +163,107 @@ public class ViewServer extends JFrame {
 	private JPanel makePanellPartides() {
 		JPanel grafica = new JPanel();
 		grafica.setLayout(null);
-		String[] intervals = { "Setmana", "Mes", "Any"};
-		petList = new JComboBox(intervals);
-		petList.setSelectedIndex(0);
-		petList.setBounds(200, 30, 200, 50);
-
-		CategoryDataset dataset = createDataset();
-
-		JFreeChart chart = createChart(dataset);
-		ChartPanel chartPanel = new ChartPanel(chart);
-		chartPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-		chartPanel.setBackground(Color.white);
-		add(chartPanel);
-
-
 		grafica.setOpaque(false);
-		grafica.add(petList);
+		String[] intervals = { "Setmana", "Mes", "Any"};
+		selector = new JComboBox(intervals);
+		selector.setSelectedIndex(0);
+		selector.setBounds(230, 0, 200, 50);
+
+		CategoryDataset dataset = createDataset(selector.getSelectedItem().toString());
+
+		JFreeChart chart = createChart(dataset, selector.getSelectedItem().toString());
+		ChartPanel chartPanel = new ChartPanel(chart);
+
+		CategoryPlot cplot = (CategoryPlot)chart.getPlot();
+		cplot.setBackgroundPaint(Color.decode("#8C1018"));
+		chart.getTitle().setPaint(Color.decode("#FFDC60"));
+		chart.setBorderVisible(false);
+
+
+		Stroke solid = new BasicStroke(2);
+
+		CategoryAxis domainAxis = cplot.getDomainAxis();
+		domainAxis.setAxisLinePaint(Color.decode("#FFDC60"));
+		domainAxis.setLabelPaint(Color.decode("#FFDC60"));
+		domainAxis.setTickLabelPaint(Color.decode("#FFDC60"));
+		domainAxis.setAxisLineStroke(solid);
+
+		ValueAxis valueAxis = cplot.getRangeAxis();
+		valueAxis.setAxisLinePaint(Color.decode("#FFDC60"));
+		valueAxis.setLabelPaint(Color.decode("#FFDC60"));
+		valueAxis.setTickLabelPaint(Color.decode("#FFDC60"));
+		valueAxis.setLabelFont(new Font("Arial", Font.PLAIN , 10));
+		valueAxis.setAxisLineStroke(solid);
+
+		cplot.setOutlinePaint(Color.decode("#FFDC60"));
+		cplot.setBackgroundImageAlpha((float)0.0);
+		((BarRenderer)cplot.getRenderer()).setBarPainter(new StandardBarPainter());
+		BarRenderer r = (BarRenderer)chart.getCategoryPlot().getRenderer();
+		r.setSeriesPaint(0, Color.decode("#FFDC60"));
+
+
+
+		chart.setBackgroundPaint(Color.decode("#00FFFFFF"));
+		chart.setBackgroundImageAlpha((float) 0.0);
+		chartPanel.setBackground(Color.decode("#00FFFFFF"));
+		chartPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+		chartPanel.setBounds(0, 50, 700, 400);
+		grafica.add(chartPanel);
+
+
+		grafica.add(selector);
 
 		return grafica;
 	}
-	private CategoryDataset createDataset() {
 
+	private int totalGamesToday(String data){
+		int total = 0;
+		for(Partida p : games){
+			if(p.getData().equals(data)){
+				total++;
+			}
+		}
+		return total;
+	}
+
+	private CategoryDataset createDataset(String criteri) {
+		int days = 0, total, ok=0;
 		var dataset = new DefaultCategoryDataset();
-		dataset.setValue(46, "Gold medals", "USA");
-		dataset.setValue(38, "Gold medals", "China");
-		dataset.setValue(29, "Gold medals", "UK");
-		dataset.setValue(22, "Gold medals", "Russia");
-		dataset.setValue(13, "Gold medals", "South Korea");
-		dataset.setValue(11, "Gold medals", "Germany");
+		if(criteri.equals("Setmana")){
+			days = 7;
+		}else if(criteri.equals("Mes")){
+			days = 30;
+		}else if(criteri.equals("Any")){
+			days = 365;
+		}
+		for(int i=days-1; i>=0; i--){
+			String today = LocalDate.now().minusDays(i).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+			total = totalGamesToday(today);
+			if(total == 0){
+				ok++;
+			}
+			dataset.setValue(totalGamesToday(today), "", today);
+		}
+
+		if(ok==days){
+			System.out.println("No games in these dates");
+		}
 
 		return dataset;
 	}
-	private JFreeChart createChart(CategoryDataset dataset) {
+	private JFreeChart createChart(CategoryDataset dataset, String period) {
+		String titol = "";
+		if(period.equals("Setmana")){
+			titol += "la última: Setmana";
+		}else{
+			titol += "l'últim: " + period;
+		}
 
-		JFreeChart barChart = ChartFactory.createBarChart(
-				"Olympic gold medals in London",
-				"",
-				"Gold medals",
-				dataset,
+		JFreeChart barChart = ChartFactory.createBarChart("Partides Jugades en " + titol, "", "", dataset,
 				PlotOrientation.VERTICAL,
 				false, true, false);
 
+		barChart.setBackgroundPaint(Color.decode("#8C1018"));
 		return barChart;
 	}
 
@@ -190,7 +274,7 @@ public class ViewServer extends JFrame {
   public void serverController(ActionListener controlador) {
 	btnStart.addActionListener(controlador);
 	btnStop.addActionListener(controlador);
-	petList.addActionListener(controlador);
+	selector.addActionListener(controlador);
 
   }
 

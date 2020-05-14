@@ -1,9 +1,11 @@
 package src.Controller;
 
+import src.Model.Database.DAO.partidaDAO;
 import src.Model.Database.DAO.statsDAO;
 import src.Model.Database.DAO.usuariDAO;
 import src.Model.Network.DedicatedServer;
 import src.Model.Network.Server;
+import src.Partida;
 import src.Usuari;
 import src.View.ViewServer;
 
@@ -25,7 +27,10 @@ public class ControllerServer implements ActionListener {
         this.server = server;
         this.view = view;
         statsDAO sDAO = new statsDAO();
+        partidaDAO aDAO = new partidaDAO();
         ArrayList<Usuari> r = sDAO.getTopUsers();
+        ArrayList<Partida> p = aDAO.getAllPartides();
+        view.setAllGames(p);
         view.setTableContents(r);
         view.initAll();
     }
