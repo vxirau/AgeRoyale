@@ -3,8 +3,10 @@ package src.View;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.Axis;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.labels.ItemLabelAnchor;
 import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
@@ -15,9 +17,14 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.StackedBarRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import src.Controller.ControllerServer;
 import src.Partida;
 import src.Usuari;
@@ -65,7 +72,7 @@ public class ViewServer extends JFrame {
 		selector.setBounds(330, 0, 200, 50);
 		graphType = new JToggleButton();
 		textGraph = new JLabel("Canvia tipus de gràfica:");
-		textGraph.setBounds(15, 17, 190, 14);
+		textGraph.setBounds(15, 17, 190, 16);
 		textGraph.setFont(new Font("Arial", Font.BOLD, 14));
 		textGraph.setForeground(Color.decode("#FFDC60"));
 		graphType.setBounds(180, 13, 140, 25);
@@ -142,19 +149,119 @@ public class ViewServer extends JFrame {
 
 	}
 
-	private JPanel makeLinePartides(int selectedIndex) {
+	public JPanel makeLinePartides(int selectedIndex) {
 		JPanel lineGraph = new JPanel();
 		lineGraph.setLayout(null);
 		lineGraph.setOpaque(false);
 		selector.setSelectedIndex(selectedIndex);
 
+		//----------------------------------------------------------------------------------------------------
+		XYDataset dataset = createXYDataset(selectedIndex);
+		JFreeChart chart = createLineChart(dataset, selectedIndex);
 
+		ChartPanel chartPanel = new ChartPanel(chart);
+
+		XYPlot cplot = (XYPlot)chart.getPlot();
+		cplot.setBackgroundPaint(Color.decode("#8C1018"));
+		cplot.setDomainGridlinePaint(Color.decode("#FFFDFF"));
+		cplot.setRangeGridlinePaint(Color.decode("#FFFDFF"));
+		chart.getTitle().setPaint(Color.decode("#FFDC60"));
+		chart.setBorderVisible(false);
+
+		Stroke solid = new BasicStroke(2);
+
+		Axis domainAxis = ((XYPlot)chart.getPlot()).getDomainAxis();
+		domainAxis.setAxisLinePaint(Color.decode("#FFDC60"));
+		domainAxis.setLabelPaint(Color.decode("#FFDC60"));
+		domainAxis.setTickLabelPaint(Color.decode("#FFDC60"));
+		domainAxis.setAxisLineStroke(solid);
+
+		Axis valueAxis = ((XYPlot)chart.getPlot()).getRangeAxis();
+		valueAxis.setAxisLinePaint(Color.decode("#FFDC60"));
+		valueAxis.setLabelPaint(Color.decode("#FFDC60"));
+		valueAxis.setTickLabelPaint(Color.decode("#FFDC60"));
+		valueAxis.setLabelFont(new Font("Arial", Font.PLAIN , 10));
+		valueAxis.setAxisLineStroke(solid);
+
+		((XYPlot)chart.getPlot()).setOutlinePaint(Color.decode("#FFDC60"));
+		((XYPlot)chart.getPlot()).setBackgroundImageAlpha((float)0.0);
+//		XYLineAndShapeRenderer r = (XYLineAndShapeRenderer)chart.getCategoryPlot().getRenderer();
+		//r.setSeriesPaint(0, Color.decode("#FFDC60"));
+
+
+
+		chartPanel.setBounds(0, 50, 700, 400);
+		lineGraph.add(chartPanel);
+		//----------------------------------------------------------------------------------------------------
 		lineGraph.add(textGraph);
 		lineGraph.add(graphType);
 		lineGraph.add(selector);
 		return lineGraph;
 	}
+	private XYDataset createXYDataset(int criteri){
+		int days = 0, total, ok=0;
+		var series = new XYSeries("Partides x Dia");
+		if(criteri == 0){
+			days = 7;
+		}else if(criteri == 1){
+			days = 30;
+		}else if(criteri == 2){
+			days = 365;
+		}
 
+		for(int i=days-1; i>=0; i--){
+			String today = LocalDate.now().minusDays(i).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+			total = totalGamesToday(today);
+			if(total == 0){
+				ok++;
+			}
+			series.add(i, totalGamesToday(today));
+		}
+
+		if(ok==days){
+			System.out.println("No games in these dates");
+		}
+
+		var dataset = new XYSeriesCollection();
+		dataset.addSeries(series);
+		return dataset;
+	}
+	private JFreeChart createLineChart(XYDataset dataset, int period) {
+		String titol = "";
+		if(period == 0){
+			titol += "la última: Setmana";
+		}else if(period == 1){
+			titol += "l'últim: Mes";
+		}else if(period == 2){
+			titol += "l'últim: Any";
+		}
+
+		JFreeChart chart = ChartFactory.createXYLineChart( "Partides Jugades en " + titol,"", "",
+				dataset,
+				PlotOrientation.VERTICAL, false, true, false
+		);
+
+		chart.setBackgroundPaint(Color.decode("#85201F"));
+
+
+		XYPlot plot = chart.getXYPlot();
+
+		var renderer = new XYLineAndShapeRenderer();
+		renderer.setSeriesPaint(0, Color.decode("#FFDC60"));
+		renderer.setSeriesStroke(0, new BasicStroke(2.0f));
+
+		plot.setRenderer(renderer);
+		plot.setBackgroundPaint(Color.white);
+
+		plot.setRangeGridlinesVisible(true);
+		plot.setRangeGridlinePaint(Color.BLACK);
+		plot.setDomainGridlinesVisible(true);
+		plot.setDomainGridlinePaint(Color.BLACK);
+
+		chart.setTitle(new TextTitle("Partides Jugades en " + titol,new Font("Serif", java.awt.Font.BOLD, 18)));
+
+		return chart;
+	}
 	private JScrollPane makePanellEstadistiques() {
 
 		String[] columnNames = {"Username", "% Victòries", "Temps mitg x Victoria"};
@@ -260,7 +367,6 @@ public class ViewServer extends JFrame {
 
 		return grafica;
 	}
-
 	private int totalGamesToday(String data){
 		int total = 0;
 		for(Partida p : games){
@@ -280,7 +386,7 @@ public class ViewServer extends JFrame {
 		}else if(criteri.equals("Any")){
 			days = 365;
 		}
-		for(int i=days-1; i>=0; i--){
+		for(int i=0; i<days; i++){
 			String today = LocalDate.now().minusDays(i).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 			total = totalGamesToday(today);
 			if(total == 0){
@@ -312,9 +418,11 @@ public class ViewServer extends JFrame {
 	}
 
 
-
 	public JTabbedPane getTabbedPane(){
 		return this.tabbedPane;
+	}
+	public boolean getTipo(){
+		return this.tipoh;
 	}
 	public void serverController(ActionListener controlador) {
 		btnStart.addActionListener(controlador);
@@ -322,7 +430,6 @@ public class ViewServer extends JFrame {
 		selector.addActionListener(controlador);
 
 	}
-
 	public void refresh(JTabbedPane p){
 		this.tabbedPane = p;
 		revalidate();
