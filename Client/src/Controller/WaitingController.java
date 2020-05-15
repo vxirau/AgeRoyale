@@ -1,5 +1,6 @@
 package src.Controller;
 
+import src.Model.Network.UserService;
 import src.Partida;
 import src.View.GameView;
 import src.View.WaitingRoomView;
@@ -15,12 +16,14 @@ public class WaitingController implements ActionListener, WindowListener {
     private Partida p;
     private WaitingRoomView view;
     private GameView gv;
+    private UserService userService;
 
-    public WaitingController(int total, RoomsController roomsController, Partida p, WaitingRoomView w){
+    public WaitingController(int total, RoomsController roomsController, Partida p, WaitingRoomView w, UserService uService){
         this.roomsController = roomsController;
         this.total = total;
         this.view = w;
         this.p = p;
+        this.userService = uService;
     }
 
     @Override

@@ -80,6 +80,11 @@ public class RoomsController {
 		uService.sendGetPartides(m, this);
 	}
 
+	public static UserService getService() {
+		return uService;
+	}
+
+
 	public static GameView startGame(int num, int privacitat, Partida p, WaitingController w) throws IOException {
 		GameView gView = null;
 		try {

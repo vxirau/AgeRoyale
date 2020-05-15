@@ -119,7 +119,7 @@ public class RoomListView extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 		RoomListView.this.setVisible(false);
 				WaitingRoomView waitingRoom = new WaitingRoomView();
-				WaitingController roomControl = new WaitingController(total, roomsController,p, waitingRoom);
+				WaitingController roomControl = new WaitingController(total, roomsController,p, waitingRoom, roomsController.getService());
 				waitingRoom.setController(roomControl);
 				waitingRoom.setVisible(true);
 				RoomsController.setClientVisible(false);
