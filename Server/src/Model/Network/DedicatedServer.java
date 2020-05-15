@@ -83,6 +83,11 @@ public class DedicatedServer extends Thread {
 					partidaDAO pDao = new partidaDAO();
 					ArrayList<Partida> p = pDao.getAllPartides();
 					objectOut.writeObject(new Message(p, "allGamesReply"));
+				} else if (m.getType().equals("getAllRunningGames")) {
+					objectOut.reset();
+					partidaDAO pDao = new partidaDAO();
+					ArrayList<Partida> p = pDao.getRunningPartides();
+					objectOut.writeObject(new Message(p, "allGamesReply"));
 				} else if (m.getType().equals("Login")) {
 					Usuari usuari = (Usuari) m.getObject();
 					usuariDAO uDAO = new usuariDAO();

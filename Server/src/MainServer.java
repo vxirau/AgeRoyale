@@ -32,6 +32,7 @@ public class MainServer {
             Server serv = new Server(vServer);
             ControllerServer cServer = new ControllerServer(serv,vServer);
             vServer.serverController(cServer);
+            vServer.getTabbedPane().setSelectedIndex(0);
             vServer.setVisible(true);
 
         } catch (IOException e) {

@@ -13,6 +13,7 @@ public class Partida implements Serializable{
     private boolean publiques;
     private String name;
     private String host;
+    private boolean finished;
     private ArrayList<Usuari> jugadors;
     private ArrayList<Usuari> espectadors;
     private static volatile boolean gameIsRunning = false;
@@ -128,8 +129,13 @@ public class Partida implements Serializable{
         RoomsController.startGame(0, 0, this);
     }
 
+    public boolean isFinished() {
+        return finished;
+    }
 
-
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
 
     /*
     //Actualitzem l'estat de les tropes

@@ -76,6 +76,7 @@ CREATE TABLE partida(
     name		varchar(255),
     host 		varchar(255),
     date        varchar(255),
+    finished    boolean,
     player1     int,
     player2     int,
     PRIMARY KEY (idPartida),
@@ -103,8 +104,8 @@ INSERT INTO usuari (nickname, email, password, idStats, isOnline) values
 INSERT INTO requests(originId, destinationId) VALUES  (1, 4), (1, 3), (2, 1), (2, 5), (2, 4);
 
 
-INSERT INTO partida (duration, publica, name, host, date, player1, player2) VALUES
-    (200, true, 'Prova1', 'admin', '20-05-2020', 1, 2), (150, true, 'Prova2', 'admin', '19-05-2020', 3, 4), (478, false, 'Prova3', 'admin',  '18-05-2020', 5, 1);
+INSERT INTO partida (duration, publica, name, host, date, finished, player1, player2) VALUES
+    (200, true, 'Prova1', 'admin', '20-05-2020', false, 1, 2), (150, true, 'Prova2', 'admin', '19-05-2020', false, 3, 4), (478, false, 'Prova3', 'admin',  '18-05-2020', false, 5, 1);
 
 INSERT INTO amic (id_u1, id_u2) VALUES
     (1, 2), (2, 3), (3, 4), (4, 5), (5, 1);
@@ -156,7 +157,7 @@ SELECT st.idStat FROM AgeRoyale.stats as st ORDER BY st.idStat DESC LIMIT 1;
 
 #remove stats
 DELETE FROM AgeRoyale.stats WHERE idStat = 6;
-DELETE FROM AgeRoyale.stats where AgeRoyale.usuari.idUser = 1 AND AgeRoyale.usuari.idStats = AgeRoyale.stats.idStat;
+#DELETE FROM AgeRoyale.stats where AgeRoyale.usuari.idUser = 1 AND AgeRoyale.usuari.idStats = AgeRoyale.stats.idStat;
 
 #reset stats
 UPDATE AgeRoyale.stats SET AgeRoyale.stats.totalPartides = 0, AgeRoyale.stats.totalVictories = 0, AgeRoyale.stats.winrate = 0, AgeRoyale.stats.avgDurationVictories = 0 WHERE AgeRoyale.stats.idStat = 6;
@@ -176,7 +177,7 @@ UPDATE AgeRoyale.tropa SET AgeRoyale.tropa.atac = 31, AgeRoyale.tropa.vida = 101
 INSERT INTO AgeRoyale.tropa (atac, vida, cost, tipus) VALUE (1, 1, 1, 1);
 
 #remove
-DELETE FROM AgeRoyale.tropa WHERE idTropa = 1;
+#DELETE FROM AgeRoyale.tropa WHERE idTropa = 1;
 
 ###########################################     USUARI    ###############################################################################################
 #get all users

@@ -75,7 +75,7 @@ public class RoomsController {
 	}
 
 	public synchronized void initMessage() {
-		Message m = new Message(null, "getAllGames");
+		Message m = new Message(null, "getAllRunningGames");
 		uService.sendGetPartides(m, this);
 	}
 

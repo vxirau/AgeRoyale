@@ -42,6 +42,7 @@ public class ControllerServer implements ActionListener {
         if(e.getSource() instanceof  JComboBox){
             JComboBox cb = (JComboBox)e.getSource();
             String item = (String)cb.getSelectedItem();
+            view.setDades(true);
             int index=0;
             if(item.equals("Mes")){
                 index = 1;
@@ -60,6 +61,7 @@ public class ControllerServer implements ActionListener {
         }else if(e.getSource() instanceof  JButton){
             String botoClicked = ((JButton)e.getSource()).getText();
             if(botoClicked.equals("Start")){
+                JOptionPane.showMessageDialog(view, "Server started!", "Server", JOptionPane.PLAIN_MESSAGE);
                 server.startServer();
             }else if(botoClicked.equals("Stop")){
                 server.stopServer();
