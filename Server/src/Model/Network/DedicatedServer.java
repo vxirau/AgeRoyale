@@ -1,5 +1,6 @@
 package src.Model.Network;
 
+import src.Controller.ControllerServer;
 import src.Controller.TroopSController;
 import src.Message;
 import src.Model.Database.DAO.amicDAO;
@@ -77,6 +78,7 @@ public class DedicatedServer extends Thread {
 					}
 				} else if (m.getType().equals("roomCreate")) {
 					partidaDAO pDao = new partidaDAO();
+					ControllerServer.updateTable();
 					pDao.addPartida((Partida) m.getObject());
 				} else if (m.getType().equals("getAllGames")) {
 					objectOut.reset();

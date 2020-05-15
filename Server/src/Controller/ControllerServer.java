@@ -21,7 +21,7 @@ import java.util.LinkedList;
 public class ControllerServer implements ActionListener {
 
     private Server server;
-    private ViewServer view;
+    private static ViewServer view;
 
     public ControllerServer(Server server, ViewServer view) {
         this.server = server;
@@ -66,6 +66,21 @@ public class ControllerServer implements ActionListener {
 
 
 
+    }
+
+    public static void updateTable(){
+        statsDAO sDAO = new statsDAO();
+        partidaDAO aDAO = new partidaDAO();
+        ArrayList<Usuari> r = sDAO.getTopUsers();
+        ArrayList<Partida> p = aDAO.getAllPartides();
+        view.setAllGames(p);
+        view.setTableContents(r);
+        view.initAll();
+        JTabbedPane h = view.getTabbedPane();
+        h.removeTabAt(2);
+        h.addTab("Partides Jugades", view.makeGraph(0));
+        h.setSelectedIndex(2);
+        view.refresh(h);
     }
 
 
