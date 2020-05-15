@@ -9,6 +9,7 @@ public class Usuari implements Serializable {
     private String email;
     private String password;
     private Stats stats;
+    private Boolean accepted;
     private ArrayList<Tropa> tropes;
     private ArrayList<Usuari> amics;
     private boolean isOnline;
@@ -124,6 +125,14 @@ public class Usuari implements Serializable {
 
     public void setOnline(boolean online) {
         isOnline = online;
+    }
+
+    public Boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(Boolean accepted) {
+        this.accepted = accepted;
     }
 
     @Override

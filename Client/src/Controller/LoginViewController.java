@@ -41,12 +41,32 @@ public class LoginViewController implements ActionListener {
                 try {
                     ArrayList<Usuari> r = separateRequests(requests, 0);
                     ArrayList<Usuari> rq = separateRequests(requests, 1);
+                    checkForAcceptedRequests(rq);
                     MenuController controlador = new MenuController(rView, uService, LoginViewController.this.user, r, rq);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    private void checkForAcceptedRequests(ArrayList<Usuari> rq){
+        ArrayList<Usuari> r = new ArrayList<>();
+        for(Usuari y : rq){
+            if(y.isAccepted()!=null){
+                r.add(y);
+                if(y.isAccepted()){
+                    JOptionPane.showMessageDialog(view, "Han acceptat la teva solicitud! Consulta els teus amics.");
+                }
+            }
+        }
+        for(Usuari e : r){
+            ArrayList<Usuari> h = new ArrayList<>();
+            h.add(this.user);
+            h.add(e);
+            Message m = new Message(h, "removeRequest");
+            uService.sendLogin(m, this);
+        }
     }
 
     public ArrayList<Usuari> separateRequests(ArrayList<Usuari> requests, int criteri){

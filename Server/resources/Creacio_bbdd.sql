@@ -39,6 +39,7 @@ CREATE TABLE usuari(
 CREATE TABLE requests(
      destinationId    int not null,
      originId     int not null,
+     accepted     boolean,
      PRIMARY KEY (destinationId, originId),
      FOREIGN KEY (destinationId) REFERENCES usuari(idUser),
      FOREIGN KEY (originId) REFERENCES usuari(idUser)
@@ -162,6 +163,9 @@ DELETE FROM AgeRoyale.stats WHERE idStat = 6;
 #reset stats
 UPDATE AgeRoyale.stats SET AgeRoyale.stats.totalPartides = 0, AgeRoyale.stats.totalVictories = 0, AgeRoyale.stats.winrate = 0, AgeRoyale.stats.avgDurationVictories = 0 WHERE AgeRoyale.stats.idStat = 6;
 
+SELECT if(COUNT(*) > 0, req.originId, -1) as exist FROM AgeRoyale.requests AS req WHERE destinationId = 1;
+SELECT req.originId FROM AgeRoyale.requests AS req WHERE destinationId = 1;
+SELECT * FROM requests;
 ###########################################     TORPES    ###############################################################################################
 
 #get tropes from user id

@@ -22,7 +22,9 @@ public class requestsDAO {
                     String query2 = "SELECT req.originId FROM AgeRoyale.requests AS req WHERE destinationId = " + u.getIdUsuari() + ";";
                     ResultSet rs2 = DBConnector.getInstance().selectQuery(query2);
                     while(rs2.next()){
-                        allRequests.add(uDAO.getUserFromId(rs2.getInt("originId")));
+                        Usuari g = uDAO.getUserFromId(rs2.getInt("originId"));
+                        g.setAccepted(rs2.getBoolean("accepted"));
+                        allRequests.add(g);
                     }
 
                 }
@@ -53,7 +55,9 @@ public class requestsDAO {
                     String query2 = "SELECT req.destinationId FROM AgeRoyale.requests AS req WHERE originId = " + u.getIdUsuari() + ";";
                     ResultSet rs2 = DBConnector.getInstance().selectQuery(query2);
                     while(rs2.next()){
-                        allRequests.add(uDAO.getUserFromId(rs2.getInt("destinationId")));
+                        Usuari g = uDAO.getUserFromId(rs2.getInt("destinationId"));
+                        g.setAccepted(rs2.getBoolean("accepted"));
+                        allRequests.add(g);
                     }
 
                 }
