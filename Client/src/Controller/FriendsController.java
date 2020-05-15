@@ -48,7 +48,6 @@ public class FriendsController implements ActionListener{
             cerca = FriendsController.this.friendView.getJtfSearchAmic().getText();
             if (cerca.equals("")){
                 resetMessage();
-                System.out.println("Vas liat");
             }
         }
     };

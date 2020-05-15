@@ -80,6 +80,8 @@ public class DedicatedServer extends Thread {
 					partidaDAO pDao = new partidaDAO();
 					ControllerServer.updateTable();
 					pDao.addPartida((Partida) m.getObject());
+					ArrayList<Partida> p = pDao.getRunningPartides();
+					objectOut.writeObject(new Message(p, "allGamesReply"));
 				} else if (m.getType().equals("getAllGames")) {
 					objectOut.reset();
 					partidaDAO pDao = new partidaDAO();

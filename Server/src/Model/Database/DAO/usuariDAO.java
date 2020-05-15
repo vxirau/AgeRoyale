@@ -45,7 +45,7 @@ public class usuariDAO {
         amicDAO amicDAO = new amicDAO();
         ArrayList<Usuari> usuaris = new ArrayList<>();
 
-        String query = "SELECT us.* FROM AgeRoyale.usuari AS us WHERE nickname LIKE '%" + name + "%';";
+        String query = "SELECT us.* FROM AgeRoyale.usuari AS us WHERE nickname LIKE '%" + name + "%' OR email LIKE '%" + name + "';";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
         try{
             while(rs.next()){
