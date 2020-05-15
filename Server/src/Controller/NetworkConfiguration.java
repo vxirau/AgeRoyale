@@ -10,11 +10,19 @@ import java.nio.file.Paths;
 public class NetworkConfiguration {
 
 		private String ip;
-		private int port;
+		private int serverPort;
+		private int DBPort;
+		private String DBip;
+		private String DBUser;
+		private String DBPass;
 
 		public static boolean Setup=false;
 		public static String staticIP;
 		public static int staticPort;
+		public static int staticDBPort;
+		public static String staticDPip;
+		public static String staticDBUser;
+		public static String staticDBPass;
 
 		public NetworkConfiguration(){
 
@@ -22,12 +30,16 @@ public class NetworkConfiguration {
 
 		public NetworkConfiguration(String ip, int port){
 			this.ip = ip;
-			this.port = port;
+			this.serverPort = port;
 		}
 
 		public void ompleStatic(){
 			staticIP = this.ip;
-			staticPort = this.port;
+			staticPort = this.serverPort;
+			staticDBPort = DBPort;
+			staticDPip = DBip;
+			staticDBUser = DBUser;
+			staticDBPass = DBPass;
 		}
 
 		public void setIP(String ip){
@@ -39,11 +51,11 @@ public class NetworkConfiguration {
 		}
 
 		public void setPort(int port){
-			this.port = port;
+			this.serverPort = port;
 		}
 
 		public int getPort(){
-			return this.port;
+			return this.serverPort;
 		}
 
 

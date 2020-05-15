@@ -2,6 +2,7 @@ package src.Model.Database;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
+import src.Controller.NetworkConfiguration;
 import src.Partida;
 
 import java.sql.DriverManager;
@@ -14,8 +15,8 @@ public class DBConnector {
     private static String userName;
     private static String password;
     private static String db = "ageroyale";
-    private static int port = 3306;
-    private String url = "jdbc:mysql://localhost";
+    private static int port = NetworkConfiguration.staticDBPort;
+    private String url = NetworkConfiguration.staticDPip;
     public Connection conn;
     private static Statement s;
     private static DBConnector instance;
@@ -23,8 +24,8 @@ public class DBConnector {
     private DBConnector() {
         this.url += ":" + port + "/";
         this.url += db + "?verifyServerCertificate=false&useSSL=false&serverTimezone=UTC";
-        DBConnector.userName = "root";
-        DBConnector.password = "timador";
+        DBConnector.userName = NetworkConfiguration.staticDBUser;
+        DBConnector.password = NetworkConfiguration.staticDBPass;
         this.instance = this;
     }
 

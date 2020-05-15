@@ -1,4 +1,8 @@
 {
-  "ip": "192.168.1.41",
-  "port": 2003
+  "ip": "192.168.86.201",
+  "serverPort": 2003,
+  "DBPort": 3306,
+  "DBip": "jdbc:mysql://localhost",
+  "DBUser": "root",
+  "DBPass": ""
 }
