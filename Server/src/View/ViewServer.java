@@ -24,6 +24,8 @@ import src.Usuari;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
@@ -47,17 +49,48 @@ public class ViewServer extends JFrame {
 	private Object[][] data;
 	private JComboBox selector;
 	private JTabbedPane tabbedPane;
+	private JToggleButton graphType;
+	private boolean tipoh=true;
 	private ArrayList<Partida> games;
+	private JLabel textGraph;
 
 	public ViewServer(){
 
 	}
 	public void initAll(){
 		JPanel panelPare = new JPanel(new GridLayout(1, 2));
-		//panelPare.setLayout(new FlowLayout());
 		panelPare.setOpaque(false);
 		String[] intervals = { "Setmana", "Mes", "Any"};
 		selector = new JComboBox(intervals);
+		selector.setBounds(330, 0, 200, 50);
+		graphType = new JToggleButton();
+		textGraph = new JLabel("Canvia tipus de gràfica:");
+		textGraph.setBounds(15, 17, 190, 14);
+		textGraph.setFont(new Font("Arial", Font.BOLD, 14));
+		textGraph.setForeground(Color.decode("#FFDC60"));
+		graphType.setBounds(180, 13, 140, 25);
+		graphType.setText("Gràfic de Línies");
+		graphType.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if(tipoh){
+					tipoh = false;
+					graphType.setText("Gràfic de Línies");
+					tabbedPane.setComponentAt(2, makeLinePartides(selector.getSelectedIndex()));
+					tabbedPane.setSelectedIndex(2);
+					refresh(tabbedPane);
+				}else{
+					tipoh = true;
+					graphType.setText("Gràfic de Barres");
+					getTabbedPane().setComponentAt(2, makePanellPartides(selector.getSelectedIndex()));
+					getTabbedPane().setSelectedIndex(2);
+
+					//refresh(tabbedPane);
+				}
+			}
+		});
+
+
 
 		JPanel Start = new JPanel( new BorderLayout());
 		btnStart = new JButton("Start");
@@ -90,7 +123,12 @@ public class ViewServer extends JFrame {
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.addTab("Control Servidor", panelPare);
 		tabbedPane.addTab("Top Usuaris", makePanellEstadistiques());
-		tabbedPane.addTab("Partides Jugades", makePanellPartides(0));
+		if(tipoh){
+			tabbedPane.addTab("Partides Jugades", makeLinePartides(selector.getSelectedIndex()));
+		}else{
+			tabbedPane.addTab("Partides Jugades", makePanellPartides(selector.getSelectedIndex()));
+		}
+		graphType.setSelected(tipoh);
 
 
 
@@ -102,6 +140,19 @@ public class ViewServer extends JFrame {
 		this.setSize(700, 500);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+	}
+
+	private JPanel makeLinePartides(int selectedIndex) {
+		JPanel lineGraph = new JPanel();
+		lineGraph.setLayout(null);
+		lineGraph.setOpaque(false);
+		selector.setSelectedIndex(selectedIndex);
+
+
+		lineGraph.add(textGraph);
+		lineGraph.add(graphType);
+		lineGraph.add(selector);
+		return lineGraph;
 	}
 
 	private JScrollPane makePanellEstadistiques() {
@@ -139,7 +190,6 @@ public class ViewServer extends JFrame {
 		scrollPane.setBorder(null);
 		return scrollPane;
 	}
-
 	public static float round(float d, int decimalPlace) {
 		BigDecimal bd = new BigDecimal(Float.toString(d));
 		bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
@@ -148,7 +198,6 @@ public class ViewServer extends JFrame {
 	public void setAllGames(ArrayList<Partida> all){
 		this.games = all;
 	}
-
 	public void setTableContents(ArrayList<Usuari> all){
 		Object[][] data = new Object[all.size()][3];
 		for(int i=0; i<all.size() ;i++){
@@ -169,7 +218,6 @@ public class ViewServer extends JFrame {
 		grafica.setOpaque(false);
 
 		selector.setSelectedIndex(index);
-		selector.setBounds(230, 0, 200, 50);
 
 		CategoryDataset dataset = createDataset(selector.getSelectedItem().toString());
 
@@ -206,8 +254,8 @@ public class ViewServer extends JFrame {
 
 		chartPanel.setBounds(0, 50, 700, 400);
 		grafica.add(chartPanel);
-
-
+		grafica.add(graphType);
+		grafica.add(textGraph);
 		grafica.add(selector);
 
 		return grafica;
