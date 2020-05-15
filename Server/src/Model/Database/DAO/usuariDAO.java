@@ -6,7 +6,14 @@ import src.Usuari;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class usuariDAO {
 
@@ -253,6 +260,20 @@ public class usuariDAO {
         return false;
     }
 
+    public void banUser(Usuari u){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+
+        String query = "UPDATE AgeRoyale.usuari SET AgeRoyale.usuari.banned = 1, AgeRoyale.usuari.banDate = '" + dateFormat.format(cal.getTime()) + "'  WHERE AgeRoyale.usuari.idUser = " + u.getIdUsuari() + " AND AgeRoyale.usuari.nickname = '" + u.getNickName() + "';";
+        DBConnector.getInstance().updateQuery(query);
+    }
+
+    public Date convertToDateViaInstant(LocalDate dateToConvert) {
+        return java.util.Date.from(dateToConvert.atStartOfDay()
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+    }
+
     public boolean existsUsuariOnChange(Usuari usuari){
         String query = "SELECT if(COUNT(*) > 1, 1, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = '" + usuari.getNickName() + "' OR us.email = '" + usuari.getEmail() + "';";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
@@ -267,5 +288,42 @@ public class usuariDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public boolean isBanned(Usuari usr) {
+        String query = "SELECT us.banned FROM AgeRoyale.usuari AS us WHERE us.idUser = " + usr.getIdUsuari() + ";";
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        Boolean r = null;
+        try {
+            if(rs.next()){
+                r = (Boolean) rs.getObject("banned");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        if(r == false || r == null){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public String getDateBan(Usuari usr) {
+        String query = "SELECT us.banDate FROM AgeRoyale.usuari AS us WHERE us.idUser = " + usr.getIdUsuari() + ";";
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        String s = "";
+        try {
+            if(rs.next()){
+                s =  rs.getString("banDate");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return s;
+    }
+
+    public void unBan(Usuari u) {
+        String query = "UPDATE AgeRoyale.usuari SET AgeRoyale.usuari.banned = 0, AgeRoyale.usuari.banDate = " + null + "WHERE AgeRoyale.usuari.idUser = " + u.getIdUsuari() + " AND AgeRoyale.usuari.nickname = '" + u.getNickName() + "';";
+        DBConnector.getInstance().updateQuery(query);
     }
 }

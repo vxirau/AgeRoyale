@@ -85,7 +85,6 @@ public class FriendView extends JFrame {
         titol.add(fondo_petit);
         jpFriends.add(titol);
 
-        //JPanel jpSearchAmic = new JPanel(new FlowLayout(FlowLayout.LEFT)) {
         JPanel jpSearchAmic = new JPanel(new GridLayout(1, 1)) {
             protected void paintComponent(Graphics g) {
                 ImageIcon elementButton = new ImageIcon(this.getClass().getResource("/resources/busqueda_amic.png"));
@@ -145,7 +144,6 @@ public class FriendView extends JFrame {
             nomAmic.setBorder(new EmptyBorder(10,0,0,0));//top,left,bottom,right
 
             nomAmic.setFont(new Font("Helvetica", 0, 20));
-            //nomAmic.setBounds(300, 290, 100, 15);
             jpsAmics[i].add(nomAmic);
 
 
@@ -161,22 +159,21 @@ public class FriendView extends JFrame {
                 jlLvl.setText("Lvl " + lvl + ".");
             }
 
-						JLabel online = new JLabel();
-						if(amics.get(i).isOnline()){
-							online.setText("<html><font color='white'>" + Utils.ferEspais(22) + " Online" +  "</font></html>");
-							online.setForeground(Color.WHITE);
+            JLabel online = new JLabel();
+            if(amics.get(i).isOnline()){
+                online.setText("<html><font color='white'>" + Utils.ferEspais(22) + " Online" +  "</font></html>");
+                online.setForeground(Color.WHITE);
 
-                        }else{
-							online.setText("<html><font color='white'>" + Utils.ferEspais(22) + " Offline" + "</font></html>");
-							online.setForeground(Color.GRAY);
-						}
+            }else{
+                online.setText("<html><font color='white'>" + Utils.ferEspais(22) + " Offline" + "</font></html>");
+                online.setForeground(Color.GRAY);
+            }
 
-						//online.setBounds(300, 320, 100, 15);
-						jpsAmics[i].add(online);
-                        jpsAmics[i].setPreferredSize(new Dimension(410,90));
-                        jpsAmics[i].setMaximumSize(new Dimension(430,90));
-                        jpsAmics[i].setSize(430, 90);
-                        jpAmics.add(jpsAmics[i]);
+            jpsAmics[i].add(online);
+            jpsAmics[i].setPreferredSize(new Dimension(410,90));
+            jpsAmics[i].setMaximumSize(new Dimension(430,90));
+            jpsAmics[i].setSize(430, 90);
+            jpAmics.add(jpsAmics[i]);
         }
 
 

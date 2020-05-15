@@ -14,7 +14,18 @@ import src.View.ViewServer;
 
 import java.io.*;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 
 public class DedicatedServer extends Thread {
@@ -96,7 +107,31 @@ public class DedicatedServer extends Thread {
 					Usuari usuari = (Usuari) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
 					Usuari usr = uDAO.existsLogin(usuari);
-					Message messageResposta = new Message(usr, "Login resposta");
+					Message messageResposta;
+					if(usr != null && uDAO.isBanned(usr)){
+						SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+						Date date = format.parse(uDAO.getDateBan(usr));
+
+						DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+						Calendar cal = Calendar.getInstance();
+						Date currentDate = format.parse(dateFormat.format(cal.getTime()));
+
+						long secs = (currentDate.getTime() - date.getTime()) / 1000;
+						int hours = (int) (secs / 3600);
+						int minuts = (int) (secs/60) - hours*60;
+
+						if(hours>=24){
+							uDAO.unBan(usr);
+							messageResposta = new Message(usr, "Login resposta");
+						}else{
+							int remainingH = 23-hours;
+							int remainingMin = 60-minuts;
+							Usuari not = new Usuari(-30, remainingH+"h " + remainingMin + "min ", "BANNED");
+							messageResposta = new Message(not, "Login resposta");
+						}
+					}else{
+						messageResposta = new Message(usr, "Login resposta");
+					}
 					objectOut.writeObject(messageResposta);
 					if (usr != null) {
 						uDAO.updateState(usr, true);
@@ -184,6 +219,11 @@ public class DedicatedServer extends Thread {
 					requestsDAO rDAO = new requestsDAO();
 					rDAO.addRequest(users.get(0), users.get(1));
 				}
+				else if(m.getType().equals("banUser")){
+					Usuari user = (Usuari) m.getObject();
+					usuariDAO uDAO = new usuariDAO();
+					uDAO.banUser(user);
+				}
 			}
 		} catch (IOException | ClassNotFoundException e1){
 				// en cas derror aturem el servidor dedicat
@@ -192,8 +232,23 @@ public class DedicatedServer extends Thread {
 				clients.remove(this);
 				// invoquem el metode del servidor que mostra els servidors dedicats actuals
 				server.showClients();
-			}
+			} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
+	}
+
+	public Date convertToDateViaInstant(LocalDate dateToConvert) {
+		return java.util.Date.from(dateToConvert.atStartOfDay()
+				.atZone(ZoneId.systemDefault())
+				.toInstant());
+	}
+
+
+	public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
+		return dateToConvert.toInstant()
+				.atZone(ZoneId.systemDefault())
+				.toLocalDate();
 	}
 
 	private ObjectOutputStream getOutChannel() {

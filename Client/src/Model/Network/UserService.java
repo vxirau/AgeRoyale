@@ -113,7 +113,12 @@ public class UserService extends Thread{
 					roomsController.setAllGames(p);
 				} else if (jelow.getType().equals("Login resposta")) {
 					if (jelow.getObject() != null) {
-						loginViewController.loginSuccessful((Usuari) jelow.getObject());
+						Usuari loginU = (Usuari) jelow.getObject();
+						if(loginU.getIdUsuari() == -30 ){
+							loginViewController.userIsBanned(loginU);
+						}else{
+							loginViewController.loginSuccessful((Usuari) jelow.getObject());
+						}
 					} else {
 						loginViewController.loginNotSuccessful();
 					}

@@ -10,6 +10,9 @@ import src.View.ViewRegistre;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class LoginViewController implements ActionListener {
@@ -29,6 +32,10 @@ public class LoginViewController implements ActionListener {
         this.user = usr;
         Message m = new Message(usr, "getRequests");
         uService.sendObject(m);
+    }
+
+    public void userIsBanned(Usuari s){
+        JOptionPane.showMessageDialog(view, "Estas bannejat!\nEt queden: " + s.getNickName()+ " dies per poder entrar");
     }
 
     public void onRequestsRecieved(ArrayList<Usuari> requests){

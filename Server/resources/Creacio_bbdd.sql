@@ -31,6 +31,8 @@ CREATE TABLE usuari(
     password    VARCHAR(255),
     idStats     int,
     isOnline    boolean,
+    banned      boolean,
+    banDate     VARCHAR(255),
     PRIMARY KEY (idUser),
     FOREIGN KEY (idStats) REFERENCES stats (idStat)
 );
@@ -89,24 +91,40 @@ SELECT* FROM usuari;
 
 #Importacio basica de informació
 INSERT INTO stats(TOTALPARTIDES, TOTALVICTORIES, WINRATE, AVGDURATIONVICTORIES) VALUES
-    (10,  4, 30.2, 200), (15, 10, 70, 150), (28, 35, 65, 200), (25, 10, 40, 100), (248, 234, 21, 10);
+    (10,  4, 30.2, 200), (15, 10, 70, 150), (28, 35, 65, 200), (25, 10, 40, 100), (248, 234, 21, 10), (15, 10, 70, 150), (28, 35, 65, 200), (25, 10, 40, 100), (248, 234, 21, 10), (15, 10, 70, 150), (28, 35, 65, 200), (25, 10, 40, 100), (248, 234, 21, 10);
 
 #SELECT if(COUNT(*) > 0, req.originId, -1) as exist FROM AgeRoyale.requests AS req WHERE destinationId = 1;
 #SELECT req.originId FROM AgeRoyale.requests AS req WHERE destinationId = 1;
 
 
-INSERT INTO usuari (nickname, email, password, idStats, isOnline) values
-    ('Victor', 'victor.xirau@students.salle.url.edu', '1234', 1, false),
-    ('Lidia', 'lidia.figueras@students.salle.url.edu', '1234', 2, false),
-    ('Adria', 'adria.pajares@students.salle.url.edu', '1234', 3, false),
-    ('Marthin', 'marti.ejarque@students.salle.url.edu', '1234', 4, false),
-    ('Bernat', 'bernat.segura@students.salle.url.edu', '1234', 5, false);
+INSERT INTO usuari (nickname, email, password, idStats, isOnline, banned) values
+    ('Victor', 'victor.xirau@students.salle.url.edu', '1234', 1, false, false),
+    ('Lidia', 'lidia.figueras@students.salle.url.edu', '1234', 2, false, false),
+    ('Adria', 'adria.pajares@students.salle.url.edu', '1234', 3, false, false),
+    ('Marthin', 'marti.ejarque@students.salle.url.edu', '1234', 4, false, false),
+    ('Jorge', 'bernat.segura@students.salle.url.edu', '1234', 5, false, false),
+    ('Robert', 'lidia.figueras@students.salle.url.edu', '1234', 6, false, false),
+    ('Pilotes', 'adria.pajares@students.salle.url.edu', '1234', 7, false, false),
+    ('ViejoLesbiano', 'marti.ejarque@students.salle.url.edu', '1234', 8, false, false),
+    ('LaSal', 'bernat.segura@students.salle.url.edu', '1234', 9, false, false),
+    ('NoMames', 'lidia.figueras@students.salle.url.edu', '1234', 10, false, false),
+    ('PapiChulo', 'adria.pajares@students.salle.url.edu', '1234', 11, false, false),
+    ('Adriaannn', 'marti.ejarque@students.salle.url.edu', '1234', 12, false, false),
+    ('Coli', 'bernat.segura@students.salle.url.edu', '1234', 13, false, false);
 
 INSERT INTO requests(originId, destinationId) VALUES  (1, 4), (1, 3), (2, 1), (2, 5), (2, 4);
 
 
 INSERT INTO partida (duration, publica, name, host, date, finished, player1, player2) VALUES
-    (200, true, 'Prova1', 'admin', '20-05-2020', false, 1, 2), (150, true, 'Prova2', 'admin', '19-05-2020', false, 3, 4), (478, false, 'Prova3', 'admin',  '18-05-2020', false, 5, 1);
+    (200, true, 'Prova1', 'admin', '20-05-2020', false, 1, 2),
+    (150, true, 'Prova2', 'admin', '19-05-2020', false, 3, 4),
+    (478, false, 'Prova3', 'admin',  '18-05-2020', true, 5, 1),
+    (150, true, 'Prova4', 'admin', '19-05-2020', false, 3, 4),
+    (478, false, 'Prova5', 'admin',  '18-05-2020', false, 5, 1),
+    (150, true, 'Prova6', 'admin', '19-05-2020', true, 3, 4),
+    (478, false, 'Prova7', 'admin',  '18-05-2020', false, 5, 1),
+    (150, true, 'Prova8', 'admin', '19-05-2020', true, 3, 4),
+    (478, false, 'Prova9', 'admin',  '18-05-2020', false, 5, 1);
 
 INSERT INTO amic (id_u1, id_u2) VALUES
     (1, 2), (2, 3), (3, 4), (4, 5), (5, 1);

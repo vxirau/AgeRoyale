@@ -129,12 +129,17 @@ public class GraphPanel extends JPanel {
         }
     }
     public void scaleDataSet(){
-        int ratioX = this.eixX/maxX;
-        int ratioY = this.eixY/maxY;
-        for (int i=0; i<punts.size() ;i++){
-            Point2D p = new Point2D.Double(ratioX*punts.get(i).getX()+10, (this.eixY)-ratioY*punts.get(i).getY()+10);
-            scaledPoints.add(p);
+        if(maxY == 0 || maxX == 0){
+           hiHaDades = false;
+        }else{
+            int ratioX = this.eixX/maxX;
+            int ratioY = this.eixY/maxY;
+            for (int i=0; i<punts.size() ;i++){
+                Point2D p = new Point2D.Double(ratioX*punts.get(i).getX()+10, (this.eixY)-ratioY*punts.get(i).getY()+10);
+                scaledPoints.add(p);
+            }
         }
+
     }
     private int totalGamesToday(String data){
         int total = 0;
