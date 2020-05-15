@@ -20,6 +20,7 @@ public class FriendsController implements ActionListener{
     private UserService uService;
     private ArrayList<Usuari> friends;
     private ArrayList<Usuari> requests;
+    private ArrayList<Usuari> requested;
 
     private String cerca;
 
@@ -52,32 +53,66 @@ public class FriendsController implements ActionListener{
         }
     };
 
-    public FriendsController(Usuari usr, UserService userService, MenuController menuCtrl, ArrayList<Usuari> requests) {
+    public FriendsController(Usuari usr, UserService userService, MenuController menuCtrl, ArrayList<Usuari> requests, ArrayList<Usuari> requested) {
         this.usuari = usr;
         this.uService = userService;
         this.menuController = menuCtrl;
         this.requests = requests;
+        this.requested = requested;
     }
 
 
     public void removeFriend(Usuari user){
         boolean eliminar=false, ok=true;
-        int a= JOptionPane.showConfirmDialog(friendView, "Vols eliminar aquest amic?");
-        if(a==JOptionPane.YES_OPTION){
-            eliminar=true;
-        }else if(a==JOptionPane.NO_OPTION){
-            eliminar=false;
+        ArrayList<Usuari> parella = new ArrayList<>();
+        parella.add(usuari);
+        parella.add(user);
+        if(this.usuari.getAmics().contains(user)){
+            int a= JOptionPane.showConfirmDialog(friendView, "Vols eliminar aquest amic?");
+            if(a==JOptionPane.YES_OPTION){
+                eliminar=true;
+            }else if(a==JOptionPane.NO_OPTION){
+                eliminar=false;
+            }else{
+                ok=false;
+            }
+            if(ok && eliminar){
+                Message mes = new Message(parella, "removeFriend");
+                uService.sendGetFriends(mes, this, false);
+            }
         }else{
-            ok=false;
+            if(requestHasUser(user)){
+                int a= JOptionPane.showConfirmDialog(friendView, "Vols enviar una solicitud a: " + user.getNickName());
+                if(a==JOptionPane.YES_OPTION){
+                    eliminar=true;
+                }else if(a==JOptionPane.NO_OPTION){
+                    eliminar=false;
+                }else{
+                    ok=false;
+                }
+                if(ok && eliminar){
+                    Message mes = new Message(parella, "sendRequest");
+                    requested.add(user);
+                    uService.sendGetFriends(mes, this, false);
+                }
+            }else{
+                JOptionPane.showMessageDialog(friendView, "Ja has enviat una solicitud a aquest usuari!");
+            }
+
         }
 
-        if(ok && eliminar){
-            ArrayList<Usuari> parella = new ArrayList<>();
-            parella.add(usuari);
-            parella.add(user);
-            Message mes = new Message(parella, "removeFriend");
-            uService.sendGetFriends(mes, this, false);
+
+
+    }
+
+    private boolean requestHasUser(Usuari u){
+        boolean has = true;
+        for(Usuari user: requested) {
+            if(user.getIdUsuari() == u.getIdUsuari()){
+                has = false;
+            }
         }
+        return has;
     }
 
     public void setFriendView(FriendView friendView) {
@@ -95,11 +130,26 @@ public class FriendsController implements ActionListener{
     }
 
      public void setFriends(ArrayList<Usuari> amics) throws InterruptedException {
+        if(friendView.getTextField().getText().toString().length()>0){
+            clearFriendList(amics);
+        }
         this.friends = amics;
         friendView.setAmics(amics);
         menuController.updateViews();
         friendView.setControllers(listenerDelTextField, listenerCercaAmic, this);
         friendView.getJtfSearchAmic().setText(cerca);
+     }
+
+     public void clearFriendList(ArrayList<Usuari> amics){
+        for(int i=0; i<amics.size() ;i++){
+            if(amics.get(i).getIdUsuari() == this.usuari.getIdUsuari()){
+                amics.remove(i);
+            }
+            if(this.usuari.getAmics().contains(amics.get(i))){
+                amics.remove(i);
+            }
+        }
+
      }
 
     public void setAmicsUsuari(ArrayList<Usuari> amicsUsuari) {

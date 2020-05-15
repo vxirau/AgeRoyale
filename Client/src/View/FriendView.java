@@ -100,6 +100,7 @@ public class FriendView extends JFrame {
         jtfSearchAmic = new JTextField();
         jtfSearchAmic.setOpaque(false);
         jtfSearchAmic.setBounds(20, 10, 100, 15);
+        jtfSearchAmic.setMargin(new Insets(10, 10, 10, 10));
         jtfSearchAmic.setBorder(BorderFactory.createEmptyBorder());
         jpSearchAmic.add(jtfSearchAmic);
         jpFriends.add(jpSearchAmic);
@@ -236,6 +237,10 @@ public class FriendView extends JFrame {
     public void setAmics(ArrayList<Usuari> amics) {
         this.amics = amics;
         initAll();
+    }
+
+    public JTextField getTextField(){
+        return this.jtfSearchAmic;
     }
 
     public JScrollPane getScrollPaneAmics() {

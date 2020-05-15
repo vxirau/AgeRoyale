@@ -39,12 +39,40 @@ public class LoginViewController implements ActionListener {
                 view.setVisible(false);
                 rView.setVisible(true);
                 try {
-                    MenuController controlador = new MenuController(rView, uService, LoginViewController.this.user, requests);
+                    ArrayList<Usuari> r = separateRequests(requests, 0);
+                    ArrayList<Usuari> rq = separateRequests(requests, 1);
+                    MenuController controlador = new MenuController(rView, uService, LoginViewController.this.user, r, rq);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    public ArrayList<Usuari> separateRequests(ArrayList<Usuari> requests, int criteri){
+        ArrayList<Usuari> users = new ArrayList<>();
+        int i=0;
+        boolean ok = true;
+        if(criteri==0){
+            for(i=0; ok; i++){
+                if(requests.get(i).getIdUsuari()==-20 && requests.get(i).getNickName().equals("SEPARATOR")){
+                    ok = false;
+                }else{
+                    users.add(requests.get(i));
+                }
+            }
+        }else if(criteri==1){
+            for(i=0; ok; i++){
+                if(requests.get(i).getIdUsuari()==-20 && requests.get(i).getNickName().equals("SEPARATOR")){
+                    ok = false;
+                }
+            }
+            for(int j=i; j<requests.size() ;j++){
+                users.add(requests.get(j));
+            }
+        }
+
+        return users;
     }
 
     public void loginNotSuccessful(){

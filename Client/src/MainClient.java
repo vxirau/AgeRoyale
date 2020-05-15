@@ -81,7 +81,7 @@ public class MainClient {
                           amics.add(new Usuari("amigo10", "password10"));
                           Usuari u  = new Usuari(0, "victor", "password", amics);
                           try {
-                              MenuController controlador = new MenuController(rView, userService, u, null);
+                              MenuController controlador = new MenuController(rView, userService, u, null, null);
                           } catch (InterruptedException e) {
                               e.printStackTrace();
                           }

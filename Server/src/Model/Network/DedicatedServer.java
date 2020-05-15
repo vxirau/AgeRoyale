@@ -170,6 +170,11 @@ public class DedicatedServer extends Thread {
 					requestsDAO rDAO = new requestsDAO();
 					rDAO.removeRequest(users.get(0), users.get(1));
 				}
+				else if(m.getType().equals("sendRequest")){
+					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
+					requestsDAO rDAO = new requestsDAO();
+					rDAO.addRequest(users.get(0), users.get(1));
+				}
 			}
 		} catch (IOException | ClassNotFoundException e1){
 				// en cas derror aturem el servidor dedicat
