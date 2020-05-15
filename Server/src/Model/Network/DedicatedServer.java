@@ -198,27 +198,5 @@ public class DedicatedServer extends Thread {
 		return objectOut;
 	}
 
-	private void updateAllClients() {
-		ObjectOutputStream outStream;
-		for (DedicatedServer dServer : clients) {
-			// recuperem el canal de sortida del servidor dedicat
-			// per tal de contactar amb el client
-			if(dServer!=null){
-				outStream = dServer.getOutChannel();
-				try {
-					// netejem el canal de sortida
-					outStream.reset();
-					// NO ENVIEM EL MODEL, SINO EL SEU ESTAT, ALLO QUE ES RELLEVANT
-					// PELS CLIENTS (OBSERVAR Grid != GridState)
-					//dataOut.writeUTF("hola");
-					outStream.writeObject(new Message(null, "pilotes"));
-					//outStream.writeObject("");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
-		}
-	}
 
 }
