@@ -2,6 +2,7 @@ package src.View;
 
 import src.Controller.GameController;
 import src.Controller.RoomsController;
+import src.Controller.WaitingController;
 import src.Model.Database.DAO.partidaDAO;
 import src.Model.Network.UserService;
 import src.Partida;
@@ -117,12 +118,11 @@ public class RoomListView extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 		RoomListView.this.setVisible(false);
-				System.out.println("Game pressed");
-				try {
-					RoomsController.startGame(total,0, p);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
+				WaitingRoomView waitingRoom = new WaitingRoomView();
+				WaitingController roomControl = new WaitingController(total, roomsController,p, waitingRoom);
+				waitingRoom.setController(roomControl);
+				waitingRoom.setVisible(true);
+				RoomsController.setClientVisible(false);
 
 			}
 		});

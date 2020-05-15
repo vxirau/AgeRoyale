@@ -3,6 +3,7 @@ package src.View;
 import src.Controller.GameController;
 import src.Controller.MenuController;
 import src.Controller.TroopController;
+import src.Controller.WaitingController;
 import src.Message;
 import src.Model.Network.UserService;
 import src.Tropa;
@@ -91,7 +92,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
         this.setResizable(false);
         //this.getContentPane().setLayout(new GridLayout(ROWS,COLUMNS));
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setSize(width, height);
 
 
@@ -295,9 +296,10 @@ public class GameView extends JFrame implements Runnable, Serializable {
         }
     }
 
-    public void registerController(GameController gameController){
+    public void registerController(GameController gameController, WaitingController w){
         this.addMouseMotionListener(gameController);
         this.addMouseListener(gameController);
+        this.addWindowListener(w);
     }
 
     public  int getxMousePosition() {

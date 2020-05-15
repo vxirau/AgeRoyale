@@ -27,6 +27,7 @@ public class RoomsController {
 	private static UserService uService;
 	private ArrayList<Partida> allGames;
 	private ArrayList<Tropa> tropes;
+	private static MenuView menuView;
 	private ActionListener actionListenerCreaPartida = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -79,7 +80,7 @@ public class RoomsController {
 		uService.sendGetPartides(m, this);
 	}
 
-	public static void startGame(int num, int privacitat, Partida p) throws IOException {
+	public static GameView startGame(int num, int privacitat, Partida p, WaitingController w) throws IOException {
 		GameView gView = null;
 		try {
 			gView = new GameView();
@@ -88,24 +89,30 @@ public class RoomsController {
 		}
 		gView.startGame();
 		GameController controller = new GameController(gView,uService);
-		gView.registerController(controller);
+		gView.registerController(controller, w);
 		TroopController tcontrol = new TroopController(gView,uService);
 
 		GameView finalGView = gView;
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				finalGView.registerController(controller);
+				finalGView.registerController(controller, w);
 				finalGView.setTroopController(tcontrol);
-
 				finalGView.setVisible(true);
 			}
 		});
 
 		//gView.setVisible(true);
-
+		return finalGView;
 	}
 
+	public void setMenuView(MenuView v){
+		this.menuView = v;
+	}
+
+	public MenuView getMenuView(){
+		return this.menuView;
+	}
 
 	public void setAllGames(ArrayList<Partida> allGames) {
 		if (allGames != null) {
@@ -116,6 +123,10 @@ public class RoomsController {
 		if (vista != null) {
 			vista.setAllGames(this.allGames);
 		}
+	}
+
+	public static void setClientVisible(boolean visible){
+		menuView.setVisible(visible);
 	}
 
 	public void setVista(RoomListView vista) {

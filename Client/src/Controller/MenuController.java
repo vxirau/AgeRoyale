@@ -30,7 +30,6 @@ public class MenuController {
         @Override
         public void windowClosing(WindowEvent e) {
             super.windowClosing(e);
-            System.out.println("closiing");
             Message message = new Message(user, "Logout");
             uService.sendLogout(message);
         }

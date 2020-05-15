@@ -56,7 +56,7 @@ public class MainClient {
                   SwingUtilities.invokeLater(new Runnable() {
                       @Override
                       public void run() {
-                          finalGView.registerController(finalGameController);
+                          finalGView.registerController(finalGameController, null);
                           finalGView.setTroopController(finalTroopController);
 
                           finalGView.setVisible(true);

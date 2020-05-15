@@ -126,7 +126,7 @@ public class Partida implements Serializable{
     }
 
     public void startPartida() throws IOException {
-        RoomsController.startGame(0, 0, this);
+        RoomsController.startGame(0, 0, this, null);
     }
 
     public boolean isFinished() {
