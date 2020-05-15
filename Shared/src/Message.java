@@ -1,7 +1,6 @@
 package src;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Message implements Serializable {
     private String type;
@@ -11,8 +10,6 @@ public class Message implements Serializable {
         this.type = type;
         this.object =  obj;
     }
-
-
 
     public String getType() {
         return type;

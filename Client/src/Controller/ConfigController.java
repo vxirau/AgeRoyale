@@ -49,7 +49,8 @@ public class ConfigController {
             if (jButtonSave.getName().equals("SAVE")) {
                 if (!usuari.getPassword().equals(configView.getJtfConfigContrasenya().getText())) {
                     System.out.println("La contrasenya es diferent");
-                    if(/*Contrasenya compleix els estandarstrue*/true){
+                    String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}";
+                    if(configView.getJtfConfigContrasenya().getText().matches(pattern)){
                         System.out.println("Contrasenya modificada");
                         usuari.setPassword(configView.getJtfConfigContrasenya().getText());
                         Message m = new Message(usuari, "PasswordUpdate");
@@ -123,6 +124,10 @@ public class ConfigController {
         nickname = ConfigController.NO_CANVI;
         password = ConfigController.NO_CANVI;
         flag = false;
+    }
+
+    private boolean check(String text) {
+        return true;
     }
 
     public void setUsuari(Usuari usuari) {

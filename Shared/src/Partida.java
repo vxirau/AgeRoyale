@@ -1,13 +1,10 @@
 package src;
 
 import src.Controller.RoomsController;
-import src.Model.Network.UserService;
-import src.View.GameView;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Partida implements Serializable{
     private Integer idPartida;
@@ -18,9 +15,7 @@ public class Partida implements Serializable{
     private String host;
     private ArrayList<Usuari> jugadors;
     private ArrayList<Usuari> espectadors;
-    //private GameView gameView;
     private static volatile boolean gameIsRunning = false;
-
 
     public Partida() {
 
@@ -132,6 +127,7 @@ public class Partida implements Serializable{
     public void startPartida() throws IOException {
         RoomsController.startGame(0, 0, this);
     }
+
 
 
 

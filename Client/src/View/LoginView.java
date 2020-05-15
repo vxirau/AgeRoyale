@@ -1,23 +1,17 @@
 package src.View;
 
-import src.Utils;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.Flow;
 
-public class LoginView extends JFrame implements ActionListener {
+public class LoginView extends JFrame {
     private JPanel jpPare;
     private JTextField jtfusername;
     private JTextField jtfpassword;
-    private JPanel jpLoginView;
     private JButton botoInici;
     private JButton jbRegistrat;
 
     public LoginView(){
-        //setBackground(Color.RED);
         setTitle("Login");
         setLocationRelativeTo(null);
         setResizable(false);
@@ -25,9 +19,6 @@ public class LoginView extends JFrame implements ActionListener {
         initComponents();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        //String imageURl = "/resources/fondo-rojo-oscuro-marron_28629-798.png";
-        //BackView backView = new BackView(imageURl);
-        //this.add(backView, BorderLayout.CENTER);
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
@@ -146,12 +137,6 @@ public class LoginView extends JFrame implements ActionListener {
 
 
     }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        //listeners dels jpanels
-    }
-
 
     public String getUsuari(){
         return jtfusername.getText();
