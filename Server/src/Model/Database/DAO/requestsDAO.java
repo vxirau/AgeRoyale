@@ -19,7 +19,7 @@ public class requestsDAO {
             if (rs.next()) {
                 int id = rs.getInt("exist");
                 if (id != -1){
-                    String query2 = "SELECT req.originId FROM AgeRoyale.requests AS req WHERE destinationId = " + u.getIdUsuari() + ";";
+                    String query2 = "SELECT req.originId, req.accepted FROM AgeRoyale.requests AS req WHERE destinationId = " + u.getIdUsuari() + ";";
                     ResultSet rs2 = DBConnector.getInstance().selectQuery(query2);
                     while(rs2.next()){
                         Usuari g = uDAO.getUserFromId(rs2.getInt("originId"));
@@ -52,11 +52,13 @@ public class requestsDAO {
             if (rs.next()) {
                 int id = rs.getInt("exist");
                 if (id != -1){
-                    String query2 = "SELECT req.destinationId FROM AgeRoyale.requests AS req WHERE originId = " + u.getIdUsuari() + ";";
+                    String query2 = "SELECT req.destinationId, req.accepted FROM AgeRoyale.requests AS req WHERE originId = " + u.getIdUsuari() + ";";
                     ResultSet rs2 = DBConnector.getInstance().selectQuery(query2);
                     while(rs2.next()){
                         Usuari g = uDAO.getUserFromId(rs2.getInt("destinationId"));
-                        g.setAccepted(rs2.getBoolean("accepted"));
+
+                        Boolean b = (Boolean) rs2.getObject("accepted");
+                        g.setAccepted(b);
                         allRequests.add(g);
                     }
 
@@ -78,5 +80,14 @@ public class requestsDAO {
         DBConnector.getInstance().insertQuery(query);
     }
 
+    public void acceptRequest(Usuari u1, Usuari u2){
+        String query = "UPDATE AgeRoyale.requests SET AgeRoyale.requests.accepted = 1 WHERE AgeRoyale.requests.destinationId = " + u2.getIdUsuari() + " AND AgeRoyale.requests.originId = " + u1.getIdUsuari() + ";";
+        DBConnector.getInstance().updateQuery(query);
+    }
+
+    public void denyRequest(Usuari u1, Usuari u2){
+        String query = "UPDATE AgeRoyale.requests SET AgeRoyale.requests.accepted = 0 WHERE AgeRoyale.requests.destinationId = " + u2.getIdUsuari() + " AND AgeRoyale.requests.originId = " + u1.getIdUsuari() + ";";
+        DBConnector.getInstance().updateQuery(query);
+    }
 
 } 

@@ -166,7 +166,7 @@ public class FriendsController implements ActionListener{
             Message m = new Message(users, "acceptRequest");
             uService.sendFriendSearch(m, this);
         }else if(a==JOptionPane.NO_OPTION){
-            Message m = new Message(users, "removeRequest");
+            Message m = new Message(users, "denyRequest");
             uService.sendFriendSearch(m, this);
         }
 

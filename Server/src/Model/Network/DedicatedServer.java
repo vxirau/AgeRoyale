@@ -158,7 +158,7 @@ public class DedicatedServer extends Thread {
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					requestsDAO rDAO = new requestsDAO();
 					amicDAO aDAO = new amicDAO();
-					rDAO.removeRequest(users.get(0), users.get(1));
+					rDAO.acceptRequest(users.get(0), users.get(1));
 					aDAO.addAmic(users.get(0), users.get(1));
 					ArrayList<Usuari> a = aDAO.getAmics(users.get(0));
 					Message messageResposta = new Message(a, "FriendsResposta");
@@ -169,6 +169,11 @@ public class DedicatedServer extends Thread {
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					requestsDAO rDAO = new requestsDAO();
 					rDAO.removeRequest(users.get(0), users.get(1));
+				}
+				else if(m.getType().equals("denyRequest")){
+					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
+					requestsDAO rDAO = new requestsDAO();
+					rDAO.denyRequest(users.get(0), users.get(1));
 				}
 				else if(m.getType().equals("sendRequest")){
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();

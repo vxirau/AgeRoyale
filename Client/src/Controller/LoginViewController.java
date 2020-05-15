@@ -56,14 +56,14 @@ public class LoginViewController implements ActionListener {
             if(y.isAccepted()!=null){
                 r.add(y);
                 if(y.isAccepted()){
-                    JOptionPane.showMessageDialog(view, "Han acceptat la teva solicitud! Consulta els teus amics.");
+                    JOptionPane.showMessageDialog(view, "Una solicitud teva ha estat acceptada!\nConsulta els teus amics.");
                 }
             }
         }
         for(Usuari e : r){
             ArrayList<Usuari> h = new ArrayList<>();
-            h.add(this.user);
             h.add(e);
+            h.add(this.user);
             Message m = new Message(h, "removeRequest");
             uService.sendLogin(m, this);
         }

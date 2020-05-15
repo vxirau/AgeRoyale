@@ -163,6 +163,9 @@ DELETE FROM AgeRoyale.stats WHERE idStat = 6;
 #reset stats
 UPDATE AgeRoyale.stats SET AgeRoyale.stats.totalPartides = 0, AgeRoyale.stats.totalVictories = 0, AgeRoyale.stats.winrate = 0, AgeRoyale.stats.avgDurationVictories = 0 WHERE AgeRoyale.stats.idStat = 6;
 
+UPDATE AgeRoyale.requests SET AgeRoyale.requests.accepted = 0 WHERE AgeRoyale.requests.destinationId = 1 AND AgeRoyale.requests.originId = 2;
+
+
 SELECT if(COUNT(*) > 0, req.originId, -1) as exist FROM AgeRoyale.requests AS req WHERE destinationId = 1;
 SELECT req.originId FROM AgeRoyale.requests AS req WHERE destinationId = 1;
 SELECT * FROM requests;
