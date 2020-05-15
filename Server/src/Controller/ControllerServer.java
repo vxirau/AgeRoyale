@@ -51,11 +51,7 @@ public class ControllerServer implements ActionListener {
             }
             JTabbedPane p = view.getTabbedPane();
             p.removeTabAt(2);
-            if(!view.getTipo()){
-                p.addTab("Partides Jugades", view.makeLinePartides(index));
-            }else{
-                p.addTab("Partides Jugades", view.makePanellPartides(index));
-            }
+            p.addTab("Partides Jugades", view.makeGraph(index));
             p.setSelectedIndex(2);
             view.refresh(p);
         }else if(e.getSource() instanceof  JButton){

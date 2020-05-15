@@ -28,6 +28,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.geom.Line2D;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -40,10 +41,8 @@ public class ViewServer extends JFrame {
 	private Object[][] data;
 	private JComboBox selector;
 	private JTabbedPane tabbedPane;
-	private JToggleButton graphType;
 	private boolean tipoh=true;
 	private ArrayList<Partida> games;
-	private JLabel textGraph;
 	private boolean hiHaDades=false;
 
 	public ViewServer(){
@@ -54,30 +53,9 @@ public class ViewServer extends JFrame {
 		panelPare.setOpaque(false);
 		String[] intervals = { "Setmana", "Mes", "Any"};
 		selector = new JComboBox(intervals);
-		selector.setBounds(330, 0, 200, 50);
-		graphType = new JToggleButton();
-		textGraph = new JLabel("Canvia tipus de gràfica:");
-		textGraph.setBounds(15, 17, 190, 16);
-		textGraph.setFont(new Font("Arial", Font.BOLD, 14));
-		textGraph.setForeground(Color.decode("#FFDC60"));
-		graphType.setBounds(180, 13, 140, 25);
-		graphType.setText("Gràfic de Línies");
-		graphType.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				if(tipoh){
-					tipoh = false;
-					graphType.setText("Gràfic de Línies");
-					tabbedPane.setComponentAt(2, makeLinePartides(selector.getSelectedIndex()));
-					tabbedPane.setSelectedIndex(2);
-				}else{
-					tipoh = true;
-					graphType.setText("Gràfic de Barres");
-					getTabbedPane().setComponentAt(2, makePanellPartides(selector.getSelectedIndex()));
-					getTabbedPane().setSelectedIndex(2);
-				}
-			}
-		});
+		selector.setBounds(550, 0, 130, 50);
+
+
 
 
 		JPanel Start = new JPanel( new BorderLayout());
@@ -107,18 +85,12 @@ public class ViewServer extends JFrame {
 
 		panelPare.add(Start);
 		panelPare.add(panel);
+
 		panelPare.setBackground(Color.decode("#85201F"));
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.addTab("Control Servidor", panelPare);
 		tabbedPane.addTab("Top Usuaris", makePanellEstadistiques());
-		if(tipoh){
-			tabbedPane.addTab("Partides Jugades", makeLinePartides(selector.getSelectedIndex()));
-		}else{
-			tabbedPane.addTab("Partides Jugades", makePanellPartides(selector.getSelectedIndex()));
-		}
-		graphType.setSelected(tipoh);
-
-
+		tabbedPane.addTab("Partides Jugades", makeGraph(selector.getSelectedIndex()));
 
 		this.setContentPane(tabbedPane);
 		this.setBackground(Color.decode("#85201F"));
@@ -129,128 +101,16 @@ public class ViewServer extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	}
-	public JPanel makeLinePartides(int selectedIndex) {
-		JPanel lineGraph = new JPanel();
-		lineGraph.setLayout(null);
-		lineGraph.setOpaque(false);
+
+	public JPanel makeGraph(int selectedIndex) {
+		GraphPanel j = new GraphPanel(selectedIndex, this.games);
 		selector.setSelectedIndex(selectedIndex);
 
-		//----------------------------------------------------------------------------------------------------
-		XYDataset dataset = createXYDataset(selectedIndex);
-
-		if(hiHaDades){
-			JFreeChart chart = createLineChart(dataset, selectedIndex);
-
-			ChartPanel chartPanel = new ChartPanel(chart);
-
-			XYPlot cplot = (XYPlot)chart.getPlot();
-			cplot.setBackgroundPaint(Color.decode("#8C1018"));
-			cplot.setDomainGridlinePaint(Color.decode("#FFFDFF"));
-			cplot.setRangeGridlinePaint(Color.decode("#FFFDFF"));
-			chart.getTitle().setPaint(Color.decode("#FFDC60"));
-			chart.setBorderVisible(false);
-
-			Stroke solid = new BasicStroke(2);
-
-			Axis domainAxis = ((XYPlot)chart.getPlot()).getDomainAxis();
-			domainAxis.setAxisLinePaint(Color.decode("#FFDC60"));
-			domainAxis.setLabelPaint(Color.decode("#FFDC60"));
-			domainAxis.setTickLabelPaint(Color.decode("#FFDC60"));
-			domainAxis.setAxisLineStroke(solid);
-
-			Axis valueAxis = ((XYPlot)chart.getPlot()).getRangeAxis();
-			valueAxis.setAxisLinePaint(Color.decode("#FFDC60"));
-			valueAxis.setLabelPaint(Color.decode("#FFDC60"));
-			valueAxis.setTickLabelPaint(Color.decode("#FFDC60"));
-			valueAxis.setLabelFont(new Font("Arial", Font.PLAIN , 10));
-			valueAxis.setAxisLineStroke(solid);
-
-			((XYPlot)chart.getPlot()).setOutlinePaint(Color.decode("#FFDC60"));
-			((XYPlot)chart.getPlot()).setBackgroundImageAlpha((float)0.0);
-//		XYLineAndShapeRenderer r = (XYLineAndShapeRenderer)chart.getCategoryPlot().getRenderer();
-			//r.setSeriesPaint(0, Color.decode("#FFDC60"));
-
-
-
-			chartPanel.setBounds(0, 50, 700, 400);
-			lineGraph.add(chartPanel);
-		}else{
-			JLabel j = new JLabel("No hi ha dades en aquestes dates");
-			j.setFont(new Font("Arial", Font.BOLD, 30));
-			j.setBounds(100, 200, 600, 40);
-			j.setForeground(Color.decode("#FFDC60"));
-			lineGraph.add(j);
-		}
-		//----------------------------------------------------------------------------------------------------
-		lineGraph.add(textGraph);
-		lineGraph.add(graphType);
-		lineGraph.add(selector);
-		return lineGraph;
+		j.add(selector);
+		return j;
 	}
-	private XYDataset createXYDataset(int criteri){
-		int days = 0, total, ok=0;
-		var series = new XYSeries("Partides x Dia");
-		if(criteri == 0){
-			days = 7;
-		}else if(criteri == 1){
-			days = 30;
-		}else if(criteri == 2){
-			days = 365;
-		}
-
-		for(int i=days-1; i>=0; i--){
-			String today = LocalDate.now().minusDays(i).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-			total = totalGamesToday(today);
-			if(total == 0){
-				ok++;
-			}
-			series.add(i, totalGamesToday(today));
-		}
-
-		if(ok==days){
-			hiHaDades = false;
-		}
-
-		var dataset = new XYSeriesCollection();
-		dataset.addSeries(series);
-		return dataset;
-	}
-	private JFreeChart createLineChart(XYDataset dataset, int period) {
-		String titol = "";
-		if(period == 0){
-			titol += "la última: Setmana";
-		}else if(period == 1){
-			titol += "l'últim: Mes";
-		}else if(period == 2){
-			titol += "l'últim: Any";
-		}
-
-		JFreeChart chart = ChartFactory.createXYLineChart( "Partides Jugades en " + titol,"", "",
-				dataset,
-				PlotOrientation.VERTICAL, false, true, false
-		);
-
-		chart.setBackgroundPaint(Color.decode("#85201F"));
 
 
-		XYPlot plot = chart.getXYPlot();
-
-		var renderer = new XYLineAndShapeRenderer();
-		renderer.setSeriesPaint(0, Color.decode("#FFDC60"));
-		renderer.setSeriesStroke(0, new BasicStroke(2.0f));
-
-		plot.setRenderer(renderer);
-		plot.setBackgroundPaint(Color.white);
-
-		plot.setRangeGridlinesVisible(true);
-		plot.setRangeGridlinePaint(Color.BLACK);
-		plot.setDomainGridlinesVisible(true);
-		plot.setDomainGridlinePaint(Color.BLACK);
-
-		chart.setTitle(new TextTitle("Partides Jugades en " + titol,new Font("Serif", java.awt.Font.BOLD, 18)));
-
-		return chart;
-	}
 	private JScrollPane makePanellEstadistiques() {
 
 		String[] columnNames = {"Username", "% Victòries", "Temps mitg x Victoria"};
@@ -309,120 +169,11 @@ public class ViewServer extends JFrame {
 		}
 		this.data = data;
 	}
-	public JPanel makePanellPartides(int index) {
-		JPanel grafica = new JPanel();
-		grafica.setLayout(null);
-		grafica.setOpaque(false);
-
-		selector.setSelectedIndex(index);
-
-
-		CategoryDataset dataset = createDataset(selector.getSelectedItem().toString());
-		if(hiHaDades){
-			JFreeChart chart = createChart(dataset, selector.getSelectedItem().toString());
-			ChartPanel chartPanel = new ChartPanel(chart);
-
-			CategoryPlot cplot = (CategoryPlot)chart.getPlot();
-			cplot.setBackgroundPaint(Color.decode("#8C1018"));
-			chart.getTitle().setPaint(Color.decode("#FFDC60"));
-			chart.setBorderVisible(false);
-
-
-			Stroke solid = new BasicStroke(2);
-
-			CategoryAxis domainAxis = cplot.getDomainAxis();
-			domainAxis.setAxisLinePaint(Color.decode("#FFDC60"));
-			domainAxis.setLabelPaint(Color.decode("#FFDC60"));
-			domainAxis.setTickLabelPaint(Color.decode("#FFDC60"));
-			domainAxis.setAxisLineStroke(solid);
-
-			ValueAxis valueAxis = cplot.getRangeAxis();
-			valueAxis.setAxisLinePaint(Color.decode("#FFDC60"));
-			valueAxis.setLabelPaint(Color.decode("#FFDC60"));
-			valueAxis.setTickLabelPaint(Color.decode("#FFDC60"));
-			valueAxis.setLabelFont(new Font("Arial", Font.PLAIN , 10));
-			valueAxis.setAxisLineStroke(solid);
-
-			cplot.setOutlinePaint(Color.decode("#FFDC60"));
-			cplot.setBackgroundImageAlpha((float)0.0);
-			((BarRenderer)cplot.getRenderer()).setBarPainter(new StandardBarPainter());
-			BarRenderer r = (BarRenderer)chart.getCategoryPlot().getRenderer();
-			r.setSeriesPaint(0, Color.decode("#FFDC60"));
-
-
-			chartPanel.setBounds(0, 50, 700, 400);
-			grafica.add(chartPanel);
-		}else{
-			JLabel j = new JLabel("No hi ha dades en aquestes dates");
-			j.setFont(new Font("Arial", Font.BOLD, 30));
-			j.setBounds(100, 200, 600, 40);
-			j.setForeground(Color.decode("#FFDC60"));
-			grafica.add(j);
-		}
-
-		grafica.add(graphType);
-		grafica.add(textGraph);
-		grafica.add(selector);
-
-		return grafica;
-	}
-	private int totalGamesToday(String data){
-		int total = 0;
-		for(Partida p : games){
-			if(p.getData().equals(data)){
-				total++;
-			}
-		}
-		return total;
-	}
-	private CategoryDataset createDataset(String criteri) {
-		int days = 0, total, ok=0;
-		var dataset = new DefaultCategoryDataset();
-		if(criteri.equals("Setmana")){
-			days = 7;
-		}else if(criteri.equals("Mes")){
-			days = 30;
-		}else if(criteri.equals("Any")){
-			days = 365;
-		}
-		for(int i=0; i<days; i++){
-			String today = LocalDate.now().minusDays(i).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-			total = totalGamesToday(today);
-			if(total == 0){
-				ok++;
-			}
-			dataset.setValue(totalGamesToday(today), "", today);
-		}
-
-		if(ok==days){
-			hiHaDades = false;
-		}
-
-		return dataset;
-	}
-	private JFreeChart createChart(CategoryDataset dataset, String period) {
-		String titol = "";
-		if(period.equals("Setmana")){
-			titol += "la última: Setmana";
-		}else{
-			titol += "l'últim: " + period;
-		}
-
-		JFreeChart barChart = ChartFactory.createBarChart("Partides Jugades en " + titol, "", "", dataset,
-				PlotOrientation.VERTICAL,
-				false, true, false);
-
-		barChart.setBackgroundPaint(Color.decode("#8C1018"));
-		return barChart;
-	}
 	public void setDades(boolean v){
 		this.hiHaDades = v;
 	}
 	public JTabbedPane getTabbedPane(){
 		return this.tabbedPane;
-	}
-	public boolean getTipo(){
-		return this.tipoh;
 	}
 	public void serverController(ActionListener controlador) {
 		btnStart.addActionListener(controlador);
