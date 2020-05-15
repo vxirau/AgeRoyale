@@ -155,8 +155,8 @@ UPDATE AgeRoyale.stats SET AgeRoyale.stats.totalPartides = 31, AgeRoyale.stats.t
 SELECT st.idStat FROM AgeRoyale.stats as st ORDER BY st.idStat DESC LIMIT 1;
 
 #remove stats
-#DELETE FROM AgeRoyale.stats WHERE idStat = 6;
-#DELETE FROM AgeRoyale.stats where AgeRoyale.usuari.idUser = 1 AND AgeRoyale.usuari.idStats = AgeRoyale.stats.idStat;
+DELETE FROM AgeRoyale.stats WHERE idStat = 6;
+DELETE FROM AgeRoyale.stats where AgeRoyale.usuari.idUser = 1 AND AgeRoyale.usuari.idStats = AgeRoyale.stats.idStat;
 
 #reset stats
 UPDATE AgeRoyale.stats SET AgeRoyale.stats.totalPartides = 0, AgeRoyale.stats.totalVictories = 0, AgeRoyale.stats.winrate = 0, AgeRoyale.stats.avgDurationVictories = 0 WHERE AgeRoyale.stats.idStat = 6;

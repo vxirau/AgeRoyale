@@ -1,10 +1,7 @@
 package src.View;
 
 import src.Controller.MenuController;
-import src.Controller.RoomsController;
-import src.Message;
 import src.Model.Network.UserService;
-import src.Partida;
 import src.Usuari;
 
 import javax.swing.*;
@@ -12,9 +9,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+public class MenuView extends JFrame implements Runnable {
 
-public class MenuView extends JFrame implements ActionListener, Runnable {
+    private UserService uService;
+    private Usuari usuari;
+    private MenuController menuController;
 
+    //CONSTANTS PER CONTROLAR EL MENU
     public static String actualView = "";
     public static final String MAIN = "Main_";
     public static final String CONFIGURACIO = "Config_";
@@ -22,14 +23,11 @@ public class MenuView extends JFrame implements ActionListener, Runnable {
     public static final String AMICS = "Friends_";
     public static final String CREAPARTIDA = "CrearPartida_";
 
-
-    private UserService uService;
-    private Usuari usuari;
-    private MenuController menuController;
-
+    //Animacions
     private static Thread thread;
     private static volatile boolean onTroopsView = false;
     private boolean firstTimeOnThread = true;
+
     //Panell actual
     private JPanel jpActive;
 
@@ -252,7 +250,7 @@ public class MenuView extends JFrame implements ActionListener, Runnable {
     }
 
     private void initTropes() {
-        tropesView = new TropesView();
+        tropesView = new TropesView(usuari);
         jpTropes = tropesView.getJpTropes();
     }
 
@@ -286,11 +284,6 @@ public class MenuView extends JFrame implements ActionListener, Runnable {
     private void initCrearPartida() {
         roomListView = new RoomListView(menuController.getRoomsController(), this.usuari);
         jpCrearPartida = roomListView.getJpPare();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
     }
 
     public void setUsuari(Usuari usuari){
@@ -329,9 +322,6 @@ public class MenuView extends JFrame implements ActionListener, Runnable {
         adjustViews(actualView);
     }
 
-
-
-
     @Override
     public void run() {
         final long[] startTime = {System.currentTimeMillis()};
@@ -343,22 +333,18 @@ public class MenuView extends JFrame implements ActionListener, Runnable {
             }
             tropesView.updateTropes(elapsedTime);
         }
-
-
     }
 
-    public synchronized void startTimer() throws InterruptedException {
+    public synchronized void startTimer() {
         onTroopsView = true;
         thread = new Thread(this, "Troop Selection Timer");
         thread.start();
-
     }
-    public synchronized void stopTimer() throws InterruptedException {
+
+    public synchronized void stopTimer() {
         onTroopsView = false;
         thread.interrupt();
         thread.stop();
-        //thread.join();
-
     }
 }
 
