@@ -3,7 +3,6 @@ package src;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import src.Controller.ControllerServer;
-import src.Controller.NetworkConfiguration;
 import src.Model.Network.Server;
 import src.View.ViewServer;
 

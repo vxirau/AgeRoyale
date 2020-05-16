@@ -1,7 +1,7 @@
 package src.Model.Network;
 
 
-import src.Controller.NetworkConfiguration;
+import src.NetworkConfiguration;
 import src.View.ViewServer;
 
 import java.io.IOException;
@@ -73,4 +73,12 @@ public class Server extends Thread {
 		}
 	}
 
+    public void broadcastClients() {
+		for (DedicatedServer dServer : dServers) {
+			//Broadcast to:
+			// -- RoomListView
+			// -- FriendListView
+			// -- WaitingRooms
+		}
+    }
 }

@@ -142,4 +142,9 @@ public class RoomsController {
 	public ArrayList<Partida> getAllGames() {
 		return allGames;
 	}
+
+	public void updateGameTable(Partida p, String newPlayer) {
+		Message m = new Message(p, newPlayer);
+		uService.sendObject(m);
+	}
 }

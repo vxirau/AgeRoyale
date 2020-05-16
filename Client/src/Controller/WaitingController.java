@@ -1,7 +1,9 @@
 package src.Controller;
 
+import src.Message;
 import src.Model.Network.UserService;
 import src.Partida;
+import src.Usuari;
 import src.View.GameView;
 import src.View.WaitingRoomView;
 
@@ -17,13 +19,15 @@ public class WaitingController implements ActionListener, WindowListener {
     private WaitingRoomView view;
     private GameView gv;
     private UserService userService;
+    private Usuari usuari;
 
-    public WaitingController(int total, RoomsController roomsController, Partida p, WaitingRoomView w, UserService uService){
+    public WaitingController(int total, RoomsController roomsController, Partida p, WaitingRoomView w, UserService uService, Usuari usr){
         this.roomsController = roomsController;
         this.total = total;
         this.view = w;
         this.p = p;
         this.userService = uService;
+        this.usuari = usr;
     }
 
     @Override
@@ -49,6 +53,8 @@ public class WaitingController implements ActionListener, WindowListener {
         JFrame j = (JFrame)e.getSource();
         if(j instanceof  WaitingRoomView){
             view.setVisible(false);
+            Message m = new Message(usuari, "removeFromWaitingRoom");
+            userService.sendObject(m);
             roomsController.getMenuView().setVisible(true);
         }else if(j instanceof GameView){
             view.setVisible(false);

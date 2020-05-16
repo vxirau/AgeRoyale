@@ -3,10 +3,7 @@ package src.Model.Network;
 import src.Controller.ControllerServer;
 import src.Controller.TroopSController;
 import src.Message;
-import src.Model.Database.DAO.amicDAO;
-import src.Model.Database.DAO.partidaDAO;
-import src.Model.Database.DAO.requestsDAO;
-import src.Model.Database.DAO.usuariDAO;
+import src.Model.Database.DAO.*;
 import src.Partida;
 import src.Tropa;
 import src.Usuari;
@@ -208,22 +205,46 @@ public class DedicatedServer extends Thread {
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					requestsDAO rDAO = new requestsDAO();
 					rDAO.removeRequest(users.get(0), users.get(1));
-				}
-				else if(m.getType().equals("denyRequest")){
+				}else if(m.getType().equals("denyRequest")){
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					requestsDAO rDAO = new requestsDAO();
 					rDAO.denyRequest(users.get(0), users.get(1));
-				}
-				else if(m.getType().equals("sendRequest")){
+				}else if(m.getType().equals("sendRequest")){
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					requestsDAO rDAO = new requestsDAO();
 					rDAO.addRequest(users.get(0), users.get(1));
-				}
-				else if(m.getType().equals("banUser")){
+				}else if(m.getType().equals("banUser")){
 					Usuari user = (Usuari) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
 					uDAO.banUser(user);
+				}else if(m.getType().equals("newPlayer")){
+					Partida p = (Partida)m.getObject();
+					partidaDAO pDAO = new partidaDAO();
+					if(pDAO.hasPlayerOne(p) && p.getIdPartida() != pDAO.getPlayerOne(p)){
+						pDAO.addPlayerTwo(p, p.getJugadors().get(1));
+					}else{
+						pDAO.addPlayerOne(p, p.getJugadors().get(0));
+					}
+					server.broadcastClients();
+				}else if(m.getType().equals("newSpectator")){
+					spectatorDAO sDAO = new spectatorDAO();
+					Partida p = (Partida)m.getObject();
+					for(Usuari u : p.getEspectadors()){
+						if(!sDAO.isSpectating(p, u)){
+							sDAO.addSpectator(p, u);
+						}
+					}
+					server.broadcastClients();
+				}else if(m.getType().equals("removeFromWaitingRoom")){
+					//Treure de la waiting room
+					//Si es jugador, treure de partida
+					//Si no és jugador, treure de espectadors
+					//Fer broadcast.
+
+				}else if(m.getType().equals("updateSpectators")){
+
 				}
+
 			}
 		} catch (IOException | ClassNotFoundException e1){
 				// en cas derror aturem el servidor dedicat
@@ -242,6 +263,27 @@ public class DedicatedServer extends Thread {
 		return java.util.Date.from(dateToConvert.atStartOfDay()
 				.atZone(ZoneId.systemDefault())
 				.toInstant());
+	}
+
+	public void privateMessage(String message, Object o) throws IOException {
+		if (message.equals("Friends")){
+			Usuari usuari = (Usuari) o;
+			amicDAO aDAO = new amicDAO();
+			ArrayList<Usuari> a = aDAO.getAmics(usuari);
+			Message messageResposta = new Message(a, "FriendsResposta");
+			objectOut.writeObject(messageResposta);
+		} else if (message.equals("getAllGames")) {
+			partidaDAO pDao = new partidaDAO();
+			ArrayList<Partida> p = pDao.getAllPartides();
+			objectOut.writeObject(new Message(p, "allGamesReply"));
+		} else if (message.equals("getAllRunningGames")) {
+			objectOut.reset();
+			partidaDAO pDao = new partidaDAO();
+			ArrayList<Partida> p = pDao.getRunningPartides();
+			objectOut.writeObject(new Message(p, "allGamesReply"));
+		}else if(message.equals("updateSpectators")){
+
+		}
 	}
 
 

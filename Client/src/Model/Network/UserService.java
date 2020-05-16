@@ -2,20 +2,13 @@ package src.Model.Network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import src.*;
 import src.Controller.*;
-import src.Message;
-import src.Partida;
-import src.Tropa;
-import src.Usuari;
 import src.View.LoginView;
-import src.View.MenuView;
-import src.View.RoomListView;
 import src.View.ViewRegistre;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;

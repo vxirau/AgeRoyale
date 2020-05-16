@@ -14,7 +14,7 @@ public class MainClient {
 
 
 
-    private static int game = 8;
+    private static int game = 1;
     public static void main(String[] args) {
         try {
             javax.swing.UIManager.setLookAndFeel( "javax.swing.plaf.nimbus.NimbusLookAndFeel" );
@@ -24,11 +24,11 @@ public class MainClient {
         SwingUtilities.invokeLater(new Runnable() {
           @Override
           public void run() {
-             //UserService userService = new UserService();
+             UserService userService = new UserService();
               if (game == 1) {
                   LoginView loginview = new LoginView();
-                  //LoginViewController controller = new LoginViewController(loginview, userService);
-                  //loginview.loginViewsetListener(controller);
+                  LoginViewController controller = new LoginViewController(loginview, userService);
+                  loginview.loginViewsetListener(controller);
                   loginview.setVisible(true);
               } else if(game == 0){
                   GameView gView = null;

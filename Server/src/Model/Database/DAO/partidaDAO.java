@@ -109,7 +109,7 @@ public class partidaDAO {
         partida.setIdPartida(newPartidaPK);
 
         String query = "INSERT INTO AgeRoyale.partida (idPartida, publica, name, host, duration, date, finished)"
-                + " VALUES (?, ?, ?, ?, ?, ?)";
+                + " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try{
             PreparedStatement preparedStmt = DBConnector.getInstance().conn.prepareStatement(query);
@@ -119,8 +119,9 @@ public class partidaDAO {
             preparedStmt.setString (3, partida.getName());
             preparedStmt.setString (4, partida.getHost());
             preparedStmt.setInt (5, partida.getDuracio());
-            preparedStmt.setBoolean (6+1, partida.isFinished());
             preparedStmt.setString (6, partida.getData());
+            preparedStmt.setBoolean (6+1, partida.isFinished());
+
 
             DBConnector.getInstance().insertQuery(preparedStmt);
         } catch (SQLException ex) {
@@ -160,4 +161,49 @@ public class partidaDAO {
         }
         return ++nextPk;
     }
+
+    public void addPlayerTwo(Partida p, Usuari usuari) {
+        String query = "UPDATE AgeRoyale.partida SET AgeRoyale.partida.player2 = "+usuari.getIdUsuari()+" WHERE AgeRoyale.partida.idPartida = " + p.getIdPartida() + ";";
+        DBConnector.getInstance().updateQuery(query);
+    }
+
+    public void addPlayerOne(Partida p, Usuari usuari) {
+        String query = "UPDATE AgeRoyale.partida SET AgeRoyale.partida.player1 = "+usuari.getIdUsuari()+" WHERE AgeRoyale.partida.idPartida = " + p.getIdPartida() + ";";
+        DBConnector.getInstance().updateQuery(query);
+    }
+
+    public Integer getPlayerOne(Partida p){
+        Integer has = null;
+        String query = "SELECT par.player1 FROM AgeRoyale.partida as par WHERE idPartida = " + p.getIdPartida();
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try {
+            if (rs.next()) {
+                has = (Integer) rs.getObject("player1");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return has;
+    }
+
+    public boolean hasPlayerOne(Partida p) {
+        Integer has = null;
+        String query = "SELECT par.player1 FROM AgeRoyale.partida as par WHERE idPartida = " + p.getIdPartida();
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try {
+            if (rs.next()) {
+                has = (Integer) rs.getObject("player1");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if(has == null){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+
 }

@@ -20,6 +20,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class RoomListView extends JFrame{
 
@@ -112,14 +114,27 @@ public class RoomListView extends JFrame{
 				super.paintComponent(g);
 			}
 		};
-
+		ImageIcon imagen = new ImageIcon(this.getClass().getResource("/resources/escut.png"));
 		element.setOpaque(false);
 		element.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-		RoomListView.this.setVisible(false);
+				RoomListView.this.setVisible(false);
+				Object[] options = {"Jugador", "Espectador"};
+				int n = JOptionPane.showOptionDialog(RoomListView.this,
+						"Vols entrar com a espectador o com a jugador?",
+						"Partida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+						imagen, options,  options[0]);
+				if(n==JOptionPane.YES_OPTION){
+					p.getJugadors().add(RoomListView.this.usuari);
+					roomsController.updateGameTable(p,"newPlayer");
+				}else if(n==JOptionPane.NO_OPTION){
+					p.getEspectadors().add(RoomListView.this.usuari);
+					roomsController.updateGameTable(p,"newSpectator");
+				}
+
 				WaitingRoomView waitingRoom = new WaitingRoomView(p, RoomListView.this.usuari);
-				WaitingController roomControl = new WaitingController(total, roomsController,p, waitingRoom, roomsController.getService());
+				WaitingController roomControl = new WaitingController(total, roomsController,p, waitingRoom, roomsController.getService(), RoomListView.this.usuari);
 				waitingRoom.setController(roomControl);
 				waitingRoom.setVisible(true);
 				RoomsController.setClientVisible(false);
@@ -268,10 +283,39 @@ public class RoomListView extends JFrame{
 
 	public void setAllGames(ArrayList<Partida> partides){
 		if(partides!=null){
+			cleanGames(partides);
 			allGames = partides;
 			initAll();
 		}else{
 			JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+		}
+	}
+	private void cleanGames(ArrayList<Partida> games){
+		for(Partida p : games){
+			boolean done = true;
+			if(p.getJugadors()!=null){
+				while(done){
+					done = false;
+					for(int i=0 ; i<p.getJugadors().size() ;i++) {
+						if (p.getJugadors().get(i).getIdUsuari() == 0 || p.getJugadors().get(i).getNickName() == null) {
+							p.getJugadors().remove(i);
+							done = true;
+						}
+					}
+				}
+			}
+			if(p.getEspectadors()!=null){
+				done = true;
+				while(done) {
+					done = false;
+					for (int i = 0; i < p.getEspectadors().size(); i++) {
+						if (p.getEspectadors().get(i).getIdUsuari() == 0 || p.getEspectadors().get(i).getNickName() == null) {
+							p.getEspectadors().remove(i);
+							done = true;
+						}
+					}
+				}
+			}
 		}
 	}
 
