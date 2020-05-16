@@ -35,6 +35,7 @@ public class DedicatedServer extends Thread {
 	private LinkedList<DedicatedServer> clients;
 	private ViewServer vista;
 	private TroopSController troopSController;
+	private Usuari clientUser;
 	private Server server;
 	public static int cont = 0;
 
@@ -127,6 +128,7 @@ public class DedicatedServer extends Thread {
 							messageResposta = new Message(not, "Login resposta");
 						}
 					}else{
+						clientUser = usr;
 						messageResposta = new Message(usr, "Login resposta");
 					}
 					objectOut.writeObject(messageResposta);
@@ -241,7 +243,7 @@ public class DedicatedServer extends Thread {
 					//Si no és jugador, treure de espectadors
 					//Fer broadcast.
 
-				}else if(m.getType().equals("updateSpectators")){
+				}else if(m.getType().equals("updateWaitingRooms")){
 
 				}
 

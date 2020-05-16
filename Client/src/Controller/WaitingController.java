@@ -60,6 +60,10 @@ public class WaitingController implements ActionListener, WindowListener {
             view.setVisible(false);
             gv.setVisible(false);
             //TODO: BANNEJAR USUARI SI ES ABANS DORA
+            //TODO: DETECTAR SI ES ESPECTADOR O JUGADOR QUE SURT :)
+            /*if(esJugador){
+                end game a la bbdd;
+            }*/
             roomsController.getMenuView().setVisible(true);
         }
     }

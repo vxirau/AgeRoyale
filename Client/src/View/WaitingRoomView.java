@@ -87,10 +87,7 @@ public class WaitingRoomView extends JFrame {
         players.setViewportView(jugador);
         main.add(players);
         main.add(spectators);
-        start = new JButton();
-        start.setText("Start Game");
-        start.setHorizontalAlignment(SwingConstants.CENTER);
-        start.setBounds(30,100,100,50);
+
 
         if(p.getJugadors()!=null){
             for(Usuari f : p.getJugadors()){
@@ -107,7 +104,7 @@ public class WaitingRoomView extends JFrame {
         }
 
 
-        if(!p.isPublic() && p.getHost().equals(usr.getNickName())){
+        if(!p.isPublic() && p.getHost().equals(usr.getNickName()) && p.getJugadors().size()<2){
             JLabel separator = new JLabel();
             separator.setText(Utils.ferDottedLine(41));
             separator.setBounds(22, 440, 440, 10);
@@ -160,6 +157,12 @@ public class WaitingRoomView extends JFrame {
 
             friendInvites.setViewportView(inviteFriends);
             main.add(friendInvites);
+        }else if(p.getJugadors().size()==2){
+            start = new JButton();
+            start.setText("Start Game");
+            start.setHorizontalAlignment(SwingConstants.CENTER);
+            start.setBounds(85, 660, 300, 30);
+            main.add(start);
         }
 
 
@@ -179,7 +182,9 @@ public class WaitingRoomView extends JFrame {
 
     public void setController(WaitingController controller){
         this.addWindowListener(controller);
-        start.addActionListener(controller);
+        if(start != null ){
+            start.addActionListener(controller);
+        }
     }
     
     public JPanel createFriend(Usuari u){
