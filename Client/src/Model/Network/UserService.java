@@ -29,6 +29,7 @@ public class UserService extends Thread{
     private ConfigController configController;
     private FriendsController friendsController;
     private TroopController troopController;
+	private WaitingController waitingController;
     private boolean flag;
 
 
@@ -101,7 +102,7 @@ public class UserService extends Thread{
 					Usuari user = (Usuari) jelow.getObject();
 					lview.setUsuari(user.getNickName());
 					lview.setPassword(user.getPassword());
-				} else if (jelow.getType().equals("allGamesReply")) {
+				} else if (jelow.getType().equals("allGamesReply") && roomsController!=null) {
 					ArrayList<Partida> p = (ArrayList<Partida>)jelow.getObject();
 					roomsController.setAllGames(p);
 				} else if (jelow.getType().equals("Login resposta")) {
@@ -122,7 +123,7 @@ public class UserService extends Thread{
 					} else if (resposta.equals("UserPKUpdates_OK")){
 						configController.canviSuccessful();
 					}
-				} else if(jelow.getType().equals("FriendsResposta")) {
+				} else if(jelow.getType().equals("FriendsResposta") && friendsController!=null) {
 					ArrayList<Usuari> amics = (ArrayList<Usuari>) jelow.getObject();
 					friendsController.setFriends(amics);
                     if (flag) {
@@ -131,15 +132,15 @@ public class UserService extends Thread{
                     this.flag = false;
         		} else if(jelow.getType().equals("Tropa resposta")){
 					Tropa t = (Tropa) jelow.getObject();
-					//troopController.setTropa(t);
 					troopController.getTropa(t);
 					troopController.show(t);
 				} else if(jelow.getType().equals("FindFriendResposta")){
                 	friendsController.setFriends((ArrayList<Usuari>) jelow.getObject());
 				}else if(jelow.getType().equals("requestsReply")){
 					loginViewController.onRequestsRecieved((ArrayList<Usuari>) jelow.getObject());
-				} else{
-					JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+				} else if(jelow.getType().equals("updateWaiting")){
+					Partida p= (Partida)jelow.getObject();
+					waitingController.updateGame(p);
 				}
 
 
@@ -184,6 +185,16 @@ public class UserService extends Thread{
 
 	public void sendGetPartides(Object message, RoomsController roomsController) {
 		this.roomsController = roomsController;
+		try{
+			this.doStream.reset();
+			this.doStream.writeObject(message);
+		} catch (IOException e) {
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
+	public void sendWaitingRoom(Object message, WaitingController waitingController) {
+		this.waitingController = waitingController;
 		try{
 			this.doStream.reset();
 			this.doStream.writeObject(message);

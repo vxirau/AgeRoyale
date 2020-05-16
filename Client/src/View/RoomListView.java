@@ -114,49 +114,12 @@ public class RoomListView extends JFrame{
 				super.paintComponent(g);
 			}
 		};
-		ImageIcon imagen = new ImageIcon(this.getClass().getResource("/resources/escut.png"));
+
 		element.setOpaque(false);
 		element.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
-				RoomListView.this.setVisible(false);
-				Object[] options = {"Jugador", "Espectador"};
-				if(p.getJugadors().size()<2){
-					int n = JOptionPane.showOptionDialog(RoomListView.this,
-							"Vols entrar com a espectador o com a jugador?",
-							"Partida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-							imagen, options,  options[0]);
-					if(n==JOptionPane.YES_OPTION){
-						p.getJugadors().add(RoomListView.this.usuari);
-						roomsController.updateGameTable(p,"newPlayer");
-					}else if(n==JOptionPane.NO_OPTION){
-						if(p.getEspectadors() == null){
-							p.setEspectadors(new ArrayList<>());
-						}
-						p.getEspectadors().add(RoomListView.this.usuari);
-						roomsController.updateGameTable(p,"newSpectator");
-					}
-
-					WaitingRoomView waitingRoom = new WaitingRoomView(p, RoomListView.this.usuari);
-					WaitingController roomControl = new WaitingController(total, roomsController,p, waitingRoom, roomsController.getService(), RoomListView.this.usuari);
-					waitingRoom.setController(roomControl);
-					waitingRoom.setVisible(true);
-					RoomsController.setClientVisible(false);
-				}else{
-					p.getEspectadors().add(RoomListView.this.usuari);
-					roomsController.updateGameTable(p,"newSpectator");
-
-					WaitingRoomView waitingRoom = new WaitingRoomView(p, RoomListView.this.usuari);
-					WaitingController roomControl = new WaitingController(total, roomsController,p, waitingRoom, roomsController.getService(), RoomListView.this.usuari);
-					waitingRoom.setController(roomControl);
-					waitingRoom.setVisible(true);
-					RoomsController.setClientVisible(false);
-				}
-
-
-
-
+				roomsController.gameSelected(p,total);
 			}
 		});
 

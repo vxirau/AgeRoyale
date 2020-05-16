@@ -10,6 +10,7 @@ import src.Usuari;
 import src.View.ViewServer;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -34,6 +35,7 @@ public class DedicatedServer extends Thread {
 	private ObjectOutputStream objectOut;
 	private LinkedList<DedicatedServer> clients;
 	private ViewServer vista;
+	private Integer inRoom = null;
 	private TroopSController troopSController;
 	private Usuari clientUser;
 	private Server server;
@@ -91,6 +93,7 @@ public class DedicatedServer extends Thread {
 					pDao.addPartida((Partida) m.getObject());
 					ArrayList<Partida> p = pDao.getRunningPartides();
 					objectOut.writeObject(new Message(p, "allGamesReply"));
+					server.broadcastClients();
 				} else if (m.getType().equals("getAllGames")) {
 					objectOut.reset();
 					partidaDAO pDao = new partidaDAO();
@@ -130,11 +133,13 @@ public class DedicatedServer extends Thread {
 					}else{
 						clientUser = usr;
 						messageResposta = new Message(usr, "Login resposta");
+						server.broadcastClients();
 					}
 					objectOut.writeObject(messageResposta);
 					if (usr != null) {
 						uDAO.updateState(usr, true);
 					}
+
 				} else if (m.getType().equals("Logout")) {
 					Usuari usuari = (Usuari) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
@@ -145,6 +150,7 @@ public class DedicatedServer extends Thread {
 					stopDedicatedServer();
 					clients.remove(this);
 					server.showClients();
+					server.broadcastClients();
 				} else if (m.getType().equals("PasswordUpdate")) {
 					Usuari usuari = (Usuari) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
@@ -203,6 +209,7 @@ public class DedicatedServer extends Thread {
 					objectOut.writeObject(messageResposta);
 					Message messageResposta2 = new Message(rDAO.getFriendRequests(users.get(0)), "requestsReply");
 					objectOut.writeObject(messageResposta2);
+					server.broadcastClients();
 				}else if(m.getType().equals("removeRequest")){
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					requestsDAO rDAO = new requestsDAO();
@@ -227,6 +234,7 @@ public class DedicatedServer extends Thread {
 					}else{
 						pDAO.addPlayerOne(p, p.getJugadors().get(0));
 					}
+					inRoom = p.getIdPartida();
 					server.broadcastClients();
 				}else if(m.getType().equals("newSpectator")){
 					spectatorDAO sDAO = new spectatorDAO();
@@ -236,9 +244,8 @@ public class DedicatedServer extends Thread {
 							sDAO.addSpectator(p, u);
 						}
 					}
+					inRoom = p.getIdPartida();
 					server.broadcastClients();
-				}else if(m.getType().equals("updateWaitingRooms")){
-
 				} else if (m.getType().equals("userLeft")) {
 					Usuari u = (Usuari) m.getObject();
 					partidaDAO pDAO = new partidaDAO();
@@ -249,6 +256,8 @@ public class DedicatedServer extends Thread {
 					}else{
 						sDAO.removeSpectator(u);
 					}
+					inRoom = null;
+					server.broadcastClients();
 				}
 
 			}
@@ -271,32 +280,29 @@ public class DedicatedServer extends Thread {
 				.toInstant());
 	}
 
-	public void privateMessage(String message, Object o) throws IOException {
+	public void privateMessage(String message) throws IOException {
+
 		if (message.equals("Friends")){
-			Usuari usuari = (Usuari) o;
+			Usuari usuari = this.clientUser;
 			amicDAO aDAO = new amicDAO();
 			ArrayList<Usuari> a = aDAO.getAmics(usuari);
 			Message messageResposta = new Message(a, "FriendsResposta");
 			objectOut.writeObject(messageResposta);
-		} else if (message.equals("getAllGames")) {
-			partidaDAO pDao = new partidaDAO();
-			ArrayList<Partida> p = pDao.getAllPartides();
-			objectOut.writeObject(new Message(p, "allGamesReply"));
 		} else if (message.equals("getAllRunningGames")) {
 			objectOut.reset();
 			partidaDAO pDao = new partidaDAO();
 			ArrayList<Partida> p = pDao.getRunningPartides();
 			objectOut.writeObject(new Message(p, "allGamesReply"));
-		}else if(message.equals("updateSpectators")){
-
+		}else if(message.equals("updateWaitingRoom")){
+			if(inRoom != null){
+				partidaDAO pDAO = new partidaDAO();
+				spectatorDAO sDAO = new spectatorDAO();
+				Partida p = pDAO.getPartida(inRoom);
+				ArrayList<Usuari> spect = sDAO.getAllSpectatorInGame(p);
+				p.setEspectadors(spect);
+				objectOut.writeObject(new Message(p, "updateWaiting"));
+			}
 		}
-	}
-
-
-	public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
-		return dateToConvert.toInstant()
-				.atZone(ZoneId.systemDefault())
-				.toLocalDate();
 	}
 
 	private ObjectOutputStream getOutChannel() {

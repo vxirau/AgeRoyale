@@ -15,13 +15,26 @@ import java.util.ArrayList;
 public class WaitingRoomView extends JFrame {
     private JButton start;
     private ArrayList<Usuari> friends;
+    private Partida p;
+    private Usuari usr;
 
     //Publica, esperar a que es connecti algú i quan es connecti començar partida
 
     //Privada, convidar amics en linia (amics entren si accepten)
 
-    public WaitingRoomView(Partida p, Usuari usr){
+    public WaitingRoomView(Partida p, Usuari usr) {
         this.friends = usr.getAmics();
+        this.p = p;
+        this.usr = usr;
+    }
+    public void setPartida(Partida partida){
+        this.p = partida;
+    }
+
+    public void initAll(){
+
+        removeAll();
+
         JPanel main  = new JPanel();
         main.setLayout(null);
         main.setOpaque(false);
@@ -178,6 +191,9 @@ public class WaitingRoomView extends JFrame {
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setSize(450, 800);
+
+        revalidate();
+        repaint();
     }
 
     public void setController(WaitingController controller){

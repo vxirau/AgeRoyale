@@ -30,6 +30,11 @@ public class WaitingController implements ActionListener, WindowListener {
         this.usuari = usr;
     }
 
+    public void updateGame(Partida p){
+        view.setPartida(p);
+        view.initAll();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if(((JButton)e.getSource()).getText().equals("Start Game")){

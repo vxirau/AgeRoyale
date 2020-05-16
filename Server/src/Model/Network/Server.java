@@ -75,10 +75,14 @@ public class Server extends Thread {
 
     public void broadcastClients() {
 		for (DedicatedServer dServer : dServers) {
-			//Broadcast to:
-			// -- RoomListView
-			// -- FriendListView
-			// -- WaitingRooms
+			try {
+				dServer.privateMessage("Friends");
+				dServer.privateMessage("getAllGames");
+				dServer.privateMessage("getAllRunningGames");
+				dServer.privateMessage("updateWaitingRoom");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
     }
 }
