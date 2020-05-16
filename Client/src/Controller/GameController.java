@@ -26,7 +26,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
     public GameController(GameView gameView,UserService userService) throws IOException {
         this.gameView = gameView;
         this.mouseIsClicked = false;
-        this.deck = new Deck(this.gameView, this.gameView.getWidth(), this.gameView.getHeight());
+        this.deck = new Deck(this.gameView.getWidth(), this.gameView.getHeight());
         this.uService = userService;
 
         //userService.startServerComunication();//TODO: comentar

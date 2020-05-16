@@ -80,7 +80,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
         this.tropa = new Tropa();
         mouseIsClicked = false;
         whichTroop = 10;
-        this.deck = new Deck(this, width, height);
+        this.deck = new Deck(width, height);
 
 
         //Creem el mapa i li donem la mesura en tiles ( en aquest cas, sera de 10 x 20)
