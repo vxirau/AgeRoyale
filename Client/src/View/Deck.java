@@ -14,21 +14,18 @@ public class Deck implements Serializable {
     private Rectangle deckRectangleBorder;
     private int deckHeight;
     private int width;
-    private GameView gameView;
     private static final String SKELETON_DECK_PATH  = "/resources/skeleton_deck.png";
     private static final String GOBLIN_DECK_PATH  = "/resources/goblin_deck.png";
     private static final String WIZARD_DECK_PATH  = "/resources/wizard_deck.png";
     private static final String BOMB_DECK_PATH  = "/resources/bomb_deck.png";
     private boolean characterIsSelected;
     private int whichTroop;
-    BufferedImage[] bufferedImage;
+    public BufferedImage[] bufferedImage;
 
     private final Color  DECK_RECTANGLE_COLOR;
 
 
-    public Deck(GameView gameView, int screenWidth, int screenHeight) throws IOException {
-
-        this.gameView = gameView;
+    public Deck(int screenWidth, int screenHeight) throws IOException {
         deckHeight = 64;
         deckRectangle = new Rectangle(0, screenHeight - deckHeight + 5, screenWidth, deckHeight);
         deckRectangleBorder = new Rectangle(deckRectangle.x, deckRectangle.y , deckRectangle.width, 3 );

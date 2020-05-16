@@ -14,7 +14,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class FriendRequest extends JFrame {
+public class FriendRequestView extends JFrame {
     private JPanel jpPare;
     private JPanel[] jpsRequest;
     private JScrollPane jScrollPane;
@@ -22,7 +22,7 @@ public class FriendRequest extends JFrame {
     private FriendsController controller;
     private ArrayList<Usuari> requests;
 
-    public FriendRequest(FriendsController controller, ArrayList<Usuari> requests) {
+    public FriendRequestView(FriendsController controller, ArrayList<Usuari> requests) {
         this.controller = controller;
         this.requests = requests;
         setTitle("RequestFriend");

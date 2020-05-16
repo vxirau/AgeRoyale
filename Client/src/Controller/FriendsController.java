@@ -3,7 +3,7 @@ package src.Controller;
 import src.Message;
 import src.Model.Network.UserService;
 import src.Usuari;
-import src.View.FriendRequest;
+import src.View.FriendRequestView;
 import src.View.FriendView;
 
 import javax.swing.*;
@@ -28,7 +28,7 @@ public class FriendsController implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         String boto = ((JButton) e.getSource()).getText();
         if(boto.equals("Friend Request")){
-            FriendRequest r = new FriendRequest(this, requests);
+            FriendRequestView r = new FriendRequestView(this, requests);
             r.setVisible(true);
         }
     }
