@@ -47,7 +47,7 @@ public class spectatorDAO {
     }
 
     public void removeSpectator (Usuari user){
-        String query = "DELETE FROM AgeRoyale.espectators WHERE es.idUsuari = " + user.getIdUsuari() + ";";
+        String query = "DELETE FROM AgeRoyale.espectators WHERE AgeRoyale.espectators.idUsuari = " + user.getIdUsuari() + ";";
         DBConnector.getInstance().deleteQuery(query);
     }
 }
