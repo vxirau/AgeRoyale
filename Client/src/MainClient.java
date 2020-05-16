@@ -40,17 +40,17 @@ public class MainClient {
                   gView.startGame();
                   GameController gameController = null;
                   TroopController troopController = null;
-                 // try {
-                      //gameController = new GameController(gView,userService);
-                      //troopController = new TroopController(gView,userService);
-                 // } catch (IOException e) {
-                   //   e.printStackTrace();
-                 // }
+                 try {
+                      gameController = new GameController(gView,userService);
+                      troopController = new TroopController(gView,userService);
+                  } catch (IOException e) {
+                      e.printStackTrace();
+                 }
 
-                  GameView finalGView = gView;
-                  GameController finalGameController = gameController;
-                  TroopController finalTroopController = troopController;
-                  SwingUtilities.invokeLater(new Runnable() {
+                 GameView finalGView = gView;
+                 GameController finalGameController = gameController;
+                 TroopController finalTroopController = troopController;
+                 SwingUtilities.invokeLater(new Runnable() {
                       @Override
                       public void run() {
                           finalGView.registerController(finalGameController, null);
