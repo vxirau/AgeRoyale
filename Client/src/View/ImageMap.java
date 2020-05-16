@@ -13,7 +13,7 @@ public class ImageMap extends GameMap implements Serializable {
         super(path);
     }
     //Metode per llegir el mapa creat amb pixels, mitjancant el qual introduim els valors dels colors del mapa a pixelArray
-    protected void loadMap(String path) throws IOException {
+    public void loadMap(String path) throws IOException {
         BufferedImage image = ImageIO.read(ImageMap.class.getResource(path));
 
         mapWidth = image.getWidth();
@@ -26,7 +26,7 @@ public class ImageMap extends GameMap implements Serializable {
     }
 
     //Metode per crear el mapa. Llegim els colors guardats a pixelArray, i en funcio del color que trobi el pixel, carregara l'sprite pertinent al tile
-    protected void generateGameMap(){
+    public void generateGameMap(){
         for(int i = 0; i < pixelArray.length; i++){
             //Obtenim el color guardat a la posicio i de l'array de pixels
             switch(pixelArray[i]){
