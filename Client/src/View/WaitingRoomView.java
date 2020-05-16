@@ -35,15 +35,43 @@ public class WaitingRoomView extends JFrame {
         jlTitol.setFont(new Font("Herculanum", Font.BOLD, 25));
         main.add(jlTitol);
 
+        JLabel jName = new JLabel();
+        jName.setText("Nom Sala: " + p.getName());
+        jName.setBounds(85, 700, 300, 60);
+        jName.setHorizontalAlignment(SwingConstants.CENTER);
+        jName.setOpaque(false);
+        jName.setForeground(Color.WHITE);
+        jName.setFont(new Font("Herculanum", Font.BOLD, 25));
+        main.add(jName);
+
         JScrollPane players = new JScrollPane();
         players.setEnabled(true);
         players.getViewport().setOpaque(false);
         players.setBounds(30,100,400,100);
         players.setOpaque(false);
         JPanel jugador = new JPanel();
-        jugador.setLayout(null);
+        players.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jugador.setLayout(new BoxLayout(jugador, BoxLayout.Y_AXIS));
         jugador.setOpaque(false);
 
+
+        JLabel playersText = new JLabel();
+        playersText.setText("Jugadors Connectats");
+        playersText.setBounds(85, 80, 300, 30);
+        playersText.setHorizontalAlignment(SwingConstants.CENTER);
+        playersText.setOpaque(false);
+        playersText.setForeground(Color.WHITE);
+        playersText.setFont(new Font("Herculanum", Font.BOLD, 15));
+        main.add(playersText);
+
+        JLabel espectadorsText = new JLabel();
+        espectadorsText.setText("Espectadors Connectats");
+        espectadorsText.setBounds(85, 200, 300, 30);
+        espectadorsText.setHorizontalAlignment(SwingConstants.CENTER);
+        espectadorsText.setOpaque(false);
+        espectadorsText.setForeground(Color.WHITE);
+        espectadorsText.setFont(new Font("Herculanum", Font.BOLD, 15));
+        main.add(espectadorsText);
 
         JScrollPane spectators = new JScrollPane();
         spectators.setOpaque(false);
@@ -51,7 +79,8 @@ public class WaitingRoomView extends JFrame {
         spectators.getViewport().setOpaque(false);
         spectators.setBounds(30,220,400,200);
         JPanel espectador = new JPanel();
-        espectador.setLayout(null);
+        spectators.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        espectador.setLayout(new BoxLayout(espectador, BoxLayout.Y_AXIS));
         espectador.setOpaque(false);
 
         spectators.setViewportView(espectador);
@@ -62,19 +91,48 @@ public class WaitingRoomView extends JFrame {
         start.setText("Start Game");
         start.setHorizontalAlignment(SwingConstants.CENTER);
         start.setBounds(30,100,100,50);
-        //main.add(start);
 
-        //TODO: detectar quan es connecti algú, començar partida
-        //TODO: crear taula rooms, amb les diferentes partides pendents
-        //TODO: posar fondo a la view
+        if(p.getJugadors()!=null){
+            for(Usuari f : p.getJugadors()){
+                jugador.add(createFriend(f));
+                jugador.add(makeSeparator());
+            }
+        }
+
+        if(p.getEspectadors()!=null){
+            for(Usuari f : p.getEspectadors()){
+                espectador.add(createFriend(f));
+                espectador.add(makeSeparator());
+            }
+        }
+
 
         if(!p.isPublic() && p.getHost().equals(usr.getNickName())){
             JLabel separator = new JLabel();
             separator.setText(Utils.ferDottedLine(41));
-            separator.setBounds(22, 450, 440, 10);
+            separator.setBounds(22, 440, 440, 10);
             separator.setForeground(Color.decode("#FFDC60"));
             separator.setFont(new Font("Arial", Font.BOLD, 30));
             main.add(separator);
+
+
+            JLabel inviteText = new JLabel();
+            inviteText.setText("Tria amics per convidar");
+            inviteText.setBounds(85, 455, 300, 30);
+            inviteText.setHorizontalAlignment(SwingConstants.CENTER);
+            inviteText.setOpaque(false);
+            inviteText.setForeground(Color.WHITE);
+            inviteText.setFont(new Font("Herculanum", Font.BOLD, 15));
+            main.add(inviteText);
+
+            JLabel info = new JLabel();
+            info.setText("Només es mostren els amics en linia");
+            info.setBounds(85, 680, 300, 30);
+            info.setHorizontalAlignment(SwingConstants.CENTER);
+            info.setOpaque(false);
+            info.setForeground(Color.WHITE);
+            info.setFont(new Font("Herculanum", Font.BOLD, 15));
+            main.add(info);
 
             JScrollPane friendInvites = new JScrollPane();
             friendInvites.setEnabled(true);
@@ -82,11 +140,22 @@ public class WaitingRoomView extends JFrame {
             friendInvites.setOpaque(false);
             friendInvites.setBounds(30,480,400,200);
             JPanel inviteFriends = new JPanel();
+            friendInvites.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             inviteFriends.setLayout(new BoxLayout(inviteFriends, BoxLayout.Y_AXIS));
             inviteFriends.setOpaque(false);
             
             for(Usuari f : friends){
-                friendInvites.add(createFriend(f));
+                if(f.isOnline()){
+                    JPanel panel = createFriend(f);
+                    panel.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            System.out.println("Amic apretat");
+                        }
+                    });
+                    inviteFriends.add(panel);
+                    inviteFriends.add(makeSeparator());
+                }
             }
 
             friendInvites.setViewportView(inviteFriends);
@@ -114,45 +183,32 @@ public class WaitingRoomView extends JFrame {
     }
     
     public JPanel createFriend(Usuari u){
-        JPanel amic = new JPanel(new GridLayout(3, 1)){
-            protected void paintComponent(Graphics g) {
-                ImageIcon elementButton = new ImageIcon(this.getClass().getResource("/resources/friend_bg.png"));
-                g.drawImage(elementButton.getImage(), 0, 0, null);
-                super.paintComponent(g);
-            }
-        };
-        amic.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
+        JPanel amic = new JPanel(new GridLayout(1, 1));
+        amic.setBackground(Color.decode("#FFDC60"));
 
-            }
-        });
-
-        amic.setOpaque(false);
         amic.setVisible(true);
-
         JLabel nomAmic = new JLabel();
-        nomAmic.setText("<html><font color='white'>" + Utils.ferEspais(14) + " "+ u.getNickName() + "</font></html>");
-        nomAmic.setForeground(Color.WHITE);
-        nomAmic.setBorder(new EmptyBorder(10,0,0,0));//top,left,bottom,right
+        nomAmic.setText(u.getNickName() );
+        nomAmic.setForeground(Color.BLACK);
+        nomAmic.setBorder(new EmptyBorder(10,0,0,0));
+        nomAmic.setFont(new Font("Helvetica", Font.BOLD, 20));
+        nomAmic.setHorizontalAlignment(SwingConstants.CENTER);
 
-        nomAmic.setFont(new Font("Helvetica", 0, 20));
         amic.add(nomAmic);
 
-        JLabel online = new JLabel();
-        if(u.isOnline()){
-            online.setText("<html><font color='white'>" + Utils.ferEspais(22) + " Online" +  "</font></html>");
-            online.setForeground(Color.WHITE);
+        amic.setPreferredSize(new Dimension(400,50));
+        amic.setMaximumSize(new Dimension(400,50));
+        amic.setSize(400, 50);
+        return amic;
+    }
 
-        }else{
-            online.setText("<html><font color='white'>" + Utils.ferEspais(22) + " Offline" + "</font></html>");
-            online.setForeground(Color.GRAY);
-        }
-
-        amic.add(online);
-        amic.setPreferredSize(new Dimension(410,90));
-        amic.setMaximumSize(new Dimension(430,90));
-        amic.setSize(430, 90);
+    public JPanel makeSeparator(){
+        JPanel amic = new JPanel();
+        amic.setPreferredSize(new Dimension(360,5));
+        amic.setMaximumSize(new Dimension(360,5));
+        amic.setSize(360, 5);
+        amic.setVisible(true);
+        amic.setOpaque(false);
         return amic;
     }
 } 

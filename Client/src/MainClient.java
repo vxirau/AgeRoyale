@@ -14,7 +14,7 @@ public class MainClient {
 
 
 
-    private static int game = 1;
+    private static int game = 8;
     public static void main(String[] args) {
         try {
             javax.swing.UIManager.setLookAndFeel( "javax.swing.plaf.nimbus.NimbusLookAndFeel" );
@@ -24,11 +24,11 @@ public class MainClient {
         SwingUtilities.invokeLater(new Runnable() {
           @Override
           public void run() {
-             UserService userService = new UserService();
+             //UserService userService = new UserService();
               if (game == 1) {
                   LoginView loginview = new LoginView();
-                  LoginViewController controller = new LoginViewController(loginview, userService);
-                  loginview.loginViewsetListener(controller);
+                  //LoginViewController controller = new LoginViewController(loginview, userService);
+                  //loginview.loginViewsetListener(controller);
                   loginview.setVisible(true);
               } else if(game == 0){
                   GameView gView = null;
@@ -73,7 +73,16 @@ public class MainClient {
                   amics.add(new Usuari("amigo9", "password9"));
                   amics.add(new Usuari("amigo10", "password10"));
                   Usuari u  = new Usuari(0, "Victor", "password", amics);
-                  WaitingRoomView view = new WaitingRoomView(new Partida(0, false, "Prova", "Victor"), u);
+
+                  ArrayList<Usuari> jugadors = new ArrayList<>();
+                  jugadors.add(new Usuari("amigo1", "password1"));
+                  jugadors.add(new Usuari("amigo2", "password2"));
+
+                  ArrayList<Usuari> espectadors = new ArrayList<>();
+                  espectadors.add(new Usuari("amigo4", "password1"));
+                  espectadors.add(new Usuari("amigo78", "password2"));
+
+                  WaitingRoomView view = new WaitingRoomView(new Partida("Partidaza", null, false, "Victor", jugadors, espectadors), u);
                   view.setVisible(true);
               }else{
                   SwingUtilities.invokeLater(new Runnable() {
