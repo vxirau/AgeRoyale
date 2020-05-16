@@ -1,6 +1,5 @@
 package src.View;
 
-import org.jfree.data.xy.XYSeries;
 import src.Partida;
 
 import javax.swing.*;

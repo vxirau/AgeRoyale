@@ -11,15 +11,14 @@ public class NetworkConfiguration {
 
 		private String ip;
 		private int serverPort;
-		private int DBPort;
 		private String DBip;
 		private String DBUser;
 		private String DBPass;
 
+
 		public static boolean Setup=false;
 		public static String staticIP;
 		public static int staticPort;
-		public static int staticDBPort;
 		public static String staticDPip;
 		public static String staticDBUser;
 		public static String staticDBPass;
@@ -35,11 +34,10 @@ public class NetworkConfiguration {
 
 		public void ompleStatic(){
 			staticIP = this.ip;
-			staticPort = this.serverPort;
-			staticDBPort = DBPort;
+			staticPort = serverPort;
 			staticDPip = DBip;
 			staticDBUser = DBUser;
-			staticDBPass = DBPass;
+			staticDBPass=DBPass;
 		}
 
 		public void setIP(String ip){

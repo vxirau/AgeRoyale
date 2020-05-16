@@ -15,15 +15,13 @@ public class DBConnector {
     private static String userName;
     private static String password;
     private static String db = "ageroyale";
-    private static int port = NetworkConfiguration.staticDBPort;
+
     private String url = NetworkConfiguration.staticDPip;
     public Connection conn;
     private static Statement s;
     private static DBConnector instance;
 
     private DBConnector() {
-        this.url += ":" + port + "/";
-        this.url += db + "?verifyServerCertificate=false&useSSL=false&serverTimezone=UTC";
         DBConnector.userName = NetworkConfiguration.staticDBUser;
         DBConnector.password = NetworkConfiguration.staticDBPass;
         this.instance = this;
@@ -37,10 +35,13 @@ public class DBConnector {
         return instance;
     }
 
+
     public void connect() {
         try {
             Class.forName("com.mysql.jdbc.Connection");
-            conn = (Connection) DriverManager.getConnection(url, userName, password);
+            conn = (Connection) DriverManager.getConnection(NetworkConfiguration.staticDPip, NetworkConfiguration.staticDBUser, NetworkConfiguration.staticDBPass);
+            s =(Statement) conn.createStatement();
+            s.executeUpdate("USE AgeRoyale;");
             if (conn != null) {
                 System.out.println("Connexió a base de dades "+url+" ... Ok");
             }

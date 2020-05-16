@@ -1,12 +1,11 @@
 #CREACIO DE LA BASE DE DADES
-SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
-DROP DATABASE IF EXISTS AgeRoyale;
-CREATE DATABASE AgeRoyale;
+#SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+
 USE AgeRoyale;
 
 #DESTRUCCIO DE LES TAULES
 DROP TABLE IF EXISTS partida CASCADE;
-DROP TABLE IF EXISTS UsuariTropa CASCADE;
+DROP TABLE IF EXISTS usuaritropa CASCADE;
 DROP TABLE IF EXISTS tropa CASCADE;
 DROP TABLE IF EXISTS amic CASCADE;
 DROP TABLE IF EXISTS usuari CASCADE;
@@ -65,7 +64,7 @@ CREATE TABLE tropa(
   PRIMARY KEY (idTropa)
 );
 
-CREATE TABLE UsuariTropa(
+CREATE TABLE usuaritropa(
     idUser  int not null,
     idTropa int not null,
     FOREIGN KEY (idUser) REFERENCES usuari(idUser),
@@ -132,7 +131,7 @@ INSERT INTO amic (id_u1, id_u2) VALUES
 INSERT INTO tropa (ATAC, VIDA, COST, TIPUS) values
     (30, 100, 200, true), (10, 300, 100, false), (50, 50, 100, true), (40, 70, 50, true), (10, 150, 2, false);
 
-INSERT INTO UsuariTropa (idUser, idTropa) VALUES
+INSERT INTO usuaritropa (idUser, idTropa) VALUES
     (1, 1), (1, 2),
     (2, 2), (2, 3),
     (3, 3), (3, 4),
@@ -269,4 +268,4 @@ DELETE FROM AgeRoyale.usuaritropa WHERE idTropa = 1;
 DELETE FROM AgeRoyale.usuaritropa WHERE idUser = 1;
 
 #add tropa to user
-INSERT INTO AgeRoyale.UsuariTropa (idUser, idTropa) VALUES (1, 1);
+INSERT INTO AgeRoyale.usuaritropa (idUser, idTropa) VALUES (1, 1);

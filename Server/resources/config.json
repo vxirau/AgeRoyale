@@ -1,8 +1,8 @@
 {
   "ip": "192.168.86.201",
   "serverPort": 2003,
-  "DBPort": 3306,
-  "DBip": "jdbc:mysql://localhost",
   "DBUser": "root",
-  "DBPass": ""
+  "DBPass" : "administrador",
+  "DBip": "jdbc:mysql://ageroyale.cdnvdlofzqio.eu-west-2.rds.amazonaws.com:3306"
 }
+
