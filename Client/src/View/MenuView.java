@@ -254,9 +254,6 @@ public class MenuView extends JFrame implements Runnable {
         jpTropes = tropesView.getJpTropes();
     }
 
-
-
-
     private void initMain() {
         mainView = new MainView(this);
         jpMain = mainView.getJpMain();
@@ -264,25 +261,12 @@ public class MenuView extends JFrame implements Runnable {
 
     public void initFriends() {
         friendView = new FriendView(usuari, menuController.getFriendsController());
-
-        Usuari main = new Usuari();
-        main.setNickName("hola");
-        main.setAmics(new ArrayList<Usuari>());
-        setUsuari(main);
-        Usuari u = new Usuari();
-        u.setNickName("Uno");
-        Usuari d = new Usuari();
-        d.setNickName("Dos");
-        ArrayList<Usuari> amics = new ArrayList<>();
-        amics.add(d);
-        amics.add(u);
-
-        //friendView.setAmics(amics);
         jpFriends = friendView.getJpFriends();
     }
 
     private void initCrearPartida() {
         menuController.getRoomsController().setMenuView(this);
+
         roomListView = new RoomListView(menuController.getRoomsController(), this.usuari);
         jpCrearPartida = roomListView.getJpPare();
     }

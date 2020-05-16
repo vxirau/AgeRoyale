@@ -48,20 +48,13 @@ public class RoomsController {
 				}else{
 					ok=false;
 				}
-
 				if(ok){
 					DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 					LocalDateTime now = LocalDateTime.now();
 					Partida p = new Partida(m, dtf.format(now), privacitat, usuari.getNickName());
-					try {
-						p.startPartida();
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
 					Message mes = new Message(p, "roomCreate");
 					uService.sendPartida(mes);
 				}
-
 			}
 		}
 	};

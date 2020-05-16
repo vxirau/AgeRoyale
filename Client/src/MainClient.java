@@ -2,10 +2,7 @@ package src;
 
 import src.Controller.*;
 import src.Model.Network.UserService;
-import src.View.GameView;
-import src.View.LoginView;
-import src.View.MenuView;
-import src.View.ViewRegistre;
+import src.View.*;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -43,12 +40,12 @@ public class MainClient {
                   gView.startGame();
                   GameController gameController = null;
                   TroopController troopController = null;
-                  try {
-                      gameController = new GameController(gView,userService);
-                      troopController = new TroopController(gView,userService);
-                  } catch (IOException e) {
-                      e.printStackTrace();
-                  }
+                 // try {
+                      //gameController = new GameController(gView,userService);
+                      //troopController = new TroopController(gView,userService);
+                 // } catch (IOException e) {
+                   //   e.printStackTrace();
+                 // }
 
                   GameView finalGView = gView;
                   GameController finalGameController = gameController;
@@ -63,6 +60,21 @@ public class MainClient {
                       }
                   });
 
+              }else if(game == 8){
+                  ArrayList<Usuari> amics = new ArrayList<>();
+                  amics.add(new Usuari("amigo1", "password1"));
+                  amics.add(new Usuari("amigo2", "password2"));
+                  amics.add(new Usuari("amigo3", "password3"));
+                  amics.add(new Usuari("amigo4", "password4"));
+                  amics.add(new Usuari("amigo5", "password5"));
+                  amics.add(new Usuari("amigo6", "password6"));
+                  amics.add(new Usuari("amigo7", "password7"));
+                  amics.add(new Usuari("amigo8", "password8"));
+                  amics.add(new Usuari("amigo9", "password9"));
+                  amics.add(new Usuari("amigo10", "password10"));
+                  Usuari u  = new Usuari(0, "Victor", "password", amics);
+                  WaitingRoomView view = new WaitingRoomView(new Partida(0, false, "Prova", "Victor"), u);
+                  view.setVisible(true);
               }else{
                   SwingUtilities.invokeLater(new Runnable() {
                       @Override
@@ -80,11 +92,11 @@ public class MainClient {
                           amics.add(new Usuari("amigo9", "password9"));
                           amics.add(new Usuari("amigo10", "password10"));
                           Usuari u  = new Usuari(0, "victor", "password", amics);
-                          try {
-                              MenuController controlador = new MenuController(rView, userService, u, null, null);
+                         /* try {
+                              //MenuController controlador = new MenuController(rView, userService, u, null, null);
                           } catch (InterruptedException e) {
                               e.printStackTrace();
-                          }
+                          }*/
                           rView.setVisible(true);
                       }
                   });

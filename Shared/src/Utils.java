@@ -10,4 +10,12 @@ public class Utils {
 		return s;
 	}
 
+	public static String ferDottedLine(int total){
+		String s= "";
+		for(int i=0; i<total ;i++){
+			s+="-";
+		}
+		return s;
+	}
+
 }
