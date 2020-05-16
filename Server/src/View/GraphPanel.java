@@ -7,9 +7,15 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class GraphPanel extends JPanel {
     private boolean hiHaDades = true;
@@ -112,7 +118,17 @@ public class GraphPanel extends JPanel {
         }
         maxX = days-1;
         for(int i=days; i>=0; i--){
-            String today = LocalDate.now().minusDays(i).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Calendar cal = Calendar.getInstance();
+            Date currentDate=null;
+            try {
+                currentDate = format.parse(dateFormat.format(cal.getTime()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            String today = toLocalDate(currentDate).minusDays(i).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             total = totalGamesToday(today);
             if(total == 0){
                 ok++;
@@ -143,10 +159,24 @@ public class GraphPanel extends JPanel {
     private int totalGamesToday(String data){
         int total = 0;
         for(Partida p : games){
-            if(p.getData().equals(data)){
+            Date date1= null;
+            try {
+                date1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(p.getData());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            String pDate = toLocalDate(date1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+            if(pDate.equals(data)){
                 total++;
             }
         }
         return total;
     }
+
+    public LocalDate toLocalDate(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
 }
