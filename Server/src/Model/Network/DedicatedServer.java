@@ -237,12 +237,6 @@ public class DedicatedServer extends Thread {
 						}
 					}
 					server.broadcastClients();
-				}else if(m.getType().equals("removeFromWaitingRoom")){
-					//Treure de la waiting room
-					//Si es jugador, treure de partida
-					//Si no és jugador, treure de espectadors
-					//Fer broadcast.
-
 				}else if(m.getType().equals("updateWaitingRooms")){
 
 				} else if (m.getType().equals("userLeft")) {
