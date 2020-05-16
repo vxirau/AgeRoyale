@@ -53,17 +53,14 @@ public class WaitingController implements ActionListener, WindowListener {
         JFrame j = (JFrame)e.getSource();
         if(j instanceof  WaitingRoomView){
             view.setVisible(false);
-            Message m = new Message(usuari, "removeFromWaitingRoom");
+            Message m = new Message(usuari, "userLeft");
             userService.sendObject(m);
             roomsController.getMenuView().setVisible(true);
         }else if(j instanceof GameView){
             view.setVisible(false);
             gv.setVisible(false);
-            //TODO: BANNEJAR USUARI SI ES ABANS DORA
-            //TODO: DETECTAR SI ES ESPECTADOR O JUGADOR QUE SURT :)
-            /*if(esJugador){
-                end game a la bbdd;
-            }*/
+            //TODO: BANNEJAR SI S'HA PIRAT ABANS DORA
+
             roomsController.getMenuView().setVisible(true);
         }
     }

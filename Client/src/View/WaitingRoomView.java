@@ -157,7 +157,7 @@ public class WaitingRoomView extends JFrame {
 
             friendInvites.setViewportView(inviteFriends);
             main.add(friendInvites);
-        }else if(p.getJugadors().size()==2){
+        }else if(p.getJugadors().size()==2 && p.getHost().equals(usr.getNickName())){
             start = new JButton();
             start.setText("Start Game");
             start.setHorizontalAlignment(SwingConstants.CENTER);

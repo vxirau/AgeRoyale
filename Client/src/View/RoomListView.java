@@ -131,6 +131,9 @@ public class RoomListView extends JFrame{
 						p.getJugadors().add(RoomListView.this.usuari);
 						roomsController.updateGameTable(p,"newPlayer");
 					}else if(n==JOptionPane.NO_OPTION){
+						if(p.getEspectadors() == null){
+							p.setEspectadors(new ArrayList<>());
+						}
 						p.getEspectadors().add(RoomListView.this.usuari);
 						roomsController.updateGameTable(p,"newSpectator");
 					}

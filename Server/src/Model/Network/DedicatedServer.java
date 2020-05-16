@@ -245,6 +245,16 @@ public class DedicatedServer extends Thread {
 
 				}else if(m.getType().equals("updateWaitingRooms")){
 
+				} else if (m.getType().equals("userLeft")) {
+					Usuari u = (Usuari) m.getObject();
+					partidaDAO pDAO = new partidaDAO();
+					spectatorDAO sDAO = new spectatorDAO();
+					Partida part = pDAO.userIsPlayer(u);
+					if(part != null){
+						pDAO.removePlayer(part, u);
+					}else{
+						sDAO.removeSpectator(u);
+					}
 				}
 
 			}

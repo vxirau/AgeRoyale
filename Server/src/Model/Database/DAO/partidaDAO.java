@@ -19,6 +19,7 @@ public class partidaDAO {
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
         try{
             if (rs.next()){
+                partida.setIdPartida(rs.getInt("idPartida"));
                 partida.setDuracio(rs.getInt("duration"));
                 partida.setData(rs.getString("date"));
                 partida.setFinished(rs.getBoolean("finished"));
@@ -171,6 +172,46 @@ public class partidaDAO {
         String query = "UPDATE AgeRoyale.partida SET AgeRoyale.partida.player1 = "+usuari.getIdUsuari()+" WHERE AgeRoyale.partida.idPartida = " + p.getIdPartida() + ";";
         DBConnector.getInstance().updateQuery(query);
     }
+
+    public Partida userIsPlayer(Usuari u){
+        Partida partida = null;
+        String query = "SELECT par.idPartida FROM AgeRoyale.partida AS par WHERE par.player1 = " + u.getIdUsuari() + " OR par.player2 = " + u.getIdUsuari() +";";
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try{
+            if (rs.next()){
+                partida = getPartida(rs.getInt("idPartida"));
+             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return partida;
+    }
+
+    public void removePlayer(Partida p, Usuari usuari) {
+        int playerNum = getPlayerNum(p, usuari);
+        String query = "UPDATE AgeRoyale.partida SET AgeRoyale.partida.player"+playerNum+" = "+null+" WHERE AgeRoyale.partida.idPartida = " + p.getIdPartida() + ";";
+        DBConnector.getInstance().updateQuery(query);
+    }
+
+    private int getPlayerNum(Partida p, Usuari usuari) {
+        Integer has=null;
+        String query = "SELECT par.player1 FROM AgeRoyale.partida as par WHERE idPartida = " + p.getIdPartida();
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try {
+            if (rs.next()) {
+                has = (Integer)rs.getObject("player1");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if(has!=null && has == usuari.getIdUsuari()){
+            has = 1;
+        }else{
+            has = 2;
+        }
+        return has;
+    }
+
 
     public Integer getPlayerOne(Partida p){
         Integer has = null;

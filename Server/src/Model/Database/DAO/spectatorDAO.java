@@ -46,8 +46,8 @@ public class spectatorDAO {
         return spectators;
     }
 
-    public void removeSpectator (Partida p, Usuari user){
-        String query = "DELETE FROM AgeRoyale.partida WHERE player1 = " + user.getIdUsuari() + " OR player2 = " + user.getIdUsuari() + ";";
+    public void removeSpectator (Usuari user){
+        String query = "DELETE FROM AgeRoyale.espectators WHERE es.idUsuari = " + user.getIdUsuari() + ";";
         DBConnector.getInstance().deleteQuery(query);
     }
 }
