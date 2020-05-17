@@ -26,6 +26,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
     private final int height;
     public static final int ROWS = 20;
     public static final int COLUMNS = 10;
+    private static final int DECK_SPACE = 106;
     private static volatile boolean gameIsRunning = false;
     private  GameController gameController;
 
@@ -37,7 +38,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
     private  boolean rebut = false;
     private  boolean trobat = false;
     private static BufferedImage image;
-    private static Tropa tropa;
+
 
     //Variable per accedir a la imatge a partir dels seus pixels
     private static int[] pixelsImage;
@@ -71,13 +72,13 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
 
         this.width = 32 * COLUMNS;
-        this.height = 32 * ROWS + 64;
+        this.height = 32 * ROWS + DECK_SPACE;
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         this.pixelsImage = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
         this.pixels = new int[width * height];
         this.tropes = new ArrayList<>();
         this.troops = new ArrayList<>();
-        this.tropa = new Tropa();
+
         mouseIsClicked = false;
         whichTroop = 10;
         this.deck = new Deck(width, height);
@@ -176,6 +177,14 @@ public class GameView extends JFrame implements Runnable, Serializable {
         this.troops = troops;
     }
 
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public void setDeck(Deck deck) {
+        this.deck = deck;
+    }
+
     public void showGraphics(){
         //Creem un buffer per tal de dibuixar els grafics en segon pla
         BufferStrategy bufferStrategy = getBufferStrategy();
@@ -190,15 +199,16 @@ public class GameView extends JFrame implements Runnable, Serializable {
         if(tropes.size() > 0) {
 
             for (int i = 0; i < tropes.size(); i++) {
-
-
                 //VERSIÓ 1
                 try {
                     Thread.sleep(160/tropes.size());
                 } catch (Exception e) {
                     System.out.println(e);
                 }
+
                 troopController.update(tropes.get(i), i);
+
+
 
                 //VERSIÓ 2
                /*if (troops.size() > 0) {
@@ -290,6 +300,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
                 delta--;
             }
 
+
             showGraphics();
 
 
@@ -324,28 +335,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
         this.mouseIsClicked = mouseIsClicked;
     }
 
-    /*public void invokeTroop(int whichTroop){
-        switch (whichTroop){
-            case 0:
-                Tropa skeleton = new Tropa(gameMap, xMousePosition, yMousePosition, Sprite.SKELETON_BACK);
-                tropes.add(skeleton);
-                break;
-            case 1:
-                Tropa goblin = new Tropa(gameMap, xMousePosition, yMousePosition, Sprite.GOBLIN_BACK);
-                tropes.add(goblin);
-                break;
-            case 2:
-                Tropa wizard = new Tropa(gameMap, xMousePosition, yMousePosition, Sprite.MAGIC_TOWER);
-                tropes.add(wizard);
-                break;
-            case 3:
-                Tropa bomb = new Tropa(gameMap, xMousePosition, yMousePosition, Sprite.BOMB);
-                tropes.add(bomb);
-                break;
-            default:
-                break;
-        }
-    }*/
+
 
     public GameMap getGameMap() {
         return gameMap;
@@ -374,10 +364,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
     }
 
-    /*public void selectTroopFromDeck(int whichTroop){
-        this.whichTroop = whichTroop;
-        deck.selectTroop(whichTroop);
-    }*/
+
 
     public ArrayList<Tropa> getTropes() {
         return tropes;

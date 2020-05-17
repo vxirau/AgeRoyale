@@ -136,7 +136,18 @@ public class UserService extends Thread{
 					Tropa t = (Tropa) jelow.getObject();
 					troopController.getTropa(t);
 					troopController.show(t);
-				} else if(jelow.getType().equals("FindFriendResposta")){
+				} else if(jelow.getType().equals("Bomba resposta")){
+					Tropa t = (Tropa) jelow.getObject();
+					troopController.getTropa(t);
+
+					troopController.show(t);
+
+
+				}else if(jelow.getType().equals("Destruir bomba")){
+					Tropa t = (Tropa) jelow.getObject();
+					troopController.destroyTroop(t);
+
+				}else if(jelow.getType().equals("FindFriendResposta")){
                 	friendsController.setFriends((ArrayList<Usuari>) jelow.getObject());
 				}else if(jelow.getType().equals("requestsReply")){
 					loginViewController.onRequestsRecieved((ArrayList<Usuari>) jelow.getObject());

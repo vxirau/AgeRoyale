@@ -240,7 +240,6 @@ public class TropesView extends JFrame{
 
     public void updateTropes(long elapsedTime){
         if(elapsedTime < 300){
-
             //TROPA 1 UPDATE
             if (usuari.getTropes().size() > 0) {
                 tropa1_foto = new ImageIcon(this.getClass().getResource(SKELETON_FRONT));

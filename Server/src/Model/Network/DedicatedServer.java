@@ -189,7 +189,22 @@ public class DedicatedServer extends Thread {
                     objectOut.reset();
 					Message mresposta = new Message(t,"Tropa resposta");
 					objectOut.writeObject(mresposta);
-				} else if (m.getType().equals("FindFriend")){
+				} else if(m.getType().equals("Bomba update")){
+					Tropa t = (Tropa) m.getObject();
+					t = troopSController.bombExplosion(t, cont);
+					if(t.isPlaying()){
+						cont++;
+						objectOut.reset();
+						Message mresposta = new Message(t,"Bomba resposta");
+						objectOut.writeObject(mresposta);
+					}else{
+
+						Message mresposta = new Message(t,"Destruir bomba");
+						objectOut.writeObject(mresposta);
+						System.out.println("ESTOY DESTRUIDA COÑIOOOOOOOOOOOOOOOO");
+					}
+
+				}else if (m.getType().equals("FindFriend")){
 					String nom = (String) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
 					ArrayList<Usuari> auz = uDAO.getUsersByName(nom);

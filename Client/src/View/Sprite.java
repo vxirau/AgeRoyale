@@ -14,10 +14,6 @@ public class Sprite implements Serializable {
     private SpritesSheet sheet;
 
     //Sprites tropes
-    public static final Sprite PERSONA_FRONT = new Sprite(32, 0, 0, 0, SpritesSheet.troops);
-    public static final Sprite PERSONA_BACK = new Sprite(32, 1, 0, 0, SpritesSheet.troops);
-    public static final Sprite PERSONA_RIGHT = new Sprite(32, 2, 0, 0, SpritesSheet.troops);
-    public static final Sprite PERSONA_LEFT = new Sprite(32, 3, 0, 0, SpritesSheet.troops);
     public static final Sprite GOBLIN_BACK = new Sprite(32, 4, 0, 0, SpritesSheet.troops);
     public static final Sprite GOBLIN_BACK_RIGHT_FOOT = new Sprite(32, 5, 0, 0, SpritesSheet.troops);
     public static final Sprite GOBLIN_BACK_LEFT_FOOT = new Sprite(32, 6, 0, 0, SpritesSheet.troops);
