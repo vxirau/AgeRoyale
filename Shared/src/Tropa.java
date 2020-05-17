@@ -21,6 +21,11 @@ public class Tropa extends Entity implements Serializable {
     private float yVariation;
     private static final int SIDE = 32;
     private boolean isFighting;
+    private boolean isOn;
+    private int idPartida;
+    private String whichSprite;
+    private Usuari usr;
+
     private int troopType;
     private int idTropa;
     private int vida;
@@ -70,10 +75,6 @@ public class Tropa extends Entity implements Serializable {
         isPlaying = playing;
     }
 
-
-
-
-
     public Sprite getSprite() {
         return sprite;
     }
@@ -99,6 +100,36 @@ public class Tropa extends Entity implements Serializable {
         xVariation = 0;
         yVariation = (float) -2;
         this.isFighting = false;
+
+
+    }
+
+
+
+    public Tropa(GameMap gameMap, int idTropa, int vida, int cost, int atac, int alcance, boolean ofensiva) {
+        this.gameMap = gameMap;
+        this.idTropa = idTropa;
+        this.vida = vida;
+        this.cost = cost;
+        this.atac = atac;
+        this.alcance = alcance;
+        this.ofensiva = ofensiva;
+    }
+
+    /*public void update(){
+        if(isPlaying) {
+            if(this.troopType == 0 || this.troopType == 1){
+                moveOffensiveTroop(xVariation, yVariation, cont);
+            }else if(troopType == 2){
+                bombExplosion(cont);
+            }else{
+
+            }
+            cont++;
+        }
+    }*/
+
+    public void setSprites(Sprite sprite){
 
         if(sprite.equals(Sprite.SKELETON_BACK)){
 
@@ -148,30 +179,6 @@ public class Tropa extends Entity implements Serializable {
         }
     }
 
-
-
-    public Tropa(GameMap gameMap, int idTropa, int vida, int cost, int atac, int alcance, boolean ofensiva) {
-        this.gameMap = gameMap;
-        this.idTropa = idTropa;
-        this.vida = vida;
-        this.cost = cost;
-        this.atac = atac;
-        this.alcance = alcance;
-        this.ofensiva = ofensiva;
-    }
-
-    /*public void update(){
-        if(isPlaying) {
-            if(this.troopType == 0 || this.troopType == 1){
-                moveOffensiveTroop(xVariation, yVariation, cont);
-            }else if(troopType == 2){
-                bombExplosion(cont);
-            }else{
-
-            }
-            cont++;
-        }
-    }*/
 
 
     public void show(GameView gameView){
@@ -239,9 +246,6 @@ public class Tropa extends Entity implements Serializable {
     }
 
 
-
-
-
     public int getIdTropa() {
         return idTropa;
     }
@@ -289,4 +293,29 @@ public class Tropa extends Entity implements Serializable {
     public void setOfensiva(boolean ofensiva) {
         this.ofensiva = ofensiva;
     }
+
+    public boolean isOn() {
+        return isOn;
+    }
+
+    public void setOn(boolean on) {
+        isOn = on;
+    }
+
+    public int getIdPartida() {
+        return idPartida;
+    }
+
+    public void setIdPartida(int idPartida) {
+        this.idPartida = idPartida;
+    }
+
+    public String getWhichSprite() {
+        return whichSprite;
+    }
+
+    public void setWhichSprite(String whichSprite) {
+        this.whichSprite = whichSprite;
+    }
+
 }

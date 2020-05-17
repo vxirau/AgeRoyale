@@ -4,6 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import src.*;
 import src.Controller.*;
+import src.Message;
+import src.Partida;
+import src.Tropa;
+import src.Usuari;
+import src.View.*;
 import src.View.LoginView;
 import src.View.ViewRegistre;
 
@@ -37,6 +42,7 @@ public class UserService extends Thread{
 	}
 
 	private boolean flag;
+    private GameController gameController;
 
 
 	public UserService() {
@@ -54,6 +60,7 @@ public class UserService extends Thread{
 			this.doStream = new ObjectOutputStream(socket.getOutputStream());
 			this.doInput = new ObjectInputStream(socket.getInputStream());
 			this.dInput = new DataInputStream(socket.getInputStream());
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("*** ESTA EL SERVIDOR EN EXECUCIO? ***");
@@ -93,7 +100,7 @@ public class UserService extends Thread{
 			try {
 
 				Message jelow = (Message) doInput.readObject();
-				System.out.println("Arriba a client: " + jelow.getType());
+				//System.out.println("Arriba a client: " + jelow.getType());
 				if (jelow.getType().equals("REGISTER_OK")) {
 					JOptionPane.showOptionDialog(new JFrame(), "DE SUPER PUTA MARE SOCI", "Congratulacions", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 					LoginView lview = new LoginView();
@@ -136,6 +143,7 @@ public class UserService extends Thread{
 					Tropa t = (Tropa) jelow.getObject();
 					troopController.getTropa(t);
 					troopController.show(t);
+					troopController.setAccept(true);
 				} else if(jelow.getType().equals("Bomba resposta")){
 					Tropa t = (Tropa) jelow.getObject();
 					troopController.getTropa(t);
@@ -143,15 +151,36 @@ public class UserService extends Thread{
 					troopController.show(t);
 
 
-				}else if(jelow.getType().equals("Destruir bomba")){
+				}else if(jelow.getType().equals("Destruir bomba")) {
 					Tropa t = (Tropa) jelow.getObject();
 					troopController.destroyTroop(t);
 
-				}else if(jelow.getType().equals("FindFriendResposta")){
+				} else if(jelow.getType().equals("FindFriendResposta")){
                 	friendsController.setFriends((ArrayList<Usuari>) jelow.getObject());
 				}else if(jelow.getType().equals("requestsReply")){
 					loginViewController.onRequestsRecieved((ArrayList<Usuari>) jelow.getObject());
-				} else if(jelow.getType().equals("updateWaiting")){
+				} else if(jelow.getType().equals("tropesCheck")){
+
+					Tropa t = (Tropa) jelow.getObject();
+					if(t.getWhichSprite() != null) {
+						if (t.getWhichSprite().equals("SKELETON_BACK")) {
+							t.setSprite(Sprite.SKELETON_BACK);
+							t.setGameMap(gameController.getGameView().getGameMap());
+							t.setIdPartida(10);
+							t.setOn(true);
+							t.setSprites(Sprite.SKELETON_BACK);
+							//t.setTroopDirection('s');
+							t.setyPosition(596 - t.getyPosition());
+							t.setxPosition(300 - t.getxPosition());
+							t.setyVariation(2);
+						}
+						gameController.getGameView().getTropes().add(t);
+
+						//gameController.getGameView().setFlag(2);
+
+					}
+					gameController.getGameView().setSendcheck(true);
+				}else if(jelow.getType().equals("updateWaiting")){
 					Partida p= (Partida)jelow.getObject();
 					waitingController.updateGame(p);
 				}else if(jelow.getType().equals("InviteRecived")){
@@ -293,6 +322,30 @@ public class UserService extends Thread{
 			this.troopController = troopController;
 			this.doStream.reset();
 			this.doStream.writeObject(message);
+		} catch (IOException e) {
+			e.printStackTrace();
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
+
+	public void addTropa(Message m){
+
+		try {
+			//this.doStream.reset();
+			this.doStream.writeObject(m);
+		} catch (IOException e) {
+			e.printStackTrace();
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
+
+	public void sendCheck(Message m, GameController gcontroller){
+		try{
+			this.gameController = gcontroller;
+			this.doStream.reset();
+			this.doStream.writeObject(m);
 		} catch (IOException e) {
 			e.printStackTrace();
 			stopServerComunication();

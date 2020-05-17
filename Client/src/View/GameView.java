@@ -3,6 +3,7 @@ package src.View;
 import src.Controller.GameController;
 import src.Controller.MenuController;
 import src.Controller.TroopController;
+import src.Controller.TroopUpdate;
 import src.Controller.WaitingController;
 import src.Message;
 import src.Model.Network.UserService;
@@ -28,17 +29,19 @@ public class GameView extends JFrame implements Runnable, Serializable {
     public static final int COLUMNS = 10;
     private static final int DECK_SPACE = 106;
     private static volatile boolean gameIsRunning = false;
-    private  GameController gameController;
+    private GameController gameController;
+    private static boolean sendcheck = true;
+    private int flag = 0;
 
 
-
+    private ArrayList<TroopUpdate> updates;
     private  TroopController troopController;
     private static int xMousePosition;
     private static int yMousePosition;
     private  boolean rebut = false;
     private  boolean trobat = false;
     private static BufferedImage image;
-
+    private static Tropa tropa;
 
     //Variable per accedir a la imatge a partir dels seus pixels
     private static int[] pixelsImage;
@@ -78,7 +81,8 @@ public class GameView extends JFrame implements Runnable, Serializable {
         this.pixels = new int[width * height];
         this.tropes = new ArrayList<>();
         this.troops = new ArrayList<>();
-
+        this.updates = new ArrayList<>();
+        this.tropa = new Tropa();
         mouseIsClicked = false;
         whichTroop = 10;
         this.deck = new Deck(width, height);
@@ -87,17 +91,14 @@ public class GameView extends JFrame implements Runnable, Serializable {
         //Creem el mapa i li donem la mesura en tiles ( en aquest cas, sera de 10 x 20)
 
         gameMap = new ImageMap(IMAGE_MAP_PATH);
-
-
         this.setVisible(true);
-
         this.setResizable(false);
         //this.getContentPane().setLayout(new GridLayout(ROWS,COLUMNS));
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setSize(width, height);
-
-
         this.setLocationRelativeTo(null);
+
+        //gameMap.showMap(0, 0, this);
 
 
     }
@@ -151,9 +152,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
         }
     }
 
-
-
-
     public synchronized void startGame(){
         gameIsRunning = true;
         thread = new Thread(this, "GameGraphics");
@@ -185,30 +183,52 @@ public class GameView extends JFrame implements Runnable, Serializable {
         this.deck = deck;
     }
 
-    public void showGraphics(){
+
+
+
+        public synchronized void showGraphics(){
         //Creem un buffer per tal de dibuixar els grafics en segon pla
         BufferStrategy bufferStrategy = getBufferStrategy();
         if(bufferStrategy == null){
-            createBufferStrategy(3);
+            createBufferStrategy(2);
             return;
         }
 
         gameMap.showMap(0, 0, this);
 
-
         if(tropes.size() > 0) {
 
             for (int i = 0; i < tropes.size(); i++) {
+
+                TroopUpdate update = new TroopUpdate(troopController, this);
+
+                if (tropes.get(i).isOn()) {
+
+                    update.catchTroop(tropes.get(i), i, true);
+                    update.getT().start();
+                    updates.add(update);
+                    tropes.get(i).setOn(false);
+
+                }
+
+                if (!updates.isEmpty() && updates.size() == tropes.size()) {
+                    updates.get(i).setTropa(tropes.get(i));
+                    troopController.show(tropes.get(i));
+
+                }
+
                 //VERSIÓ 1
-                try {
+                 /*try {
                     Thread.sleep(160/tropes.size());
                 } catch (Exception e) {
                     System.out.println(e);
                 }
 
-                troopController.update(tropes.get(i), i);
+                synchronized (String.class) {
 
+                    troopController.update(tropes.get(i), i);
 
+            }*/
 
                 //VERSIÓ 2
                /*if (troops.size() > 0) {
@@ -238,9 +258,9 @@ public class GameView extends JFrame implements Runnable, Serializable {
                 } else {
                     troopController.update(tropes.get(i), i);
                     troops.add(tropes.get(i));
-                }
+                }*/
 
-               //VERSIO 3
+                //VERSIO 3
                 /*if(tropa == null){
                     troopController.update(tropes.get(i), i);
                     tropa = tropes.get(i);
@@ -251,10 +271,9 @@ public class GameView extends JFrame implements Runnable, Serializable {
                         tropa = tropes.get(i);
                     }
                 }*/
+
             }
         }
-
-
 
         //Copiem els grafics al joc
         System.arraycopy(pixels, 0, pixelsImage, 0, pixelsImage.length);
@@ -263,9 +282,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
         Graphics g = bufferStrategy.getDrawGraphics();
         g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
         deck.showDeck(g, xMousePosition, yMousePosition, mouseIsClicked, whichTroop);
-
         g.dispose();
-
         //Mostrem el que tenim
         bufferStrategy.show();
 
@@ -282,10 +299,11 @@ public class GameView extends JFrame implements Runnable, Serializable {
         double elapsedTime;
         double delta = 0;
 
+
         requestFocus();
 
-        while(gameIsRunning){
 
+        while(gameIsRunning){
 
             //Message message = new Message(this, "Game Refresh");
             final long loopStart = System.nanoTime();
@@ -296,7 +314,17 @@ public class GameView extends JFrame implements Runnable, Serializable {
             delta += elapsedTime/NS_PER_FRAME;
 
             while(delta >= 1){
-                updateGame();
+                //updateGame();
+                showGraphics();
+
+                synchronized (Tropa.class) {
+                    if (sendcheck) {
+                        gameController.sendCheck();
+                        sendcheck = false;
+                        System.out.println("Tinc aquestes tropes: " + getTropes().toString());
+                    }
+                }
+
                 delta--;
             }
 
@@ -382,10 +410,33 @@ public class GameView extends JFrame implements Runnable, Serializable {
         this.rebut = rebut;
     }
 
+    public static boolean isGameIsRunning() {
+        return gameIsRunning;
+    }
+
+    public static void setGameIsRunning(boolean gameIsRunning) {
+        GameView.gameIsRunning = gameIsRunning;
+    }
 
     private void updateServer(){
 
 
     }
 
+    public static boolean isSendcheck() {
+        return sendcheck;
+    }
+
+    public static void setSendcheck(boolean sendcheck) {
+        GameView.sendcheck = sendcheck;
+    }
+
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
 }

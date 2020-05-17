@@ -41,14 +41,24 @@ public class WaitingController implements ActionListener, WindowListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println("ESTOY HASTA LOS COJONES");
-        if(((JButton)e.getSource()).getText().equals("Start Game")){
+        if(e == null){
             try {
-                gv = roomsController.startGame(total,0, p, this);
+                p.setIdPartida(10);
+                gv = roomsController.startGame(total,0, p, this,false);
+                view.setVisible(false);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        } else if(((JButton)e.getSource()).getText().equals("Start Game")){
+            try {
+                p.setIdPartida(10);
+                gv = roomsController.startGame(total,0, p, this,false);
                 view.setVisible(false);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
+
     }
 
 

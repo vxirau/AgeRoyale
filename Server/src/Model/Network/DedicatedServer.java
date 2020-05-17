@@ -1,13 +1,18 @@
 package src.Model.Network;
 
+import com.mysql.fabric.xmlrpc.base.Array;
 import src.*;
 import src.Controller.ControllerServer;
 import src.Controller.TroopSController;
+import src.Message;
+import src.Model.Database.DAO.*;
+import src.Partida;
+import src.Tropa;
+import src.Usuari;
 import src.Model.Database.DAO.*;
 import src.View.ViewServer;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -71,7 +76,7 @@ public class DedicatedServer extends Thread {
 			while(isOn) {
 
 				Message m = (Message) dataInput.readObject();
-				System.out.println("ARRIBA: " + m.getType());
+				//System.out.println("ARRIBA: " + m.getType());
 				if (m.getType().equals("register")) {
 					Usuari u = (Usuari) m.getObject();
 					System.out.println(u.toString());
@@ -169,25 +174,25 @@ public class DedicatedServer extends Thread {
 					}
 					Message messageResposta = new Message(resposta, "UserPKUpdatesResposta");
 					objectOut.writeObject(messageResposta);
-				} else if (m.getType().equals("Friends")){
+				} else if (m.getType().equals("Friends")) {
 					Usuari usuari = (Usuari) m.getObject();
 					amicDAO aDAO = new amicDAO();
 					ArrayList<Usuari> a = aDAO.getAmics(usuari);
 					Message messageResposta = new Message(a, "FriendsResposta");
 					objectOut.writeObject(messageResposta);
-				} else if (m.getType().equals("removeFriend")){
+				} else if (m.getType().equals("removeFriend")) {
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					amicDAO aDAO = new amicDAO();
 					aDAO.removeAmic(users.get(0), users.get(1));
 					ArrayList<Usuari> a = aDAO.getAmics(users.get(0));
 					Message messageResposta = new Message(a, "FriendsResposta");
 					objectOut.writeObject(messageResposta);
-				} else if(m.getType().equals("Tropa update")){
+				} else if (m.getType().equals("Tropa update")) {
 					Tropa t = (Tropa) m.getObject();
-					t = troopSController.moveOffensiveTroop(t,t.getxVariation(),t.getyVariation(),cont);
+					t = troopSController.moveOffensiveTroop(t, t.getxVariation(), t.getyVariation(), cont);
 					cont++;
-                    objectOut.reset();
-					Message mresposta = new Message(t,"Tropa resposta");
+					//objectOut.reset();
+					Message mresposta = new Message(t, "Tropa resposta");
 					objectOut.writeObject(mresposta);
 				} else if(m.getType().equals("Bomba update")){
 					Tropa t = (Tropa) m.getObject();
@@ -241,6 +246,7 @@ public class DedicatedServer extends Thread {
 				}else if(m.getType().equals("newPlayer")){
 					Partida p = (Partida)m.getObject();
 					partidaDAO pDAO = new partidaDAO();
+					p = pDAO.getPartida(p.getIdPartida());
 					if(pDAO.hasPlayerOne(p) && p.getIdPartida() != pDAO.getPlayerOne(p)){
 						pDAO.addPlayerTwo(p, p.getJugadors().get(1));
 					}else{
@@ -273,8 +279,36 @@ public class DedicatedServer extends Thread {
 				}else if(m.getType().equals("Invite")) {
 					Invite invite = (Invite) m.getObject();
 					server.broadcastInvite(invite);
-				}
-			}
+				}else if(m.getType().equals("add tropa")){
+                    Tropa t = (Tropa) m.getObject();
+                    tropaPartidaDAO pDAO = new tropaPartidaDAO();
+                    pDAO.addTropa(t);
+                } else if(m.getType().equals("checkID")){
+                    Tropa troop = new Tropa();
+                    boolean trobat = false;
+                    ArrayList<Tropa> vistes = (ArrayList<Tropa>) m.getObject();
+                    tropaPartidaDAO pDAO = new tropaPartidaDAO();
+                    ArrayList<Tropa> tropes = pDAO.getTropesPartida(10);
+
+                    if(tropes.size() > vistes.size()){
+                        troop = tropes.get(tropes.size() - 1);
+                    }
+
+                    Message message = new Message(troop,"tropesCheck");
+                    objectOut.writeObject(message);
+
+
+					/*tropaPartidaDAO pDAO = new tropaPartidaDAO();
+					ArrayList<Tropa> tropes = pDAO.getTropesPartida(10);
+
+					if(!tropes.isEmpty()) {
+						Message message = new Message(tropes.get(0), "tropesCheck");
+						objectOut.writeObject(message);
+					}*/
+
+                }
+            }
+
 		} catch (IOException | ClassNotFoundException e1){
 				// en cas derror aturem el servidor dedicat
 				stopDedicatedServer();

@@ -22,6 +22,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
     private int whichTroop;
     private Deck deck;
     private UserService uService;
+    private int id;
 
     public GameController(GameView gameView,UserService userService) throws IOException {
         this.gameView = gameView;
@@ -122,7 +123,6 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        System.out.println("X: " + e.getX() + " Y: " + e.getY());
         gameView.updateMouse(e.getX(), e.getY(), mouseIsClicked);
     }
 
@@ -144,11 +144,23 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
         switch (whichTroop){
             case 0:
                 Tropa skeleton = new Tropa(gameView.getGameMap(), gameView.getxMousePosition(), gameView.getyMousePosition(), Sprite.SKELETON_BACK);
+                skeleton.setSprites(Sprite.SKELETON_BACK);
+                skeleton.setOn(true);
+                skeleton.setIdPartida(10);
+                skeleton.setWhichSprite("SKELETON_BACK");
                 gameView.getTropes().add(skeleton);
+                Message m = new Message(skeleton, "add tropa");
+
+                synchronized (Tropa.class){
+                    uService.addTropa(m);
+                }
+
                 break;
             case 1:
                 Tropa goblin = new Tropa(gameView.getGameMap(), gameView.getxMousePosition(), gameView.getyMousePosition(), Sprite.GOBLIN_BACK);
+                goblin.setOn(true);
                 gameView.getTropes().add(goblin);
+
                 break;
             case 2:
                 Tropa wizard = new Tropa(gameView.getGameMap(), gameView.getxMousePosition(), gameView.getyMousePosition(), Sprite.MAGIC_TOWER);
@@ -163,6 +175,26 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
         }
     }
 
+    public void sendCheck(){
 
+        Message m = new Message(gameView.getTropes(),"checkID");
+        uService.sendCheck(m,this);
 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public GameView getGameView() {
+        return gameView;
+    }
+
+    public void setGameView(GameView gameView) {
+        this.gameView = gameView;
+    }
 }

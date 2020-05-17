@@ -11,8 +11,7 @@ public class TroopSController {
     }
 
 
-    public Tropa moveOffensiveTroop(Tropa tropa, float xVariation, float yVariation, int cont) {
-
+    public synchronized Tropa moveOffensiveTroop(Tropa tropa, float xVariation, float yVariation, int cont) {
         //Es mou cap a la dreta (east)
         float xTroop;
         float yTroop;
@@ -122,11 +121,12 @@ public class TroopSController {
                 switch (cont) {
                     case 0:
                         //this.sprite = Sprite.SKELETON_FRONT;
-                        if(tropa.getTroopType() == 0){
+                        tropa.setSprite(tropa.getMov().get(9));
+                        /*if(tropa.getTroopType() == 0){
                             tropa.setSprite(tropa.getMov().get(3));
                         }else if (tropa.getTroopType() == 1){
                             tropa.setSprite(tropa.getMov().get(9));
-                        }
+                        }*/
                     /*try {
                         Thread.sleep(160);
                     } catch (Exception e) {
@@ -135,11 +135,12 @@ public class TroopSController {
                         break;
                     case 1:
                         //this.sprite = Sprite.SKELETON_FRONT_LEFT_FOOT;
-                        if(tropa.getTroopType() == 0){
+                        tropa.setSprite(tropa.getMov().get(10));
+                        /*if(tropa.getTroopType() == 0){
                             tropa.setSprite(tropa.getMov().get(4));
                         }else if (tropa.getTroopType() == 1){
                             tropa.setSprite(tropa.getMov().get(10));
-                        }
+                        }*/
                     /*try {
                         Thread.sleep(160);
                     } catch (Exception e) {
@@ -148,11 +149,12 @@ public class TroopSController {
                         break;
                     case 2:
                         //this.sprite = Sprite.SKELETON_FRONT_RIGHT_FOOT;
-                        if(tropa.getTroopType() == 0){
+                        tropa.setSprite(tropa.getMov().get(11));
+                        /*if(tropa.getTroopType() == 0){
                             tropa.setSprite(tropa.getMov().get(5));
                         }else if (tropa.getTroopType() == 1){
                             tropa.setSprite(tropa.getMov().get(11));
-                        }
+                        }*/
                         DedicatedServer.cont = -1;
                     /*try {
                         Thread.sleep(160);

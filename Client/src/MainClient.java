@@ -31,7 +31,8 @@ public class MainClient {
                   loginview.loginViewsetListener(controller);
                   loginview.setVisible(true);
               } else if(game == 0){
-                  GameView gView = null;
+
+                  /*GameView gView = null;
                   try {
                       gView = new GameView();
                   } catch (IOException e) {
@@ -58,7 +59,7 @@ public class MainClient {
 
                           finalGView.setVisible(true);
                       }
-                  });
+                  });*/
 
               }else if(game == 8){
                   ArrayList<Usuari> amics = new ArrayList<>();

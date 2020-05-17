@@ -16,6 +16,8 @@ public class Partida implements Serializable{
     private boolean finished;
     private ArrayList<Usuari> jugadors;
     private ArrayList<Usuari> espectadors;
+
+    //private GameView gameView;
     private static volatile boolean gameIsRunning = false;
 
     public Partida() {
@@ -45,6 +47,7 @@ public class Partida implements Serializable{
         this.publiques = publiques;
         this.host = host;
         this.duracio = 0;
+        this.idPartida = 10;
     }
 
     public Partida(int idPartida, String data, int duracio, ArrayList<Usuari> jugadors, ArrayList<Usuari> espectadors) {
@@ -133,10 +136,6 @@ public class Partida implements Serializable{
 
     public void setEspectadors(ArrayList<Usuari> espectadors) {
         this.espectadors = espectadors;
-    }
-
-    public void startPartida() throws IOException {
-        RoomsController.startGame(0, 0, this, null);
     }
 
     public boolean isFinished() {

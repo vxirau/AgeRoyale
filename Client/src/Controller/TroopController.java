@@ -18,8 +18,7 @@ public class TroopController {
     private ArrayList<Tropa> troops = new ArrayList<>();
     private static Tropa tropa;
     public static int index;
-    public boolean accept = true;
-    public static int total;
+    private boolean accept = false;
 
 
     public TroopController(GameView gameView, UserService userService) throws IOException {
@@ -59,8 +58,12 @@ public class TroopController {
 
         }
     }
-    public void update(Tropa t, int i){
-        checkTroopsStatus(t);
+
+
+
+    public synchronized void update(Tropa t, int i){
+            checkTroopsStatus(t);
+
         if(gameView.getTropes().size() > 0){
             //for(int i = 0; i < gameView.getTropes().size(); i++){
                 //gameView.getTropes().get(i).update();
@@ -78,7 +81,6 @@ public class TroopController {
             if(tropa.getTroopType() == 0 || tropa.getTroopType() == 1){
                 //moveOffensiveTroop(tropa, tropa.getxVariation(), tropa.getyVariation(), cont);
                 //crida uservice
-
                 Message m = new Message(tropa, "Tropa update");
                 uService.sendTropa(m, this);
 
@@ -93,12 +95,9 @@ public class TroopController {
 
     public void getTropa(Tropa t){
 
-
-
+        t.setOn(false);
         gameView.getTropes().set(index, t);
-
         gameView.setRebut(true);
-
 
     }
 
@@ -120,6 +119,21 @@ public class TroopController {
     }
 
 
+    public boolean isAccept() {
+        return accept;
+    }
+
+    public void setAccept(boolean accept) {
+        this.accept = accept;
+    }
+
+    public GameView getGameView() {
+        return gameView;
+    }
+
+    public void setGameView(GameView gameView) {
+        this.gameView = gameView;
+    }
 
     //on collision
 }

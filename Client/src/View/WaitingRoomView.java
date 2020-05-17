@@ -8,8 +8,10 @@ import src.Utils;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class WaitingRoomView extends JFrame {
@@ -120,6 +122,13 @@ public class WaitingRoomView extends JFrame {
         start.setHorizontalAlignment(SwingConstants.CENTER);
         start.setBounds(85, 660, 300, 30);
         start.setVisible(false);
+        start.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                waitingController.actionPerformed(null);
+            }
+        });
         main.add(start);
 
         if(!p.isPublic() && p.getHost().equals(usr.getNickName()) && p.getJugadors().size()<2){

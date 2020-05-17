@@ -86,6 +86,7 @@ CREATE TABLE partida(
     FOREIGN KEY (player2) REFERENCES usuari(idUser)
 );
 
+
 SELECT* FROM usuari;
 
 #Importacio basica de informació
