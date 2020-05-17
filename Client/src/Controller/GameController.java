@@ -49,7 +49,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
         int troopX = 0;
         int y = 0;
 
-        if(e.getY() > 630) {
+        if(e.getY() > 620) {
             if(!mouseIsClicked){
                 System.out.println("AHORA ESTA CLICADO");
                 mouseIsClicked = true;
@@ -74,7 +74,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
         }
 
         if(mouseIsClicked){
-            if(e.getY() <= 630){
+            if(e.getY() <= 620){
                 System.out.println("INVOCO TROPA BRO");
                 if(e.getY() <= 355){
                     y = 355;
@@ -82,8 +82,13 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
                     y = e.getY();
                 }
                 gameView.updateMouse(e.getX(), y, mouseIsClicked);
-                invokeTroop(this.whichTroop);
-                mouseIsClicked = false;
+                //Invocarem a la tropa si tenim l'or suficient
+                if(gameView.getDeck().isEnoughGold(this.whichTroop)){
+                    invokeTroop(this.whichTroop);
+                    gameView.getDeck().updateUserGold(whichTroop);
+                    mouseIsClicked = false;
+                }
+
             }
         }
 
@@ -117,6 +122,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        System.out.println("X: " + e.getX() + " Y: " + e.getY());
         gameView.updateMouse(e.getX(), e.getY(), mouseIsClicked);
     }
 
@@ -156,5 +162,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
                 break;
         }
     }
+
+
 
 }

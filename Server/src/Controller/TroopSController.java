@@ -16,159 +16,226 @@ public class TroopSController {
         //Es mou cap a la dreta (east)
         float xTroop;
         float yTroop;
-        if (xVariation > 0) {
-            tropa.setTroopDirection('e');
+        //La tropa nomes es moura si no esta lluitant
+        if(!tropa.isFighting()){
+            if (xVariation > 0) {
+                tropa.setTroopDirection('e');
 
-            xTroop = tropa.getxPosition() + xVariation;
-            tropa.setxPosition(xTroop);
-            switch (cont) {
-                case 0:
-                    //this.sprite = Sprite.SKELETON_RIGHT;
-                    tropa.setSprite(tropa.getMov().get(0));
-
-                    /*try {
-                        Thread.sleep(160);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }*/
-                    break;
-                case 1:
-                    //this.sprite = Sprite.SKELETON_RIGHT_LEFT_FOOT;
-                    tropa.setSprite(tropa.getMov().get(1));
-                    /*try {
-                        Thread.sleep(160);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }*/
-                    break;
-                case 2:
-                    //this.sprite = Sprite.SKELETON_RIGHT_RIGHT_FOOT;
-                    tropa.setSprite(tropa.getMov().get(2));
-                    /*try {
-                        Thread.sleep(160);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }*/
-                    DedicatedServer.cont = -1;
-                    break;
-                default:
-                    break;
-            }
-
-        }
-        //Es mou cap a l'esquerra (west)
-        if (xVariation < 0) {
-
-            tropa.setTroopDirection('w');
-            xTroop = tropa.getxPosition() + xVariation;
-            tropa.setxPosition(xTroop);
-        }
-        //Es mou cap abaix (south)
-        if (yVariation > 0) {
-
-            tropa.setTroopDirection('s');
-            yTroop = tropa.getyPosition() + yVariation;
-            tropa.setyPosition(yTroop);
-            switch (cont) {
-                case 0:
-                    //this.sprite = Sprite.SKELETON_FRONT;
-                    tropa.setSprite(tropa.getMov().get(3));
-                    /*try {
-                        Thread.sleep(160);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }*/
-                    break;
-                case 1:
-                    //this.sprite = Sprite.SKELETON_FRONT_LEFT_FOOT;
-                    tropa.setSprite(tropa.getMov().get(4));
-                    /*try {
-                        Thread.sleep(160);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }*/
-                    break;
-                case 2:
-                    //this.sprite = Sprite.SKELETON_FRONT_RIGHT_FOOT;
-                    tropa.setSprite(tropa.getMov().get(5));
-                    DedicatedServer.cont = -1;
-                    /*try {
-                        Thread.sleep(160);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }*/
-
-                    break;
-                default:
-                    break;
-            }
-
-        }
-        //Es mou cap adalt (north)
-        if (yVariation < 0) {
-
-            tropa.setTroopDirection('n');
-            yTroop = tropa.getyPosition() + yVariation;
-            tropa.setyPosition(yTroop);
-            switch (cont) {
-                case 0:
-                    //this.sprite = Sprite.SKELETON_FRONT;
-                    tropa.setSprite(tropa.getMov().get(3));
-                    /*try {
-                        Thread.sleep(160);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }*/
-                    break;
-                case 1:
-                    //this.sprite = Sprite.SKELETON_FRONT_LEFT_FOOT;
-                    tropa.setSprite(tropa.getMov().get(4));
-                    /*try {
-                        Thread.sleep(160);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }*/
-                    break;
-                case 2:
-                    //this.sprite = Sprite.SKELETON_FRONT_RIGHT_FOOT;
-                    tropa.setSprite(tropa.getMov().get(5));
-                    DedicatedServer.cont = -1;
-                    /*try {
-                        Thread.sleep(160);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }*/
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        //Si la tropa no ha estat destruida, la movem
-        if (!tropa.entityIsDestroyed()) {
-            if (onCollision(tropa, (int) xVariation, 0)) {
-                //updatexPosition(xVariation);
                 xTroop = tropa.getxPosition() + xVariation;
                 tropa.setxPosition(xTroop);
-            } else {
+                switch (cont) {
+                    case 0:
+                        //this.sprite = Sprite.SKELETON_RIGHT;
+                        if(tropa.getTroopType() == 0){
+                            tropa.setSprite(tropa.getMov().get(0));
+                        }
 
-                xVariation = 0;
+
+                    /*try {
+                        Thread.sleep(160);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }*/
+                        break;
+                    case 1:
+                        //this.sprite = Sprite.SKELETON_RIGHT_LEFT_FOOT;
+                        if(tropa.getTroopType() == 0){
+                            tropa.setSprite(tropa.getMov().get(1));
+                        }
+                    /*try {
+                        Thread.sleep(160);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }*/
+                        break;
+                    case 2:
+                        //this.sprite = Sprite.SKELETON_RIGHT_RIGHT_FOOT;
+                        if(tropa.getTroopType() == 0){
+                            tropa.setSprite(tropa.getMov().get(2));
+                        }
+                    /*try {
+                        Thread.sleep(160);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }*/
+                        DedicatedServer.cont = -1;
+                        break;
+                    default:
+                        break;
+                }
+
             }
-            if (onCollision(tropa, 0, (int) yVariation)) {
-                //updateyPosition(yVariation);
+            //Es mou cap a l'esquerra (west)
+            if (xVariation < 0) {
+
+                tropa.setTroopDirection('w');
+                xTroop = tropa.getxPosition() + xVariation;
+                tropa.setxPosition(xTroop);
+
+                switch (cont) {
+                    case 0:
+                        //this.sprite = Sprite.SKELETON_RIGHT;
+                        if(tropa.getTroopType() == 0){
+                            tropa.setSprite(tropa.getMov().get(6));
+                        }
+
+
+                    /*try {
+                        Thread.sleep(160);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }*/
+                        break;
+                    case 1:
+                        //this.sprite = Sprite.SKELETON_RIGHT_LEFT_FOOT;
+                        if(tropa.getTroopType() == 0){
+                            tropa.setSprite(tropa.getMov().get(7));
+                        }
+                    /*try {
+                        Thread.sleep(160);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }*/
+                        break;
+                    case 2:
+                        //this.sprite = Sprite.SKELETON_RIGHT_RIGHT_FOOT;
+                        if(tropa.getTroopType() == 0){
+                            tropa.setSprite(tropa.getMov().get(8));
+                        }
+                    /*try {
+                        Thread.sleep(160);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }*/
+                        DedicatedServer.cont = -1;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            //Es mou cap abaix (south)
+            if (yVariation > 0) {
+
+                tropa.setTroopDirection('s');
                 yTroop = tropa.getyPosition() + yVariation;
                 tropa.setyPosition(yTroop);
-            } else {
+                switch (cont) {
+                    case 0:
+                        //this.sprite = Sprite.SKELETON_FRONT;
+                        if(tropa.getTroopType() == 0){
+                            tropa.setSprite(tropa.getMov().get(3));
+                        }else if (tropa.getTroopType() == 1){
+                            tropa.setSprite(tropa.getMov().get(9));
+                        }
+                    /*try {
+                        Thread.sleep(160);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }*/
+                        break;
+                    case 1:
+                        //this.sprite = Sprite.SKELETON_FRONT_LEFT_FOOT;
+                        if(tropa.getTroopType() == 0){
+                            tropa.setSprite(tropa.getMov().get(4));
+                        }else if (tropa.getTroopType() == 1){
+                            tropa.setSprite(tropa.getMov().get(10));
+                        }
+                    /*try {
+                        Thread.sleep(160);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }*/
+                        break;
+                    case 2:
+                        //this.sprite = Sprite.SKELETON_FRONT_RIGHT_FOOT;
+                        if(tropa.getTroopType() == 0){
+                            tropa.setSprite(tropa.getMov().get(5));
+                        }else if (tropa.getTroopType() == 1){
+                            tropa.setSprite(tropa.getMov().get(11));
+                        }
+                        DedicatedServer.cont = -1;
+                    /*try {
+                        Thread.sleep(160);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }*/
 
-                yVariation = 0;
+                        break;
+                    default:
+                        break;
+                }
+
             }
+            //Es mou cap adalt (north)
+            if (yVariation < 0) {
+
+                tropa.setTroopDirection('n');
+                yTroop = tropa.getyPosition() + yVariation;
+                tropa.setyPosition(yTroop);
+                switch (cont) {
+                    case 0:
+                        //this.sprite = Sprite.SKELETON_FRONT;
+                        tropa.setSprite(tropa.getMov().get(3));
+                    /*try {
+                        Thread.sleep(160);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }*/
+                        break;
+                    case 1:
+                        //this.sprite = Sprite.SKELETON_FRONT_LEFT_FOOT;
+                        tropa.setSprite(tropa.getMov().get(4));
+                    /*try {
+                        Thread.sleep(160);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }*/
+                        break;
+                    case 2:
+                        //this.sprite = Sprite.SKELETON_FRONT_RIGHT_FOOT;
+                        tropa.setSprite(tropa.getMov().get(5));
+                        DedicatedServer.cont = -1;
+                    /*try {
+                        Thread.sleep(160);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }*/
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            //Si la tropa no ha estat destruida, la movem
+            if (!tropa.entityIsDestroyed()) {
+                if (onCollision(tropa, (int) xVariation, 0)) {
+                    //updatexPosition(xVariation);
+                    xTroop = tropa.getxPosition() + xVariation;
+                    tropa.setxPosition(xTroop);
+                } else {
+
+                    xVariation = 0;
+                }
+                if (onCollision(tropa, 0, (int) yVariation)) {
+                    //updateyPosition(yVariation);
+                    yTroop = tropa.getyPosition() + yVariation;
+                    tropa.setyPosition(yTroop);
+                } else {
+
+                    yVariation = 0;
+                }
+            }
+        }else{
+            tropa.setxVariation(0);
+            tropa.setyVariation(0);
         }
+
 
     return tropa;
 
 
     }
-    private void bombExplosion(Tropa tropa, int cont) {
+    public Tropa bombExplosion(Tropa tropa, int cont) {
         switch (cont) {
             case 0:
                 //this.sprite = Sprite.SKELETON_RIGHT;
@@ -208,11 +275,22 @@ public class TroopSController {
                     } catch (Exception e) {
                         System.out.println(e);
                     }
-                DedicatedServer.cont = -1;
+               DedicatedServer.cont = -1;
+               tropa.setPlaying(false);
+               tropa.setEntityIsDestroyed(true);
+
                 break;
             default:
                 break;
         }
+        return tropa;
+    }
+
+
+
+    //Comprova l'estat de totes les tropes del joc
+    public void checkTroopsStatus(){
+
     }
 
     //Metode per detectar si col·lisionem amb alguna cosa al mapa
@@ -242,10 +320,19 @@ public class TroopSController {
         }
         //Si xoquem amb un objecte de front, canviem la seva direccio
         if(tropa.getGameMap().getSpecificTile(leftBorder + infBorder * tropa.getGameMap().getMapWidth()).isSolid()){
-            //TODO: CANVIAR LES COLISIONS I FER QUE ES PARI EL PERSONAJE SI EL CASTELL O LA TORRE NO ESTAN DESTRUITS
+            if(tropa.getGameMap().getSpecificTile(leftBorder + supBorder * tropa.getGameMap().getMapWidth()).getSprite() == Sprite.TOWER_DOWN_LEFT_ENEMY || tropa.getGameMap().getSpecificTile(leftBorder + supBorder * tropa.getGameMap().getMapWidth()).getSprite() == Sprite.TOWER_DOWN_RIGHT_ENEMY
+                || tropa.getGameMap().getSpecificTile(leftBorder + supBorder * tropa.getGameMap().getMapWidth()).getSprite() == Sprite.CASTLE_DOWN_LEFT_ENEMY || tropa.getGameMap().getSpecificTile(leftBorder + supBorder * tropa.getGameMap().getMapWidth()).getSprite() == Sprite.CASTLE_DOWN_RIGHT_ENEMY){
+                //TODO: CANVIAR LES COLISIONS I FER QUE ES PARI EL PERSONAJE SI EL CASTELL O LA TORRE NO ESTAN DESTRUITS
+            }
+
             //Si ens trobem a la part esquerra del mapa  i xoquem amb l'aigua, busquem el el pont esquerra
             if(xPosition < 160  && yPosition > 200){
-                tropa.setxVariation(-2);
+                if(xPosition < 60){
+                    tropa.setxVariation(2);
+                }else{
+                    tropa.setxVariation(-2);
+                }
+
             }
             //Si ens trobem a la part esquerra del mapa  i xoquem amb la torre , l'ataquem o anem a pel castell principal
             if(xPosition < 160  && yPosition < 200){
@@ -257,7 +344,12 @@ public class TroopSController {
             }
             //Si ens trobem a la part dreta del mapa  i xoquem amb la torre, l'ataquem o anem a pel castell principal
             if(xPosition >= 160 && yPosition > 200){
-                tropa.setxVariation(2);
+                if(xPosition > 250){
+                    tropa.setxVariation(-2);
+                }else{
+                    tropa.setxVariation(2);
+                }
+
             }
             tropa.setyVariation(0);
             collision = true;

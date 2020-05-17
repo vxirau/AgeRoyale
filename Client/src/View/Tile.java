@@ -1,12 +1,16 @@
 package src.View;
 
+import java.awt.geom.Point2D;
 import java.io.Serializable;
 
 //La classe Tile representara cada quadre on es carreagara cada sprite del joc
 public class Tile implements Serializable {
 
-    private int x;
-    private int y;
+    private int x1;
+    private int x2;
+    private int y1;
+    private int y2;
+    private Point2D tileCenter;
     private Sprite sprite;
     private boolean isSolid;
 
@@ -34,13 +38,44 @@ public class Tile implements Serializable {
     public static final Tile CASTLE_DOWN_RIGHT_ENEMY = new Tile(Sprite.CASTLE_DOWN_RIGHT_ENEMY, true);
 
 
+    public int getX1() {
+        return x1;
+    }
 
+    public void setX1(int x1) {
+        this.x1 = x1;
+    }
 
+    public int getX2() {
+        return x2;
+    }
 
+    public void setX2(int x2) {
+        this.x2 = x2;
+    }
+
+    public int getY1() {
+        return y1;
+    }
+
+    public void setY1(int y1) {
+        this.y1 = y1;
+    }
+
+    public int getY2() {
+        return y2;
+    }
+
+    public void setY2(int y2) {
+        this.y2 = y2;
+    }
+    public Tile(){
+    }
 
     public Tile(Sprite sprite){
         this.sprite = sprite;
         isSolid = false;
+
     }
     public Tile(Sprite sprite, boolean isSolid){
         this.sprite = sprite;
@@ -51,8 +86,24 @@ public class Tile implements Serializable {
         return isSolid;
     }
 
+    public Point2D getTileCenter() {
+        return tileCenter;
+    }
+
+    public void setTileCenter(Point2D tileXCenter) {
+        this.tileCenter = tileXCenter;
+    }
+
     public Sprite getSprite() {
         return sprite;
+    }
+
+    public boolean isInsideTile(double x, double y){
+        if (x >= this.getX1() && x < this.getX2() && y>= this.getY1() && y < this.getY2()){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public void drawTile(int x, int y, GameView gameView){

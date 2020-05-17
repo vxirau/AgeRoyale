@@ -3,6 +3,7 @@ package src;
 import src.View.GameMap;
 import src.View.GameView;
 import src.View.Sprite;
+import src.View.Tile;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -18,7 +19,8 @@ public class Tropa extends Entity implements Serializable {
     private GameMap gameMap;
     private float xVariation;
     private float yVariation;
-
+    private static final int SIDE = 32;
+    private boolean isFighting;
     private int troopType;
     private int idTropa;
     private int vida;
@@ -26,6 +28,31 @@ public class Tropa extends Entity implements Serializable {
     private int atac;
     private int alcance;
     private boolean ofensiva;
+    private Tile tile;
+
+    private boolean isPlaying = true;
+    private static int cont = 0;
+    private ArrayList<Sprite> mov = new ArrayList<>();
+
+
+    public Tile getTroopTile() {
+        for(int i = 0; i < 20; i ++){
+            for(int j = 0; j < 10; j++){
+                if(this.xPosition >= this.getGameMap().getMapTiles()[i][j].getX1() && this.xPosition < this.getGameMap().getMapTiles()[i][j].getX2()
+                    && this.yPosition >= this.getGameMap().getMapTiles()[i][j].getY1() && this.yPosition < this.getGameMap().getMapTiles()[i][j].getY2()){
+                    //Trobem el tile al que es troba la nostra tropa i el retornem.
+                    return this.getGameMap().getTilesArray()[i];
+                }
+            }
+        }
+        return null;
+    }
+
+    public void setTile(Tile tile) {
+        this.tile = tile;
+    }
+
+
 
     public int getTroopType() {
         return troopType;
@@ -43,9 +70,7 @@ public class Tropa extends Entity implements Serializable {
         isPlaying = playing;
     }
 
-    private boolean isPlaying = true;
-    private static int cont = 0;
-    private ArrayList<Sprite> mov = new ArrayList<>();
+
 
 
 
@@ -57,6 +82,14 @@ public class Tropa extends Entity implements Serializable {
 
     }
 
+    public boolean isFighting() {
+        return isFighting;
+    }
+
+    public void setFighting(boolean fighting) {
+        isFighting = fighting;
+    }
+
     public Tropa(GameMap gameMap, float xPosition, float yPosition, Sprite sprite) {
         this.gameMap = gameMap;
         this.xPosition = xPosition;
@@ -65,8 +98,10 @@ public class Tropa extends Entity implements Serializable {
         this.troopType = -1;
         xVariation = 0;
         yVariation = (float) -2;
+        this.isFighting = false;
 
         if(sprite.equals(Sprite.SKELETON_BACK)){
+
             this.troopType = 0;
             mov.add(Sprite.SKELETON_RIGHT);
             mov.add(Sprite.SKELETON_RIGHT_LEFT_FOOT);
@@ -74,18 +109,33 @@ public class Tropa extends Entity implements Serializable {
             mov.add(Sprite.SKELETON_BACK);
             mov.add(Sprite.SKELETON_BACK_LEFT_FOOT);
             mov.add(Sprite.SKELETON_BACK_RIGHT_FOOT);
+            mov.add(Sprite.SKELETON_LEFT);
+            mov.add(Sprite.SKELETON_LEFT_LEFT_FOOT);
+            mov.add(Sprite.SKELETON_LEFT_RIGHT_FOOT);
+            mov.add(Sprite.SKELETON_FRONT);
+            mov.add(Sprite.SKELETON_FRONT_LEFT_FOOT);
+            mov.add(Sprite.SKELETON_FRONT_RIGHT_FOOT);
+
 
         } else if(sprite.equals(Sprite.GOBLIN_BACK)){
             this.troopType = 1;
+
             mov.add(Sprite.GOBLIN_RIGHT);
             mov.add(Sprite.GOBLIN_RIGHT_LEFT_FOOT);
             mov.add(Sprite.GOBLIN_RIGHT_RIGHT_FOOT);
             mov.add(Sprite.GOBLIN_BACK);
             mov.add(Sprite.GOBLIN_BACK_LEFT_FOOT);
             mov.add(Sprite.GOBLIN_BACK_RIGHT_FOOT);
+            mov.add(Sprite.GOBLIN_LEFT);
+            mov.add(Sprite.GOBLIN_LEFT_LEFT_FOOT);
+            mov.add(Sprite.GOBLIN_LEFT_RIGHT_FOOT);
+            mov.add(Sprite.GOBLIN_FRONT);
+            mov.add(Sprite.GOBLIN_FRONT_LEFT_FOOT);
+            mov.add(Sprite.GOBLIN_FRONT_RIGHT_FOOT);
 
         }else if(sprite.equals(Sprite.BOMB)){
             this.troopType = 2;
+
             mov.add(Sprite.BOMB);
             mov.add(Sprite.BOMB_PHASE_1);
             mov.add(Sprite.BOMB_PHASE_2);

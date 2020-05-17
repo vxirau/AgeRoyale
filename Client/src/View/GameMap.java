@@ -1,5 +1,6 @@
 package src.View;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -7,17 +8,24 @@ public class GameMap implements Serializable {
 
     protected int mapWidth;
     protected int mapHeight;
-
-    private int[] mapTiles;
+    public static final int SIDE = 32;
+    private int xIncrement;
+    private int yIncrement;
+    private Tile[][] mapTiles;
     protected Tile[] tilesArray;
+
+
+
 
 
     public GameMap(String path) throws IOException {
         loadMap(path);
         generateGameMap();
+        mapTiles = new Tile[20][10];
+        assignTilePixels();
     }
 
-    //Metode que omplira el conjunt de tiles del mapa en funcio del tipus de tile que li correspon
+
     protected void generateGameMap(){
 
     }
@@ -28,6 +36,40 @@ public class GameMap implements Serializable {
 
     public Tile getSpecificTile(int position) {
         return tilesArray[position];
+    }
+
+
+    public Tile[] getTilesArray() {
+        return tilesArray;
+    }
+
+    public Tile[][] getMapTiles() {
+        return mapTiles;
+    }
+
+    public void setMapTiles(Tile[][] mapTiles) {
+        this.mapTiles = mapTiles;
+    }
+
+    private void assignTilePixels(){
+        xIncrement = 0;
+        yIncrement = 0;
+
+        //Assignem pixels a cada tile
+        for(int i = 0; i < 20; i ++){ //640
+            xIncrement = 0;
+            for (int j = 0; j < 10; j++){ //320
+                mapTiles[i][j] = new Tile();
+                mapTiles[i][j].setX1(xIncrement);
+                mapTiles[i][j].setX2(xIncrement + SIDE);
+                mapTiles[i][j].setY1(yIncrement);
+                mapTiles[i][j].setY2(yIncrement + SIDE);
+                mapTiles[i][j].setTileCenter(new Point((mapTiles[i][j].getX1() + (SIDE/2)),(mapTiles[i][j].getY1() + (SIDE/2))));
+                xIncrement += SIDE;
+
+            }
+            yIncrement += SIDE;
+        }
     }
 
     protected void loadMap(String path) throws IOException {
