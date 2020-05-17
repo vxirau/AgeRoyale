@@ -23,7 +23,7 @@ public class UserService extends Thread{
 	private Object[] options = {"Entèsos"};
   	private Path current = Paths.get("./Server/resources/config.json");
   	private String arxiu = current.toAbsolutePath().toString();
-    private ViewRegistre vregistre;
+    private RegisterViewController registerViewController;
     private RoomsController roomsController;
     private LoginViewController loginViewController;
     private ConfigController configController;
@@ -58,10 +58,6 @@ public class UserService extends Thread{
 			e.printStackTrace();
 			System.out.println("*** ESTA EL SERVIDOR EN EXECUCIO? ***");
 		}
-	}
-
-	public void setRegisterView(ViewRegistre vregistre){
-		this.vregistre = vregistre;
 	}
 
 	public void startServerComunication() {
@@ -103,7 +99,7 @@ public class UserService extends Thread{
 					LoginView lview = new LoginView();
 					LoginViewController controller = new LoginViewController(lview, UserService.this);
 					lview.loginViewsetListener(controller);
-					vregistre.setVisible(false);
+					registerViewController.setView(false);
 					lview.setVisible(true);
 					Usuari user = (Usuari) jelow.getObject();
 					lview.setUsuari(user.getNickName());
@@ -162,7 +158,8 @@ public class UserService extends Thread{
 		}
 	}
 
-	public void sendRegister(Object user) {
+	public void sendRegister(Object user, RegisterViewController registerViewCtrl) {
+		this.registerViewController = registerViewCtrl;
 		try{
 			this.doStream.reset();
 			this.doStream.writeObject(user);

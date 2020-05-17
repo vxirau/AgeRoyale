@@ -27,52 +27,51 @@ public class RegisterViewController implements ActionListener, WindowListener {
 				}
     }
 
-		public void showMessage(String alerta){
-			JOptionPane.showOptionDialog(new JFrame(), alerta,"Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
-		}
+	public void showMessage(String alerta){
+		JOptionPane.showOptionDialog(new JFrame(), alerta,"Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+	}
 
-		public void actionPerformed(ActionEvent event) {
-			String boto = ((JButton) event.getSource()).getText();
+	public void actionPerformed(ActionEvent event) {
+		String boto = ((JButton) event.getSource()).getText();
 
-			if(boto.equals("REGISTRAR-SE")){
-				int mal = ComprovaClient.checkRegistre(view.getName(), view.getEmail(), view.getPassword(), view.getRePass());
-				switch(mal){
-					case 1:
-						JOptionPane.showOptionDialog(new JFrame(), "Hi ha un o més paràmetres buits","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
-						break;
-					case 2:
-						JOptionPane.showOptionDialog(new JFrame(), "L'adreça electrònica no és vàlida","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
-						break;
-					case 3:
-						JOptionPane.showOptionDialog(new JFrame(), "La contrasenya no és vàlida. Ha tenir almenys:\n - Una majúscula\n - Una minúscula\n - 8 caràcters\n - 1 valor numèric","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
-						break;
-					case 4:
-						JOptionPane.showOptionDialog(new JFrame(), "Les contrasenyes no coincideixen","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
-						break;
-					case 5:
-						uService.setRegisterView(view);
-						Usuari registro = new Usuari(view.getName(), view.getEmail(), view.getPassword());
-						Message missatge = new Message(registro, "register");
-      					uService.sendRegister(missatge);
-						break;
-					default:
-						JOptionPane.showOptionDialog(new JFrame(), "Hi ha hagut algún error en processar la teva solicitud","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
-						break;
-				}
-			}else if(boto.equals("ATRAS")){
-				SwingUtilities.invokeLater(new Runnable() {
-          @Override
-          public void run() {
-						LoginView lview = null;
-						lview = new LoginView();
-						LoginViewController controller = new LoginViewController(lview, uService);
-						lview.loginViewsetListener(controller);
-						view.setVisible(false);
-						lview.setVisible(true);
-					}
-				});
-
+		if(boto.equals("REGISTRAR-SE")){
+			int mal = ComprovaClient.checkRegistre(view.getName(), view.getEmail(), view.getPassword(), view.getRePass());
+			switch(mal){
+				case 1:
+					JOptionPane.showOptionDialog(new JFrame(), "Hi ha un o més paràmetres buits","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+					break;
+				case 2:
+					JOptionPane.showOptionDialog(new JFrame(), "L'adreça electrònica no és vàlida","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+					break;
+				case 3:
+					JOptionPane.showOptionDialog(new JFrame(), "La contrasenya no és vàlida. Ha tenir almenys:\n - Una majúscula\n - Una minúscula\n - 8 caràcters\n - 1 valor numèric","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+					break;
+				case 4:
+					JOptionPane.showOptionDialog(new JFrame(), "Les contrasenyes no coincideixen","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+					break;
+				case 5:
+					Usuari registro = new Usuari(view.getName(), view.getEmail(), view.getPassword());
+					Message missatge = new Message(registro, "register");
+					uService.sendRegister(missatge, this);
+					break;
+				default:
+					JOptionPane.showOptionDialog(new JFrame(), "Hi ha hagut algún error en processar la teva solicitud","Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
+					break;
 			}
+		}else if(boto.equals("ATRAS")){
+			SwingUtilities.invokeLater(new Runnable() {
+	  @Override
+	  public void run() {
+					LoginView lview = null;
+					lview = new LoginView();
+					LoginViewController controller = new LoginViewController(lview, uService);
+					lview.loginViewsetListener(controller);
+					view.setVisible(false);
+					lview.setVisible(true);
+				}
+			});
+
+		}
     }
 
 	@Override
@@ -108,5 +107,9 @@ public class RegisterViewController implements ActionListener, WindowListener {
 	@Override
 	public void windowDeactivated(WindowEvent e) {
 
+	}
+
+	public void setView(boolean b) {
+    	view.setVisible(b);
 	}
 }
