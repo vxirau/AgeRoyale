@@ -77,9 +77,12 @@ public class ViewServer extends JFrame {
 		this.setContentPane(tabbedPane);
 		this.setBackground(Color.decode("#85201F"));
 		this.setTitle("SERVER CONSOLE");
-		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setSize(700, 500);
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
+		int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
+		this.setLocation(x, y);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	}

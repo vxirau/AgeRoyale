@@ -75,7 +75,6 @@ public class DedicatedServer extends Thread {
 				if (m.getType().equals("register")) {
 					Usuari u = (Usuari) m.getObject();
 					System.out.println(u.toString());
-
 					objectOut.reset();
 					usuariDAO uDAO = new usuariDAO();
 					if (!uDAO.existsRegistre(u)) {

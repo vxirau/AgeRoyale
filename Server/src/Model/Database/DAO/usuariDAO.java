@@ -149,14 +149,16 @@ public class usuariDAO {
             statsDAO.resetStats(statPK);
         }
 
-        if (usuari.getTropes() != null)
-            usuariTropaDAO.addTropesToUsuari(newUserPK, usuari.getTropes());
-
-        if (usuari.getAmics() != null)
+        if (usuari.getAmics() != null) {
             amicDAO.addAmic(newUserPK, usuari.getAmics());
+        }
 
-        String query = "INSERT INTO AgeRoyale.usuari (nickname, email, password, idStats) VALUE ('" + usuari.getNickName() + "', '" + usuari.getEmail() + "', '" + usuari.getPassword() + "', " + statPK + ");";
+        String query = "INSERT INTO AgeRoyale.usuari (nickname, email, password, idStats, isOnline, banned) VALUE ('" + usuari.getNickName() + "', '" + usuari.getEmail() + "', '" + usuari.getPassword() + "', " + statPK + ", 0, 0);";
         DBConnector.getInstance().insertQuery(query);
+
+        for (int i = 1; i <= 4 ; i++) {
+            usuariTropaDAO.addTropaToUsuari(newUserPK, i);
+        }
 
         return newUserPK;
     }

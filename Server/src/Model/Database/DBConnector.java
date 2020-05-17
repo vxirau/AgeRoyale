@@ -65,6 +65,10 @@ public class DBConnector {
 
         } catch (SQLException ex) {
             System.out.println("Problema al Inserir --> " + ex.getSQLState());
+            System.out.println(ex.getMessage());
+            System.out.println(ex.getErrorCode());
+            System.out.println(ex.getSQLState());
+            System.out.println(Arrays.toString(ex.getStackTrace()));
         }
     }
 
@@ -74,6 +78,10 @@ public class DBConnector {
             preparedStatement.execute();
         } catch (SQLException ex) {
             System.out.println("Problema al Inserir --> " + ex.getSQLState());
+            System.out.println(ex.getMessage());
+            System.out.println(ex.getErrorCode());
+            System.out.println(ex.getSQLState());
+            System.out.println(Arrays.toString(ex.getStackTrace()));
         }
     }
 
@@ -98,6 +106,10 @@ public class DBConnector {
 
         } catch (SQLException ex) {
             System.out.println("Problema al Eliminar --> " + ex.getSQLState());
+            System.out.println(ex.getMessage());
+            System.out.println(ex.getErrorCode());
+            System.out.println(ex.getSQLState());
+            System.out.println(Arrays.toString(ex.getStackTrace()));
         }
 
     }
