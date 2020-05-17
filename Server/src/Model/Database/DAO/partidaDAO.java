@@ -22,8 +22,11 @@ public class partidaDAO {
                 partida.setIdPartida(rs.getInt("idPartida"));
                 partida.setDuracio(rs.getInt("duration"));
                 partida.setData(rs.getString("date"));
+                partida.setName(rs.getString("name"));
                 partida.setFinished(rs.getBoolean("finished"));
-                partida.setJugadors(usuariDAO.getUserFromId(rs.getInt("player1")), usuariDAO.getUserFromId(rs.getInt("player2")));
+                partida.setHost(rs.getString("host"));
+                partida.setPubliques(rs.getBoolean("publica"));
+                partida.setJugadors(usuariDAO.getUserFromId(rs.getInt("player1")) , usuariDAO.getUserFromId(rs.getInt("player2")));
             } else {
                 partida = null;
             }

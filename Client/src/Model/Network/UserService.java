@@ -30,7 +30,13 @@ public class UserService extends Thread{
     private FriendsController friendsController;
     private TroopController troopController;
 	private WaitingController waitingController;
-    private boolean flag;
+	private MenuController menuController;
+
+	public void setMenuController(MenuController menuController) {
+		this.menuController = menuController;
+	}
+
+	private boolean flag;
 
 
 	public UserService() {
@@ -141,6 +147,9 @@ public class UserService extends Thread{
 				} else if(jelow.getType().equals("updateWaiting")){
 					Partida p= (Partida)jelow.getObject();
 					waitingController.updateGame(p);
+				}else if(jelow.getType().equals("InviteRecived")){
+					Invite invite = (Invite) jelow.getObject();
+					menuController.inviteRecived(invite);
 				}
 
 

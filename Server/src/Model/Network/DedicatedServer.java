@@ -1,12 +1,9 @@
 package src.Model.Network;
 
+import src.*;
 import src.Controller.ControllerServer;
 import src.Controller.TroopSController;
-import src.Message;
 import src.Model.Database.DAO.*;
-import src.Partida;
-import src.Tropa;
-import src.Usuari;
 import src.View.ViewServer;
 
 import java.io.*;
@@ -148,6 +145,7 @@ public class DedicatedServer extends Thread {
 					Message messageResposta = new Message(null, "Logout_OK");
 					objectOut.writeObject(messageResposta);
 					stopDedicatedServer();
+					server.removeDedicated(this);
 					clients.remove(this);
 					server.showClients();
 					server.broadcastClients();
@@ -258,8 +256,10 @@ public class DedicatedServer extends Thread {
 					}
 					inRoom = null;
 					server.broadcastClients();
+				}else if(m.getType().equals("Invite")) {
+					Invite invite = (Invite) m.getObject();
+					server.broadcastInvite(invite);
 				}
-
 			}
 		} catch (IOException | ClassNotFoundException e1){
 				// en cas derror aturem el servidor dedicat
@@ -282,7 +282,7 @@ public class DedicatedServer extends Thread {
 
 	public void privateMessage(String message) throws IOException {
 
-		if (message.equals("Friends")){
+		if (message.equals("Friends") && this.clientUser != null){
 			Usuari usuari = this.clientUser;
 			amicDAO aDAO = new amicDAO();
 			ArrayList<Usuari> a = aDAO.getAmics(usuari);
@@ -305,9 +305,20 @@ public class DedicatedServer extends Thread {
 		}
 	}
 
+
+	public void inviteMessage(Invite invite) {
+		if (clientUser.getIdUsuari() == invite.getDesti().getIdUsuari()){
+			try {
+				partidaDAO pDAO = new partidaDAO();
+				Invite inviteToSend = new Invite(invite.getOrigen(), invite.getDesti(), pDAO.getPartida(invite.getPartida().getIdPartida()));
+				objectOut.writeObject(new Message(inviteToSend, "InviteRecived"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	private ObjectOutputStream getOutChannel() {
 		return objectOut;
 	}
-
-
 }

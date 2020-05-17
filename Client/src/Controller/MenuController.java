@@ -1,10 +1,14 @@
 package src.Controller;
 
+import src.Invite;
 import src.Message;
 import src.Model.Network.UserService;
+import src.Partida;
 import src.Usuari;
 import src.View.MenuView;
+import src.View.WaitingRoomView;
 
+import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -44,8 +48,9 @@ public class MenuController {
         this.requested = requested;
 
         if(!userService.serviceStarted()){
-           userService.startServerComunication(); //TODO: descomentar
+           userService.startServerComunication();
         }
+        userService.setMenuController(this);
 
         view.setUsuari(user);
         view.setuService(userService);
@@ -64,7 +69,7 @@ public class MenuController {
         tropesController = new TropesController(user);
         mainController = new MainController(user);
         friendsController = new FriendsController(user, uService, this, requests, requested);
-        roomsController = new RoomsController(user, uService); //todo: this
+        roomsController = new RoomsController(user, uService, this);
     }
 
     private void initControllersViews() {
@@ -88,11 +93,27 @@ public class MenuController {
         return friendsController;
     }
 
-    public void updateViews() throws InterruptedException {
-        view.updateViews();
+    public void updateViews() {
+        try {
+            view.updateViews();
+        } catch (InterruptedException e){
+        }
     }
 
     public int getRequestSize() {
         return requests.size();
+    }
+
+    public void inviteRecived(Invite invite) {
+        view.setVisible(true);
+        Object[] options = {"Acceptar", "Declinar"};
+        String message = invite.getOrigen().getNickName() + " t'ha convidat a la partida " + invite.getPartida().getName() + ". Acceptes?";
+        int n = JOptionPane.showOptionDialog(view,
+                message,
+                "Invitacio", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null, options,  options[0]);
+        if (n==JOptionPane.YES_OPTION){
+            roomsController.gameSelected(invite.getPartida(), roomsController.getRoomListView().getTotal(invite.getPartida()));
+        }
     }
 }

@@ -14,10 +14,7 @@ import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,11 +39,13 @@ public class RoomListView extends JFrame{
 	private RoomsController roomsController;
 
 	private void dividirPartides(){
+		pPrivades = new ArrayList<>();
+		pPubliques = new ArrayList<>();
 		for(Partida p : allGames){
 			if(p.isPublic()){
 				pPubliques.add(p);
 			}else{
-				if(isFriendGame(p)){
+				if(isFriendGame(p) || usuari.getNickName().equals(p.getHost())){
 					pPrivades.add(p);
 				}
 			}
@@ -54,7 +53,12 @@ public class RoomListView extends JFrame{
 	}
 
 	private boolean isFriendGame(Partida game){
-		return game.getHost().equals(this.usuari.getNickName());
+		for (Usuari amic: usuari.getAmics()) {
+			if (game.getHost().equals(amic.getNickName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public JPanel getJpPare(){
@@ -68,8 +72,11 @@ public class RoomListView extends JFrame{
 	}
 
 	private void initAll(){
+		this.removeAll();
 		dividirPartides();
 		initComponents();
+		revalidate();
+		repaint();
 	}
 
 	private void initComponents() {
@@ -78,7 +85,6 @@ public class RoomListView extends JFrame{
 	}
 
 	private void colocarPanel(){
-		this.removeAll();
 
 		jpPare = new JPanel();
 		jpPare.setLayout(null);
@@ -171,16 +177,16 @@ public class RoomListView extends JFrame{
 			JPanel showPrivate = new JPanel();
 			JLabel mostrar = new JLabel();
 			showPrivate.setOpaque(false);
-			mostrar.setText("Mostrar només privades");
+			mostrar.setText("Mostrar privades");
 			mostrar.setForeground(Color.WHITE);
 			mostrar.setFont(new Font("Helvetica", Font.BOLD, 20));
 			mostrar.setBounds(35, 165, 250, 15);
 			showPrivate.add(mostrar);
-			JToggleButton show = new JToggleButton();
+			JButton show = new JButton();
 			show.setBounds(300, 165, 50, 15);
 			show.setText("No");
-			show.addChangeListener(new ChangeListener( ) {
-				public void stateChanged(ChangeEvent ev) {
+			show.addActionListener(new ActionListener( ) {
+				public void actionPerformed(ActionEvent ev) {
 					if(visible){
 						visible = false;
 						getScrollPrivades().setVisible(false);
@@ -240,8 +246,6 @@ public class RoomListView extends JFrame{
 		fondo.setBounds(0, 0, 450, 700);
 		jpPare.add(fondo);
 
-		revalidate();
-		repaint();
 	}
 
 	public JScrollPane getScrollPubliques(){
@@ -297,7 +301,26 @@ public class RoomListView extends JFrame{
 					}
 				}
 			}
+			int count = 0;
+			for(Partida g : games) {
+				if (p.getIdPartida() == g.getIdPartida())
+					count++;
+			}
+			if (count > 1)
+				games.remove(p);
 		}
 	}
 
+	public int getTotal(Partida p){
+		if (p.isPublic()){
+			for (int i = 0; i < pPubliques.size(); i++) {
+				if (p.getIdPartida() == pPubliques.get(i).getIdPartida()) return i;
+			}
+		} else {
+			for (int i = 0; i < pPrivades.size(); i++) {
+				if (p.getIdPartida() == pPrivades.get(i).getIdPartida()) return i;
+			}
+		}
+		return -1;
+	}
 }

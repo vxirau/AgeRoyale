@@ -30,6 +30,7 @@ public class RoomsController {
 	private ArrayList<Tropa> tropes;
 	private static MenuView menuView;
 	private WaitingController roomControl;
+	private MenuController menuController;
 
 	private ActionListener actionListenerCreaPartida = new ActionListener() {
 		@Override
@@ -62,7 +63,8 @@ public class RoomsController {
 		}
 	};
 
-	public RoomsController(Usuari u, UserService uService) {
+	public RoomsController(Usuari u, UserService uService, MenuController menuCtrl) {
+		this.menuController = menuCtrl;
 		this.usuari = u;
 		this.uService = uService;
 		if(!uService.serviceStarted()){
@@ -103,7 +105,7 @@ public class RoomsController {
 			}
 		});
 
-		//gView.setVisible(true);
+		gView.setVisible(true);
 		return finalGView;
 	}
 
@@ -124,6 +126,7 @@ public class RoomsController {
 		if (vista != null) {
 			vista.setAllGames(this.allGames);
 		}
+		menuController.updateViews();
 	}
 
 	public static void setClientVisible(boolean visible){
@@ -144,48 +147,58 @@ public class RoomsController {
 
 
 	public void gameSelected(Partida p, int total){
-				ImageIcon imagen = new ImageIcon(this.getClass().getResource("/resources/escut.png"));
-				vista.setVisible(false);
-				Object[] options = {"Jugador", "Espectador"};
-				String missatge = "";
-				if(p.getJugadors().size()<2){
-					int n = JOptionPane.showOptionDialog(vista,
-							"Vols entrar com a espectador o com a jugador?",
-							"Partida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-							imagen, options,  options[0]);
-					if(n==JOptionPane.YES_OPTION){
-						p.getJugadors().add(this.usuari);
-						missatge = "newPlayer";
+		ImageIcon imagen = new ImageIcon(this.getClass().getResource("/resources/escut.png"));
+		vista.setVisible(false);
+		Object[] options = {"Jugador", "Espectador"};
+		String missatge = "";
+		boolean flag = true;
+		if(p.getJugadors().size()<2){
+			int n = JOptionPane.showOptionDialog(vista,
+					"Vols entrar com a espectador o com a jugador?",
+					"Partida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+					imagen, options,  options[0]);
+			if(n==JOptionPane.YES_OPTION){
+				p.getJugadors().add(this.usuari);
+				missatge = "newPlayer";
 
-					}else if(n==JOptionPane.NO_OPTION){
-						if(p.getEspectadors() == null){
-							p.setEspectadors(new ArrayList<>());
-						}
-						missatge = "newSpectator";
-						p.getEspectadors().add(this.usuari);
-					}
-
-					WaitingRoomView waitingRoom = new WaitingRoomView(p, this.usuari);
-					roomControl = new WaitingController(total, this,p, waitingRoom, uService, this.usuari);
-					waitingRoom.setController(roomControl);
-					waitingRoom.initAll();
-					waitingRoom.setVisible(true);
-					updateGameTable(p,missatge);
-					RoomsController.setClientVisible(false);
-				}else{
-					p.getEspectadors().add(this.usuari);
-
-					WaitingRoomView waitingRoom = new WaitingRoomView(p, this.usuari);
-					roomControl = new WaitingController(total, this,p, waitingRoom, uService, this.usuari);
-					waitingRoom.setController(roomControl);
-					waitingRoom.setVisible(true);
-					waitingRoom.initAll();
-					updateGameTable(p,"newSpectator");
-					RoomsController.setClientVisible(false);
+			}else if(n==JOptionPane.NO_OPTION){
+				if(p.getEspectadors() == null){
+					p.setEspectadors(new ArrayList<>());
 				}
+				missatge = "newSpectator";
+				p.getEspectadors().add(this.usuari);
+			} else {
+				flag = false;
+			}
+			if(flag) {
+				WaitingRoomView waitingRoom = new WaitingRoomView(p, this.usuari);
+				roomControl = new WaitingController(total, this, p, waitingRoom, uService, this.usuari);
+				waitingRoom.setController(roomControl);
+				waitingRoom.initAll(false);
+				waitingRoom.setVisible(true);
+				updateGameTable(p, missatge);
+				RoomsController.setClientVisible(false);
+			}
+		}else{
+			if(p.getEspectadors() == null){
+				p.setEspectadors(new ArrayList<>());
+			}
+			p.getEspectadors().add(this.usuari);
+
+			WaitingRoomView waitingRoom = new WaitingRoomView(p, this.usuari);
+			roomControl = new WaitingController(total, this,p, waitingRoom, uService, this.usuari);
+			waitingRoom.setController(roomControl);
+			waitingRoom.setVisible(true);
+			waitingRoom.initAll(false);
+			updateGameTable(p,"newSpectator");
+			RoomsController.setClientVisible(false);
+		}
 
 	}
 
+	public RoomListView getRoomListView() {
+		return vista;
+	}
 
 	public ArrayList<Partida> getAllGames() {
 		return allGames;

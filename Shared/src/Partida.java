@@ -115,8 +115,8 @@ public class Partida implements Serializable{
         if(this.jugadors == null) {
             this.jugadors = new ArrayList<>();
         }
-        this.jugadors.add(jugador1);
-        this.jugadors.add(jugador2);
+        if (jugador1.getIdUsuari() != 0) this.jugadors.add(jugador1);
+        if (jugador2.getIdUsuari() != 0) this.jugadors.add(jugador2);
     }
 
     public ArrayList<Usuari> getEspectadors() {

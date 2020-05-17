@@ -1,5 +1,6 @@
 package src.Controller;
 
+import src.Invite;
 import src.Message;
 import src.Model.Network.UserService;
 import src.Partida;
@@ -32,11 +33,14 @@ public class WaitingController implements ActionListener, WindowListener {
 
     public void updateGame(Partida p){
         view.setPartida(p);
-        view.initAll();
+        view.initAll(true);
+        view.setController(this);
+        System.out.println("hola");
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        System.out.println("ESTOY HASTA LOS COJONES");
         if(((JButton)e.getSource()).getText().equals("Start Game")){
             try {
                 gv = roomsController.startGame(total,0, p, this);
@@ -93,5 +97,11 @@ public class WaitingController implements ActionListener, WindowListener {
     @Override
     public void windowDeactivated(WindowEvent e) {
 
+    }
+
+    public void inviteFriend(Usuari f) {
+        Invite invite = new Invite(usuari, f, p);
+        Message m = new Message(invite,"Invite");
+        userService.sendObject(m);
     }
 }

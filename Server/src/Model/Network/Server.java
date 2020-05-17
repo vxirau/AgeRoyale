@@ -1,6 +1,7 @@
 package src.Model.Network;
 
 
+import src.Invite;
 import src.NetworkConfiguration;
 import src.View.ViewServer;
 
@@ -76,13 +77,22 @@ public class Server extends Thread {
     public void broadcastClients() {
 		for (DedicatedServer dServer : dServers) {
 			try {
-				dServer.privateMessage("Friends");
-				dServer.privateMessage("getAllGames");
-				dServer.privateMessage("getAllRunningGames");
 				dServer.privateMessage("updateWaitingRoom");
+				dServer.privateMessage("Friends");
+				dServer.privateMessage("getAllRunningGames");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
     }
+
+	public void broadcastInvite(Invite invite) {
+		for (DedicatedServer dServer : dServers) {
+			dServer.inviteMessage(invite);
+		}
+	}
+
+	public void removeDedicated(DedicatedServer dedicatedServer) {
+		dServers.remove(dedicatedServer);
+	}
 }

@@ -14,16 +14,15 @@ import java.util.ArrayList;
 
 public class WaitingRoomView extends JFrame {
     private JButton start;
-    private ArrayList<Usuari> friends;
     private Partida p;
     private Usuari usr;
+    private WaitingController waitingController;
 
     //Publica, esperar a que es connecti algú i quan es connecti començar partida
 
     //Privada, convidar amics en linia (amics entren si accepten)
 
     public WaitingRoomView(Partida p, Usuari usr) {
-        this.friends = usr.getAmics();
         this.p = p;
         this.usr = usr;
     }
@@ -31,9 +30,10 @@ public class WaitingRoomView extends JFrame {
         this.p = partida;
     }
 
-    public void initAll(){
-
-        removeAll();
+    public void initAll(boolean flag){
+        if(flag) {
+            this.removeAll();
+        }
 
         JPanel main  = new JPanel();
         main.setLayout(null);
@@ -96,12 +96,6 @@ public class WaitingRoomView extends JFrame {
         espectador.setLayout(new BoxLayout(espectador, BoxLayout.Y_AXIS));
         espectador.setOpaque(false);
 
-        spectators.setViewportView(espectador);
-        players.setViewportView(jugador);
-        main.add(players);
-        main.add(spectators);
-
-
         if(p.getJugadors()!=null){
             for(Usuari f : p.getJugadors()){
                 jugador.add(createFriend(f));
@@ -116,6 +110,17 @@ public class WaitingRoomView extends JFrame {
             }
         }
 
+        spectators.setViewportView(espectador);
+        players.setViewportView(jugador);
+        main.add(players);
+        main.add(spectators);
+
+        start = new JButton();
+        start.setText("Start Game");
+        start.setHorizontalAlignment(SwingConstants.CENTER);
+        start.setBounds(85, 660, 300, 30);
+        start.setVisible(false);
+        main.add(start);
 
         if(!p.isPublic() && p.getHost().equals(usr.getNickName()) && p.getJugadors().size()<2){
             JLabel separator = new JLabel();
@@ -154,13 +159,15 @@ public class WaitingRoomView extends JFrame {
             inviteFriends.setLayout(new BoxLayout(inviteFriends, BoxLayout.Y_AXIS));
             inviteFriends.setOpaque(false);
             
-            for(Usuari f : friends){
+            for(Usuari f : usr.getAmics()){
                 if(f.isOnline()){
                     JPanel panel = createFriend(f);
                     panel.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            System.out.println("Amic apretat");
+                            if (WaitingRoomView.this.waitingController != null){
+                                WaitingRoomView.this.waitingController.inviteFriend(f);
+                            }
                         }
                     });
                     inviteFriends.add(panel);
@@ -171,11 +178,7 @@ public class WaitingRoomView extends JFrame {
             friendInvites.setViewportView(inviteFriends);
             main.add(friendInvites);
         }else if(p.getJugadors().size()==2 && p.getHost().equals(usr.getNickName())){
-            start = new JButton();
-            start.setText("Start Game");
-            start.setHorizontalAlignment(SwingConstants.CENTER);
-            start.setBounds(85, 660, 300, 30);
-            main.add(start);
+            start.setVisible(true);
         }
 
 
@@ -187,11 +190,10 @@ public class WaitingRoomView extends JFrame {
         fondo.setBounds(0, 0, 450, 800);
         main.add(fondo);
         setSize(450, 800);
-        this.setContentPane(main);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setSize(450, 800);
-
+        this.setContentPane(main);
         revalidate();
         repaint();
     }
@@ -201,6 +203,7 @@ public class WaitingRoomView extends JFrame {
         if(start != null ){
             start.addActionListener(controller);
         }
+        this.waitingController = controller;
     }
     
     public JPanel createFriend(Usuari u){
@@ -209,7 +212,7 @@ public class WaitingRoomView extends JFrame {
 
         amic.setVisible(true);
         JLabel nomAmic = new JLabel();
-        nomAmic.setText(u.getNickName() );
+        nomAmic.setText(u.getNickName());
         nomAmic.setForeground(Color.BLACK);
         nomAmic.setBorder(new EmptyBorder(10,0,0,0));
         nomAmic.setFont(new Font("Helvetica", Font.BOLD, 20));
