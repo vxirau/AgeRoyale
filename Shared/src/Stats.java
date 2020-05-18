@@ -1,5 +1,7 @@
 package src;
 
+import src.View.TropesView;
+
 import java.io.Serializable;
 
 public class Stats implements Serializable {
@@ -8,6 +10,7 @@ public class Stats implements Serializable {
     private int totalVictories;
     private Float winrate;
     private Float avgDurationVictories;
+    private String tropaMesUtilitzada;
 
     public Stats() {
 
@@ -83,6 +86,14 @@ public class Stats implements Serializable {
 
     public void setAvgDurationVictories(Float avgDurationVictories) {
         this.avgDurationVictories = avgDurationVictories;
+    }
+
+    public String getTropaMesUtilitzada() {
+        return tropaMesUtilitzada;
+    }
+
+    public void setTropaMesUtilitzada(String tropaMesUtilitzada) {
+        this.tropaMesUtilitzada = tropaMesUtilitzada;
     }
 }
 

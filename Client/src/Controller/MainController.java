@@ -36,7 +36,11 @@ public class MainController {
             mainView.getJlVictories().setText(usuari.getStats().getTotalVictories() + " victories");
             mainView.getJlTempsXVictoria().setText("Avg " + usuari.getStats().getAvgDurationVictories() + " min per victoria");
         }
-        mainView.getJlTropaMesUtilitzada().setText("Tropa: XY");
+        if (usuari.getStats().getTropaMesUtilitzada() != null && !usuari.getStats().getTropaMesUtilitzada().equals("")){
+            mainView.getJlTropaMesUtilitzada().setText("Tropa: " + usuari.getStats().getTropaMesUtilitzada());
+        } else {
+            mainView.getJlTropaMesUtilitzada().setText("Tropa: -");
+        }
     }
 
     public void setUsuari(Usuari usuari) {

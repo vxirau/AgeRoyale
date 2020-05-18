@@ -14,6 +14,7 @@ public class partidaDAO {
     //OBTENIR INFORMACIO
     public Partida getPartida(int idPartida){
         usuariDAO usuariDAO = new usuariDAO();
+        spectatorDAO sDAO = new spectatorDAO();
         Partida partida = new Partida();
         String query = "SELECT par.* FROM AgeRoyale.partida AS par WHERE idPartida = " + idPartida + ";";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
@@ -27,6 +28,7 @@ public class partidaDAO {
                 partida.setHost(rs.getString("host"));
                 partida.setPubliques(rs.getBoolean("publica"));
                 partida.setJugadors(usuariDAO.getUserFromId(rs.getInt("player1")) , usuariDAO.getUserFromId(rs.getInt("player2")));
+                partida.setEspectadors(sDAO.getAllSpectatorInGame(partida));
             } else {
                 partida = null;
             }
@@ -38,6 +40,7 @@ public class partidaDAO {
 
     public ArrayList<Partida> getPartidesFromUserId (Usuari usuari){
         usuariDAO usuariDAO = new usuariDAO();
+        spectatorDAO sDAO = new spectatorDAO();
         ArrayList<Partida> partides = new ArrayList<>();
         String query = "SELECT par.* FROM AgeRoyale.partida AS par WHERE player1 = " + usuari.getIdUsuari() + " OR player2 = " + usuari.getIdUsuari() + " ;";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
@@ -52,6 +55,7 @@ public class partidaDAO {
                 partida.setHost(rs.getString("host"));
                 partida.setPubliques(rs.getBoolean("publica"));
                 partida.setJugadors(usuariDAO.getUserFromId(rs.getInt("player1")), usuariDAO.getUserFromId(rs.getInt("player2")));
+                partida.setEspectadors(sDAO.getAllSpectatorInGame(partida));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,6 +65,7 @@ public class partidaDAO {
 
     public ArrayList<Partida> getAllPartides (){
         usuariDAO usuariDAO = new usuariDAO();
+        spectatorDAO sDAO = new spectatorDAO();
         ArrayList<Partida> partides = new ArrayList<>();
         String query = "SELECT par.* FROM AgeRoyale.partida AS par;";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
@@ -75,6 +80,7 @@ public class partidaDAO {
                 partida.setFinished(rs.getBoolean("finished"));
                 partida.setData(rs.getString("date"));
                 partida.setJugadors(usuariDAO.getUserFromId(rs.getInt("player1")), usuariDAO.getUserFromId(rs.getInt("player2")));
+                partida.setEspectadors(sDAO.getAllSpectatorInGame(partida));
                 partides.add(partida);
             }
         } catch (SQLException e) {
@@ -85,6 +91,7 @@ public class partidaDAO {
 
     public ArrayList<Partida> getRunningPartides(){
         usuariDAO usuariDAO = new usuariDAO();
+        spectatorDAO sDAO = new spectatorDAO();
         ArrayList<Partida> partides = new ArrayList<>();
         String query = "SELECT par.* FROM AgeRoyale.partida AS par WHERE par.finished = false;";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
@@ -99,6 +106,7 @@ public class partidaDAO {
                 partida.setFinished(rs.getBoolean("finished"));
                 partida.setData(rs.getString("date"));
                 partida.setJugadors(usuariDAO.getUserFromId(rs.getInt("player1")), usuariDAO.getUserFromId(rs.getInt("player2")));
+                partida.setEspectadors(sDAO.getAllSpectatorInGame(partida));
                 partides.add(partida);
             }
         } catch (SQLException e) {
@@ -250,4 +258,22 @@ public class partidaDAO {
     }
 
 
+    public boolean hasPlayerTwo(Partida p) {
+        Integer has = null;
+        String query = "SELECT par.player2 FROM AgeRoyale.partida as par WHERE idPartida = " + p.getIdPartida();
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try {
+            if (rs.next()) {
+                has = (Integer) rs.getObject("player2");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if(has == null){
+            return false;
+        }else{
+            return true;
+        }
+    }
 }

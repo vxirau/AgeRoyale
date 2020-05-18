@@ -186,10 +186,15 @@ public class UserService extends Thread{
 				}else if(jelow.getType().equals("InviteRecived")){
 					Invite invite = (Invite) jelow.getObject();
 					menuController.inviteRecived(invite);
+				} else if(jelow.getType().equals("StartGameAsPlayerRecived")){
+					roomsController.startGame(roomsController.startGamePartida, roomsController.startGameWaitingController, true);
+				} else if(jelow.getType().equals("StartGameAsSpectatorRecived")){
+					roomsController.startGame(roomsController.startGamePartida, roomsController.startGameWaitingController, false);
 				}
 
 
-			} catch (IOException | ClassNotFoundException | InterruptedException e ) {
+
+			} catch (IOException | ClassNotFoundException e ) {
 				e.printStackTrace();
 				stopServerComunication();
 				System.out.println("*** ESTA EL SERVIDOR EN EXECUCIO? ***");
@@ -353,4 +358,15 @@ public class UserService extends Thread{
 		}
 	}
 
+	public void sendStartGame(Message m, RoomsController roomsController) {
+		try{
+			this.roomsController = roomsController;
+			this.doStream.reset();
+			this.doStream.writeObject(m);
+		} catch (IOException e) {
+			e.printStackTrace();
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
 }

@@ -21,6 +21,7 @@ public class statsDAO {
                 stat.setTotalVictories(rs.getInt("totalVictories"));
                 stat.setWinrate(rs.getFloat("winrate"));
                 stat.setAvgDurationVictories(rs.getFloat("avgDurationVictories"));
+                stat.setTropaMesUtilitzada(getMostUsedTroop(idStat));
             } else {
                 stat = null;
             }
@@ -43,6 +44,7 @@ public class statsDAO {
                 stat.setTotalVictories(rs.getInt("totalVictories"));
                 stat.setWinrate(rs.getFloat("winrate"));
                 stat.setAvgDurationVictories(rs.getFloat("avgDurationVictories"));
+                stat.setTropaMesUtilitzada(getMostUsedTroop(stat.getIdStat()));
 
                 String query2 = "SELECT u.* FROM usuari as u, stats as s WHERE "+ stat.getIdStat() + " = u.idStats ORDER BY s.totalVictories DESC LIMIT 10;";
                 ResultSet rs2 = DBConnector.getInstance().selectQuery(query2);
@@ -65,6 +67,18 @@ public class statsDAO {
         return topUsers;
     }
 
+    public String getMostUsedTroop (int idStat){
+        String query = "SELECT CASE GREATEST(Skeleton, Goblin, Wizard, Bomb) WHEN Skeleton THEN 'Skeleton' WHEN Goblin THEN 'Goblin' WHEN Wizard THEN 'Wizard' WHEN Bomb THEN 'Bomb' END AS 'TROPA' FROM AgeRoyale.stats as st WHERE st.idStat = " + idStat +" ;";
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try{
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public Stats getStatsFromUserId(int idUser) {
         Stats stat = new Stats();
         String query = "SELECT st.* FROM AgeRoyale.stats as st, AgeRoyale.usuari as us WHERE us.idUser = " + idUser + " and us.idStats = st.idStat;";
@@ -76,6 +90,7 @@ public class statsDAO {
                 stat.setTotalVictories(rs.getInt("totalVictories"));
                 stat.setWinrate(rs.getFloat("winrate"));
                 stat.setAvgDurationVictories(rs.getFloat("avgDurationVictories"));
+                stat.setTropaMesUtilitzada(getMostUsedTroop(stat.getIdStat()));
             } else {
                 stat = null;
             }
@@ -93,6 +108,23 @@ public class statsDAO {
 
     public void updateStats(int idStat, int totalPartides, int totalVictories, float winrate, int avgDurationVic) {
         String query = "UPDATE AgeRoyale.stats SET AgeRoyale.stats.totalPartides = " + totalPartides + ", AgeRoyale.stats.totalVictories = " + totalVictories + ", AgeRoyale.stats.winrate = " + winrate + ", AgeRoyale.stats.avgDurationVictories = " + avgDurationVic + " WHERE AgeRoyale.stats.idStat = " + idStat + ";";
+        DBConnector.getInstance().updateQuery(query);
+    }
+
+    public void updateUsedTroop(int idUsuari, String tropa){
+        int count = 0;
+        String queryGet = "SELECT st." + tropa + " FROM AgeRoyale.stats as st, AgeRoyale.usuari as us WHERE us.idUser = " + idUsuari + " and us.idStats = st.idStat;";
+        ResultSet rs = DBConnector.getInstance().selectQuery(queryGet);
+
+        try{
+            if (rs.next()){
+                count = rs.getInt(tropa);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        count++;
+        String query = "UPDATE AgeRoyale.stats as st, AgeRoyale.usuari as us SET st." + tropa + " = " + count + " WHERE us.idUser = " + idUsuari + " and us.idStats = st.idStat";
         DBConnector.getInstance().updateQuery(query);
     }
 

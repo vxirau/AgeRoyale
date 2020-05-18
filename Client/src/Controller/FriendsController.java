@@ -128,7 +128,7 @@ public class FriendsController implements ActionListener{
         uService.sendGetFriends(m, this, true);
     }
 
-     public void setFriends(ArrayList<Usuari> amics) throws InterruptedException {
+     public void setFriends(ArrayList<Usuari> amics) {
         if(friendView.getTextField().getText().toString().length()>0){
             clearFriendList(amics);
         }
@@ -148,12 +148,12 @@ public class FriendsController implements ActionListener{
                 amics.remove(i);
             }
         }
-
      }
 
     public void setAmicsUsuari(ArrayList<Usuari> amicsUsuari) {
         usuari.setAmics(amicsUsuari);
         friendView.setAmicsUsuari(amicsUsuari);
+        friendView.getJtfSearchAmic().setText(cerca);
     }
 
     public void requestFriend(Usuari u){

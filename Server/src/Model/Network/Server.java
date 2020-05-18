@@ -3,6 +3,7 @@ package src.Model.Network;
 
 import src.Invite;
 import src.NetworkConfiguration;
+import src.Partida;
 import src.View.ViewServer;
 
 import java.io.IOException;
@@ -94,5 +95,11 @@ public class Server extends Thread {
 
 	public void removeDedicated(DedicatedServer dedicatedServer) {
 		dServers.remove(dedicatedServer);
+	}
+
+	public void broadcastStartGame(Partida partida) {
+		for (DedicatedServer dServer : dServers) {
+			dServer.startGameMessage(partida);
+		}
 	}
 }

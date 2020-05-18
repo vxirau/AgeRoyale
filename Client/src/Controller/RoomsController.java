@@ -34,6 +34,8 @@ public class RoomsController {
 	private static MenuView menuView;
 	private WaitingController roomControl;
 	private MenuController menuController;
+	public Partida startGamePartida;
+	public WaitingController startGameWaitingController;
 
 	private ActionListener actionListenerCreaPartida = new ActionListener() {
 		@Override
@@ -60,12 +62,13 @@ public class RoomsController {
 					LocalDateTime now = LocalDateTime.now();
 					Partida p = new Partida(m, dtf.format(now), privacitat, usuari.getNickName());
 					//startPartida amb el setPartida a 10
-					p.setIdPartida(10);
+					/*p.setIdPartida(10);
 					try {
 						startGame(0,1,p,null,false);
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
+					 */
 					Message mes = new Message(p, "roomCreate");
 					uService.sendPartida(mes);
 				}
@@ -96,8 +99,13 @@ public class RoomsController {
 		return uService;
 	}
 
+	public void setStartGame(Partida partida, WaitingController waitingCtrl){
+		this.startGamePartida = partida;
+		this.startGameWaitingController = waitingCtrl;
+	}
 
-	public static GameView startGame(int num, int privacitat, Partida p, WaitingController w, boolean start) throws IOException {
+
+	public GameView startGame(Partida p, WaitingController w, boolean isPlayer) throws IOException {
 		GameView gView = null;
 		try {
 			gView = new GameView();
@@ -165,13 +173,13 @@ public class RoomsController {
 
 	public void gameSelected(Partida p, int total){
 		//startGame amb id 10
-		p.setIdPartida(10);
+		/*p.setIdPartida(10);
 		try {
 			startGame(0,1,p,null,false);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		/*ImageIcon imagen = new ImageIcon(this.getClass().getResource("/resources/escut.png"));
+		}*/
+		ImageIcon imagen = new ImageIcon(this.getClass().getResource("/resources/escut.png"));
 		vista.setVisible(false);
 		Object[] options = {"Jugador", "Espectador"};
 		String missatge = "";
@@ -216,7 +224,7 @@ public class RoomsController {
 			waitingRoom.initAll(false);
 			updateGameTable(p,"newSpectator");
 			RoomsController.setClientVisible(false);
-		}*/
+		}
 
 	}
 

@@ -35,13 +35,15 @@ public class WaitingController implements ActionListener, WindowListener {
         view.setPartida(p);
         view.initAll(true);
         view.setController(this);
-        System.out.println("hola");
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println("ESTOY HASTA LOS COJONES");
-        if(e == null){
+        roomsController.setStartGame(p, this);
+        Message m = new Message(p, "startGame");
+        userService.sendStartGame(m, roomsController);
+        /*if(e == null){
             try {
                 p.setIdPartida(10);
                 gv = roomsController.startGame(total,0, p, this,false);
@@ -49,15 +51,15 @@ public class WaitingController implements ActionListener, WindowListener {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        } else if(((JButton)e.getSource()).getText().equals("Start Game")){
+        } else */ //if(((JButton)e.getSource()).getText().equals("Start Game")){
             try {
-                p.setIdPartida(10);
-                gv = roomsController.startGame(total,0, p, this,false);
+                //p.setIdPartida(10);
+                gv = roomsController.startGame(p, this);
                 view.setVisible(false);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        }
+        //}
 
     }
 

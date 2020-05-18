@@ -246,11 +246,10 @@ public class DedicatedServer extends Thread {
 				}else if(m.getType().equals("newPlayer")){
 					Partida p = (Partida)m.getObject();
 					partidaDAO pDAO = new partidaDAO();
-					p = pDAO.getPartida(p.getIdPartida());
-					if(pDAO.hasPlayerOne(p) && p.getIdPartida() != pDAO.getPlayerOne(p)){
-						pDAO.addPlayerTwo(p, p.getJugadors().get(1));
-					}else{
+					if(!pDAO.hasPlayerOne(p) &&  p.getJugadors().size() > 0) { //TODO: descobrir que fa aixo aqui -> if(pDAO.hasPlayerOne(p) && p.getIdPartida() != pDAO.getPlayerOne(p)) : versio original
 						pDAO.addPlayerOne(p, p.getJugadors().get(0));
+					}else if (!pDAO.hasPlayerTwo(p) && p.getJugadors().size() > 1){
+						pDAO.addPlayerTwo(p, p.getJugadors().get(1));
 					}
 					inRoom = p.getIdPartida();
 					server.broadcastClients();
@@ -283,6 +282,16 @@ public class DedicatedServer extends Thread {
                     Tropa t = (Tropa) m.getObject();
                     tropaPartidaDAO pDAO = new tropaPartidaDAO();
                     pDAO.addTropa(t);
+                    statsDAO sDAO = new statsDAO();
+
+                    if(t.getTroopType() != -1) {
+                    	String type = "";
+						if (t.getTroopType() == 0) type = "Skeleton";
+						if (t.getTroopType() == 1) type = "Goblin";
+						if (t.getTroopType() == 2) type = "Bomb";
+						if (t.getTroopType() == 3) type = "Wizard";
+						sDAO.updateUsedTroop(clientUser.getIdUsuari(), type);
+					}
                 } else if(m.getType().equals("checkID")){
                     Tropa troop = new Tropa();
                     boolean trobat = false;
@@ -306,9 +315,11 @@ public class DedicatedServer extends Thread {
 						objectOut.writeObject(message);
 					}*/
 
-                }
+                }else if(m.getType().equals("startGame")){
+					Partida p = (Partida) m.getObject();
+					server.broadcastStartGame(p);
+				}
             }
-
 		} catch (IOException | ClassNotFoundException e1){
 				// en cas derror aturem el servidor dedicat
 				stopDedicatedServer();
@@ -344,10 +355,7 @@ public class DedicatedServer extends Thread {
 		}else if(message.equals("updateWaitingRoom")){
 			if(inRoom != null){
 				partidaDAO pDAO = new partidaDAO();
-				spectatorDAO sDAO = new spectatorDAO();
 				Partida p = pDAO.getPartida(inRoom);
-				ArrayList<Usuari> spect = sDAO.getAllSpectatorInGame(p);
-				p.setEspectadors(spect);
 				objectOut.writeObject(new Message(p, "updateWaiting"));
 			}
 		}
@@ -355,7 +363,7 @@ public class DedicatedServer extends Thread {
 
 
 	public void inviteMessage(Invite invite) {
-		if (clientUser.getIdUsuari() == invite.getDesti().getIdUsuari()){
+		if (clientUser != null && clientUser.getIdUsuari() == invite.getDesti().getIdUsuari()){
 			try {
 				partidaDAO pDAO = new partidaDAO();
 				Invite inviteToSend = new Invite(invite.getOrigen(), invite.getDesti(), pDAO.getPartida(invite.getPartida().getIdPartida()));
@@ -366,7 +374,19 @@ public class DedicatedServer extends Thread {
 		}
 	}
 
-	private ObjectOutputStream getOutChannel() {
-		return objectOut;
+	public void startGameMessage(Partida partida) {
+		if (clientUser != null && partida.getIdPartida() == inRoom && (partida.getJugadors().get(0).getIdUsuari() == clientUser.getIdUsuari() || partida.getJugadors().get(1).getIdUsuari() == clientUser.getIdUsuari())){
+			try {
+				objectOut.writeObject(new Message(null, "StartGameAsPlayerRecived"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if (clientUser != null && partida.getIdPartida() == inRoom){
+			try {
+				objectOut.writeObject(new Message(null, "StartGameAsSpectatorRecived"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

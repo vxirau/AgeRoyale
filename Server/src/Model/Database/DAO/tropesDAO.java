@@ -70,6 +70,19 @@ public class tropesDAO {
         return tropa;
     }
 
+    public String getTropaName (int idTropa){
+        String query = "SELECT tr.name FROM AgeRoyale.tropa as tr WHERE tr.idTropa = " + idTropa + ";";
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try{
+            if (rs.next()) {
+                return rs.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     //ACTUALITZAR
     public void updateTropa (int idTropa, int newAtac, int newVida, int newCost, int newTipus){
         String query = "UPDATE AgeRoyale.tropa SET AgeRoyale.tropa.atac = " + newAtac +", AgeRoyale.tropa.vida = " + newVida + ", AgeRoyale.tropa.cost = " + newCost + ", AgeRoyale.tropa.tipus = " + newTipus + " WHERE AgeRoyale.tropa.idTropa = " + idTropa + ";";
