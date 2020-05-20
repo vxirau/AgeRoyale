@@ -12,19 +12,21 @@ import src.View.ViewServer;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class ControllerServer implements ActionListener {
+public class ControllerServer implements ActionListener, WindowListener {
 
     private Server server;
     private static ViewServer view;
+    private boolean flag;
 
-    public ControllerServer(Server server, ViewServer view) {
-        this.server = server;
+    public ControllerServer(ViewServer view) {
         this.view = view;
         statsDAO sDAO = new statsDAO();
         partidaDAO aDAO = new partidaDAO();
@@ -55,13 +57,18 @@ public class ControllerServer implements ActionListener {
             p.setSelectedIndex(2);
             view.refresh(p);
         }else if(e.getSource() instanceof  JButton){
-            String botoClicked = ((JButton)e.getSource()).getText();
-            if(botoClicked.equals("Start")){
+            //String botoClicked = ((JButton)e.getSource()).getText();
+            //if(botoClicked.equals("Start")){
+            if (!flag) {
+                this.server = new Server(view);
                 JOptionPane.showMessageDialog(view, "Server started!", "Server", JOptionPane.PLAIN_MESSAGE);
                 server.startServer();
-            }else if(botoClicked.equals("Stop")){
-                server.stopServer();
             }
+            flag = true;
+            //}
+            /*else if(botoClicked.equals("Stop")){
+                server.stopServer();
+            }*/
         }
 
 
@@ -91,5 +98,41 @@ public class ControllerServer implements ActionListener {
             return 1;
         }
         return 2;
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        if(server.isOn())    server.stopServer();
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        if(server.isOn())    server.stopServer();
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
     }
 }

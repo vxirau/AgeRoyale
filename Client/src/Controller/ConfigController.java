@@ -12,7 +12,6 @@ public class ConfigController {
     private ConfigView configView;
     private Usuari usuari;
     private UserService uService;
-    private MenuController menuController;
 
     //Variables auxiliars
     private static int NO_CANVI = 0;
@@ -20,13 +19,10 @@ public class ConfigController {
     private static int CANVI = 1;
 
     private int nickname = ConfigController.NO_CANVI;
-    //private int email = ConfigController.NO_CANVI;
     private int password = ConfigController.NO_CANVI;
     private boolean flag = false;
-    private Object[] options = {"Entèsos"};
 
-    public ConfigController(Usuari usr, UserService userService, MenuController menuCntller) {
-        this.menuController = menuCntller;
+    public ConfigController(Usuari usr, UserService userService) {
         this.usuari = usr;
         this.uService = userService;
     }
@@ -124,10 +120,6 @@ public class ConfigController {
         nickname = ConfigController.NO_CANVI;
         password = ConfigController.NO_CANVI;
         flag = false;
-    }
-
-    private boolean check(String text) {
-        return true;
     }
 
     public void setUsuari(Usuari usuari) {

@@ -338,7 +338,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
     public void registerController(GameController gameController, WaitingController w){
         this.addMouseMotionListener(gameController);
         this.addMouseListener(gameController);
-        this.addWindowListener(w);
+        // TODO: this.addWindowListener(w);
     }
 
     public  int getxMousePosition() {

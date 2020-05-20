@@ -10,9 +10,6 @@ import src.View.ViewRegistre;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class LoginViewController implements ActionListener {
@@ -98,13 +95,12 @@ public class LoginViewController implements ActionListener {
                 users.add(requests.get(j));
             }
         }
-
         return users;
     }
 
     public void loginNotSuccessful(){
-        System.out.println("No existeix. Registra't!");
-
+        //System.out.println("No existeix. Registra't!");
+        JOptionPane.showMessageDialog(view, "No existeix. Registra't!");
     }
 
     @Override

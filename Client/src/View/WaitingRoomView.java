@@ -18,28 +18,44 @@ public class WaitingRoomView extends JFrame {
     private JButton start;
     private Partida p;
     private Usuari usr;
+    private JPanel main;
     private WaitingController waitingController;
+    private JScrollPane players;
+    private JScrollPane spectators;
 
     //Publica, esperar a que es connecti algú i quan es connecti començar partida
 
     //Privada, convidar amics en linia (amics entren si accepten)
 
-    public WaitingRoomView(Partida p, Usuari usr) {
+    public WaitingRoomView(Partida p, Usuari usr, WaitingController waitingController) {
         this.p = p;
         this.usr = usr;
+        this.waitingController = waitingController;
+        main = new JPanel();
+        if (p != null) initAll();
     }
+
     public void setPartida(Partida partida){
         this.p = partida;
+        initAll();
     }
 
-    public void initAll(boolean flag){
-        if(flag) {
-            this.removeAll();
-        }
+    public void initAll(){
+        this.removeAll();
 
-        JPanel main  = new JPanel();
+        main  = new JPanel();
         main.setLayout(null);
         main.setOpaque(false);
+
+        JButton back = new JButton();
+        back.setText("Go back");
+        back.setBackground(Color.decode("#4F1900"));
+        back.setOpaque(true);
+        back.setEnabled(true);
+        back.setBounds(10, 10, 90, 30);
+        back.setForeground(Color.WHITE);
+        back.addActionListener(waitingController);
+        main.add(back);
 
         JLabel jlTitol = new JLabel();
         jlTitol.setText("Waiting for players...");
@@ -59,7 +75,7 @@ public class WaitingRoomView extends JFrame {
         jName.setFont(new Font("Herculanum", Font.BOLD, 25));
         main.add(jName);
 
-        JScrollPane players = new JScrollPane();
+        players = new JScrollPane();
         players.setEnabled(true);
         players.getViewport().setOpaque(false);
         players.setBounds(30,100,400,100);
@@ -88,7 +104,7 @@ public class WaitingRoomView extends JFrame {
         espectadorsText.setFont(new Font("Herculanum", Font.BOLD, 15));
         main.add(espectadorsText);
 
-        JScrollPane spectators = new JScrollPane();
+        spectators = new JScrollPane();
         spectators.setOpaque(false);
         spectators.setEnabled(true);
         spectators.getViewport().setOpaque(false);
@@ -122,16 +138,9 @@ public class WaitingRoomView extends JFrame {
         start.setHorizontalAlignment(SwingConstants.CENTER);
         start.setBounds(85, 660, 300, 30);
         start.setVisible(false);
-        start.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                waitingController.actionPerformed(null);
-            }
-        });
         main.add(start);
 
-        if(!p.isPublic() && p.getHost().equals(usr.getNickName()) && p.getJugadors().size()<2){
+        if(p.getHost().equals(usr.getNickName()) && p.getJugadors().size()<2){  //if(!p.isPublic() && p.getHost().equals(usr.getNickName()) && p.getJugadors().size()<2){
             JLabel separator = new JLabel();
             separator.setText(Utils.ferDottedLine(41));
             separator.setBounds(22, 440, 440, 10);
@@ -167,7 +176,7 @@ public class WaitingRoomView extends JFrame {
             friendInvites.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             inviteFriends.setLayout(new BoxLayout(inviteFriends, BoxLayout.Y_AXIS));
             inviteFriends.setOpaque(false);
-            
+
             for(Usuari f : usr.getAmics()){
                 if(f.isOnline()){
                     JPanel panel = createFriend(f);
@@ -186,10 +195,10 @@ public class WaitingRoomView extends JFrame {
 
             friendInvites.setViewportView(inviteFriends);
             main.add(friendInvites);
-        }else if(p.getJugadors().size()==2 && p.getHost().equals(usr.getNickName())){
+        }
+        if(p.getJugadors().size()==2 && p.getHost().equals(usr.getNickName())){
             start.setVisible(true);
         }
-
 
         ImageIcon imagen2 = new ImageIcon(this.getClass().getResource("/resources/fondo-rojo-oscuro-marron_28629-798.png"));
         Icon icono = new ImageIcon(imagen2.getImage().getScaledInstance(450, 800, Image.SCALE_DEFAULT));
@@ -198,21 +207,21 @@ public class WaitingRoomView extends JFrame {
         getLayeredPane().add(fondo, JLayeredPane.FRAME_CONTENT_LAYER);
         fondo.setBounds(0, 0, 450, 800);
         main.add(fondo);
-        setSize(450, 800);
+
+        /*
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setSize(450, 800);
         this.setContentPane(main);
+         */
+
         revalidate();
         repaint();
+
     }
 
     public void setController(WaitingController controller){
-        this.addWindowListener(controller);
-        if(start != null ){
-            start.addActionListener(controller);
-        }
-        this.waitingController = controller;
+        start.addActionListener(controller);
     }
     
     public JPanel createFriend(Usuari u){
@@ -244,4 +253,8 @@ public class WaitingRoomView extends JFrame {
         amic.setOpaque(false);
         return amic;
     }
-} 
+
+    public JPanel getJPanelPare() {
+        return main;
+    }
+}

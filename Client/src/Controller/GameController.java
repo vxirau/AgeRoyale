@@ -3,17 +3,12 @@ package src.Controller;
 import src.Message;
 import src.Model.Network.UserService;
 import src.Tropa;
-import src.Usuari;
 import src.View.Deck;
 import src.View.GameView;
 import src.View.Sprite;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferStrategy;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 public class GameController implements MouseListener, MouseMotionListener, Runnable, ActionListener {
 
@@ -30,14 +25,8 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
         this.deck = new Deck(this.gameView.getWidth(), this.gameView.getHeight());
         this.uService = userService;
 
-        //userService.startServerComunication();//TODO: comentar
-
         gameView.setGameController(this);
-
     }
-
-
-
 
     @Override
     public void run() {
@@ -137,8 +126,6 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
         gameView.setWhichTroop(whichTroop);
         deck.selectTroop(whichTroop);
     }
-
-
 
     public void invokeTroop(int whichTroop){
         switch (whichTroop){

@@ -27,10 +27,6 @@ public class RegisterViewController implements ActionListener, WindowListener {
 				}
     }
 
-	public void showMessage(String alerta){
-		JOptionPane.showOptionDialog(new JFrame(), alerta,"Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null,options,options[0]);
-	}
-
 	public void actionPerformed(ActionEvent event) {
 		String boto = ((JButton) event.getSource()).getText();
 

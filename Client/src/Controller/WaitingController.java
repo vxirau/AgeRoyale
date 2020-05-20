@@ -6,43 +6,53 @@ import src.Model.Network.UserService;
 import src.Partida;
 import src.Usuari;
 import src.View.GameView;
+import src.View.MenuView;
 import src.View.WaitingRoomView;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.io.IOException;
 
-public class WaitingController implements ActionListener, WindowListener {
+public class WaitingController implements ActionListener {
 
     private RoomsController roomsController;
-    private int total;
     private Partida p;
     private WaitingRoomView view;
     private GameView gv;
     private UserService userService;
     private Usuari usuari;
 
-    public WaitingController(int total, RoomsController roomsController, Partida p, WaitingRoomView w, UserService uService, Usuari usr){
+    public WaitingController(RoomsController roomsController, Partida p, UserService uService, Usuari usr){
         this.roomsController = roomsController;
-        this.total = total;
-        this.view = w;
         this.p = p;
         this.userService = uService;
         this.usuari = usr;
     }
 
+    public void setView(WaitingRoomView view) {
+        this.view = view;
+    }
+
     public void updateGame(Partida p){
         view.setPartida(p);
-        view.initAll(true);
+        view.initAll();
         view.setController(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("ESTOY HASTA LOS COJONES");
-        roomsController.setStartGame(p, this);
-        Message m = new Message(p, "startGame");
-        userService.sendStartGame(m, roomsController);
+        JButton btn = (JButton) e.getSource();
+        if (btn.getText().equals("Start Game")) {
+            Message m = new Message(p, "startGame");
+            userService.sendStartGame(m, roomsController);
+            roomsController.setStartGame(p, this);
+        }
+        if (btn.getText().equals("Go back")) {
+            roomsController.getMenuController().getView().invokeAdjustViews(MenuView.CREAPARTIDA);
+            Message m = new Message(usuari, "userLeft");
+            userService.sendObject(m);
+
+        }
+
         /*if(e == null){
             try {
                 p.setIdPartida(10);
@@ -51,7 +61,7 @@ public class WaitingController implements ActionListener, WindowListener {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        } else */ //if(((JButton)e.getSource()).getText().equals("Start Game")){
+        } else  //if(((JButton)e.getSource()).getText().equals("Start Game")){
             try {
                 //p.setIdPartida(10);
                 gv = roomsController.startGame(p, this);
@@ -59,55 +69,7 @@ public class WaitingController implements ActionListener, WindowListener {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        //}
-
-    }
-
-
-    @Override
-    public void windowOpened(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowClosing(WindowEvent e) {
-        JFrame j = (JFrame)e.getSource();
-        if(j instanceof  WaitingRoomView){
-            view.setVisible(false);
-            Message m = new Message(usuari, "userLeft");
-            userService.sendObject(m);
-            roomsController.getMenuView().setVisible(true);
-        }else if(j instanceof GameView){
-            view.setVisible(false);
-            gv.setVisible(false);
-            //TODO: BANNEJAR SI S'HA PIRAT ABANS DORA
-
-            roomsController.getMenuView().setVisible(true);
-        }
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
+        //}*/
 
     }
 

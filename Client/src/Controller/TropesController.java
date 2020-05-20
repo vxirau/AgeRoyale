@@ -15,8 +15,8 @@ public class TropesController {
         this.usuari = usr;
     }
 
-    public void setTropesView(TropesView tropesView) {
-        this.tropesView = tropesView;
+    public void setTropesView(TropesView viewTropes) {
+        this.tropesView = viewTropes;
 
         if (usuari.getTropes() != null) {
             if (usuari.getTropes().size() > 0) {

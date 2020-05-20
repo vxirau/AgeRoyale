@@ -8,16 +8,11 @@ import src.Usuari;
 import src.View.GameView;
 import src.View.MenuView;
 import src.View.RoomListView;
-import src.View.WaitingRoomView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -32,7 +27,6 @@ public class RoomsController {
 	private static ArrayList<TroopController> listTroopC;
 	private static ArrayList<GameView> listGameView;
 	private static MenuView menuView;
-	private WaitingController roomControl;
 	private MenuController menuController;
 	public Partida startGamePartida;
 	public WaitingController startGameWaitingController;
@@ -171,7 +165,7 @@ public class RoomsController {
 	}
 
 
-	public void gameSelected(Partida p, int total){
+	public void gameSelected(Partida p){
 		//startGame amb id 10
 		/*p.setIdPartida(10);
 		try {
@@ -190,7 +184,16 @@ public class RoomsController {
 					"Partida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
 					imagen, options,  options[0]);
 			if(n==JOptionPane.YES_OPTION){
-				p.getJugadors().add(this.usuari);
+				boolean alredyPlayer = false;
+				for (Usuari user:p.getJugadors() ) {
+					if (user.getIdUsuari() == usuari.getIdUsuari()) {
+						alredyPlayer = true;
+						break;
+					}
+				}
+				p.getEspectadors().removeIf(user -> user.getIdUsuari() == usuari.getIdUsuari());
+				if (!alredyPlayer) p.getJugadors().add(this.usuari);
+
 				missatge = "newPlayer";
 
 			}else if(n==JOptionPane.NO_OPTION){
@@ -198,32 +201,63 @@ public class RoomsController {
 					p.setEspectadors(new ArrayList<>());
 				}
 				missatge = "newSpectator";
-				p.getEspectadors().add(this.usuari);
+
+				boolean alredySpectator = false;
+				for (Usuari user:p.getEspectadors() ) {
+					if (user.getIdUsuari() == usuari.getIdUsuari()) {
+						alredySpectator = true;
+						break;
+					}
+				}
+				p.getJugadors().removeIf(user -> user.getIdUsuari() == usuari.getIdUsuari());
+				if (!alredySpectator) p.getEspectadors().add(this.usuari);
+
 			} else {
 				flag = false;
 			}
 			if(flag) {
+				menuController.getWaitingController().updateGame(p);
+				menuController.getView().invokeAdjustViews(MenuView.WAITINROOM);
+				updateGameTable(p, missatge);
+
+				/*
 				WaitingRoomView waitingRoom = new WaitingRoomView(p, this.usuari);
 				roomControl = new WaitingController(total, this, p, waitingRoom, uService, this.usuari);
 				waitingRoom.setController(roomControl);
 				waitingRoom.initAll(false);
 				waitingRoom.setVisible(true);
-				updateGameTable(p, missatge);
 				RoomsController.setClientVisible(false);
+
+				 */
 			}
 		}else{
 			if(p.getEspectadors() == null){
 				p.setEspectadors(new ArrayList<>());
 			}
-			p.getEspectadors().add(this.usuari);
 
+			boolean alredySpectator = false;
+			for (Usuari user:p.getEspectadors() ) {
+				if (user.getIdUsuari() == usuari.getIdUsuari()) {
+					alredySpectator = true;
+					break;
+				}
+			}
+			p.getJugadors().removeIf(user -> user.getIdUsuari() == usuari.getIdUsuari());
+			if (!alredySpectator) p.getEspectadors().add(this.usuari);
+
+			menuController.getWaitingController().updateGame(p);
+			menuController.getView().invokeAdjustViews(MenuView.WAITINROOM);
+			updateGameTable(p,"newSpectator");
+
+			/*
 			WaitingRoomView waitingRoom = new WaitingRoomView(p, this.usuari);
 			roomControl = new WaitingController(total, this,p, waitingRoom, uService, this.usuari);
 			waitingRoom.setController(roomControl);
 			waitingRoom.setVisible(true);
 			waitingRoom.initAll(false);
-			updateGameTable(p,"newSpectator");
 			RoomsController.setClientVisible(false);
+
+			 */
 		}
 
 	}
@@ -238,6 +272,10 @@ public class RoomsController {
 
 	public void updateGameTable(Partida p, String newPlayer) {
 		Message m = new Message(p, newPlayer);
-		uService.sendWaitingRoom(m, roomControl);
+		uService.sendWaitingRoom(m, menuController.getWaitingController());
+	}
+
+	public MenuController getMenuController() {
+		return menuController;
 	}
 }

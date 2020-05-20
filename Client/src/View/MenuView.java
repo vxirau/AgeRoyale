@@ -21,7 +21,9 @@ public class MenuView extends JFrame implements Runnable {
     public static final String CONFIGURACIO = "Config_";
     public static final String TROPES = "Tropes_";
     public static final String AMICS = "Friends_";
+    public static final String AMICSREQUEST = "FriendsRequest_";
     public static final String CREAPARTIDA = "CrearPartida_";
+    public static final String WAITINROOM = "WaitingRoom_";
 
     //Animacions
     private static Thread thread;
@@ -47,9 +49,17 @@ public class MenuView extends JFrame implements Runnable {
     private FriendView friendView;
     private JPanel jpFriends;
 
+    //JPanel de FriendsRequest
+    private FriendRequestView friendRequestView;
+    private JPanel jpFriendsRequest;
+
     //Jpanel de partida
     private RoomListView roomListView;
     private JPanel jpCrearPartida;
+
+    //JPanel de WaitingRoom
+    private WaitingRoomView waitingRoomView;
+    private JPanel jpWaitingRoom;
 
     //Menu inferior
     private JPanel jpMenu;
@@ -65,11 +75,7 @@ public class MenuView extends JFrame implements Runnable {
         public void mouseClicked(MouseEvent e) {
             super.mouseClicked(e);
             JPanel item = (JPanel) e.getSource();
-            try {
-                adjustViews(item.getName());
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
+            adjustViews(item.getName());
         }
     };
 
@@ -94,8 +100,12 @@ public class MenuView extends JFrame implements Runnable {
         initTropes();
         initMain();
         initFriends();
+        initFriendsRequest();
         initCrearPartida();
+        initWaitingRoom();
+
         thread = new Thread(this, "Troop Selection Timer");
+
         //Marquem la primera vista que mostrarem al iniciar
         adjustViews(MenuView.MAIN);
     }
@@ -111,10 +121,10 @@ public class MenuView extends JFrame implements Runnable {
         this.setTitle("Menu");
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     }
 
-    private void adjustViews(String name) throws InterruptedException {
+    private void adjustViews(String name) {
         actualView = name;
         String bgColor = "#282828";
         String bgColorSelected = "#361111";
@@ -168,7 +178,20 @@ public class MenuView extends JFrame implements Runnable {
             jpMenuCrearPartida.setBackground(Color.decode(bgColor));
             jpMenuFriends.setBackground(Color.decode(bgColorSelected));
         }
+        if (name.equals(MenuView.AMICSREQUEST)){
+            if(thread.isAlive()) stopTimer();
+            jpActive = friendRequestView.getJpPare();
+
+            jpMenuConfig.setBackground(Color.decode(bgColor));
+            jpMenuTropes.setBackground(Color.decode(bgColor));
+            jpMenuMain.setBackground(Color.decode(bgColor));
+            jpMenuCrearPartida.setBackground(Color.decode(bgColor));
+            jpMenuFriends.setBackground(Color.decode(bgColorSelected));
+        }
         if (name.equals(MenuView.CREAPARTIDA)){
+            this.setTitle("Menu");
+            jpMenu.setVisible(true);
+
             if(thread.isAlive()) stopTimer();
             jpActive = roomListView.getJpPare();
 
@@ -177,6 +200,12 @@ public class MenuView extends JFrame implements Runnable {
             jpMenuMain.setBackground(Color.decode(bgColor));
             jpMenuCrearPartida.setBackground(Color.decode(bgColorSelected));
             jpMenuFriends.setBackground(Color.decode(bgColor));
+        }
+        if (name.equals(MenuView.WAITINROOM)){
+            if(thread.isAlive()) stopTimer();
+            jpActive = waitingRoomView.getJPanelPare();
+            this.setTitle("Waiting Room");
+            jpMenu.setVisible(false);
         }
 
         if (jpActive != null) {
@@ -260,22 +289,31 @@ public class MenuView extends JFrame implements Runnable {
     }
 
     public void initFriends() {
-        friendView = new FriendView(usuari, menuController.getFriendsController());
+        friendView = new FriendView(usuari, menuController.getFriendsController(), this);
         jpFriends = friendView.getJpFriends();
+    }
+
+    private void initFriendsRequest() {
+        friendRequestView = new FriendRequestView(menuController.getFriendsController(), menuController.getFriendsController().getRequests() == null ? new ArrayList<>() : menuController.getFriendsController().getRequests() );
+        jpFriendsRequest = friendRequestView.getJpPare();
     }
 
     private void initCrearPartida() {
         menuController.getRoomsController().setMenuView(this);
-
         roomListView = new RoomListView(menuController.getRoomsController(), this.usuari);
         jpCrearPartida = roomListView.getJpPare();
+    }
+
+    private void initWaitingRoom() {
+        waitingRoomView = new WaitingRoomView(null, usuari, menuController.getWaitingController());
+        jpWaitingRoom = waitingRoomView.getJPanelPare();
     }
 
     public void setUsuari(Usuari usuari){
         this.usuari = usuari;
     }
 
-    public void invokeAdjustViews(String view) throws InterruptedException {
+    public void invokeAdjustViews(String view) {
         adjustViews(view);
     }
 
@@ -303,7 +341,19 @@ public class MenuView extends JFrame implements Runnable {
         return roomListView;
     }
 
-    public void updateViews() throws InterruptedException {
+    public FriendRequestView getFriendRequestView() {
+        return friendRequestView;
+    }
+
+    public void setFriendRequestView(FriendRequestView friendRequestView) {
+        this.friendRequestView = friendRequestView;
+    }
+
+    public WaitingRoomView getWaitingRoomView() {
+        return waitingRoomView;
+    }
+
+    public void updateViews() {
         adjustViews(actualView);
     }
 

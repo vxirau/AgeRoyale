@@ -8,10 +8,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class FriendView extends JFrame {
@@ -26,11 +23,13 @@ public class FriendView extends JFrame {
     private JButton jpFriendsTitle;
     private JButton request;
     private FriendsController friendsController;
+    private MenuView menuView;
 
-    public FriendView(Usuari usr, FriendsController friendsCtrl) {
+    public FriendView(Usuari usr, FriendsController friendsCtrl, MenuView menuView) {
         this.usuari = usr;
         setAmics(usr.getAmics());
         this.friendsController = friendsCtrl;
+        this.menuView = menuView;
     }
     public void initAll(){
         this.removeAll();
@@ -268,7 +267,8 @@ public class FriendView extends JFrame {
     public void setControllers(KeyListener listenerDelTextField, MouseListener listenerCercaAmic, FriendsController controller) {
         jtfSearchAmic.addKeyListener(listenerDelTextField);
         jbSearchAmic.addMouseListener(listenerCercaAmic);
-        jpFriendsTitle.addActionListener(controller);
+        //jpFriendsTitle.addActionListener(controller);
+        //request.addActionListener(controller);
         request.addActionListener(controller);
     }
 

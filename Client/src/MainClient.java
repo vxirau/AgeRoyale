@@ -83,8 +83,8 @@ public class MainClient {
                   espectadors.add(new Usuari("amigo4", "password1"));
                   espectadors.add(new Usuari("amigo78", "password2"));
 
-                  WaitingRoomView view = new WaitingRoomView(new Partida("Partidaza", null, false, "Victor", jugadors, espectadors), u);
-                  view.setVisible(true);
+                  //WaitingRoomView view = new WaitingRoomView(new Partida("Partidaza", null, false, "Victor", jugadors, espectadors), u);
+                  //view.setVisible(true);
               }else{
                   SwingUtilities.invokeLater(new Runnable() {
                       @Override

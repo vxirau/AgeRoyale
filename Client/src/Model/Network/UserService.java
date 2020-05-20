@@ -10,7 +10,6 @@ import src.Tropa;
 import src.Usuari;
 import src.View.*;
 import src.View.LoginView;
-import src.View.ViewRegistre;
 
 import javax.swing.*;
 import java.io.*;
@@ -28,21 +27,22 @@ public class UserService extends Thread{
 	private Object[] options = {"Entèsos"};
   	private Path current = Paths.get("./Server/resources/config.json");
   	private String arxiu = current.toAbsolutePath().toString();
-    private RegisterViewController registerViewController;
-    private RoomsController roomsController;
-    private LoginViewController loginViewController;
-    private ConfigController configController;
-    private FriendsController friendsController;
-    private TroopController troopController;
-	private WaitingController waitingController;
+	private boolean flag;
+
+	private LoginViewController loginViewController;
+	private RegisterViewController registerViewController;
+	private ConfigController configController;
 	private MenuController menuController;
+	private FriendsController friendsController;
+	private RoomsController roomsController;
+	private TroopController troopController;
+	private WaitingController waitingController;
+	private GameController gameController;
+
 
 	public void setMenuController(MenuController menuController) {
 		this.menuController = menuController;
 	}
-
-	private boolean flag;
-    private GameController gameController;
 
 
 	public UserService() {
@@ -147,19 +147,18 @@ public class UserService extends Thread{
 				} else if(jelow.getType().equals("Bomba resposta")){
 					Tropa t = (Tropa) jelow.getObject();
 					troopController.getTropa(t);
-
 					troopController.show(t);
-
-
 				}else if(jelow.getType().equals("Destruir bomba")) {
 					Tropa t = (Tropa) jelow.getObject();
 					troopController.destroyTroop(t);
-
 				} else if(jelow.getType().equals("FindFriendResposta")){
                 	friendsController.setFriends((ArrayList<Usuari>) jelow.getObject());
 				}else if(jelow.getType().equals("requestsReply")){
 					loginViewController.onRequestsRecieved((ArrayList<Usuari>) jelow.getObject());
-				} else if(jelow.getType().equals("tropesCheck")){
+				} else if(jelow.getType().equals("requestsReplyUpdate")) {
+					ArrayList<Usuari>  requests = (ArrayList<Usuari>) jelow.getObject();
+					friendsController.setRequests(requests);
+				}else if(jelow.getType().equals("tropesCheck")){
 
 					Tropa t = (Tropa) jelow.getObject();
 					if(t.getWhichSprite() != null) {
@@ -287,9 +286,9 @@ public class UserService extends Thread{
 		}
 	}
 
-	public void sendUserPKUpdate(Message message, ConfigController configCntroller) {
+	public void sendUserPKUpdate(Message message, ConfigController configController) {
 		try{
-			this.configController = configCntroller;
+			this.configController = configController;
 			this.doStream.reset();
 			this.doStream.writeObject(message);
 		} catch (IOException e) {
@@ -310,8 +309,9 @@ public class UserService extends Thread{
 		}
 	}
 
-	public void sendFriendSearch(Message message, FriendsController friendsCtrl) {
+	public void sendFriendSearch(Message message, FriendsController friendsCtrl, boolean flag) {
 		try{
+			this.flag = flag;
 			this.friendsController = friendsCtrl;
 			this.doStream.reset();
 			this.doStream.writeObject(message);

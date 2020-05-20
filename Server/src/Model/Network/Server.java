@@ -43,6 +43,7 @@ public class Server extends Thread {
 
 	public void stopServer() {
 		// aturem el thread del servidor
+		System.out.println("***** STOP *****");
 		isOn = false;
 		this.interrupt();
 	}
@@ -101,5 +102,9 @@ public class Server extends Thread {
 		for (DedicatedServer dServer : dServers) {
 			dServer.startGameMessage(partida);
 		}
+	}
+
+	public boolean isOn() {
+		return isOn;
 	}
 }

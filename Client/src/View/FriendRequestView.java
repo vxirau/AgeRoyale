@@ -1,17 +1,13 @@
 package src.View;
 
 import src.Controller.FriendsController;
-import src.Controller.RoomsController;
-import src.Partida;
 import src.Usuari;
-import src.Utils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class FriendRequestView extends JFrame {
@@ -24,6 +20,7 @@ public class FriendRequestView extends JFrame {
 
     public FriendRequestView(FriendsController controller, ArrayList<Usuari> requests) {
         this.controller = controller;
+        requests.removeIf(usr -> usr.getIdUsuari() == -20);
         this.requests = requests;
         setTitle("RequestFriend");
         setLocationRelativeTo(null);
@@ -39,8 +36,11 @@ public class FriendRequestView extends JFrame {
     }
 
     private void initComponents() {
+        removeAll();
         colocarPanel();
         colocarElements();
+        revalidate();
+        repaint();
     }
 
     private void colocarPanel() {
@@ -70,7 +70,7 @@ public class FriendRequestView extends JFrame {
 
         //Titol
         JPanel titol = new JPanel();
-        titol.setBounds(10, 40, 600, 300);
+        titol.setBounds(10, 20, 600, 300);
         titol.setOpaque(false);
         titol.setLayout(null);
         JLabel jlTitol = new JLabel();
@@ -83,15 +83,22 @@ public class FriendRequestView extends JFrame {
         titol.add(jlTitol);
         ImageIcon fonsProgressBar = new ImageIcon(this.getClass().getResource("/resources/friends_title_bg.png"));
         Icon iconoProgressBar = new ImageIcon(fonsProgressBar.getImage().getScaledInstance(350, 100, Image.SCALE_FAST));
-        JLabel fondo_petit= new JLabel();
+        JLabel fondo_petit = new JLabel();
         fondo_petit.setIcon(iconoProgressBar);
         getLayeredPane().add(fondo_petit, JLayeredPane.FRAME_CONTENT_LAYER);
         fondo_petit.setBounds(40, 30, 500, 100);
         titol.add(fondo_petit);
         jpPare.add(titol);
 
-
-
+        JButton back = new JButton();
+        back.setText("Go back");
+        back.setBackground(Color.decode("#4F1900"));
+        back.setOpaque(true);
+        back.setEnabled(true);
+        back.setBounds(150, 165, 120, 30);
+        back.setForeground(Color.WHITE);
+        back.addActionListener(controller);
+        jpPare.add(back);
 
         for (int i = 0; i < requests.size(); i++) {
             jpsRequest[i] = new JPanel(new GridLayout(2, 1)) {
@@ -131,7 +138,7 @@ public class FriendRequestView extends JFrame {
         jScrollPane.setViewportView(jpRequest);
         jpPare.add(jScrollPane);
 
-        ImageIcon imagen2 = new ImageIcon(this.getClass().getResource("/resources/fondoMadera.png"));
+        ImageIcon imagen2 = new ImageIcon(this.getClass().getResource("/resources/bg_config.png"));
         Icon icono = new ImageIcon(imagen2.getImage().getScaledInstance(450, 800, Image.SCALE_DEFAULT));
         JLabel fondo = new JLabel();
         fondo.setIcon(icono);
@@ -143,7 +150,15 @@ public class FriendRequestView extends JFrame {
 
         revalidate();
         repaint();
+    }
 
+    public JPanel getJpPare() {
+        return jpPare;
+    }
 
+    public void setRequests(ArrayList<Usuari> requests) {
+        requests.removeIf(usr -> usr.getIdUsuari() == -20);
+        this.requests = requests;
+        initComponents();
     }
 }

@@ -160,7 +160,8 @@ public class DedicatedServer extends Thread {
 				} else if (m.getType().equals("getRequests")) {
 					Usuari usuari = (Usuari) m.getObject();
 					requestsDAO aDAO = new requestsDAO();
-					Message messageResposta = new Message(aDAO.getFriendRequests(usuari), "requestsReply");
+					ArrayList<Usuari> friendRequests = aDAO.getFriendRequests(usuari);
+					Message messageResposta = new Message(friendRequests, "requestsReply");
 					objectOut.writeObject(messageResposta);
 				} else if (m.getType().equals("UserPKUpdates")) {
 					Usuari usuari = (Usuari) m.getObject();
@@ -222,9 +223,10 @@ public class DedicatedServer extends Thread {
 					rDAO.acceptRequest(users.get(0), users.get(1));
 					aDAO.addAmic(users.get(0), users.get(1));
 					ArrayList<Usuari> a = aDAO.getAmics(users.get(0));
-					Message messageResposta = new Message(a, "FriendsResposta");
-					objectOut.writeObject(messageResposta);
-					Message messageResposta2 = new Message(rDAO.getFriendRequests(users.get(0)), "requestsReply");
+					//Ja el fas amb el broadcast
+					//Message messageResposta = new Message(a, "FriendsResposta");
+					//objectOut.writeObject(messageResposta);
+					Message messageResposta2 = new Message(rDAO.getFriendRequests(users.get(0)), "requestsReplyUpdate");
 					objectOut.writeObject(messageResposta2);
 					server.broadcastClients();
 				}else if(m.getType().equals("removeRequest")){
@@ -235,6 +237,7 @@ public class DedicatedServer extends Thread {
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					requestsDAO rDAO = new requestsDAO();
 					rDAO.denyRequest(users.get(0), users.get(1));
+					server.broadcastClients();
 				}else if(m.getType().equals("sendRequest")){
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					requestsDAO rDAO = new requestsDAO();
