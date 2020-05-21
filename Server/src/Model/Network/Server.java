@@ -10,13 +10,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Server extends Thread {
 
 	private boolean isOn;
 	private ServerSocket sSocket;
 	// relacio amb els servidors dedicats
-	private LinkedList<DedicatedServer> dServers;
+	private CopyOnWriteArrayList<DedicatedServer> dServers;
 	// relacio amb la vista
 	// podriem mantenir una relacio amb el controlador
 	// en el cas de que aquest existis, i delegar les
@@ -29,7 +30,7 @@ public class Server extends Thread {
 			this.isOn = false;
 			this.view = vista;
 			this.sSocket = new ServerSocket(NetworkConfiguration.staticPort);
-			this.dServers = new LinkedList<DedicatedServer>();
+			this.dServers = new CopyOnWriteArrayList<>();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -1,5 +1,6 @@
 package src.Controller;
 
+import src.Edifici;
 import src.Message;
 import src.Model.Network.DedicatedServer;
 import src.Model.Network.UserService;
@@ -26,21 +27,60 @@ public class TroopController {
     private static float minDistance = Float.MAX_VALUE;
     private CopyOnWriteArrayList<Tropa> founds =  new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Tropa> detected =  new CopyOnWriteArrayList<>();
+    private ArrayList<Edifici> edificis;
 
 
 
     public TroopController(GameView gameView, UserService userService) throws IOException {
         this.gameView = gameView;
         this.uService = userService;
+        this.edificis = new ArrayList<>();
+        ompleEdifici();
+        sendEdificis(edificis);
 
         //userService.startServerComunication(); //TODO: comentar
 
         gameView.setTroopController(this);
 
     }
+    public void ompleEdifici() {
+
+        for (int i = 0; i < 4; i++) {
+            Edifici e = new Edifici();
+            switch (i) {
+                case 0:
+                    e.getTiles().add(new Point2D.Float(1, 5));
+                    e.getTiles().add(new Point2D.Float(2, 5));
+                    e.getTiles().add(new Point2D.Float(1, 6));
+                    e.getTiles().add(new Point2D.Float(2, 6));
+                    break;
+                case 1:
+                    e.getTiles().add(new Point2D.Float(7, 5));
+                    e.getTiles().add(new Point2D.Float(8, 5));
+                    e.getTiles().add(new Point2D.Float(7, 6));
+                    e.getTiles().add(new Point2D.Float(8, 6));
+                    break;
+                case 2:
+                    e.getTiles().add(new Point2D.Float(1, 14));
+                    e.getTiles().add(new Point2D.Float(2, 14));
+                    e.getTiles().add(new Point2D.Float(1, 15));
+                    e.getTiles().add(new Point2D.Float(2, 15));
+                    break;
+                case 3:
+                    e.getTiles().add(new Point2D.Float(7, 14));
+                    e.getTiles().add(new Point2D.Float(8, 14));
+                    e.getTiles().add(new Point2D.Float(7, 15));
+                    e.getTiles().add(new Point2D.Float(8, 15));
+                    break;
+                default:
+                    break;
+            }
+            edificis.add(e);
+        }
+    }
 
 
-    public void checkTroopsStatus(Tropa tropa) {
+        public void checkTroopsStatus(Tropa tropa) {
 
             troops = detectedTroops(gameView.getTropes(), tropa);
 
@@ -183,6 +223,11 @@ public class TroopController {
             }
         }
     }*/
+
+    public void sendEdificis(ArrayList<Edifici> e){
+        Message m = new Message(e, "Edificis");
+        uService.sendEdificis(m);
+    }
 
     public void update(Tropa t, int i){
         //checkTroopsStatus(t);

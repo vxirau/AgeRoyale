@@ -1,5 +1,6 @@
 package src.Controller;
 
+import src.Edifici;
 import src.Model.Network.DedicatedServer;
 import src.Tropa;
 import src.View.Sprite;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 public class TroopSController {
     private static Float minDistance = Float.MAX_VALUE;
     private static Tropa troop;
+    public ArrayList<Edifici> edificiDef;
     public static int indice = 0;
     private static final int VARIATION = 2;
     private static final int CENTER_PADDING = 160;
@@ -377,6 +379,7 @@ public class TroopSController {
         boolean collision = false;
 
 
+
         //Obtenim la posicio del jugador
         int xPosition = (int) (tropa.getxPosition());
         int yPosition = (int) (tropa.getyPosition());
@@ -417,7 +420,8 @@ public class TroopSController {
                         //
                         tropa.setxVariation(-VARIATION);
                     }else if (yPosition < TOWER_PADDING_OPPONENT &&  yPosition > CASTLE_PADDING){
-
+                        //ataquem torre
+                        //si vida <= 0 ----> canviem sprite i solid del tile
                         tropa.setxVariation(0);
                     }
                 }
@@ -548,4 +552,11 @@ public class TroopSController {
         return collision;
     }
 
+    public  ArrayList<Edifici> getEdificiDef() {
+        return edificiDef;
+    }
+
+    public void setEdificiDef(ArrayList<Edifici> edificiDef) {
+        this.edificiDef = edificiDef;
+    }
 }

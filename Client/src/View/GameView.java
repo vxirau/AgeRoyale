@@ -5,6 +5,7 @@ import src.Controller.MenuController;
 import src.Controller.TroopController;
 import src.Controller.TroopUpdate;
 import src.Controller.WaitingController;
+import src.Edifici;
 import src.Message;
 import src.Model.Network.UserService;
 import src.Tropa;
@@ -12,6 +13,7 @@ import src.Tropa;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -38,6 +40,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
 
     private CopyOnWriteArrayList<TroopUpdate> updates;
+
     private  TroopController troopController;
     private static int xMousePosition;
     private static int yMousePosition;
@@ -77,8 +80,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
     public GameView() throws IOException {
 
-
-
         this.width = 32 * COLUMNS;
         this.height = 32 * ROWS + DECK_SPACE;
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -91,10 +92,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
         mouseIsClicked = false;
         whichTroop = 10;
         this.deck = new Deck(width, height);
-
-
         //Creem el mapa i li donem la mesura en tiles ( en aquest cas, sera de 10 x 20)
-
         gameMap = new ImageMap(IMAGE_MAP_PATH);
         this.setVisible(true);
         this.setResizable(false);
@@ -105,8 +103,11 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
         //gameMap.showMap(0, 0, this);
 
-
     }
+
+
+
+
 
 
 

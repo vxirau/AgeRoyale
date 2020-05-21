@@ -385,8 +385,9 @@ public class UserService extends Thread{
 	public void sendCheck(Message m, GameController gcontroller){
 		try{
 			this.gameController = gcontroller;
-			this.doStream.reset();
 			this.doStream.writeObject(m);
+			//this.doStream.reset();
+			//this.doStream.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 			stopServerComunication();
@@ -406,9 +407,8 @@ public class UserService extends Thread{
 		}
 	}
 
-	public void sendsGetTropes(Message m, GameController controller) {
+	public void sendEdificis(Message m){
 		try{
-			this.gameController = controller;
 			this.doStream.reset();
 			this.doStream.writeObject(m);
 		} catch (IOException e) {
@@ -417,4 +417,16 @@ public class UserService extends Thread{
 			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
 		}
 	}
+
+    public void sendsGetTropes(Message m, GameController controller) {
+        try{
+            this.gameController = controller;
+            this.doStream.reset();
+            this.doStream.writeObject(m);
+        } catch (IOException e) {
+            e.printStackTrace();
+            stopServerComunication();
+            showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+        }
+    }
 }

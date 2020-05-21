@@ -36,7 +36,7 @@ public class DedicatedServer extends Thread {
 	private ObjectInputStream dataInput;
 	private DataOutputStream dataOut;
 	private ObjectOutputStream objectOut;
-	private LinkedList<DedicatedServer> clients;
+	private CopyOnWriteArrayList<DedicatedServer> clients;
 	private ViewServer vista;
 	private Integer inRoom = null;
 	private TroopSController troopSController;
@@ -48,7 +48,7 @@ public class DedicatedServer extends Thread {
 	private static CopyOnWriteArrayList<Tropa> deleted;
 
 
-	public DedicatedServer(Socket sClient, ViewServer vista, LinkedList<DedicatedServer> clients, Server server) throws IOException {
+	public DedicatedServer(Socket sClient, ViewServer vista, CopyOnWriteArrayList<DedicatedServer> clients, Server server) throws IOException {
 		this.isOn = false;
 		this.sClient = sClient;
 		this.vista = vista;
@@ -301,7 +301,7 @@ public class DedicatedServer extends Thread {
                     boolean trobat = false;
                     CopyOnWriteArrayList<Tropa> vistes = (CopyOnWriteArrayList<Tropa>) m.getObject();
                     tropaPartidaDAO pDAO = new tropaPartidaDAO();
-                    ArrayList<Tropa> tropes = pDAO.getTropesPartida(10);
+                    ArrayList<Tropa> tropes = pDAO.getTropesPartida(troop.getIdPartida());
                     if(deleted.size()%2 == 0) {
 						if (tropes.size() > (vistes.size() + (deleted.size()/2))) {
 							troop = tropes.get(tropes.size() - 1);
@@ -330,6 +330,10 @@ public class DedicatedServer extends Thread {
                 }else if(m.getType().equals("startGame")){
 					Partida p = (Partida) m.getObject();
 					server.broadcastStartGame(p);
+				} else if(m.getType().equals("Edificis")){
+					ArrayList<Edifici> edificiDef = (ArrayList<Edifici>) m.getObject();
+					troopSController.setEdificiDef(edificiDef);
+					System.out.println("HE LLEGADOO");
 				}
             }
 		} catch (IOException | ClassNotFoundException e1){
