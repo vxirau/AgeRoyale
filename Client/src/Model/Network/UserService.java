@@ -24,6 +24,7 @@ public class UserService extends Thread{
 	private ObjectInputStream doInput;
 	private DataInputStream dInput;
 	private boolean isOn = false;
+	private boolean found = false;
 	private Object[] options = {"Entèsos"};
   	private Path current = Paths.get("./Server/resources/config.json");
   	private String arxiu = current.toAbsolutePath().toString();
@@ -141,16 +142,30 @@ public class UserService extends Thread{
                     this.flag = false;
         		} else if(jelow.getType().equals("Tropa resposta")){
 					Tropa t = (Tropa) jelow.getObject();
-					troopController.getTropa(t);
-					troopController.show(t);
-					troopController.setAccept(true);
-				} else if(jelow.getType().equals("Bomba resposta")){
-					Tropa t = (Tropa) jelow.getObject();
-					troopController.getTropa(t);
-					troopController.show(t);
-				}else if(jelow.getType().equals("Destruir bomba")) {
-					Tropa t = (Tropa) jelow.getObject();
-					troopController.destroyTroop(t);
+					if(t != null) {
+                        if (t.getVida() > 0) {
+
+                            troopController.getTropa(t);
+                            //troopController.show(t);
+                            troopController.setAccept(true);
+
+                        } else {
+
+							/*or(int i = 0; i < troopController.getGameView().getTropes().size(); i++){
+								if(found){
+									troopController.getGameView().getUpdates().get(i).setIndex(i-1);
+									System.out.println("La he trobat al mediooo");
+								}
+								if(troopController.getGameView().getTropes().get(i).equals(t)){
+									found = true;
+								}
+							}
+							found = false;*/
+							troopController.deleteTropa(t);
+                        }
+                    }
+
+					//troopController.getGameView().setSendcheck(true);
 				} else if(jelow.getType().equals("FindFriendResposta")){
                 	friendsController.setFriends((ArrayList<Usuari>) jelow.getObject());
 				}else if(jelow.getType().equals("requestsReply")){
@@ -162,21 +177,40 @@ public class UserService extends Thread{
 
 					Tropa t = (Tropa) jelow.getObject();
 					if(t.getWhichSprite() != null) {
+						t.setIdPartida(10);
+						t.setOn(true);
+						if(t.getWhichSprite().equals("BOMB") ) {
+                            t.setyPosition(610 - t.getyPosition());
+                            t.setxPosition(285 - t.getxPosition());
+                        } else if(t.getWhichSprite().equals("SKELETON_BACK") || t.getWhichSprite().equals("GOBLIN_BACK")){
+                            t.setyPosition(590 - t.getyPosition());
+                            t.setxPosition(294 - t.getxPosition());
+                        } else if(t.getWhichSprite().equals("MAGIC_TOWER")){
+                            t.setyPosition(590 - t.getyPosition());
+                            t.setxPosition(284 - t.getxPosition());
+                        }
+						t.setyVariation(2);
+						t.setDefaultY(10);
+						t.setGameMap(gameController.getGameView().getGameMap());
 						if (t.getWhichSprite().equals("SKELETON_BACK")) {
 							t.setSprite(Sprite.SKELETON_BACK);
-							t.setGameMap(gameController.getGameView().getGameMap());
-							t.setIdPartida(10);
-							t.setOn(true);
 							t.setSprites(Sprite.SKELETON_BACK);
-							//t.setTroopDirection('s');
-							t.setyPosition(596 - t.getyPosition());
-							t.setxPosition(300 - t.getxPosition());
-							t.setyVariation(2);
+							gameController.getGameView().getTropes().add(t);
+						} else if(t.getWhichSprite().equals("GOBLIN_BACK")){
+							t.setSprite(Sprite.GOBLIN_BACK);
+							t.setSprites(Sprite.GOBLIN_BACK);
+							gameController.getGameView().getTropes().add(t);
+						} else if(t.getWhichSprite().equals("MAGIC_TOWER")){
+							t.setyVariation(0);
+							t.setSprite(Sprite.MAGIC_TOWER);
+							t.setSprites(Sprite.MAGIC_TOWER);
+							gameController.getGameView().getTropes().add(t);
+						} else if(t.getWhichSprite().equals("BOMB")){
+							t.setyVariation(0);
+							t.setSprite(Sprite.BOMB);
+							t.setSprites(Sprite.BOMB);
+							gameController.getGameView().getTropes().add(t);
 						}
-						gameController.getGameView().getTropes().add(t);
-
-						//gameController.getGameView().setFlag(2);
-
 					}
 					gameController.getGameView().setSendcheck(true);
 				}else if(jelow.getType().equals("updateWaiting")){

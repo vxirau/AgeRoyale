@@ -25,6 +25,9 @@ public class Tropa extends Entity implements Serializable {
     private int idPartida;
     private String whichSprite;
     private Usuari usr;
+    private int defaultY;
+    private int initialX;
+    private int initialY;
 
     private int troopType;
     private int idTropa;
@@ -47,6 +50,7 @@ public class Tropa extends Entity implements Serializable {
                     && this.yPosition >= this.getGameMap().getMapTiles()[i][j].getY1() && this.yPosition < this.getGameMap().getMapTiles()[i][j].getY2()){
                     //Trobem el tile al que es troba la nostra tropa i el retornem.
                     return this.getGameMap().getTilesArray()[i];
+
                 }
             }
         }
@@ -100,6 +104,7 @@ public class Tropa extends Entity implements Serializable {
         xVariation = 0;
         yVariation = (float) -2;
         this.isFighting = false;
+        this.defaultY = 500;
 
 
     }
@@ -174,8 +179,9 @@ public class Tropa extends Entity implements Serializable {
             mov.add(Sprite.BOMB_PHASE_4);
 
 
-        }else{
-
+        }else {
+            this.troopType = 3;
+            mov.add(Sprite.MAGIC_TOWER);
         }
     }
 
@@ -318,4 +324,39 @@ public class Tropa extends Entity implements Serializable {
         this.whichSprite = whichSprite;
     }
 
+    public int getDefaultY() {
+        return defaultY;
+    }
+
+    public void setDefaultY(int defaultY) {
+        this.defaultY = defaultY;
+    }
+
+    @Override
+    public String toString() {
+        return "Tropa{" +
+                "sprite=" + sprite +
+                ", troopDirection=" + troopDirection +
+                ", isMoving=" + isMoving +
+                ", gameMap=" + gameMap +
+                ", xVariation=" + xVariation +
+                ", yVariation=" + yVariation +
+                ", isFighting=" + isFighting +
+                ", isOn=" + isOn +
+                ", idPartida=" + idPartida +
+                ", whichSprite='" + whichSprite + '\'' +
+                ", defaultY=" + defaultY +
+                ", troopType=" + troopType +
+                ", idTropa=" + idTropa +
+                ", vida=" + vida +
+                ", cost=" + cost +
+                ", atac=" + atac +
+                ", alcance=" + alcance +
+                ", ofensiva=" + ofensiva +
+                ", tile=" + tile +
+                ", isPlaying=" + isPlaying +
+                ", xPosition=" + xPosition +
+                ", yPosition=" + yPosition +
+                '}';
+    }
 }

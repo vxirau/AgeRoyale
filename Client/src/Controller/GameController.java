@@ -135,27 +135,65 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
                 skeleton.setOn(true);
                 skeleton.setIdPartida(10);
                 skeleton.setWhichSprite("SKELETON_BACK");
+                skeleton.setVida(10);
+                skeleton.setAtac(7);
                 gameView.getTropes().add(skeleton);
                 Message m = new Message(skeleton, "add tropa");
 
+
                 synchronized (Tropa.class){
                     uService.addTropa(m);
-                }
+               }
 
                 break;
             case 1:
                 Tropa goblin = new Tropa(gameView.getGameMap(), gameView.getxMousePosition(), gameView.getyMousePosition(), Sprite.GOBLIN_BACK);
+                goblin.setSprites(Sprite.GOBLIN_BACK);
                 goblin.setOn(true);
+                goblin.setIdPartida(10);
+                goblin.setWhichSprite("GOBLIN_BACK");
+                goblin.setVida(10);
+                goblin.setAtac(2);
                 gameView.getTropes().add(goblin);
+                Message message = new Message(goblin, "add tropa");
+
+                synchronized (Tropa.class){
+                    uService.addTropa(message);
+                }
 
                 break;
             case 2:
                 Tropa wizard = new Tropa(gameView.getGameMap(), gameView.getxMousePosition(), gameView.getyMousePosition(), Sprite.MAGIC_TOWER);
+                wizard.setSprites(Sprite.MAGIC_TOWER);
+                wizard.setyVariation(0);
+                wizard.setOn(true);
+                wizard.setIdPartida(10);
+                wizard.setWhichSprite("MAGIC_TOWER");
+                wizard.setAtac(3);
+                wizard.setVida(20);
                 gameView.getTropes().add(wizard);
+                Message mwizard = new Message(wizard, "add tropa");
+
+                synchronized (Tropa.class){
+                    uService.addTropa(mwizard);
+                }
+
                 break;
             case 3:
                 Tropa bomb = new Tropa(gameView.getGameMap(), gameView.getxMousePosition(), gameView.getyMousePosition(), Sprite.BOMB);
+                bomb.setSprites(Sprite.BOMB);
+                bomb.setyVariation(0);
+                bomb.setOn(true);
+                bomb.setIdPartida(10);
+                bomb.setWhichSprite("BOMB");
+                bomb.setAtac(11);
+                bomb.setVida(1000);
                 gameView.getTropes().add(bomb);
+                Message mbomb = new Message(bomb, "add tropa");
+
+                synchronized (Tropa.class){
+                    uService.addTropa(mbomb);
+                }
                 break;
             default:
                 break;
@@ -165,7 +203,10 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
     public void sendCheck(){
 
         Message m = new Message(gameView.getTropes(),"checkID");
-        uService.sendCheck(m,this);
+
+        synchronized (Tropa.class) {
+            uService.sendCheck(m, this);
+        }
 
     }
 

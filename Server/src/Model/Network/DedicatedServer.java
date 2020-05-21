@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DedicatedServer extends Thread {
 
@@ -42,6 +43,9 @@ public class DedicatedServer extends Thread {
 	private Usuari clientUser;
 	private Server server;
 	public static int cont = 0;
+	public static int cont2 = 0;
+
+	private static CopyOnWriteArrayList<Tropa> deleted;
 
 
 	public DedicatedServer(Socket sClient, ViewServer vista, LinkedList<DedicatedServer> clients, Server server) throws IOException {
@@ -53,6 +57,7 @@ public class DedicatedServer extends Thread {
 		dataInput = new ObjectInputStream(sClient.getInputStream());
 		objectOut = new ObjectOutputStream(sClient.getOutputStream());
 		this.troopSController = new TroopSController();
+		this.deleted = new CopyOnWriteArrayList<>();
 	}
 
 	public void startDedicatedServer() {
@@ -190,27 +195,23 @@ public class DedicatedServer extends Thread {
 					objectOut.writeObject(messageResposta);
 				} else if (m.getType().equals("Tropa update")) {
 					Tropa t = (Tropa) m.getObject();
-					t = troopSController.moveOffensiveTroop(t, t.getxVariation(), t.getyVariation(), cont);
-					cont++;
-					//objectOut.reset();
+					if(t.getVida() <= 0){
+						deleted.add(t);
+					} else {
+						if (t.getTroopType() == 0 || t.getTroopType() == 1) {
+							t = troopSController.moveOffensiveTroop(t, t.getxVariation(), t.getyVariation(), cont);
+							cont++;
+							//objectOut.reset();
+						}
+					}
+					/*else if(t.getTroopType() == 3){
+						troopSController.bombExplosion(t,cont2);
+						cont2++;
+					}*/
 					Message mresposta = new Message(t, "Tropa resposta");
 					objectOut.writeObject(mresposta);
-				} else if(m.getType().equals("Bomba update")){
-					Tropa t = (Tropa) m.getObject();
-					t = troopSController.bombExplosion(t, cont);
-					if(t.isPlaying()){
-						cont++;
-						objectOut.reset();
-						Message mresposta = new Message(t,"Bomba resposta");
-						objectOut.writeObject(mresposta);
-					}else{
 
-						Message mresposta = new Message(t,"Destruir bomba");
-						objectOut.writeObject(mresposta);
-						System.out.println("ESTOY DESTRUIDA COÑIOOOOOOOOOOOOOOOO");
-					}
-
-				}else if (m.getType().equals("FindFriend")){
+				} else if (m.getType().equals("FindFriend")){
 					String nom = (String) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
 					ArrayList<Usuari> auz = uDAO.getUsersByName(nom);
@@ -298,13 +299,21 @@ public class DedicatedServer extends Thread {
                 } else if(m.getType().equals("checkID")){
                     Tropa troop = new Tropa();
                     boolean trobat = false;
-                    ArrayList<Tropa> vistes = (ArrayList<Tropa>) m.getObject();
+                    CopyOnWriteArrayList<Tropa> vistes = (CopyOnWriteArrayList<Tropa>) m.getObject();
                     tropaPartidaDAO pDAO = new tropaPartidaDAO();
                     ArrayList<Tropa> tropes = pDAO.getTropesPartida(10);
-
-                    if(tropes.size() > vistes.size()){
-                        troop = tropes.get(tropes.size() - 1);
-                    }
+                    if(deleted.size()%2 == 0) {
+						if (tropes.size() > (vistes.size() + (deleted.size()/2))) {
+							troop = tropes.get(tropes.size() - 1);
+							System.out.println("vc: " + cont2);
+							System.out.println("t: " + tropes.size());
+							System.out.println("v: " + vistes.size());
+							System.out.println("d: " + deleted.size());
+							cont2++;
+						}
+					} else {
+						System.out.println("IMPARELL");
+					}
 
                     Message message = new Message(troop,"tropesCheck");
                     objectOut.writeObject(message);

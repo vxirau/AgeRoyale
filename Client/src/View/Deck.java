@@ -117,7 +117,7 @@ public class Deck implements Serializable {
 
         java.util.Date now = new java.util.Date();
         if(clockTime < (int)((now.getTime() - createdDate.getTime()) / 1000)) {
-            System.out.println("PASSA UN SEGON");
+            //System.out.println("PASSA UN SEGON");
 
             if ((goldRectangle.width + 5) < deckRectangle.width - 40) {
                 goldDecrease = 5;

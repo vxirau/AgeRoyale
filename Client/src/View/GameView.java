@@ -18,6 +18,8 @@ import java.awt.image.DataBufferInt;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameView extends JFrame implements Runnable, Serializable {
 
@@ -32,22 +34,25 @@ public class GameView extends JFrame implements Runnable, Serializable {
     private GameController gameController;
     private static boolean sendcheck = true;
     private int flag = 0;
+    public static int ident = 0;
 
 
-    private ArrayList<TroopUpdate> updates;
+    private CopyOnWriteArrayList<TroopUpdate> updates;
     private  TroopController troopController;
     private static int xMousePosition;
     private static int yMousePosition;
     private  boolean rebut = false;
     private  boolean trobat = false;
+    public static boolean deleted = false;
     private static BufferedImage image;
     private static Tropa tropa;
+    private static int cont = 0;
 
     //Variable per accedir a la imatge a partir dels seus pixels
     private static int[] pixelsImage;
 
-    private ArrayList<Tropa> tropes;
-    private ArrayList<Tropa> troops;
+    private CopyOnWriteArrayList<Tropa> tropes;
+    //private ArrayList<Tropa> troops;
 
     private static GameMap gameMap;
     private boolean mouseIsClicked;
@@ -79,9 +84,9 @@ public class GameView extends JFrame implements Runnable, Serializable {
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         this.pixelsImage = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
         this.pixels = new int[width * height];
-        this.tropes = new ArrayList<>();
-        this.troops = new ArrayList<>();
-        this.updates = new ArrayList<>();
+        this.tropes = new CopyOnWriteArrayList<>();
+        //this.troops = new ArrayList<>();
+        this.updates = new CopyOnWriteArrayList<>();
         this.tropa = new Tropa();
         mouseIsClicked = false;
         whichTroop = 10;
@@ -167,13 +172,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
     }
 
-    public ArrayList<Tropa> getTroops() {
-        return troops;
-    }
-
-    public void setTroops(ArrayList<Tropa> troops) {
-        this.troops = troops;
-    }
 
     public Deck getDeck() {
         return deck;
@@ -197,25 +195,29 @@ public class GameView extends JFrame implements Runnable, Serializable {
         gameMap.showMap(0, 0, this);
 
         if(tropes.size() > 0) {
-
-            for (int i = 0; i < tropes.size(); i++) {
+            for (Iterator<Tropa> iterator = tropes.iterator(); iterator.hasNext(); ) {
+                Tropa tropa = iterator.next();
 
                 TroopUpdate update = new TroopUpdate(troopController, this);
 
-                if (tropes.get(i).isOn()) {
+                if (tropa.isOn()) {
 
-                    update.catchTroop(tropes.get(i), i, true);
+                    update.startThread(tropa, cont,true);
+                    tropa.setOn(false);
                     update.getT().start();
                     updates.add(update);
-                    tropes.get(i).setOn(false);
 
                 }
+
+                update.catchTroop(tropa,cont);
 
                 if (!updates.isEmpty() && updates.size() == tropes.size()) {
-                    updates.get(i).setTropa(tropes.get(i));
-                    troopController.show(tropes.get(i));
-
+                    updates.get(cont).setTropa(tropa);
+                    troopController.show(tropa);
                 }
+
+                cont++;
+
 
                 //VERSIÓ 1
                  /*try {
@@ -272,7 +274,9 @@ public class GameView extends JFrame implements Runnable, Serializable {
                     }
                 }*/
 
+
             }
+            cont = 0;
         }
 
         //Copiem els grafics al joc
@@ -315,21 +319,25 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
             while(delta >= 1){
                 //updateGame();
-                showGraphics();
 
-                synchronized (Tropa.class) {
-                    if (sendcheck) {
-                        gameController.sendCheck();
-                        sendcheck = false;
-                        System.out.println("Tinc aquestes tropes: " + getTropes().toString());
-                    }
-                }
 
                 delta--;
             }
 
+            synchronized (Integer.class) {
+                showGraphics();
+            }
 
-            showGraphics();
+            synchronized (Tropa.class) {
+                if (sendcheck) {
+                    gameController.sendCheck();
+                    sendcheck = false;
+                }
+            }
+
+
+
+            //showGraphics();
 
 
         }
@@ -394,11 +402,11 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
 
 
-    public ArrayList<Tropa> getTropes() {
+    public CopyOnWriteArrayList<Tropa> getTropes() {
         return tropes;
     }
 
-    public void setTropes(ArrayList<Tropa> tropes) {
+    public void setTropes(CopyOnWriteArrayList<Tropa> tropes) {
         this.tropes = tropes;
     }
 
@@ -438,5 +446,21 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
     public void setFlag(int flag) {
         this.flag = flag;
+    }
+
+    public CopyOnWriteArrayList<TroopUpdate> getUpdates() {
+        return updates;
+    }
+
+    public void setUpdates(CopyOnWriteArrayList<TroopUpdate> updates) {
+        this.updates = updates;
+    }
+
+    public static boolean isDeleted() {
+        return deleted;
+    }
+
+    public static void setDeleted(boolean deleted) {
+        GameView.deleted = deleted;
     }
 }

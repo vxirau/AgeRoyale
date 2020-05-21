@@ -7,7 +7,7 @@ public class TroopUpdate implements Runnable{
 
     private TroopController troopController;
     private Tropa tropa;
-    private int indice;
+    private int index;
     private GameView gameView;
     private Thread t;
     private boolean trobat;
@@ -18,9 +18,16 @@ public class TroopUpdate implements Runnable{
         this.gameView = gameView;
 
     }
-    public void catchTroop(Tropa tropa, int index, boolean trobat){
+    public void catchTroop(Tropa tropa, int index){
         this.tropa = tropa;
-        this.indice = index;
+        this.index = index;
+        //this.trobat = trobat;
+        //this.t = new Thread(this,"tropa");
+    }
+
+    public void startThread(Tropa tropa, int index,boolean trobat){
+        this.tropa = tropa;
+        this.index = index;
         this.trobat = trobat;
         this.t = new Thread(this,"tropa");
     }
@@ -41,6 +48,13 @@ public class TroopUpdate implements Runnable{
         this.tropa = tropa;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
     @Override
     public void run() {
@@ -51,16 +65,32 @@ public class TroopUpdate implements Runnable{
                 troopController.setAccept(false);
                 trobat = false;
 
-                synchronized (Tropa.class) {
-                    troopController.update(tropa, indice);
-                }
+                if(!t.getState().equals(Thread.State.TERMINATED) && !t.getState().equals(Thread.State.TIMED_WAITING)) {
 
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
+                    synchronized (Tropa.class) {
+                        troopController.checkTroopsStatus(tropa);
+
+                        if(tropa.getTroopType() == 2){
+                            if(!troopController.troops.isEmpty()){
+                                int cont = 0;
+                                while(cont < 3){
+                                    troopController.bombExplosion(tropa,cont);
+                                    cont++;
+                                }
+                            }
+                        }
+
+                        troopController.update(tropa, index);
+
+                    }
+
+                }
             }
         }
     }

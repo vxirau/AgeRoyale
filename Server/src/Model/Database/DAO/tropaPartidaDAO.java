@@ -8,12 +8,13 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class tropaPartidaDAO {
 
     public ArrayList<Tropa> getTropesPartida (int idPartida){
         ArrayList<Tropa> tropas = new ArrayList<>();
-        String query = "SELECT trp.* FROM AgeRoyale.tropapartida as trp WHERE trp.idPartida = " + idPartida + ";";
+        String query = "SELECT trp.* FROM AgeRoyale.tropapartida as trp WHERE trp.idPartida = " + idPartida + " AND trp.vida != 0;";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
         try{
             while(rs.next()){
@@ -46,4 +47,5 @@ public class tropaPartidaDAO {
         String query = "INSERT INTO AgeRoyale.tropapartida (idPartida, sprite, troopDirection, isMoving, xVariation, yVariation, xPosition, yPosition, atac, vida, cost, tipus) VALUE ( " + tropa.getIdPartida() + ", '" + tropa.getWhichSprite() + "', '" + tropa.getTroopDirection() + "', " + tropa.isMoving() + ", " + tropa.getxVariation() + ", " + tropa.getyVariation() + ", " + tropa.getxPosition() + ", " + tropa.getyPosition() + ", " +  tropa.getAtac() + ", " + tropa.getVida() + ", " + tropa.getCost() + ", " + tropa.isOfensiva() +");";
         DBConnector.getInstance().insertQuery(query);
     }
+
 }
