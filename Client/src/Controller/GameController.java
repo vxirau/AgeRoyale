@@ -2,6 +2,7 @@ package src.Controller;
 
 import src.Message;
 import src.Model.Network.UserService;
+import src.Partida;
 import src.Tropa;
 import src.View.Deck;
 import src.View.GameView;
@@ -10,6 +11,7 @@ import src.View.Sprite;
 
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GameController implements MouseListener, MouseMotionListener, Runnable, ActionListener {
 
@@ -20,6 +22,8 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
     private UserService uService;
     private int id;
     private MenuController menuController;
+    private ArrayList<Tropa> tropaStatic;
+    private Partida partida;
     public WindowListener windowListener = new WindowAdapter() {
         @Override
         public void windowClosed(WindowEvent e) {
@@ -30,13 +34,13 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
         }
     };
 
-    public GameController(GameView gameView,UserService userService, MenuController menuController) throws IOException {
+    public GameController(GameView gameView,UserService userService, MenuController menuController, Partida p) throws IOException {
         this.gameView = gameView;
         this.mouseIsClicked = false;
         this.deck = new Deck(this.gameView.getWidth(), this.gameView.getHeight());
         this.uService = userService;
         this.menuController = menuController;
-
+        this.partida = p;
         gameView.setGameController(this);
     }
 
@@ -144,12 +148,17 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
             case 0:
 
                 Tropa skeleton = new Tropa(gameView.getGameMap(), gameView.getxMousePosition(), gameView.getyMousePosition(), Sprite.SKELETON_BACK);
+
                 skeleton.setSprites(Sprite.SKELETON_BACK);
                 skeleton.setOn(true);
-                skeleton.setIdPartida(10);
+                skeleton.setIdPartida(partida.getIdPartida());
                 skeleton.setWhichSprite("SKELETON_BACK");
+
+                tropaStatic.forEach(tropa -> {if(tropa.getIdTropa() == 1) {skeleton.setVida(tropa.getVida()); skeleton.setAtac(tropa.getAtac());}} );
+                /*
                 skeleton.setVida(10);
                 skeleton.setAtac(7);
+                 */
                 gameView.getTropes().add(skeleton);
                 Message m = new Message(skeleton, "add tropa");
 
@@ -163,10 +172,13 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
                 Tropa goblin = new Tropa(gameView.getGameMap(), gameView.getxMousePosition(), gameView.getyMousePosition(), Sprite.GOBLIN_BACK);
                 goblin.setSprites(Sprite.GOBLIN_BACK);
                 goblin.setOn(true);
-                goblin.setIdPartida(10);
+                goblin.setIdPartida(partida.getIdPartida());
                 goblin.setWhichSprite("GOBLIN_BACK");
-                goblin.setVida(10);
-                goblin.setAtac(2);
+
+                tropaStatic.forEach(tropa -> {if(tropa.getIdTropa() == 2) {goblin.setVida(tropa.getVida()); goblin.setAtac(tropa.getAtac());}} );
+
+                /*goblin.setVida(10);
+                goblin.setAtac(2);*/
                 gameView.getTropes().add(goblin);
                 Message message = new Message(goblin, "add tropa");
 
@@ -180,10 +192,16 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
                 wizard.setSprites(Sprite.MAGIC_TOWER);
                 wizard.setyVariation(0);
                 wizard.setOn(true);
-                wizard.setIdPartida(10);
+                wizard.setIdPartida(partida.getIdPartida());
                 wizard.setWhichSprite("MAGIC_TOWER");
+
+                tropaStatic.forEach(tropa -> {if(tropa.getIdTropa() == 3) {wizard.setVida(tropa.getVida()); wizard.setAtac(tropa.getAtac());}} );
+
+                /*
                 wizard.setAtac(3);
                 wizard.setVida(20);
+
+                 */
                 gameView.getTropes().add(wizard);
                 Message mwizard = new Message(wizard, "add tropa");
 
@@ -197,10 +215,15 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
                 bomb.setSprites(Sprite.BOMB);
                 bomb.setyVariation(0);
                 bomb.setOn(true);
-                bomb.setIdPartida(10);
+                bomb.setIdPartida(partida.getIdPartida());
                 bomb.setWhichSprite("BOMB");
+
+                tropaStatic.forEach(tropa -> {if(tropa.getIdTropa() == 4) {bomb.setVida(tropa.getVida());bomb.setAtac(tropa.getAtac());}} );
+
+                /*
                 bomb.setAtac(11);
                 bomb.setVida(1000);
+                 */
                 gameView.getTropes().add(bomb);
                 Message mbomb = new Message(bomb, "add tropa");
 
@@ -237,5 +260,13 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
 
     public void setGameView(GameView gameView) {
         this.gameView = gameView;
+    }
+
+    public ArrayList<Tropa> getTropaStatic() {
+        return tropaStatic;
+    }
+
+    public void setTropaStatic(ArrayList<Tropa> tropaStatic) {
+        this.tropaStatic = tropaStatic;
     }
 }

@@ -52,7 +52,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
     private static int[] pixelsImage;
 
     private CopyOnWriteArrayList<Tropa> tropes;
-    private ArrayList<Tropa> tropaStatic;
     //private ArrayList<Tropa> troops;
 
     private static GameMap gameMap;
@@ -88,7 +87,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
         this.tropes = new CopyOnWriteArrayList<>();
         //this.troops = new ArrayList<>();
         this.updates = new CopyOnWriteArrayList<>();
-        this.tropaStatic = new ArrayList<>();
         this.tropa = new Tropa();
         mouseIsClicked = false;
         whichTroop = 10;

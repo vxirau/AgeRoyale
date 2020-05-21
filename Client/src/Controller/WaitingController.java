@@ -33,6 +33,7 @@ public class WaitingController implements ActionListener {
     }
 
     public void updateGame(Partida p){
+        this.p = p;
         view.setPartida(p);
         view.initAll();
         view.setController(this);
@@ -44,7 +45,7 @@ public class WaitingController implements ActionListener {
         if (btn.getText().equals("Start Game")) {
             Message m = new Message(p, "startGame");
             userService.sendStartGame(m, roomsController);
-            roomsController.setStartGame(p, this);
+            roomsController.setStartGame(p);
         }
         if (btn.getText().equals("Go back")) {
             roomsController.getMenuController().getView().invokeAdjustViews(MenuView.CREAPARTIDA);

@@ -77,11 +77,8 @@ public class DedicatedServer extends Thread {
 		String[] aux;
 
 		try {
-
 			while(isOn) {
-
 				Message m = (Message) dataInput.readObject();
-				//System.out.println("ARRIBA: " + m.getType());
 				if (m.getType().equals("register")) {
 					Usuari u = (Usuari) m.getObject();
 					System.out.println(u.toString());
@@ -282,7 +279,10 @@ public class DedicatedServer extends Thread {
 				}else if(m.getType().equals("Invite")) {
 					Invite invite = (Invite) m.getObject();
 					server.broadcastInvite(invite);
-				}else if(m.getType().equals("add tropa")){
+				} else if(m.getType().equals("GetTropesStats")) {
+					Message message = new Message(new tropesDAO(){}.getAllTropes(),"SetTropesStats");
+					objectOut.writeObject(message);
+				} else if(m.getType().equals("add tropa")){
                     Tropa t = (Tropa) m.getObject();
                     tropaPartidaDAO pDAO = new tropaPartidaDAO();
                     pDAO.addTropa(t);
@@ -387,13 +387,13 @@ public class DedicatedServer extends Thread {
 	}
 
 	public void startGameMessage(Partida partida) {
-		if (clientUser != null && partida.getIdPartida() == inRoom && (partida.getJugadors().get(0).getIdUsuari() == clientUser.getIdUsuari() || partida.getJugadors().get(1).getIdUsuari() == clientUser.getIdUsuari())){
+		if (clientUser != null && inRoom != null && partida.getIdPartida() == inRoom && (partida.getJugadors().get(0).getIdUsuari() == clientUser.getIdUsuari() || partida.getJugadors().get(1).getIdUsuari() == clientUser.getIdUsuari())){
 			try {
 				objectOut.writeObject(new Message(null, "StartGameAsPlayerRecived"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (clientUser != null && partida.getIdPartida() == inRoom){
+		} else if (clientUser != null && inRoom != null && partida.getIdPartida() == inRoom){
 			try {
 				objectOut.writeObject(new Message(null, "StartGameAsSpectatorRecived"));
 			} catch (IOException e) {

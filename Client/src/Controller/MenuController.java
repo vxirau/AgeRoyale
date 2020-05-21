@@ -5,9 +5,7 @@ import src.Message;
 import src.Model.Network.UserService;
 import src.Usuari;
 import src.View.MenuView;
-import src.View.WaitingRoomView;
 
-import javax.naming.AuthenticationNotSupportedException;
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

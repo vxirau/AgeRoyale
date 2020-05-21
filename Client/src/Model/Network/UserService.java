@@ -220,9 +220,11 @@ public class UserService extends Thread{
 					Invite invite = (Invite) jelow.getObject();
 					menuController.inviteRecived(invite);
 				} else if(jelow.getType().equals("StartGameAsPlayerRecived")){
-					roomsController.startGame(roomsController.startGamePartida, roomsController.startGameWaitingController, true);
+					roomsController.startGame(roomsController.startGamePartida, true);
 				} else if(jelow.getType().equals("StartGameAsSpectatorRecived")){
-					roomsController.startGame(roomsController.startGamePartida, roomsController.startGameWaitingController, false);
+					roomsController.startGame(roomsController.startGamePartida, false);
+				} else if(jelow.getType().equals("SetTropesStats")){
+					gameController.setTropaStatic((ArrayList<Tropa>) jelow.getObject());
 				}
 
 
@@ -395,6 +397,18 @@ public class UserService extends Thread{
 	public void sendStartGame(Message m, RoomsController roomsController) {
 		try{
 			this.roomsController = roomsController;
+			this.doStream.reset();
+			this.doStream.writeObject(m);
+		} catch (IOException e) {
+			e.printStackTrace();
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
+
+	public void sendsGetTropes(Message m, GameController controller) {
+		try{
+			this.gameController = controller;
 			this.doStream.reset();
 			this.doStream.writeObject(m);
 		} catch (IOException e) {
