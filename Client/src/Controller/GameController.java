@@ -5,6 +5,7 @@ import src.Model.Network.UserService;
 import src.Tropa;
 import src.View.Deck;
 import src.View.GameView;
+import src.View.MenuView;
 import src.View.Sprite;
 
 import java.awt.event.*;
@@ -18,12 +19,23 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
     private Deck deck;
     private UserService uService;
     private int id;
+    private MenuController menuController;
+    public WindowListener windowListener = new WindowAdapter() {
+        @Override
+        public void windowClosed(WindowEvent e) {
+            super.windowClosed(e);
+            menuController.getView().setVisible(true);
+            menuController.getView().invokeAdjustViews(MenuView.MAIN);
+            // ban usuaris
+        }
+    };
 
-    public GameController(GameView gameView,UserService userService) throws IOException {
+    public GameController(GameView gameView,UserService userService, MenuController menuController) throws IOException {
         this.gameView = gameView;
         this.mouseIsClicked = false;
         this.deck = new Deck(this.gameView.getWidth(), this.gameView.getHeight());
         this.uService = userService;
+        this.menuController = menuController;
 
         gameView.setGameController(this);
     }
@@ -130,6 +142,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
     public void invokeTroop(int whichTroop){
         switch (whichTroop){
             case 0:
+
                 Tropa skeleton = new Tropa(gameView.getGameMap(), gameView.getxMousePosition(), gameView.getyMousePosition(), Sprite.SKELETON_BACK);
                 skeleton.setSprites(Sprite.SKELETON_BACK);
                 skeleton.setOn(true);

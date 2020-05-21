@@ -100,6 +100,7 @@ public class RoomsController {
 
 
 	public GameView startGame(Partida p, WaitingController w, boolean isPlayer) throws IOException {
+
 		GameView gView = null;
 		try {
 			gView = new GameView();
@@ -107,9 +108,10 @@ public class RoomsController {
 			rer.printStackTrace();
 		}
 		gView.startGame();
-		GameController controller = new GameController(gView,uService);
+		GameController controller = new GameController(gView,uService,menuController);
+		//pillar tropes
 		controller.setId(p.getIdPartida());
-		gView.registerController(controller, w);
+		gView.registerController(controller);
 		TroopController tcontrol = new TroopController(gView,uService);
         gView.setTroopController(tcontrol);
 			//GameView finalGView = gView;
@@ -125,7 +127,9 @@ public class RoomsController {
 		});*/
 
 		gView.setVisible(true);
+		menuController.getView().setVisible(false);
 		return gView;
+
 	}
 
 	public void setMenuView(MenuView v){

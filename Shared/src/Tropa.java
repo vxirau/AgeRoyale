@@ -106,7 +106,6 @@ public class Tropa extends Entity implements Serializable {
         this.isFighting = false;
         this.defaultY = 500;
 
-
     }
 
 
