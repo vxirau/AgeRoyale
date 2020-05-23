@@ -68,7 +68,7 @@ public class TroopUpdate implements Runnable{
                 if(!t.getState().equals(Thread.State.TERMINATED) && !t.getState().equals(Thread.State.TIMED_WAITING)) {
 
                     try {
-                        Thread.sleep(300);
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -76,15 +76,16 @@ public class TroopUpdate implements Runnable{
                     synchronized (Tropa.class) {
                         troopController.checkTroopsStatus(tropa);
 
-                        if(tropa.getTroopType() == 2){
+                        /*if(tropa.getTroopType() == 2){
                             if(!troopController.troops.isEmpty()){
                                 int cont = 0;
                                 while(cont < 3){
                                     troopController.bombExplosion(tropa,cont);
                                     cont++;
                                 }
+                                tropa.setVida(0);
                             }
-                        }
+                        }*/
 
                         troopController.update(tropa, index);
 

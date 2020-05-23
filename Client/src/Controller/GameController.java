@@ -31,6 +31,8 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
             menuController.getView().setVisible(true);
             menuController.getView().invokeAdjustViews(MenuView.MAIN);
             // ban usuaris
+
+
         }
     };
 
@@ -54,6 +56,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
 
         int troopX = 0;
         int y = 0;
+        int x = 0;
 
         if(e.getY() > 620) {
             if(!mouseIsClicked){
@@ -87,7 +90,12 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
                 } else {
                     y = e.getY();
                 }
-                gameView.updateMouse(e.getX(), y, mouseIsClicked);
+                if(e.getX() >= 135 && e.getX() <= 180) {
+                    x = 166;
+                } else {
+                    x = e.getX();
+                }
+                gameView.updateMouse(x, y, mouseIsClicked);
                 //Invocarem a la tropa si tenim l'or suficient
                 if(gameView.getDeck().isEnoughGold(this.whichTroop)){
                     invokeTroop(this.whichTroop);
@@ -151,6 +159,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
 
                 skeleton.setSprites(Sprite.SKELETON_BACK);
                 skeleton.setOn(true);
+                skeleton.setNumTorre(-1);
                 skeleton.setIdPartida(partida.getIdPartida());
                 skeleton.setWhichSprite("SKELETON_BACK");
 
@@ -172,6 +181,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
                 Tropa goblin = new Tropa(gameView.getGameMap(), gameView.getxMousePosition(), gameView.getyMousePosition(), Sprite.GOBLIN_BACK);
                 goblin.setSprites(Sprite.GOBLIN_BACK);
                 goblin.setOn(true);
+                goblin.setNumTorre(-1);
                 goblin.setIdPartida(partida.getIdPartida());
                 goblin.setWhichSprite("GOBLIN_BACK");
 
@@ -192,6 +202,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
                 wizard.setSprites(Sprite.MAGIC_TOWER);
                 wizard.setyVariation(0);
                 wizard.setOn(true);
+                wizard.setNumTorre(-1);
                 wizard.setIdPartida(partida.getIdPartida());
                 wizard.setWhichSprite("MAGIC_TOWER");
 
@@ -215,6 +226,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
                 bomb.setSprites(Sprite.BOMB);
                 bomb.setyVariation(0);
                 bomb.setOn(true);
+                bomb.setNumTorre(-1);
                 bomb.setIdPartida(partida.getIdPartida());
                 bomb.setWhichSprite("BOMB");
 
@@ -268,5 +280,6 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
 
     public void setTropaStatic(ArrayList<Tropa> tropaStatic) {
         this.tropaStatic = tropaStatic;
+        gameView.startGame();
     }
 }

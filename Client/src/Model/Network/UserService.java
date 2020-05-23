@@ -144,10 +144,19 @@ public class UserService extends Thread{
 					Tropa t = (Tropa) jelow.getObject();
 					if(t != null) {
                         if (t.getVida() > 0) {
-
-                            troopController.getTropa(t);
-                            //troopController.show(t);
-                            troopController.setAccept(true);
+                        	if(t.getTroopType() == 2){
+                        		if(t.getVida() < 1000){
+									troopController.deleteTropa(t);
+								} else {
+									troopController.getTropa(t);
+									//troopController.show(t);
+									troopController.setAccept(true);
+								}
+							} else {
+								troopController.getTropa(t);
+								//troopController.show(t);
+								troopController.setAccept(true);
+							}
 
                         } else {
 
@@ -195,20 +204,24 @@ public class UserService extends Thread{
 						if (t.getWhichSprite().equals("SKELETON_BACK")) {
 							t.setSprite(Sprite.SKELETON_BACK);
 							t.setSprites(Sprite.SKELETON_BACK);
+							t.setNumTorre(-1);
 							gameController.getGameView().getTropes().add(t);
 						} else if(t.getWhichSprite().equals("GOBLIN_BACK")){
 							t.setSprite(Sprite.GOBLIN_BACK);
 							t.setSprites(Sprite.GOBLIN_BACK);
+							t.setNumTorre(-1);
 							gameController.getGameView().getTropes().add(t);
 						} else if(t.getWhichSprite().equals("MAGIC_TOWER")){
 							t.setyVariation(0);
 							t.setSprite(Sprite.MAGIC_TOWER);
 							t.setSprites(Sprite.MAGIC_TOWER);
+							t.setNumTorre(-1);
 							gameController.getGameView().getTropes().add(t);
 						} else if(t.getWhichSprite().equals("BOMB")){
 							t.setyVariation(0);
 							t.setSprite(Sprite.BOMB);
 							t.setSprites(Sprite.BOMB);
+							t.setNumTorre(-1);
 							gameController.getGameView().getTropes().add(t);
 						}
 					}
@@ -386,8 +399,7 @@ public class UserService extends Thread{
 		try{
 			this.gameController = gcontroller;
 			this.doStream.writeObject(m);
-			//this.doStream.reset();
-			//this.doStream.flush();
+			this.doStream.reset();
 		} catch (IOException e) {
 			e.printStackTrace();
 			stopServerComunication();

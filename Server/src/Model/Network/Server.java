@@ -4,6 +4,7 @@ package src.Model.Network;
 import src.Invite;
 import src.NetworkConfiguration;
 import src.Partida;
+import src.Tropa;
 import src.View.ViewServer;
 
 import java.io.IOException;
@@ -108,4 +109,6 @@ public class Server extends Thread {
 	public boolean isOn() {
 		return isOn;
 	}
+
+
 }

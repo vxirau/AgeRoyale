@@ -28,6 +28,7 @@ public class Tropa extends Entity implements Serializable {
     private int defaultY;
     private int initialX;
     private int initialY;
+    private int numTorre;
 
     private int troopType;
     private int idTropa;
@@ -329,6 +330,14 @@ public class Tropa extends Entity implements Serializable {
 
     public void setDefaultY(int defaultY) {
         this.defaultY = defaultY;
+    }
+
+    public int getNumTorre() {
+        return numTorre;
+    }
+
+    public void setNumTorre(int numTorre) {
+        this.numTorre = numTorre;
     }
 
     @Override

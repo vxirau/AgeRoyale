@@ -4,6 +4,7 @@ import org.w3c.dom.css.Rect;
 import src.Tropa;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -135,10 +136,17 @@ public class Deck implements Serializable {
         }else if(clockTime > 9 && clockTime < 60){
             g.drawString("00 : " + clockTime, clockRectangle.x + 140, clockRectangle.y + 50);
         }else if(clockTime >= 60 && clockTime <= 69){
-
-            g.drawString("01 : 0" + (clockTime- 60), clockRectangle.x + 140, clockRectangle.y + 50);
-        }else if(clockTime > 69 ){
+            g.drawString("01 : 0" + (clockTime - 60), clockRectangle.x + 140, clockRectangle.y + 50);
+        }else if(clockTime > 69 && clockTime < 120){
             g.drawString("01 : " + (clockTime - 60), clockRectangle.x + 140, clockRectangle.y + 50);
+        } else if(clockTime >= 120 && clockTime <= 129){
+            g.drawString("02 : 0" + (clockTime - 120), clockRectangle.x + 140, clockRectangle.y + 50);
+        } else if(clockTime > 129 && clockTime < 180){
+            g.drawString("02 : " + (clockTime - 120), clockRectangle.x + 140, clockRectangle.y + 50);
+        } else if (clockTime >= 180){
+           //parar el joc
+            gameView.setGameIsRunning(false);
+            JOptionPane.showMessageDialog(gameView, "S'ha acabat el temps!");
         }
 
 
@@ -215,7 +223,11 @@ public class Deck implements Serializable {
         return true;
     }
 
+    public Rectangle getGoldRectangle() {
+        return goldRectangle;
+    }
 
-
-
+    public void setGoldRectangle(Rectangle goldRectangle) {
+        this.goldRectangle = goldRectangle;
+    }
 }

@@ -8,17 +8,17 @@ import java.util.ArrayList;
 
 public class Edifici extends Entity implements Serializable{
 
-    ArrayList<Point2D> tiles;
+    Integer[][] tiles;
 
     public Edifici(){
-       tiles = new ArrayList<>();
+        this.tiles = new Integer[4][2];
     }
 
-    public ArrayList<Point2D> getTiles() {
+    public Integer[][] getTiles() {
         return tiles;
     }
 
-    public void setTiles(ArrayList<Point2D> tiles) {
+    public void setTiles(Integer[][] tiles) {
         this.tiles = tiles;
     }
 }

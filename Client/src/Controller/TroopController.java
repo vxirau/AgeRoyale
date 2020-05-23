@@ -27,57 +27,19 @@ public class TroopController {
     private static float minDistance = Float.MAX_VALUE;
     private CopyOnWriteArrayList<Tropa> founds =  new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Tropa> detected =  new CopyOnWriteArrayList<>();
-    private ArrayList<Edifici> edificis;
 
 
 
     public TroopController(GameView gameView, UserService userService) throws IOException {
         this.gameView = gameView;
         this.uService = userService;
-        this.edificis = new ArrayList<>();
-        ompleEdifici();
-        sendEdificis(edificis);
 
         //userService.startServerComunication(); //TODO: comentar
 
         gameView.setTroopController(this);
 
     }
-    public void ompleEdifici() {
 
-        for (int i = 0; i < 4; i++) {
-            Edifici e = new Edifici();
-            switch (i) {
-                case 0:
-                    e.getTiles().add(new Point2D.Float(1, 5));
-                    e.getTiles().add(new Point2D.Float(2, 5));
-                    e.getTiles().add(new Point2D.Float(1, 6));
-                    e.getTiles().add(new Point2D.Float(2, 6));
-                    break;
-                case 1:
-                    e.getTiles().add(new Point2D.Float(7, 5));
-                    e.getTiles().add(new Point2D.Float(8, 5));
-                    e.getTiles().add(new Point2D.Float(7, 6));
-                    e.getTiles().add(new Point2D.Float(8, 6));
-                    break;
-                case 2:
-                    e.getTiles().add(new Point2D.Float(1, 14));
-                    e.getTiles().add(new Point2D.Float(2, 14));
-                    e.getTiles().add(new Point2D.Float(1, 15));
-                    e.getTiles().add(new Point2D.Float(2, 15));
-                    break;
-                case 3:
-                    e.getTiles().add(new Point2D.Float(7, 14));
-                    e.getTiles().add(new Point2D.Float(8, 14));
-                    e.getTiles().add(new Point2D.Float(7, 15));
-                    e.getTiles().add(new Point2D.Float(8, 15));
-                    break;
-                default:
-                    break;
-            }
-            edificis.add(e);
-        }
-    }
 
 
         public void checkTroopsStatus(Tropa tropa) {
@@ -100,11 +62,25 @@ public class TroopController {
                     }
                 }
 
+                tropa.setVida(tropa.getVida() - troop.getAtac());
+                tropa.setFighting(true);
+
+                if(tropa.getDefaultY() < 320 && tropa.getVida() <= 0){
+
+                    if(gameView.getDeck().getGoldRectangle().getX() + 10 <= 280){
+                        Double d = gameView.getDeck().getGoldRectangle().getWidth();
+                        Integer i = d.intValue();
+                        Double d2 =  gameView.getDeck().getGoldRectangle().getHeight();
+                        Integer j = d2.intValue();
+                        gameView.getDeck().getGoldRectangle().setBounds( gameView.getDeck().getGoldRectangle().x, gameView.getDeck().getGoldRectangle().y,   i+10 , j);
+                    }
+                }
+
                 if(tropa.getTroopType() == 2){
-                    tropa.setVida(0);
-                } else {
-                    tropa.setVida(tropa.getVida() - troop.getAtac());
-                    tropa.setFighting(true);
+                    while (cont < 3) {
+                        bombExplosion(tropa, cont);
+                        cont++;
+                    }
                 }
 
 
@@ -152,7 +128,7 @@ public class TroopController {
                 //this.sprite = Sprite.SKELETON_RIGHT;
                 tropa.setSprite(tropa.getMov().get(1));
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(200);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -162,7 +138,7 @@ public class TroopController {
                 //this.sprite = Sprite.SKELETON_RIGHT_LEFT_FOOT;
                 tropa.setSprite(tropa.getMov().get(2));
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(200);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -172,7 +148,7 @@ public class TroopController {
                 //this.sprite = Sprite.SKELETON_RIGHT_RIGHT_FOOT;
                 tropa.setSprite(tropa.getMov().get(3));
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(200);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -182,10 +158,11 @@ public class TroopController {
                 //this.sprite = Sprite.SKELETON_RIGHT_RIGHT_FOOT;
                 tropa.setSprite(tropa.getMov().get(4));
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(200);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                this.cont = 0;
                 //tropa.setPlaying(false);
                 //tropa.setEntityIsDestroyed(true);
 
@@ -224,10 +201,10 @@ public class TroopController {
         }
     }*/
 
-    public void sendEdificis(ArrayList<Edifici> e){
+    /*public void sendBuild(ArrayList<Edifici> e){
         Message m = new Message(e, "Edificis");
         uService.sendEdificis(m);
-    }
+    }*/
 
     public void update(Tropa t, int i){
         //checkTroopsStatus(t);
@@ -282,7 +259,7 @@ public class TroopController {
 
     public void deleteTropa(Tropa t){
 
-       //if(indice < gameView.getTropes().size()) {
+       if(indice < gameView.getTropes().size()) {
             if(t.getTroopType() == 2){
                 System.out.println("BOMBA OUT");
             }
@@ -301,7 +278,7 @@ public class TroopController {
                     System.out.println("Index: " + gameView.getUpdates().get(i).getIndex());
                 }
             }
-      //  }
+       }
 
     }
 

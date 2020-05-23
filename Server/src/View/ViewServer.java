@@ -96,7 +96,7 @@ public class ViewServer extends JFrame {
 
 	private JScrollPane makePanellEstadistiques() {
 
-		String[] columnNames = {"Username", "% Victòries", "Temps mitg x Victoria"};
+		String[] columnNames = {"Username", "% Victòries", "Temps mig x Victoria"};
 
 		JTable table = new JTable(data, columnNames){
 			public boolean isCellEditable(int data, int columns){

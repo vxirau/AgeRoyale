@@ -47,7 +47,6 @@ public class DedicatedServer extends Thread {
 
 	private static CopyOnWriteArrayList<Tropa> deleted;
 
-
 	public DedicatedServer(Socket sClient, ViewServer vista, CopyOnWriteArrayList<DedicatedServer> clients, Server server) throws IOException {
 		this.isOn = false;
 		this.sClient = sClient;
@@ -58,6 +57,7 @@ public class DedicatedServer extends Thread {
 		objectOut = new ObjectOutputStream(sClient.getOutputStream());
 		this.troopSController = new TroopSController();
 		this.deleted = new CopyOnWriteArrayList<>();
+
 	}
 
 	public void startDedicatedServer() {
@@ -301,18 +301,13 @@ public class DedicatedServer extends Thread {
                     boolean trobat = false;
                     CopyOnWriteArrayList<Tropa> vistes = (CopyOnWriteArrayList<Tropa>) m.getObject();
                     tropaPartidaDAO pDAO = new tropaPartidaDAO();
-                    ArrayList<Tropa> tropes = pDAO.getTropesPartida(troop.getIdPartida());
-                    if(deleted.size()%2 == 0) {
-						if (tropes.size() > (vistes.size() + (deleted.size()/2))) {
-							troop = tropes.get(tropes.size() - 1);
-							System.out.println("vc: " + cont2);
-							System.out.println("t: " + tropes.size());
-							System.out.println("v: " + vistes.size());
-							System.out.println("d: " + deleted.size());
-							cont2++;
-						}
-					} else {
-						System.out.println("IMPARELL");
+                    ArrayList<Tropa> tropes = pDAO.getTropesPartida(inRoom);
+
+                    if (deleted.size() % 2 == 0) {
+                    	if (tropes.size() > (vistes.size() + (deleted.size() / 2))) {
+                    		troop = tropes.get(tropes.size() - 1);
+                    		cont2++;
+                    	}
 					}
 
                     Message message = new Message(troop,"tropesCheck");
@@ -336,15 +331,15 @@ public class DedicatedServer extends Thread {
 					System.out.println("HE LLEGADOO");
 				}
             }
-		} catch (IOException | ClassNotFoundException e1){
-				// en cas derror aturem el servidor dedicat
-				stopDedicatedServer();
-				// eliminem el servidor dedicat del conjunt de servidors dedicats
-				clients.remove(this);
-				// invoquem el metode del servidor que mostra els servidors dedicats actuals
-				server.showClients();
-			} catch (ParseException e) {
-			e.printStackTrace();
+		} catch (IOException | ClassNotFoundException | ParseException e1 ){
+			e1.printStackTrace();
+			// en cas derror aturem el servidor dedicat
+			stopDedicatedServer();
+			// eliminem el servidor dedicat del conjunt de servidors dedicats
+			clients.remove(this);
+			// invoquem el metode del servidor que mostra els servidors dedicats actuals
+			server.showClients();
+
 		}
 
 	}
@@ -391,6 +386,7 @@ public class DedicatedServer extends Thread {
 	}
 
 	public void startGameMessage(Partida partida) {
+
 		if (clientUser != null && inRoom != null && partida.getIdPartida() == inRoom && (partida.getJugadors().get(0).getIdUsuari() == clientUser.getIdUsuari() || partida.getJugadors().get(1).getIdUsuari() == clientUser.getIdUsuari())){
 			try {
 				objectOut.writeObject(new Message(null, "StartGameAsPlayerRecived"));
@@ -405,4 +401,7 @@ public class DedicatedServer extends Thread {
 			}
 		}
 	}
+
+
+
 }

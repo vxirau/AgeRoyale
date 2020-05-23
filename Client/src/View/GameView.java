@@ -10,15 +10,21 @@ import src.Message;
 import src.Model.Network.UserService;
 import src.Tropa;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.text.html.ImageView;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -37,6 +43,8 @@ public class GameView extends JFrame implements Runnable, Serializable {
     private static boolean sendcheck = true;
     private int flag = 0;
     public static int ident = 0;
+    public static BufferedImage[] bufferedImages1,bufferedImages2 ;
+    public long elapsed = 0;
 
 
     private CopyOnWriteArrayList<TroopUpdate> updates;
@@ -48,8 +56,8 @@ public class GameView extends JFrame implements Runnable, Serializable {
     private  boolean trobat = false;
     public static boolean deleted = false;
     private static BufferedImage image;
-    private static Tropa tropa;
     private static int cont = 0;
+
 
     //Variable per accedir a la imatge a partir dels seus pixels
     private static int[] pixelsImage;
@@ -88,29 +96,24 @@ public class GameView extends JFrame implements Runnable, Serializable {
         this.tropes = new CopyOnWriteArrayList<>();
         //this.troops = new ArrayList<>();
         this.updates = new CopyOnWriteArrayList<>();
-        this.tropa = new Tropa();
         mouseIsClicked = false;
         whichTroop = 10;
         this.deck = new Deck(width, height);
         //Creem el mapa i li donem la mesura en tiles ( en aquest cas, sera de 10 x 20)
         gameMap = new ImageMap(IMAGE_MAP_PATH);
+        this.bufferedImages1 = new BufferedImage[10];
+        this.bufferedImages2 = new BufferedImage[10];
+        ompleBandera(bufferedImages1, bufferedImages2);
         this.setVisible(true);
         this.setResizable(false);
         //this.getContentPane().setLayout(new GridLayout(ROWS,COLUMNS));
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setSize(width, height);
         this.setLocationRelativeTo(null);
 
         //gameMap.showMap(0, 0, this);
 
     }
-
-
-
-
-
-
-
 
 
     /*public void update(){
@@ -173,7 +176,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
     }
 
-
     public Deck getDeck() {
         return deck;
     }
@@ -181,8 +183,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
     public void setDeck(Deck deck) {
         this.deck = deck;
     }
-
-
 
 
         public synchronized void showGraphics(){
@@ -196,7 +196,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
         gameMap.showMap(0, 0, this);
 
         if(tropes.size() > 0) {
-            for (Iterator<Tropa> iterator = tropes.iterator(); iterator.hasNext(); ) {
+            for (Iterator<Tropa> iterator = tropes.iterator(); iterator.hasNext();) {
                 Tropa tropa = iterator.next();
 
                 TroopUpdate update = new TroopUpdate(troopController, this);
@@ -218,78 +218,105 @@ public class GameView extends JFrame implements Runnable, Serializable {
                 }
 
                 cont++;
-
-
-                //VERSIÓ 1
-                 /*try {
-                    Thread.sleep(160/tropes.size());
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-
-                synchronized (String.class) {
-
-                    troopController.update(tropes.get(i), i);
-
-            }*/
-
-                //VERSIÓ 2
-               /*if (troops.size() > 0) {
-                    for(Tropa t: troops){
-                        if(t.equals(tropes.get(i))){
-                           trobat = true;
-                        } /*else {
-
-                            troopController.update(tropes.get(i), i);
-                            trobat = false;
-                        }
-                    }
-
-                    if(!trobat) {
-                        try {
-                            Thread.sleep(3000);
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        troopController.update(tropes.get(i), i);
-                        //trobat = false;
-                        troops.add(tropes.get(i));
-                    } else {
-                        trobat = false;
-                    }
-
-                } else {
-                    troopController.update(tropes.get(i), i);
-                    troops.add(tropes.get(i));
-                }*/
-
-                //VERSIO 3
-                /*if(tropa == null){
-                    troopController.update(tropes.get(i), i);
-                    tropa = tropes.get(i);
-                } else {
-                    if(rebut){
-                        troopController.update(tropes.get(i), i);
-                        rebut = false;
-                        tropa = tropes.get(i);
-                    }
-                }*/
-
-
             }
             cont = 0;
+
         }
 
         //Copiem els grafics al joc
         System.arraycopy(pixels, 0, pixelsImage, 0, pixelsImage.length);
-
         //L'objecte g s'encarregara de dibuixar els grafics a la pantalla
         Graphics g = bufferStrategy.getDrawGraphics();
         g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+        for (Iterator<Tropa> iterator = tropes.iterator(); iterator.hasNext();) {
+            Tropa tropa = iterator.next();
+            /*try {
+                imageh = ImageIO.read(GameView.class.getResource("/resources/verde.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
+            switch (tropa.getNumTorre()) {
+                case 0:
+                    moveBandera(elapsed,0,g);
+                    //g.drawImage(imageh, 32, 128, null);
+                    break;
+                case 1:
+                    moveBandera(elapsed,1,g);
+                    //g.drawImage(imageh, 224, 128, null);
+                    break;
+                case 2:
+                    moveBandera(elapsed,2,g);
+                    //g.drawImage(imageh, 32, 448, null);
+                    break;
+                case 3:
+                    moveBandera(elapsed,3,g);
+                    //g.drawImage(imageh, 224, 448, null);
+                    break;
+            }
+        }
+
         deck.showDeck(g, xMousePosition, yMousePosition, mouseIsClicked, whichTroop);
+
         g.dispose();
         //Mostrem el que tenim
         bufferStrategy.show();
+
+    }
+
+    public void moveBandera(long time, int num, Graphics g){
+
+        if(time < 250){
+            drawFlag(num,0,g);
+        } else if(time >= 250 && time < 500){
+            drawFlag(num,1,g);
+        } else if(time >= 500 && time < 750){
+            drawFlag(num,2,g);
+        } else if(time >= 750 && time < 1000){
+            drawFlag(num,3,g);
+        }else if(time >= 1000 && time < 1250){
+            drawFlag(num,4,g);
+        }else if(time >= 1250 && time < 1500){
+            drawFlag(num,5,g);
+        }else if(time >= 1500 && time < 1750){
+            drawFlag(num,6,g);
+        }else if(time >= 1750 && time < 2000){
+            drawFlag(num,7,g);
+        }else if(time >= 2000 && time < 2250){
+            drawFlag(num,8,g);
+        }else if(time >= 2250 && time < 2500){
+            drawFlag(num,9,g);
+        }
+
+    }
+
+    public void drawFlag(int num, int index, Graphics g){
+        switch (num){
+            case 0:
+                g.drawImage(bufferedImages1[index], 40, 96, null);
+                break;
+            case 1:
+                g.drawImage(bufferedImages1[index], 248, 96, null);
+                break;
+            case 2:
+                g.drawImage(bufferedImages2[index], 40, 512, null);
+                break;
+            case 3:
+                g.drawImage(bufferedImages2[index], 248, 512, null);
+                break;
+        }
+    }
+
+    public void ompleBandera(BufferedImage[] b, BufferedImage[] c) {
+        for (int i = 0; i < 10; i++) {
+
+                try {
+                    b[i] = ImageIO.read(GameView.class.getResourceAsStream("/resources/bandera_" + (i+1) + ".png"));
+                    c[i] = ImageIO.read(GameView.class.getResourceAsStream("/resources/bandera_" + (i+11) + ".png"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+        }
 
     }
 
@@ -304,11 +331,14 @@ public class GameView extends JFrame implements Runnable, Serializable {
         double elapsedTime;
         double delta = 0;
 
-
         requestFocus();
-
-
+        final long[] startTime = {System.currentTimeMillis()};
         while(gameIsRunning){
+            elapsed = System.currentTimeMillis() - startTime[0];
+
+            if(elapsed > 2500){
+                startTime[0] = System.currentTimeMillis();
+            }
 
             //Message message = new Message(this, "Game Refresh");
             final long loopStart = System.nanoTime();
@@ -320,7 +350,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
             while(delta >= 1){
                 //updateGame();
-
 
                 delta--;
             }
@@ -465,4 +494,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
     public static void setDeleted(boolean deleted) {
         GameView.deleted = deleted;
     }
+
+
 }

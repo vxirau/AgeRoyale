@@ -110,7 +110,6 @@ public class RoomsController {
 		uService.sendsGetTropes(new Message(null, "GetTropesStats"), controller);
 		controller.setId(p.getIdPartida());
 		gView.registerController(controller);
-		gView.startGame();
 		TroopController tcontrol = new TroopController(gView,uService);
         gView.setTroopController(tcontrol);
 			//GameView finalGView = gView;
