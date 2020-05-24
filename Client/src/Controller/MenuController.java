@@ -12,6 +12,11 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
+
+/**
+* Classe destinada a controlar el menú del client
+ * Les diferentes vistes es gestionen desde aqui pel que aquesta classe te instancies de tots els controllers
+* */
 public class MenuController {
 
     private MenuView view;
@@ -28,7 +33,9 @@ public class MenuController {
     private ArrayList<Usuari> requests;
     private ArrayList<Usuari> requested;
 
-    //Listener
+    /**
+    * WindowListener encarregat de escoltar quan la finestra es tanca, i fer lo pertinent per la part de servidor (logout)
+    * */
     private WindowListener windowListener = new WindowAdapter() {
         @Override
         public void windowClosing(WindowEvent e) {
@@ -48,7 +55,15 @@ public class MenuController {
         }
     };
 
-
+    /**
+    * Constructor de la casse
+    * @param view vista grafica del menu per que el contrlador pugui fer-ne canvis
+     * @param userService variable que permet la connexió del client amb el servidor
+     * @parma usr usuari que ha iniciat sessió a la aplicació.
+     * @param requests array de usuaris que han enviat una solicitud al nostre client
+     * @param requested array de usuaris als que el nostre client ha enviat solicitud
+     * @throws InterruptedException per detectar si hi ha algun problema al inciar el servidor ja que aquesta classe és la que inicia la comuncació
+    * */
     public MenuController(MenuView view, UserService userService, Usuari usr, ArrayList<Usuari> requests, ArrayList<Usuari> requested) throws InterruptedException {
         this.view = view;
         this.uService = userService;
@@ -71,6 +86,10 @@ public class MenuController {
 
     }
 
+
+    /**
+    * Encarregada de inicialitzar tots els controllers de totes les vistes que es mostren
+    * */
     private void initControllers() {
         configController = new ConfigController(user, uService);
         tropesController = new TropesController(user);
@@ -80,6 +99,10 @@ public class MenuController {
         waitingController = new WaitingController(roomsController, null, uService, user);
     }
 
+
+    /**
+    * Encarregada de passar totes les viestes als controllers inicialitzats prèviament
+    * */
     private void initControllersViews() {
         configController.setConfigView(view.getConfigView());
         tropesController.setTropesView(view.getTropesView());
@@ -90,30 +113,60 @@ public class MenuController {
         waitingController.setView(view.getWaitingRoomView());
     }
 
+
+    /**
+    * Retorna el controller de la vista de partides
+     * @return roomsController variable de tipus RoomsController
+    * */
     public RoomsController getRoomsController() {
         return roomsController;
     }
 
+    /**
+     * Retorna el controller de la vista de configuració
+     * @return configController variable de tipus ConfigController
+     * */
     public ConfigController getConfigController() {
         return configController;
     }
 
+    /**
+     * Retorna el controller de la vista d'amics
+     * @return friendsController variable de tipus FriendsController
+     * */
     public FriendsController getFriendsController() {
         return friendsController;
     }
 
+    /**
+     * Retorna el controller de la vista de waiting room
+     * @return waitingController variable de tipus WaitingController
+     * */
     public WaitingController getWaitingController() {
         return waitingController;
     }
 
+    /**
+    * Encarregada de actualitzar totes les vistes, es sol cridar quan hi ha nova informació per part del servidor
+    * */
     public void updateViews() {
         view.updateViews();
     }
 
+
+    /**
+    * Retorna el tamany de la llista de solicituds
+     * @return requestsSize un enter amb el tamany de la llista
+    * */
     public int getRequestSize() {
         return requests.size();
     }
 
+
+    /**
+    * Encarregada de detectar quan es reb una solicitud a una partida en marxa. La petició s'inicia en una sala d'espera.
+     * @param invite objecte que conté la informacío de la partida a la que s'ha convidat el client
+    * */
     public void inviteRecived(Invite invite) {
         view.setVisible(true);
         Object[] options = {"Acceptar", "Declinar"};
@@ -127,6 +180,10 @@ public class MenuController {
         }
     }
 
+    /**
+    * Retorna la vista del menú
+     * @return view variable de tipus MenuView
+    * */
     public MenuView getView() {
         return view;
     }

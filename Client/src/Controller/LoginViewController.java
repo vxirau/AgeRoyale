@@ -12,11 +12,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+
+/**
+* Controlador destinat a la finestra de login. Implementa ActionListener per poder fer ús d'aquesta quan es prem un JButton en aquest cas.
+* */
 public class LoginViewController implements ActionListener {
     private LoginView view;
     private UserService uService;
     private Usuari user;
 
+
+    /**
+    * Constructor de la classe.
+     * @param view vista gràfica del login
+     * @param userService variable que permet la connexió del client amb el servidor
+    * */
     public LoginViewController(LoginView view, UserService userService) {
         this.view = view;
         this.uService = userService;
@@ -25,16 +35,31 @@ public class LoginViewController implements ActionListener {
         }
     }
 
+
+    /**
+    * Funció que s'invoca desde el propi userService que notifica al client que el login ha estat satisfactori
+     * @param usr objecte usuari que retorna el servidor si s'ha pogut fer login
+    * */
     public void loginSuccessful(Usuari usr){
         this.user = usr;
         Message m = new Message(usr, "getRequests");
         uService.sendObject(m);
     }
 
+
+    /**
+    * Funció encarregada de avisar al usuari que esta bannejat.
+     * @param s objecte emprat pel servidor per retornar la informació del temps restant de banneig
+    * */
     public void userIsBanned(Usuari s){
         JOptionPane.showMessageDialog(view, "Estas bannejat!\nEt queden: " + s.getNickName()+ " dies per poder entrar");
     }
 
+
+    /**
+    * Quan es reben les solicituds del servidor, que s'han demant a la loginSuccessful, inicia les vistes pertinents
+     * @param requests llista de usuaris que han solicitat amistat al client.
+    * */
     public void onRequestsRecieved(ArrayList<Usuari> requests){
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -54,6 +79,11 @@ public class LoginViewController implements ActionListener {
         });
     }
 
+
+    /**
+    * Comprova si algun client ha acceptat una solicitud que el client hagués enviat en una sessió prèvia
+     * @param rq llista de usuaris que l'usuari ha solicitat amistat
+    * */
     private void checkForAcceptedRequests(ArrayList<Usuari> rq){
         ArrayList<Usuari> r = new ArrayList<>();
         for(Usuari y : rq){
@@ -73,6 +103,14 @@ public class LoginViewController implements ActionListener {
         }
     }
 
+
+    /**
+    * El servidor envia una resposta de tots els usuaris que el nostre client ha solicitat amistat, i de tots els que l'han solicitat a ell.
+     * Aquesta funció te la finalitat de separar aquesta resposta en dos arrays per separat, els que han solicitat, i els que ell ha solicitat
+     * @param requests array de usuaris amb els que ha solicitat i els que li han solicitat
+     * @param criteri criteri que decideix si volem la llista de solicitats o dels que soliciten
+     * @return users llista resultant de la separació. Conté un dels dos tipus de solicituds
+    * */
     public ArrayList<Usuari> separateRequests(ArrayList<Usuari> requests, int criteri){
         ArrayList<Usuari> users = new ArrayList<>();
         int i=0;
@@ -98,11 +136,21 @@ public class LoginViewController implements ActionListener {
         return users;
     }
 
+
+    /**
+    * En cas que el login no es pugui realitzar s'instancia aquesta funció. Encarregada de mostrar un missatge al client
+    * */
     public void loginNotSuccessful(){
         //System.out.println("No existeix. Registra't!");
         JOptionPane.showMessageDialog(view, "No existeix. Registra't!");
     }
 
+
+    /**
+    * Com que la classe implement actionListener, ha de implementar la funció actionPerformed. Aquesta detectarà quan l'usuari ha interaccionat amb algun element de UI que tingui aquest controlador assignat
+     * Encarregada de enviar la informació al servidor de que es vol fer login.
+     * @param e variable que conté la informació dels elements emprats
+    * */
     @Override
     public void actionPerformed(ActionEvent e) {
         String boto = ((JButton) e.getSource()).getText();
