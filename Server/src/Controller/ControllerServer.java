@@ -3,7 +3,6 @@ package src.Controller;
 import src.Model.Database.DAO.partidaDAO;
 import src.Model.Database.DAO.statsDAO;
 import src.Model.Database.DAO.usuariDAO;
-import src.Model.Network.DedicatedServer;
 import src.Model.Network.Server;
 import src.Partida;
 import src.Usuari;
@@ -14,11 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class ControllerServer implements ActionListener, WindowListener {
 

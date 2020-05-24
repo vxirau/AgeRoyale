@@ -1,6 +1,5 @@
 package src.Model.Network;
 
-import com.mysql.fabric.xmlrpc.base.Array;
 import src.*;
 import src.Controller.ControllerServer;
 import src.Controller.TroopSController;
@@ -9,24 +8,17 @@ import src.Model.Database.DAO.*;
 import src.Partida;
 import src.Tropa;
 import src.Usuari;
-import src.Model.Database.DAO.*;
-import src.View.ViewServer;
 
 import java.io.*;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DedicatedServer extends Thread {
@@ -37,7 +29,6 @@ public class DedicatedServer extends Thread {
 	private DataOutputStream dataOut;
 	private ObjectOutputStream objectOut;
 	private CopyOnWriteArrayList<DedicatedServer> clients;
-	private ViewServer vista;
 	private Integer inRoom = null;
 	private TroopSController troopSController;
 	private Usuari clientUser;
@@ -48,10 +39,9 @@ public class DedicatedServer extends Thread {
 	private static CopyOnWriteArrayList<Tropa> deleted;
 
 
-	public DedicatedServer(Socket sClient, ViewServer vista, CopyOnWriteArrayList<DedicatedServer> clients, Server server) throws IOException {
+	public DedicatedServer(Socket sClient, CopyOnWriteArrayList<DedicatedServer> clients, Server server) throws IOException {
 		this.isOn = false;
 		this.sClient = sClient;
-		this.vista = vista;
 		this.clients = clients;
 		this.server = server;
 		dataInput = new ObjectInputStream(sClient.getInputStream());

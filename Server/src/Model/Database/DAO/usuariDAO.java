@@ -100,23 +100,6 @@ public class usuariDAO {
     }
 
     //ACTUALITZAR INFORMACIO
-    public void updateUsuari (Usuari usuari){
-        statsDAO statsDAO = new statsDAO();
-        usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
-        amicDAO amicDAO = new amicDAO();
-
-        statsDAO.updateStats(usuari.getStats());
-
-        usuariTropaDAO.onRemoveUsuari(usuari);
-        usuariTropaDAO.addTropesToUsuari(usuari, usuari.getTropes());
-
-        amicDAO.removeAmics(usuari);
-        amicDAO.addAmic(usuari, usuari.getAmics());
-
-        String query = "UPDATE AgeRoyale.usuari SET nickname = '" + usuari.getNickName() + "' , email = '" + usuari.getEmail() + "' , password = '" + usuari.getPassword() + "' WHERE idUser = " + usuari.getIdUsuari() + ";";
-        DBConnector.getInstance().updateQuery(query);
-    }
-
     public void updateState(Usuari usuari, boolean online){
         String query = "UPDATE AgeRoyale.usuari SET isOnline = " + Boolean.toString(online) + " WHERE idUser = " + usuari.getIdUsuari() + ";";
         DBConnector.getInstance().updateQuery(query);
@@ -161,22 +144,6 @@ public class usuariDAO {
         }
 
         return newUserPK;
-    }
-
-    //BORRAR INFORMACIO
-    public void removeUsuari(Usuari usuari){
-        statsDAO statsDAO = new statsDAO();
-        usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
-        amicDAO amicDAO = new amicDAO();
-        partidaDAO partidaDAO = new partidaDAO();
-
-        String query = "DELETE FROM AgeRoyale.usuari WHERE idUser = " + usuari.getIdUsuari() + ";";
-        DBConnector.getInstance().deleteQuery(query);
-
-        amicDAO.removeAmics(usuari);
-        usuariTropaDAO.onRemoveUsuari(usuari);
-        statsDAO.removeStats(usuari);
-        partidaDAO.removePartida(usuari);
     }
 
     //GESTIO DE PK
@@ -246,34 +213,12 @@ public class usuariDAO {
         return false;
     }
 
-    public boolean existsRegistre (String nickname, String email){
-        String query = "SELECT if(COUNT(*) = 1, 1, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = '" + nickname + "' OR us.email = '" + email + "';";
-        ResultSet rs = DBConnector.getInstance().selectQuery(query);
-        try {
-            if (rs.next()) {
-                int result = rs.getInt("exist");
-                if (result == 1){
-                    return true;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     public void banUser(Usuari u){
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
 
         String query = "UPDATE AgeRoyale.usuari SET AgeRoyale.usuari.banned = 1, AgeRoyale.usuari.banDate = '" + dateFormat.format(cal.getTime()) + "'  WHERE AgeRoyale.usuari.idUser = " + u.getIdUsuari() + " AND AgeRoyale.usuari.nickname = '" + u.getNickName() + "';";
         DBConnector.getInstance().updateQuery(query);
-    }
-
-    public Date convertToDateViaInstant(LocalDate dateToConvert) {
-        return java.util.Date.from(dateToConvert.atStartOfDay()
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
     }
 
     public boolean existsUsuariOnChange(Usuari usuari){
