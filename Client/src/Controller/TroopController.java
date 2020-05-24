@@ -27,12 +27,12 @@ public class TroopController {
     private static Tropa troop;
     //public static int indice;
     private static int cont = 0;
-    private Tropa troop;
+
     public int indice;
-    private int cont = 0;
+
     private boolean accept = false;
     private float minDistance = Float.MAX_VALUE;
-    public CopyOnWriteArrayList<Tropa> troops = new CopyOnWriteArrayList<>();
+
     private CopyOnWriteArrayList<Tropa> founds =  new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Tropa> detected =  new CopyOnWriteArrayList<>();
 

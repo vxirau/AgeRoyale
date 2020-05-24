@@ -10,6 +10,7 @@ import src.Partida;
 import src.Tropa;
 import src.Usuari;
 import src.Model.Database.DAO.*;
+import src.View.Sprite;
 import src.View.ViewServer;
 
 import java.io.*;
@@ -41,7 +42,7 @@ public class DedicatedServer extends Thread {
 	private ObjectOutputStream objectOut;
 	private CopyOnWriteArrayList<DedicatedServer> clients;
 	private ViewServer vista;
-	private Integer inRoom = null;
+	public Integer inRoom = null;
 	private TroopSController troopSController;
 	private Usuari clientUser;
 	private Server server;

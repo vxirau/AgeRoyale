@@ -265,10 +265,10 @@ public class GameView extends JFrame implements Runnable, Serializable {
                     tropa.setOn(false);
                     update.getT().start();
                     updates.add(update);
-                    //update.catchTroop(tropa,cont);
+
                 }
 
-                update.catchTroop(tropa,cont);
+
 
                 if (!updates.isEmpty() && updates.size() == tropes.size()) {
                     updates.get(cont).setTropa(tropa);
@@ -602,9 +602,9 @@ public class GameView extends JFrame implements Runnable, Serializable {
      * Comprova si el joc s'està executant o no
      * @return gameIsRunning boolea que indicarà l'estat del joc
      * */
-    public  boolean isGameIsRunning() {
 
-    public static boolean isGameIsRunning() {
+
+    public  boolean isGameIsRunning() {
         return gameIsRunning;
     }
 /**
@@ -613,16 +613,14 @@ public class GameView extends JFrame implements Runnable, Serializable {
  * */
     public  void setGameIsRunning(boolean gameIsRunning) {
         this.gameIsRunning = gameIsRunning;
-
+    }
 
 
     /**
     * Comprova si el send ha estat verificat
      * @return sendcheck booleà que indicarà si s'ha enviat correctament
     * */
-    public static boolean isSendcheck() {
-        return sendcheck;
-    }
+
     public Usuari getUser() {
         return user;
     }

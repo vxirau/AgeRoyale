@@ -1,9 +1,7 @@
 package src.Controller;
 
-import src.Message;
+import src.*;
 import src.Model.Network.UserService;
-import src.Partida;
-import src.Tropa;
 import src.View.Deck;
 import src.View.GameView;
 import src.View.MenuView;
