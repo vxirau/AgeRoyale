@@ -25,7 +25,6 @@ public class TroopController {
     private UserService uService;
     public static CopyOnWriteArrayList<Tropa> troops = new CopyOnWriteArrayList<>();
     private static Tropa troop;
-    //public static int indice;
     private static int cont = 0;
 
     public int indice;
@@ -45,7 +44,6 @@ public class TroopController {
     public TroopController(GameView gameView, UserService userService){
         this.gameView = gameView;
         this.uService = userService;
-
 
         gameView.setTroopController(this);
 
@@ -128,15 +126,12 @@ public class TroopController {
 
 
     public synchronized void update(Tropa t){
-        //checkTroopsStatus(t);
+
         if(gameView.getTropes().size() > 0){
-            //for(int i = 0; i < gameView.getTropes().size(); i++){
-                //gameView.getTropes().get(i).update();
+
                 if(t != null) {
                     updateTropa(t);
-                    //indice = i;
-                    // es pot mirar de fer a un altre lloc
-                //}
+
             }
         }
     }
@@ -164,11 +159,8 @@ public class TroopController {
     public void getTropa(Tropa t){
         t.setOn(false);
 
-
-
             for (int i = 0; i <gameView.getTropes().size(); i++) {
                 if(gameView.getTropes().get(i).getInitialX() == t.getInitialX() && gameView.getTropes().get(i).getInitialY() == t.getInitialY()) {
-                    //gameView.getTropes().set(indice,t);
                     gameView.getTropes().set(i, t);
                     gameView.setRebut(true);
                 }

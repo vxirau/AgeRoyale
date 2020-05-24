@@ -7,6 +7,8 @@ import src.View.GameView;
 import src.View.MenuView;
 import src.View.Sprite;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,16 +23,6 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
     private GameView gameView;
     private boolean mouseIsClicked;
     private int whichTroop;
-    private GameMetadata metadata;
-
-    public GameMetadata getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(GameMetadata metadata) {
-        this.metadata = metadata;
-    }
-
     private Deck deck;
     private UserService uService;
     private int id;
@@ -38,6 +30,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
     private ArrayList<Tropa> tropaStatic;
     private Partida partida;
     private Usuari usuari;
+    private boolean isPlayer;
 
 
 
@@ -50,8 +43,9 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
             super.windowClosed(e);
             menuController.getView().setVisible(true);
             menuController.getView().invokeAdjustViews(MenuView.MAIN);
-            // ban usuaris
-
+            gameView.setVisible(false);
+            JOptionPane.showMessageDialog(menuController.getView(), "Et rendeixes tan ràpid?", "BANEJAT", JOptionPane.PLAIN_MESSAGE);
+            uService.sendObject(new Message(usuari,"banUser"));
 
         }
     };
@@ -63,9 +57,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
      * @param p partida que esta inicialitzada
      * @throws IOException en cas que hi hagués algun error retorna aquesta excepció.
      * */
-    public GameController(GameView gameView,UserService userService, MenuController menuController, Partida p, Usuari usuari) throws IOException {
-
-
+    public GameController(GameView gameView,UserService userService, MenuController menuController, Partida p, Usuari usuari, boolean isPlayer) throws IOException {
 
         this.gameView = gameView;
         this.gameView.setUser(usuari);
@@ -75,7 +67,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
         this.menuController = menuController;
         this.partida = p;
         this.usuari = usuari;
-        this.metadata = new GameMetadata();
+        this.isPlayer = isPlayer;
         gameView.setGameController(this);
     }
 
@@ -95,58 +87,58 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
     @Override
     public void mouseClicked(MouseEvent e) {
 
-        int troopX = 0;
-        int y = 0;
-        int x = 0;
+        if(isPlayer){
+            int troopX = 0;
+            int y = 0;
+            int x = 0;
 
-        if(e.getY() > 620) {
-            if(!mouseIsClicked){
-                System.out.println("AHORA ESTA CLICADO");
-                mouseIsClicked = true;
-                troopX = e.getX();
-                if(troopX >= 0 && troopX < 80){
-                    this.whichTroop = 0;
-                }
-                if(troopX >= 80 && troopX < 1600){
-                   this.whichTroop = 1;
-                }
-                if(troopX >= 160 && troopX < 240){
-                    this.whichTroop = 2;
-                }
-                if(troopX >= 240 && troopX < 320){
-                    this.whichTroop = 3;
-                }
+            if(e.getY() > 620) {
+                if(!mouseIsClicked){
+                    mouseIsClicked = true;
+                    troopX = e.getX();
+                    if(troopX >= 0 && troopX < 80){
+                        this.whichTroop = 0;
+                    }
+                    if(troopX >= 80 && troopX < 1600){
+                        this.whichTroop = 1;
+                    }
+                    if(troopX >= 160 && troopX < 240){
+                        this.whichTroop = 2;
+                    }
+                    if(troopX >= 240 && troopX < 320){
+                        this.whichTroop = 3;
+                    }
 
-                gameView.updateMouse(e.getX(), e.getY(), mouseIsClicked);
-                selectTroopFromDeck(whichTroop);
+                    gameView.updateMouse(e.getX(), e.getY(), mouseIsClicked);
+                    selectTroopFromDeck(whichTroop);
 
+                }
             }
-        }
 
-        if(mouseIsClicked){
-            if(e.getY() <= 620){
-                System.out.println("INVOCO TROPA BRO");
-                if(e.getY() <= 355){
-                    y = 355;
-                } else {
-                    y = e.getY();
-                }
-                if(e.getX() >= 135 && e.getX() <= 180) {
-                    x = 166;
-                } else {
-                    x = e.getX();
-                }
-                gameView.updateMouse(x, y, mouseIsClicked);
-                //Invocarem a la tropa si tenim l'or suficient
-                if(gameView.getDeck().isEnoughGold(this.whichTroop)){
-                    invokeTroop(this.whichTroop);
-                    gameView.getDeck().updateUserGold(whichTroop);
-                    mouseIsClicked = false;
-                }
+            if(mouseIsClicked){
+                if(e.getY() <= 620){
+                    if(e.getY() <= 355){
+                        y = 355;
+                    } else {
+                        y = e.getY();
+                    }
+                    if(e.getX() >= 135 && e.getX() <= 180) {
+                        x = 166;
+                    } else {
+                        x = e.getX();
+                    }
+                    gameView.updateMouse(x, y, mouseIsClicked);
+                    //Invocarem a la tropa si tenim l'or suficient
+                    if(gameView.getDeck().isEnoughGold(this.whichTroop)){
+                        invokeTroop(this.whichTroop);
+                        gameView.getDeck().updateUserGold(whichTroop);
+                        mouseIsClicked = false;
+                    }
 
+                }
             }
-        }
 
+        }
     }
 
 
@@ -382,5 +374,46 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
     public void setTropaStatic(ArrayList<Tropa> tropaStatic) {
         this.tropaStatic = tropaStatic;
         gameView.startGame();
+    }
+
+    /**
+     * Ens retorna al menú principal, tot tancant les gameViews
+     *
+     * */
+    public void finishGame(){
+
+        uService.sendObject(new Message(deck.getClockTime(),"ClockTime"));
+
+        gameView.setVisible(false);
+        menuController.getView().setVisible(true);
+        menuController.getView().invokeAdjustViews(MenuView.MAIN);
+
+    }
+
+    /**
+     * Enviem un missatge a servidor conforme el client ha guanyat la partida
+     *
+     * */
+    public void sendVictory(){
+
+        uService.sendObject(new Message(usuari,"Victory"));
+    }
+
+    /**
+     * Enviem un missatge a servidor conforme el client ha perdut la partida
+     *
+     * */
+    public void sendDefeat(){
+
+        uService.sendObject(new Message(usuari,"Defeat"));
+
+    }
+
+    public Usuari getUsuari() {
+        return usuari;
+    }
+
+    public void setUsuari(Usuari usuari) {
+        this.usuari = usuari;
     }
 }

@@ -305,4 +305,12 @@ public class Deck implements Serializable {
     public void setGoldRectangle(Rectangle goldRectangle) {
         this.goldRectangle = goldRectangle;
     }
+
+    public int getClockTime() {
+        return clockTime;
+    }
+
+    public void setClockTime(int clockTime) {
+        this.clockTime = clockTime;
+    }
 }

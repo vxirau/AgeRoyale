@@ -167,9 +167,9 @@ public class RoomListView extends JFrame{
 		nom.setFont(new Font("Helvetica", 0, 15));
 		nom.setPreferredSize(new Dimension(250,15));
 		element.add(nom);
-
+		int count = (int) p.getJugadors().stream().count() + (int) p.getEspectadors().stream().count();
 		JLabel persones = new JLabel();
-		persones.setText("<html><font color='white'> " + Utils.ferEspais(28) + " Total Connected: " + (0) + "</font></html>");
+		persones.setText("<html><font color='white'> " + Utils.ferEspais(28) + " Total Connected: " + (count) + "</font></html>");
 		persones.setForeground(Color.WHITE);
 		persones.setPreferredSize(new Dimension(250,15));
 		persones.setFont(new Font("Helvetica", 0, 15));

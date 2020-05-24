@@ -79,24 +79,6 @@ public class WaitingController implements ActionListener {
 
         }
 
-        /*if(e == null){
-            try {
-                p.setIdPartida(10);
-                gv = roomsController.startGame(total,0, p, this,false);
-                view.setVisible(false);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        } else  //if(((JButton)e.getSource()).getText().equals("Start Game")){
-            try {
-                //p.setIdPartida(10);
-                gv = roomsController.startGame(p, this);
-                view.setVisible(false);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        //}*/
-
     }
 
 

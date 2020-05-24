@@ -315,4 +315,9 @@ public class partidaDAO {
             return true;
         }
     }
+
+    public void updateTime(int idPartida, int time){
+        String query = "UPDATE AgeRoyale.partida SET AgeRoyale.partida.duration = " + time + ", AgeRoyale.partida.finished = true WHERE idPartida = " + idPartida  + ";";
+        DBConnector.getInstance().updateQuery(query);
+    }
 }

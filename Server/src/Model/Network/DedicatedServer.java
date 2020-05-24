@@ -49,8 +49,6 @@ public class DedicatedServer extends Thread {
 	public static int cont = 0;
 	public static int cont2 = 0;
 
-
-
 	private static CopyOnWriteArrayList<Tropa> deleted;
 	private static CopyOnWriteArrayList<Tropa> full;
 
@@ -309,11 +307,11 @@ public class DedicatedServer extends Thread {
 				} else if (m.getType().equals("add tropa")) {
 					Tropa t = (Tropa) m.getObject();
 
-
 					server.broadcastTropa(t);
 
 					tropaPartidaDAO pDAO = new tropaPartidaDAO();
 					pDAO.addTropa(t);
+
 					statsDAO sDAO = new statsDAO();
 					if (t.getTroopType() != -1) {
 						String type = "";
@@ -324,41 +322,33 @@ public class DedicatedServer extends Thread {
 						sDAO.updateUsedTroop(clientUser.getIdUsuari(), type);
 					}
 
-				}
-				/*else if(m.getType().equals("checkID")){
-                    Tropa troop = new Tropa();
-                    boolean trobat = false;
-                    CopyOnWriteArrayList<Tropa> vistes = (CopyOnWriteArrayList<Tropa>) m.getObject();
-                    tropaPartidaDAO pDAO = new tropaPartidaDAO();
-                    ArrayList<Tropa> tropes = pDAO.getTropesPartida(inRoom);
-
-                    if (deleted.size() % 2 == 0) {
-                    	if (tropes.size() > (vistes.size() + (deleted.size() / 2))) {
-                    		troop = tropes.get(tropes.size() - 1);
-                    		cont2++;
-                    	}
-					}
-
-                    Message message = new Message(troop,"tropesCheck");
-                    //objectOut.writeObject(message);
-
-
-					/*tropaPartidaDAO pDAO = new tropaPartidaDAO();
-					ArrayList<Tropa> tropes = pDAO.getTropesPartida(10);
-
-					if(!tropes.isEmpty()) {
-						Message message = new Message(tropes.get(0), "tropesCheck");
-						objectOut.writeObject(message);
-					}
-
-                }*/
-				else if (m.getType().equals("startGame")) {
+				} else if (m.getType().equals("startGame")) {
 					Partida p = (Partida) m.getObject();
 					server.broadcastStartGame(p);
 				} else if (m.getType().equals("Edificis")) {
 					ArrayList<Edifici> edificiDef = (ArrayList<Edifici>) m.getObject();
 					troopSController.setEdificiDef(edificiDef);
-					System.out.println("HE LLEGADOO");
+				} else if(m.getType().equals("Victory")){
+
+					Usuari u = (Usuari) m.getObject();
+					u.getStats().setTotalVictories(u.getStats().getTotalVictories() + 1);
+					u.getStats().setTotalPartides(u.getStats().getTotalPartides() + 1);
+					statsDAO sDAO = new statsDAO();
+					sDAO.updateStats(u.getStats());
+
+				} else if(m.getType().equals("Defeat")){
+
+					Usuari u = (Usuari) m.getObject();
+					u.getStats().setTotalPartides(u.getStats().getTotalPartides() + 1);
+					statsDAO sDAO = new statsDAO();
+					sDAO.updateStats(u.getStats());
+
+				} else if(m.getType().equals("ClockTime")){
+
+					int clock = (Integer) m.getObject();
+					partidaDAO pDAO = new partidaDAO();
+					pDAO.updateTime(inRoom, clock);
+
 				}
 			}
 		} catch (IOException | ClassNotFoundException | ParseException e1) {
@@ -453,7 +443,10 @@ public class DedicatedServer extends Thread {
 		}
 	}
 
-
+	/**
+	 * Aquesta funció fa de mirall amb la gameview del altre usuari que està a la partida
+	 * @param t Tropa a fer l'efecte mirall
+	 */
 	public void actualitzaPartida(Tropa t) {
 		if (t.getIdUsuariInvoke() != clientUser.getIdUsuari()) {
 			//Modifiquem la posicio de la tropa i l'enviem a l'oponent
@@ -461,8 +454,6 @@ public class DedicatedServer extends Thread {
 
 				t.setIdPartida(inRoom);
 				t.setOn(true);
-
-
 
 
 				if (t.getWhichSprite().equals("BOMB")) {
@@ -505,6 +496,7 @@ public class DedicatedServer extends Thread {
 				t.setInitialX(t.getxPosition());
 				t.setInitialY(t.getyPosition());
 
+
 				Message messageResposta = new Message(t, "Tropa Answer");
 
 
@@ -515,11 +507,7 @@ public class DedicatedServer extends Thread {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
-
-
 			}
-
 		}
 	}
 }

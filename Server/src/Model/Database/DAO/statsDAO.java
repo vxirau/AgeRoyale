@@ -104,7 +104,7 @@ public class statsDAO {
      */
     //ACTUALITZR INFORMACIO
     public void updateStats(Stats stats) {
-        String query = "UPDATE AgeRoyale.stats SET AgeRoyale.stats.totalPartides = " + stats.getTotalPartides() + ", AgeRoyale.stats.totalVictories = " + stats.getTotalVictories() + ", AgeRoyale.stats.winrate = " + stats.getWinrate() + ", AgeRoyale.stats.avgDurationVictories = " + stats.getAvgDurationVictories() + " WHERE AgeRoyale.stats.idStat = " + stats.getIdStat() + ";";
+        String query = "UPDATE AgeRoyale.stats SET AgeRoyale.stats.totalPartides = " + stats.getTotalPartides() + ", AgeRoyale.stats.totalVictories = " + stats.getTotalVictories() + " WHERE AgeRoyale.stats.idStat = " + stats.getIdStat() + ";";
         DBConnector.getInstance().updateQuery(query);
     }
 

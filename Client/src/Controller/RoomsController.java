@@ -26,9 +26,6 @@ public class RoomsController {
 	private Usuari usuari;
 	private UserService uService;
 	private ArrayList<Partida> allGames;
-	//private static ArrayList<GameController> listGameC;
-	//private static ArrayList<TroopController> listTroopC;
-	//private static ArrayList<GameView> listGameView;
 	private MenuView menuView;
 	private MenuController menuController;
 	public Partida startGamePartida;
@@ -61,14 +58,6 @@ public class RoomsController {
 					DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 					LocalDateTime now = LocalDateTime.now();
 					Partida p = new Partida(m, dtf.format(now), privacitat, usuari.getNickName());
-					//startPartida amb el setPartida a 10
-					/*p.setIdPartida(10);
-					try {
-						startGame(0,1,p,null,false);
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
-					 */
 					Message mes = new Message(p, "roomCreate");
 					uService.sendPartida(mes);
 				}
@@ -135,25 +124,12 @@ public class RoomsController {
 		} catch (IOException rer) {
 			rer.printStackTrace();
 		}
-		GameController controller = new GameController(gView,uService,menuController, p, usuari);
-		//pillar tropes
+		GameController controller = new GameController(gView,uService,menuController, p, usuari, isPlayer);
 		uService.sendsGetTropes(new Message(null, "GetTropesStats"), controller);
 		controller.setId(p.getIdPartida());
 		gView.registerController(controller);
 		TroopController tcontrol = new TroopController(gView,uService);
-        gView.setTroopController(tcontrol);
-			//GameView finalGView = gView;
-
-		/*SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				finalGView.registerController(controller);
-				finalGView.setTroopController(tcontrol);
-
-				finalGView.setVisible(true);
-			}
-		});*/
-
+		gView.setTroopController(tcontrol);
 		gView.setVisible(true);
 		menuController.getView().setVisible(false);
 		return gView;
@@ -234,13 +210,6 @@ public class RoomsController {
 	 * @param p partida que ha premut l'usuari
 	* */
 	public void gameSelected(Partida p){
-		//startGame amb id 10
-		/*p.setIdPartida(10);
-		try {
-			startGame(0,1,p,null,false);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
 		ImageIcon imagen = new ImageIcon(this.getClass().getResource("/resources/escut.png"));
 		vista.setVisible(false);
 		Object[] options = {"Jugador", "Espectador"};
@@ -288,15 +257,6 @@ public class RoomsController {
 				menuController.getView().invokeAdjustViews(MenuView.WAITINROOM);
 				updateGameTable(p, missatge);
 
-				/*
-				WaitingRoomView waitingRoom = new WaitingRoomView(p, this.usuari);
-				roomControl = new WaitingController(total, this, p, waitingRoom, uService, this.usuari);
-				waitingRoom.setController(roomControl);
-				waitingRoom.initAll(false);
-				waitingRoom.setVisible(true);
-				RoomsController.setClientVisible(false);
-
-				 */
 			}
 		}else{
 			if(p.getEspectadors() == null){
@@ -316,15 +276,6 @@ public class RoomsController {
 			menuController.getWaitingController().updateGame(p);
 			menuController.getView().invokeAdjustViews(MenuView.WAITINROOM);
 			updateGameTable(p,"newSpectator");
-			/*
-			WaitingRoomView waitingRoom = new WaitingRoomView(p, this.usuari);
-			roomControl = new WaitingController(total, this,p, waitingRoom, uService, this.usuari);
-			waitingRoom.setController(roomControl);
-			waitingRoom.setVisible(true);
-			waitingRoom.initAll(false);
-			RoomsController.setClientVisible(false);
-
-			 */
 		}
 
 	}

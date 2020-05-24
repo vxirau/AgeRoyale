@@ -29,10 +29,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
     public static final int ROWS = 20;
     public static final int COLUMNS = 10;
     private static final int DECK_SPACE = 106;
-
-
-
-
     private volatile boolean gameIsRunning = false;
     private boolean gameHasFinished  = false;
     private GameController gameController;
@@ -133,7 +129,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
         ompleBandera(bufferedImages1, bufferedImages2);
         this.setVisible(true);
         this.setResizable(false);
-
+        //this.setTitle(gameController.getUsuari().getNickName());
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setSize(width, height);
         this.setLocationRelativeTo(null);
@@ -451,15 +447,26 @@ public class GameView extends JFrame implements Runnable, Serializable {
         }
     }
 
-
+    /**
+     * Avisa al usuari si ha guanyat o perdut la partida
+     * @param whichCastleDestroyed variable de tipus enter
+     * */
     public void finishGame(int whichCastleDestroyed){
+
         if(whichCastleDestroyed == 1){
             //Hem guanyat
             JOptionPane.showMessageDialog(this, "Felicitats! Has guanyat la partida!", "Victòria", JOptionPane.PLAIN_MESSAGE);
+            gameController.sendVictory();
         }else if(whichCastleDestroyed == 2){
             //Hem perdut
             JOptionPane.showMessageDialog(this, "Has perdut! Més sort a la pròxima!", "Derrota", JOptionPane.PLAIN_MESSAGE);
+            gameController.sendDefeat();
         }
+        this.gameIsRunning = false;
+
+        gameController.finishGame();
+
+
     }
 
     /**
@@ -470,6 +477,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
         this.addMouseMotionListener(gameController);
         this.addMouseListener(gameController);
         this.addWindowListener(gameController.windowListener);
+        //this.gameController = gameController;
         //this.addWindowListener(w);
     }
 
