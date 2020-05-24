@@ -6,6 +6,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+/**
+* Classe de vista principal. Igual que les demés hereda de JFrame perque volemq ue sigui una finestra i es comporti com a tal.
+* */
 public class MainView extends JFrame{
     private MenuView menuView;
     private JPanel jpMain;
@@ -18,6 +21,10 @@ public class MainView extends JFrame{
     private JLabel jlTropaMesUtilitzada;
     private MouseListener mouseClickBatlla;
 
+    /**
+    * Constructor de la classe
+     * @param menuView vista del menú, a la que s'adereix aquesta.
+    * */
     public MainView(MenuView menuView) {
         this.menuView = menuView;
 
@@ -175,85 +182,54 @@ public class MainView extends JFrame{
         jpMain.add(fondo);
     }
 
-    public MenuView getMenuView() {
-        return menuView;
-    }
-
-    public void setMenuView(MenuView menuView) {
-        this.menuView = menuView;
-    }
-
+    /**
+    * Retorna el JPanel principal, el que conté tota la vista
+     * @return jpMain variable de tipus JPanel que conté tots els elements gràfics
+    * */
     public JPanel getJpMain() {
         return jpMain;
     }
 
-    public void setJpMain(JPanel jpMain) {
-        this.jpMain = jpMain;
-    }
-
-    public JButton getJpMainTopUser() {
-        return jbMainTopUser;
-    }
-
-    public void setJpMainTopUser(JButton jbMainTopUser) {
-        this.jbMainTopUser = jbMainTopUser;
-    }
-
+    /**
+     * Retorna la barra de progrés de nivell
+     * @return jProgressBar variable de tipus JProgressBar
+     * */
     public JProgressBar getjProgressBar() {
         return jProgressBar;
     }
 
-    public void setjProgressBar(JProgressBar jProgressBar) {
-        this.jProgressBar = jProgressBar;
-    }
-
+    /**
+     * Retorna el JButton de nivell de la pantalla principal
+     * @return jbMainTopLvl variable de tipus JButton
+     * */
     public JButton getJbMainTopLvl() {
         return jbMainTopLvl;
     }
 
-    public void setJbMainTopLvl(JButton jbMainTopLvl) {
-        this.jbMainTopLvl = jbMainTopLvl;
-    }
-
+    /**
+     * Retorna el label de les victories del jugador
+     * @return jlVictories variable de tipus JLabel
+     * */
     public JLabel getJlVictories() {
         return jlVictories;
     }
 
-    public void setJlVictories(JLabel jlVictories) {
-        this.jlVictories = jlVictories;
-    }
-
+    /**
+     * Retorna el label del temps per victoria del jugador
+     * @return jlTempsXVictoria variable de tipus JLabel
+     * */
     public JLabel getJlTempsXVictoria() {
         return jlTempsXVictoria;
     }
 
-    public void setJlTempsXVictoria(JLabel jlTempsXVictoria) {
-        this.jlTempsXVictoria = jlTempsXVictoria;
-    }
-
+    /**
+     * Retorna el label amb el nom de la tropa més utilitzada per l'usuari
+     * @return jlTropaMesUtilitzada variable de tipus JLabel
+     * */
     public JLabel getJlTropaMesUtilitzada() {
         return jlTropaMesUtilitzada;
     }
 
-    public void setJlTropaMesUtilitzada(JLabel jlTropaMesUtilitzada) {
-        this.jlTropaMesUtilitzada = jlTropaMesUtilitzada;
-    }
-
-    public MouseListener getMouseClickBatlla() {
-        return mouseClickBatlla;
-    }
-
-    public void setMouseClickBatlla(MouseListener mouseClickBatlla) {
-        this.mouseClickBatlla = mouseClickBatlla;
-    }
-
-    public JButton getJbMainTopUser() {
-        return jbMainTopUser;
-    }
-
-    public void setJbMainTopUser(JButton jbMainTopUser) {
-        this.jbMainTopUser = jbMainTopUser;
-    }
 
 
 }

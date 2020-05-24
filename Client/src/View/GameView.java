@@ -348,7 +348,11 @@ public class GameView extends JFrame implements Runnable, Serializable {
         }
     }
 
-    //
+    /**
+    * Encarregada de carregar la imatge pertinent de la bandera
+     * @param b array de imatges carregades desde la memoria
+     * @param c array de imatges carregades desde la memoria
+    * */
     public void ompleBandera(BufferedImage[] b, BufferedImage[] c) {
         for (int i = 0; i < 10; i++) {
 
@@ -363,7 +367,9 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
     }
 
-
+    /**
+    * Funció obligatoria en implementar un runnable. És la funció propia del thread que representa la partida
+    * */
     @Override
     public void run() {
 
@@ -416,6 +422,10 @@ public class GameView extends JFrame implements Runnable, Serializable {
         }
     }
 
+    /**
+    * Registra els controlers de la vista.
+     * @param gameController variable de tipus GameController
+    * */
     public void registerController(GameController gameController){
         this.addMouseMotionListener(gameController);
         this.addMouseListener(gameController);
@@ -423,117 +433,209 @@ public class GameView extends JFrame implements Runnable, Serializable {
         //this.addWindowListener(w);
     }
 
+    /**
+    * Retorna la coordenada x de la posició del ratolí
+     * @return xMousePosition entern amb la posició al eix de les X del ratolí
+    * */
     public  int getxMousePosition() {
         return xMousePosition;
     }
 
+    /**
+    * Setter de la coordenada x del ratoli
+     * @param xMousePosition posició x a assignar
+    * */
     public  void setxMousePosition(int xMousePosition) {
         GameView.xMousePosition = xMousePosition;
     }
 
+    /**
+     * Retorna la coordenada 7 de la posició del ratolí
+     * @return yMousePosition entern amb la posició al eix de les Y del ratolí
+     * */
     public  int getyMousePosition() {
         return yMousePosition;
     }
 
+    /**
+     * Setter de la coordenada y del ratoli
+     * @param yMousePosition posició y a assignar
+     * */
     public  void setyMousePosition(int yMousePosition) {
         GameView.yMousePosition = yMousePosition;
     }
 
+    /**
+     * Actualitza els valors de la coordenada del ratolí
+     * @param yMousePosition posició y a assignar
+     * @param xMousePosition posició x a assignar
+     * @param mouseIsClicked booleà que indica si s'ha premut o no el ratolí
+     * */
     public void updateMouse(int xMousePosition, int yMousePosition, boolean mouseIsClicked){
         this.xMousePosition = xMousePosition;
         this.yMousePosition = yMousePosition;
         this.mouseIsClicked = mouseIsClicked;
     }
 
-
-
+    /**
+    * Getter del objecte gameMap de la classe
+     * @return gameMap variable de tipus GameMap
+    * */
     public GameMap getGameMap() {
         return gameMap;
     }
 
+    /**
+     * Setter del objecte gameMap de la classe
+     * @param gameMap variable de tipus GameMap
+     * */
     public void setGameMap(GameMap gameMap) {
         GameView.gameMap = gameMap;
     }
 
+    /**
+     * Getter de quina tropa esta a la partida
+     * @return whichTroop enter que indica quina tropa és
+     * */
     public int getWhichTroop() {
         return whichTroop;
     }
 
+    /**
+     * Setter de quina tropa esta a la partida
+     * @param whichTroop enter que indica quina tropa és
+     * */
     public void setWhichTroop(int whichTroop) {
         this.whichTroop = whichTroop;
     }
 
-
+    /**
+     * Setter de del controller de la partida
+     * @param gameController variable de tipus GameController
+     * */
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
 
     }
 
+    /**
+     * Setter de del controller de les tropes
+     * @param troopController variable de tipus TroopController
+     * */
     public void setTroopController(TroopController troopController) {
         this.troopController = troopController;
 
     }
 
-
-
+    /**
+     * Getter de les tropes que hi ha a la partida
+     * @return tropes llista amb les tropes de la partida
+     * */
     public CopyOnWriteArrayList<Tropa> getTropes() {
         return tropes;
     }
 
+    /**
+     * Setter de les tropes que hi ha a la partida
+     * @param tropes llista amb les tropes de la partida
+     * */
     public void setTropes(CopyOnWriteArrayList<Tropa> tropes) {
         this.tropes = tropes;
     }
 
+    /**
+     * Comprova si s'ha rebut o no la tropa
+     * @return rebut boolea que indicarà l'estat del missatge
+     * */
     public  boolean isRebut() {
         return rebut;
     }
 
+    /**
+     * Assigna el valor del booleà rebut al que reb per paràmetre
+     * @param rebut boolea que indicarà l'estat del missatge
+     * */
     public void setRebut(boolean rebut) {
         this.rebut = rebut;
     }
 
+    /**
+     * Comprova si el joc s'està executant o no
+     * @return gameIsRunning boolea que indicarà l'estat del joc
+     * */
     public static boolean isGameIsRunning() {
         return gameIsRunning;
     }
 
+    /**
+     * Assigna el valor de si el joc s'està executant o no
+     * @param gameIsRunning boolea que indicarà l'estat del joc
+     * */
     public static void setGameIsRunning(boolean gameIsRunning) {
         GameView.gameIsRunning = gameIsRunning;
     }
 
-    private void updateServer(){
-
-
-    }
-
+    /**
+    * Comprova si el send ha estat verificat
+     * @return sendcheck booleà que indicarà si s'ha enviat correctament
+    * */
     public static boolean isSendcheck() {
         return sendcheck;
     }
 
+    /**
+     * Assigna el valor del sendcheck al que reb per valor
+     * @param sendcheck booleà que indicarà si s'ha enviat correctament
+     * */
     public static void setSendcheck(boolean sendcheck) {
         GameView.sendcheck = sendcheck;
     }
 
 
+    /**
+     * Retornarà el flag de la partida
+     * @return flag enter que ens donarà el flag
+     * */
     public int getFlag() {
         return flag;
     }
 
+    /**
+     * Assigna el flag de la partida
+     * @param flag enter que ens donarà el flag
+     * */
     public void setFlag(int flag) {
         this.flag = flag;
     }
 
+    /**
+     * retorna la llista de tropes actualitzades
+     * @return updates llista de tropes
+     * */
     public CopyOnWriteArrayList<TroopUpdate> getUpdates() {
         return updates;
     }
 
+    /**
+     * Assigna la llista de tropes actualitzades
+     * @param updates llista de tropes
+     * */
     public void setUpdates(CopyOnWriteArrayList<TroopUpdate> updates) {
         this.updates = updates;
     }
 
+    /**
+     * Retorna si s'ha eliminat o no
+     * @return deleted booleà que indicara aquesta condició
+     * */
     public static boolean isDeleted() {
         return deleted;
     }
 
+    /**
+     * Assigna si s'ha eliminat o no
+     * @param deleted booleà que indicara aquesta condició
+     * */
     public static void setDeleted(boolean deleted) {
         GameView.deleted = deleted;
     }
