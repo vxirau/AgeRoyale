@@ -10,22 +10,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 
+/**
+ * Classe que correspon a la connexió amb la base de dades
+ */
 public class DBConnector {
-    private static String userName;
-    private static String password;
-    private static String db = "ageroyale";
 
     private String url = NetworkConfiguration.staticDPip;
     public Connection conn;
     private static Statement s;
     private static DBConnector instance;
 
+    /**
+     * Contructor de la classe
+     */
     private DBConnector() {
-        DBConnector.userName = NetworkConfiguration.staticDBUser;
-        DBConnector.password = NetworkConfiguration.staticDBPass;
         this.instance = this;
     }
 
+    /**
+     * C
+     * @return
+     */
     public static DBConnector getInstance(){
         if(instance == null){
             instance = new DBConnector();
@@ -35,6 +40,9 @@ public class DBConnector {
     }
 
 
+    /**
+     * Es connecta amb la base de dades de mySQl
+     */
     public void connect() {
         try {
             Class.forName("com.mysql.jdbc.Connection");
@@ -58,6 +66,10 @@ public class DBConnector {
 
     }
 
+    /**
+     * Query que serveix per a inserir dades en una taula
+     * @param query query a realitzar
+     */
     public void insertQuery(String query){
         try {
             s =(Statement) conn.createStatement();
@@ -72,6 +84,10 @@ public class DBConnector {
         }
     }
 
+    /**
+     * realitza la query d'inserir
+     * @param preparedStatement serveix per a "precompila" la query
+     */
     public void insertQuery(PreparedStatement preparedStatement){
         try {
             System.out.println(preparedStatement.toString());
@@ -85,6 +101,10 @@ public class DBConnector {
         }
     }
 
+    /**
+     * Query que actualitza una taula
+     * @param query sentència de la query
+     */
     public void updateQuery(String query){
         try {
             s =(Statement) conn.createStatement();
@@ -99,6 +119,10 @@ public class DBConnector {
         }
     }
 
+    /**
+     * Query que elimina alguna dada d'una taula
+     * @param query sentència de la query
+     */
     public void deleteQuery(String query){
         try {
             s =(Statement) conn.createStatement();
@@ -114,6 +138,11 @@ public class DBConnector {
 
     }
 
+    /**
+     * Query que filtra informació d'una taula
+     * @param query sentència de la query
+     * @return retorna el resultat de la búsqueda de la query
+     */
     public ResultSet selectQuery(String query){
         ResultSet rs = null;
         try {
@@ -130,6 +159,9 @@ public class DBConnector {
         return rs;
     }
 
+    /**
+     * Es desconnecta de la base de dades
+     */
     public void disconnect(){
         try {
             conn.close();

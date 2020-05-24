@@ -8,25 +8,25 @@ import src.Utils;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.util.ArrayList;
 
+/**
+ * Vista de la sala d'espera de la partida. Hereda de JFrame ja que volem que sigui una finestra.
+ */
 public class WaitingRoomView extends JFrame {
     private JButton start;
     private Partida p;
     private Usuari usr;
     private JPanel main;
     private WaitingController waitingController;
-    private JScrollPane players;
-    private JScrollPane spectators;
 
-    //Publica, esperar a que es connecti algú i quan es connecti començar partida
-
-    //Privada, convidar amics en linia (amics entren si accepten)
-
+    /**
+     * Constructor de la classe
+     * @param p partida a la que correspon la sala d'espera
+     * @param usr usuari que ha iniciat sessió
+     * @param waitingController controlador assignat a aquesta vista
+     */
     public WaitingRoomView(Partida p, Usuari usr, WaitingController waitingController) {
         this.p = p;
         this.usr = usr;
@@ -35,11 +35,18 @@ public class WaitingRoomView extends JFrame {
         if (p != null) initAll();
     }
 
+    /**
+     * S'assigna la partida
+     * @param partida partida a la que es farà la sala d'espera
+     */
     public void setPartida(Partida partida){
         this.p = partida;
         initAll();
     }
 
+    /**
+     * Inicialitza la pantalla gràfica de la sala d'espera amb els components gràfics corresponents
+     */
     public void initAll(){
         this.removeAll();
 
@@ -75,7 +82,7 @@ public class WaitingRoomView extends JFrame {
         jName.setFont(new Font("Herculanum", Font.BOLD, 25));
         main.add(jName);
 
-        players = new JScrollPane();
+        JScrollPane players = new JScrollPane();
         players.setEnabled(true);
         players.getViewport().setOpaque(false);
         players.setBounds(30,100,400,100);
@@ -104,7 +111,7 @@ public class WaitingRoomView extends JFrame {
         espectadorsText.setFont(new Font("Herculanum", Font.BOLD, 15));
         main.add(espectadorsText);
 
-        spectators = new JScrollPane();
+        JScrollPane spectators = new JScrollPane();
         spectators.setOpaque(false);
         spectators.setEnabled(true);
         spectators.getViewport().setOpaque(false);
@@ -220,10 +227,19 @@ public class WaitingRoomView extends JFrame {
 
     }
 
+    /**
+     * S'assigna el controlador a la vista
+     * @param controller controlador que se li assigna
+     */
     public void setController(WaitingController controller){
         start.addActionListener(controller);
     }
-    
+
+    /**
+     * Genera el Jpanel de un amic
+     * @param u usuari corresponent a amic
+     * @return amic retorna el JPanel generat
+     */
     public JPanel createFriend(Usuari u){
         JPanel amic = new JPanel(new GridLayout(1, 1));
         amic.setBackground(Color.decode("#FFDC60"));
@@ -244,6 +260,10 @@ public class WaitingRoomView extends JFrame {
         return amic;
     }
 
+    /**
+     * Genera un JPanel que representa una separació entre els JPanels d'amics
+     * @return
+     */
     public JPanel makeSeparator(){
         JPanel amic = new JPanel();
         amic.setPreferredSize(new Dimension(360,5));
@@ -254,6 +274,10 @@ public class WaitingRoomView extends JFrame {
         return amic;
     }
 
+    /**
+     * Retorna el Jpanel pare
+     * @return main retorna el pare JPanel
+     */
     public JPanel getJPanelPare() {
         return main;
     }

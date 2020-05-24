@@ -7,8 +7,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Classe que representa la taula de tropes de la base de dades
+ */
 public class tropesDAO {
 
+    /**
+     * Retorna totes les tropes de la base de dades
+     * @return tropas llista de tropes
+     */
     //OBTENIR
     public ArrayList<Tropa> getAllTropes (){
         ArrayList<Tropa> tropas = new ArrayList<>();
@@ -31,6 +38,11 @@ public class tropesDAO {
         return tropas;
     }
 
+    /**
+     * Retorna les tropes d'un usuari, buscant-lo per l'id
+     * @param idUser id del usuari
+     * @return tropas llista de tropes corresponent amb l'id del usuari
+     */
     public ArrayList<Tropa> getTropesFromUserId (Integer idUser) {
         ArrayList<Tropa> tropas = new ArrayList<>();
         String query = "SELECT tr.* FROM AgeRoyale.tropa as tr, AgeRoyale.usuaritropa as ustr WHERE ustr.idUser = " + idUser + " and ustr.idTropa = tr.idTropa;";
@@ -50,75 +62,5 @@ public class tropesDAO {
             e.printStackTrace();
         }
         return tropas;
-    }
-
-    public Tropa getTropaFromIdTropa (int idTropa){
-        Tropa tropa = new Tropa();
-        String query = "SELECT tr.* FROM AgeRoyale.tropa as tr WHERE tr.idTropa = " + idTropa + ";";
-        ResultSet rs = DBConnector.getInstance().selectQuery(query);
-        try{
-            if (rs.next()) {
-                tropa.setIdTropa(rs.getInt("idTropa"));
-                tropa.setAtac(rs.getInt("atac"));
-                tropa.setVida(rs.getInt("vida"));
-                tropa.setCost(rs.getInt("cost"));
-                tropa.setOfensiva(rs.getBoolean("tipus"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return tropa;
-    }
-
-    public String getTropaName (int idTropa){
-        String query = "SELECT tr.name FROM AgeRoyale.tropa as tr WHERE tr.idTropa = " + idTropa + ";";
-        ResultSet rs = DBConnector.getInstance().selectQuery(query);
-        try{
-            if (rs.next()) {
-                return rs.getString("name");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    //ACTUALITZAR
-    public void updateTropa (int idTropa, int newAtac, int newVida, int newCost, int newTipus){
-        String query = "UPDATE AgeRoyale.tropa SET AgeRoyale.tropa.atac = " + newAtac +", AgeRoyale.tropa.vida = " + newVida + ", AgeRoyale.tropa.cost = " + newCost + ", AgeRoyale.tropa.tipus = " + newTipus + " WHERE AgeRoyale.tropa.idTropa = " + idTropa + ";";
-        DBConnector.getInstance().updateQuery(query);
-    }
-
-    public void updateTropa (Tropa tropa){
-        String query = "UPDATE AgeRoyale.tropa SET AgeRoyale.tropa.atac = " + tropa.getAtac() +", AgeRoyale.tropa.vida = " + tropa.getVida() + ", AgeRoyale.tropa.cost = " + tropa.getCost() + ", AgeRoyale.tropa.tipus = " + tropa.isOfensiva() + " WHERE AgeRoyale.tropa.idTropa = " + tropa.getIdTropa() + ";";
-        DBConnector.getInstance().updateQuery(query);
-    }
-
-    //AFEGIR
-    public void addTropa (int dany, int vida, int cost, boolean atac){
-        String query = "INSERT INTO AgeRoyale.tropa (atac, vida, cost, tipus) VALUE (" + dany + ", " + vida + ", " + cost + ", " + atac +");";
-        DBConnector.getInstance().insertQuery(query);
-    }
-
-    public void addTropa (Tropa tropa){
-        String query = "INSERT INTO AgeRoyale.tropa (atac, vida, cost, tipus) VALUE (" + tropa.getAtac() + ", " + tropa.getVida() + ", " + tropa.getCost() + ", " + tropa.isOfensiva() +");";
-        DBConnector.getInstance().insertQuery(query);
-    }
-
-    //BORRAR
-    public void removeTropa (int idTropa){
-        usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
-
-        usuariTropaDAO.onRemoveTropa(idTropa);
-        String query = "DELETE FROM AgeRoyale.tropa WHERE idTropa = " + idTropa + ";";
-        DBConnector.getInstance().deleteQuery(query);
-    }
-
-    public void removeTropa (Tropa tropa){
-        usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
-
-        usuariTropaDAO.onRemoveTropa(tropa);
-        String query = "DELETE FROM AgeRoyale.tropa WHERE idTropa = " + tropa.getIdTropa() + ";";
-        DBConnector.getInstance().deleteQuery(query);
     }
 }

@@ -5,14 +5,27 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serializable;
 
+/**
+* Classe destinada a la generació del mapa. Hereda de GameMap pel que contará també amb totes les seves funcions i implementa serialitzable per poder-se enviar al servidor quan sigui necessari
+* */
 public class ImageMap extends GameMap implements Serializable {
 
     private int[] pixelArray;
 
+    /**
+    * Constructor de la classe
+     * @param path directori de la imatge
+     * @throws IOException en cas que la imatge no es pugui trobar
+    * */
     public ImageMap(String path) throws IOException {
         super(path);
     }
-    //Metode per llegir el mapa creat amb pixels, mitjancant el qual introduim els valors dels colors del mapa a pixelArray
+
+    /**
+    * Metode per llegir el mapa creat amb pixels, mitjancant el qual introduim els valors dels colors del mapa a pixelArray
+     * @param path directori de la imatge
+     * @throws IOException en cas que la imatge no pugui trobar-se
+    * */
     public void loadMap(String path) throws IOException {
         BufferedImage image = ImageIO.read(ImageMap.class.getResource(path));
 
@@ -25,7 +38,9 @@ public class ImageMap extends GameMap implements Serializable {
         image.getRGB(0, 0, mapWidth, mapHeight, pixelArray,0,  mapWidth);
     }
 
-    //Metode per crear el mapa. Llegim els colors guardats a pixelArray, i en funcio del color que trobi el pixel, carregara l'sprite pertinent al tile
+    /**
+    * Metode per crear el mapa. Llegim els colors guardats a pixelArray, i en funcio del color que trobi el pixel, carregara l'sprite pertinent al tile
+    * */
     public void generateGameMap(){
         for(int i = 0; i < pixelArray.length; i++){
             //Obtenim el color guardat a la posicio i de l'array de pixels

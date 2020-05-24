@@ -3,13 +3,12 @@ package src.Controller;
 import src.Edifici;
 import src.Model.Network.DedicatedServer;
 import src.Tropa;
-import src.View.GameView;
-import src.View.Sprite;
-import src.View.Tile;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+/**
+ * Aquesta classe és el controller destinat a la vista de les tropes
+ */
 public class TroopSController {
     private static Float minDistance = Float.MAX_VALUE;
     private static Tropa troop;
@@ -26,11 +25,22 @@ public class TroopSController {
     private static final int RIGHT_WATER_PADDING = 260;
     private static final int HALF_MAP = 320;
 
+    /**
+     * Constructor de la classe
+     */
     public TroopSController(){
         edificiDef = new ArrayList<>();
         ompleEdifici();
     }
 
+    /**
+     * Funció que mou la tropa ofensiva
+     * @param tropa tropa a moure
+     * @param xVariation variació de la x
+     * @param yVariation variació de la y
+     * @param cont variable auxiliar que indica quin moviment ha de fer el personatge
+     * @return tropa tropa moguda
+     */
     public synchronized Tropa moveOffensiveTroop(Tropa tropa, float xVariation, float yVariation, int cont) {
         //Es mou cap a la dreta (east)
         float xTroop;
@@ -412,7 +422,7 @@ public class TroopSController {
                         if( edificiDef.get(5).getEntityLife() > 0){
                             tropa.setxVariation(0);
                             edificiDef.get(5).setEntityLife(edificiDef.get(5).getEntityLife() - tropa.getAtac());
-                            System.out.println("LE ESTAS PARTIENDO EL CULO AL CASTILLO:" + edificiDef.get(5).getEntityLife());
+
 
                         } else {
 
@@ -456,7 +466,7 @@ public class TroopSController {
                         if( edificiDef.get(5).getEntityLife() > 0){
                             tropa.setxVariation(0);
                             edificiDef.get(5).setEntityLife(edificiDef.get(5).getEntityLife() - tropa.getAtac());
-                            System.out.println("LE ESTAS PARTIENDO EL CULO AL CASTILLO:" + edificiDef.get(5).getEntityLife());
+
 
                         } else {
 
@@ -486,6 +496,10 @@ public class TroopSController {
         }
         return collision;
     }
+
+    /**
+     * Funció que omple el mapa amb els edificis corresponents
+     */
     public void ompleEdifici() {
 
         for (int i = 0; i < 6; i++) {
@@ -548,10 +562,18 @@ public class TroopSController {
         }
     }
 
+    /**
+     * Retorna els edificis del mapa
+     * @return edificiDef llista d'edificis del mapa
+     */
     public  ArrayList<Edifici> getEdificiDef() {
         return edificiDef;
     }
 
+    /**
+     * Assigna els edificis del mapa
+     * @return edificiDef llista d'edificis del mapa
+     */
     public void setEdificiDef(ArrayList<Edifici> edificiDef) {
         this.edificiDef = edificiDef;
     }

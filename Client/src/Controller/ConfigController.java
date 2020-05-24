@@ -7,6 +7,11 @@ import src.View.ConfigView;
 
 import javax.swing.*;
 
+
+/**
+*Aquesta classe és el controller destinat a la vista de configuració.
+* Aquesta vista permet al usuari canviar alguns aspectes de la seva configuració a la base de dades pel que aquesta classe realitza les crides necessaries
+* */
 public class ConfigController {
 
     private ConfigView configView;
@@ -22,22 +27,40 @@ public class ConfigController {
     private int password = ConfigController.NO_CANVI;
     private boolean flag = false;
 
+
+    /**
+    * Primer constructor
+    * @param usr  usuari que està emprant la aplicació
+    * @param userService  variable que permet la connexió del client amb el servidor
+    * */
     public ConfigController(Usuari usr, UserService userService) {
         this.usuari = usr;
         this.uService = userService;
     }
 
+
+    /**
+    * Assigna la vista al controller.
+    * @param configView JFrame que conté la informació de configuració.
+    * */
     public void setConfigView(ConfigView configView) {
         this.configView = configView;
         initInfo();
     }
 
+
+     /**
+     * Inicialitza la vista amb els atributs del usuari que ha iniciat sessió.
+     * */
     private void initInfo() {
         configView.getJtfConfigNickname().setText(usuari.getNickName());
         configView.getJtfConfigCorreu().setText(usuari.getEmail());
         configView.getJtfConfigContrasenya().setText(usuari.getPassword());
     }
 
+    /**
+     * Encarregada de realitzar les accions pertinents quan es prem el botó de guardar configuracions.
+     * */
     public void saveBtnClicked() {
         JButton jButtonSave = configView.getJbConfigSave();
 
@@ -83,6 +106,10 @@ public class ConfigController {
         }
     }
 
+
+    /**
+    * Resposta del servidor quan el canvi s'ha realitzat correctament, mostra missatges de informació al client
+    * */
     public void canviSuccessful(){
         this.usuari.setNickName(configView.getJtfConfigNickname().getText());
         this.usuari.setEmail(configView.getJtfConfigCorreu().getText());
@@ -99,6 +126,10 @@ public class ConfigController {
         password = ConfigController.NO_CANVI;
     }
 
+
+    /**
+    * Resposta del servidor quan el canvi no s'ha realitzat correctament, mostra el smissatge de informació al client
+    * */
     public void canviNotSuccessful(){
         configView.getJtfConfigNickname().setText(usuari.getNickName());
         configView.getJtfConfigCorreu().setText(usuari.getEmail());
@@ -116,12 +147,21 @@ public class ConfigController {
         password = ConfigController.NO_CANVI;
     }
 
+
+    /**
+    * Reseteja variables de control de la classe
+    * */
     private void resetFlags(){
         nickname = ConfigController.NO_CANVI;
         password = ConfigController.NO_CANVI;
         flag = false;
     }
 
+
+    /**
+    * Assigna el obejcte usuari de la classe amb el nou objecte.
+     * @param usuari Objecte que conté la nova informació del usuari enviat pel servidor.
+    * */
     public void setUsuari(Usuari usuari) {
         this.usuari = usuari;
 

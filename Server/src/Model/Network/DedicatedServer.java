@@ -10,7 +10,6 @@ import src.Partida;
 import src.Tropa;
 import src.Usuari;
 import src.Model.Database.DAO.*;
-import src.View.Sprite;
 import src.View.ViewServer;
 
 import java.io.*;
@@ -30,6 +29,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * Classe que representa un servidor dedicat per cada client. Hereda de thread ja que s'executa paralelament a l'execució del programa per poder-se fer servir en qualsevol moment
+ */
 public class DedicatedServer extends Thread {
 
 	private boolean isOn;
@@ -39,7 +41,7 @@ public class DedicatedServer extends Thread {
 	private ObjectOutputStream objectOut;
 	private CopyOnWriteArrayList<DedicatedServer> clients;
 	private ViewServer vista;
-	public Integer inRoom = null;
+	private Integer inRoom = null;
 	private TroopSController troopSController;
 	private Usuari clientUser;
 	private Server server;
@@ -51,7 +53,14 @@ public class DedicatedServer extends Thread {
 	private static CopyOnWriteArrayList<Tropa> deleted;
 	private static CopyOnWriteArrayList<Tropa> full;
 
-	public DedicatedServer(Socket sClient, ViewServer vista, CopyOnWriteArrayList<DedicatedServer> clients, Server server) throws IOException  {
+	/**
+	 * Contructor de la classe
+	 * @param sClient client amb el que s'estableix la connexió
+	 * @param clients clients connectats al servidor
+	 * @param server servidor
+	 * @throws IOException en cas que hi hagués algun error retorna aquesta excepció.
+	 */
+	public DedicatedServer(Socket sClient, CopyOnWriteArrayList<DedicatedServer> clients, Server server) throws IOException {
 		this.isOn = false;
 		this.sClient = sClient;
 		this.vista = vista;
@@ -64,18 +73,27 @@ public class DedicatedServer extends Thread {
 
 	}
 
+	/**
+	 * S'inicialitza la comunicació entre servidor i client
+	 */
 	public void startDedicatedServer() {
 		// iniciem el servidor dedicat
 		isOn = true;
 		this.start();
 	}
 
+	/**
+	 * S'atura la connexió entre servidor i client
+	 */
 	public void stopDedicatedServer() {
 		// aturem el servidor dedicat
 		this.isOn = false;
 		this.interrupt();
 	}
 
+	/**
+	 * El servidor rep els missatges del client corresponent i retorna una resposta
+	 */
 	public void run() {
 		String in;
 		String[] aux;
@@ -84,7 +102,6 @@ public class DedicatedServer extends Thread {
 			while (isOn) {
 
 				Message m = (Message) dataInput.readObject();
-
 				if (m.getType().equals("register")) {
 					Usuari u = (Usuari) m.getObject();
 					System.out.println(u.toString());
@@ -350,16 +367,27 @@ public class DedicatedServer extends Thread {
 			clients.remove(this);
 			// invoquem el metode del servidor que mostra els servidors dedicats actuals
 			server.showClients();
+
 		}
 
 	}
 
+	/**
+	 * Converteix una data de tipus LocalDate a Date
+	 * @param dateToConvert data a convertir de tipus LocalDate
+	 * @return dateToConvert retorna la data de tipus Date
+	 */
 	public Date convertToDateViaInstant(LocalDate dateToConvert) {
 		return java.util.Date.from(dateToConvert.atStartOfDay()
 				.atZone(ZoneId.systemDefault())
 				.toInstant());
 	}
 
+	/**
+	 * Missatges que envia el client al servidor, i el servidor respon. Són missatges privats perquè són els encarregats de dur a terme les broadcast.
+	 * @param message missatge rebut per part del client
+	 * @throws IOException en cas que hi hagués algun error retorna aquesta excepció.
+	 */
 	public void privateMessage(String message) throws IOException {
 
 		if (message.equals("Friends") && this.clientUser != null) {
@@ -382,7 +410,10 @@ public class DedicatedServer extends Thread {
 		}
 	}
 
-
+	/**
+	 * El servidor rep un missatge que correspon a les invitacions per part d'un client a un altre
+	 * @param invite invitació corresponent
+	 */
 	public void inviteMessage(Invite invite) {
 		if (clientUser != null && clientUser.getIdUsuari() == invite.getDesti().getIdUsuari()) {
 			try {
@@ -400,6 +431,10 @@ public class DedicatedServer extends Thread {
 		return this.clientUser;
 	}
 
+	/**
+	 * El servidor rep un missatge per part del clinet de inicialitzar la partida, i el servidor respon
+	 * @param partida Partida a iniciar
+	 */
 	public void startGameMessage(Partida partida) {
 
 		if (clientUser != null && inRoom != null && partida.getIdPartida() == inRoom && (partida.getJugadors().get(0).getIdUsuari() == clientUser.getIdUsuari() || partida.getJugadors().get(1).getIdUsuari() == clientUser.getIdUsuari())) {

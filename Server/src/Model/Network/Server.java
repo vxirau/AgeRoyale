@@ -10,6 +10,9 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * Classe encarregada de rebre les connexions de tots els clients. Hereda de thread ja que s'executa paralelament a l'execució del programa per poder-se fer servir en qualsevol moment
+ */
 public class Server extends Thread {
 
 	private boolean isOn;
@@ -32,7 +35,10 @@ public class Server extends Thread {
 	// tasques dactualitzacio de la vista al controlador
 	private ViewServer view;
 
-
+	/**
+	 * Constructor de la classe
+	 * @param vista pantalla gràfica del servidor
+	 */
 	public Server(ViewServer vista) {
 		try {
 			this.isOn = false;
@@ -44,12 +50,18 @@ public class Server extends Thread {
 		}
 	}
 
+	/**
+	 * Inicialitza el servidor
+	 */
 	public void startServer() {
 		// iniciem el thread del servidor
 		isOn = true;
 		this.start();
 	}
 
+	/**
+	 * Para l'execució del servidor
+	 */
 	public void stopServer() {
 		// aturem el thread del servidor
 		System.out.println("***** STOP *****");
@@ -57,10 +69,16 @@ public class Server extends Thread {
 		this.interrupt();
 	}
 
+	/**
+	 * Mostra els clients que han establert connexió amb el servidor
+	 */
 	public void showClients() {
 		System.out.println("***** SERVER ***** (" + dServers.size() +" clients / dedicated servers running)");
 	}
 
+	/**
+	 * El servidor accepta les peticions dels clients
+	 */
 	public void run()  {
 		while (isOn) {
 			try {
@@ -69,7 +87,7 @@ public class Server extends Thread {
 				Socket sClient = sSocket.accept();
 				// creem un nou servidor dedicat per atendre les
 				// peticions del client
-				DedicatedServer pwClient = new DedicatedServer(sClient, view, dServers, this);
+				DedicatedServer pwClient = new DedicatedServer(sClient, dServers, this);
 				dServers.add(pwClient);
 				// engegem el servidor dedicat
 				pwClient.startDedicatedServer();
@@ -85,6 +103,9 @@ public class Server extends Thread {
 		}
 	}
 
+	/**
+	 * Realitza un broadcast a tots els clients, per tal de que tots tinguin la mateix infomació (Waiting room, friends, running games)
+	 */
     public void broadcastClients() {
 		for (DedicatedServer dServer : dServers) {
 			try {
@@ -98,6 +119,10 @@ public class Server extends Thread {
 		}
     }
 
+	/**
+	 * realitza un broadcast de les invitacions, per tal de que la invitació arribi al client destí i al origen
+	 * @param invite invitació per part d'un client a un altre
+	 */
 	public void broadcastInvite(Invite invite) {
 		for (DedicatedServer dServer : dServers) {
 			dServer.inviteMessage(invite);
@@ -110,16 +135,28 @@ public class Server extends Thread {
 			}
 		}
 	}
+	/**
+	 * Elimina un dedicatedServer, la connexió entre un client i el server
+	 * @param dedicatedServer
+	 */
 	public void removeDedicated(DedicatedServer dedicatedServer) {
 		dServers.remove(dedicatedServer);
 	}
 
+	/**
+	 * Realitza un broadcast del començament del joc, per tal de que s'actualitzi en tots els clients
+	 * @param partida partida que s'està jugant
+	 */
 	public void broadcastStartGame(Partida partida) {
 		for (DedicatedServer dServer : dServers) {
 			dServer.startGameMessage(partida);
 		}
 	}
 
+	/**
+	 * Indica si el servidor està encès
+	 * @return
+	 */
 	public boolean isOn() {
 		return isOn;
 	}

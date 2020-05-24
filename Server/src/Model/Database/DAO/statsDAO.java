@@ -8,7 +8,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Classe que representa les estadístiques de l'usuari
+ */
 public class statsDAO {
+
+    /**
+     * Retorna les estadistiques corresponents a un id
+     * @param idStat id de les estadistiques
+     * @return stat retorna les estadistiques corresponents
+     */
     //OBTENIR INFORMACIO
     public Stats getStatsFromStatsId(int idStat) {
         Stats stat = new Stats();
@@ -31,6 +40,10 @@ public class statsDAO {
         return stat;
     }
 
+    /**
+     * Retorna el top d'usuaris
+     * @return topUsers retorna la llista dels usuaris top
+     */
     public ArrayList<Usuari> getTopUsers(){
         ArrayList<Usuari> topUsers = new ArrayList<>();
 
@@ -67,6 +80,11 @@ public class statsDAO {
         return topUsers;
     }
 
+    /**
+     * Retorna la tropa més utilitzada
+     * @param idStat indica el id de la estadistica
+     * @return String retorna la tropa més usada
+     */
     public String getMostUsedTroop (int idStat){
         String query = "SELECT CASE GREATEST(Skeleton, Goblin, Wizard, Bomb) WHEN Skeleton THEN 'Skeleton' WHEN Goblin THEN 'Goblin' WHEN Wizard THEN 'Wizard' WHEN Bomb THEN 'Bomb' END AS 'TROPA' FROM AgeRoyale.stats as st WHERE st.idStat = " + idStat +" ;";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
@@ -79,38 +97,22 @@ public class statsDAO {
         }
         return null;
     }
-    public Stats getStatsFromUserId(int idUser) {
-        Stats stat = new Stats();
-        String query = "SELECT st.* FROM AgeRoyale.stats as st, AgeRoyale.usuari as us WHERE us.idUser = " + idUser + " and us.idStats = st.idStat;";
-        ResultSet rs = DBConnector.getInstance().selectQuery(query);
-        try{
-            if (rs.next()){
-                stat.setIdStat(rs.getInt("idStat"));
-                stat.setTotalPartides(rs.getInt("totalPartides"));
-                stat.setTotalVictories(rs.getInt("totalVictories"));
-                stat.setWinrate(rs.getFloat("winrate"));
-                stat.setAvgDurationVictories(rs.getFloat("avgDurationVictories"));
-                stat.setTropaMesUtilitzada(getMostUsedTroop(stat.getIdStat()));
-            } else {
-                stat = null;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return stat;
-    }
 
+    /**
+     * Actualitza les estadistqiues
+     * @param stats estadistiques
+     */
     //ACTUALITZR INFORMACIO
     public void updateStats(Stats stats) {
         String query = "UPDATE AgeRoyale.stats SET AgeRoyale.stats.totalPartides = " + stats.getTotalPartides() + ", AgeRoyale.stats.totalVictories = " + stats.getTotalVictories() + ", AgeRoyale.stats.winrate = " + stats.getWinrate() + ", AgeRoyale.stats.avgDurationVictories = " + stats.getAvgDurationVictories() + " WHERE AgeRoyale.stats.idStat = " + stats.getIdStat() + ";";
         DBConnector.getInstance().updateQuery(query);
     }
 
-    public void updateStats(int idStat, int totalPartides, int totalVictories, float winrate, int avgDurationVic) {
-        String query = "UPDATE AgeRoyale.stats SET AgeRoyale.stats.totalPartides = " + totalPartides + ", AgeRoyale.stats.totalVictories = " + totalVictories + ", AgeRoyale.stats.winrate = " + winrate + ", AgeRoyale.stats.avgDurationVictories = " + avgDurationVic + " WHERE AgeRoyale.stats.idStat = " + idStat + ";";
-        DBConnector.getInstance().updateQuery(query);
-    }
-
+    /**
+     * Actualiatza la tropa més usada per part de l'usuari
+     * @param idUsuari id de l'usuari
+     * @param tropa tropa més usada
+     */
     public void updateUsedTroop(int idUsuari, String tropa){
         int count = 0;
         String queryGet = "SELECT st." + tropa + " FROM AgeRoyale.stats as st, AgeRoyale.usuari as us WHERE us.idUser = " + idUsuari + " and us.idStats = st.idStat;";
@@ -128,43 +130,40 @@ public class statsDAO {
         DBConnector.getInstance().updateQuery(query);
     }
 
+    /**
+     * Afegeix estadistiques (victories, derrotes, etc)
+     * @param stat representa les estadistques
+     */
     //AFEGIR INFORMACIO
     public void addStats (Stats stat) {
         String query = "INSERT INTO AgeRoyale.stats (idStat, totalPartides, totalVictories, winrate, avgDurationVictories) VALUE (" + stat.getIdStat() + ", " + stat.getTotalPartides() + ", " + stat.getTotalVictories() + ", " + stat.getWinrate() + ", " + stat.getAvgDurationVictories() + ");";
         DBConnector.getInstance().insertQuery(query);
     }
 
-    public void addStats (int idStat, int totalPartides, int totalVictories, float winrate, int avgDurationVic) {
-        String query = "INSERT INTO AgeRoyale.stats (idStat, totalPartides, totalVictories, winrate, avgDurationVictories) VALUE (" + idStat + ", " + totalPartides + ", " + totalVictories + ", " + winrate + ", " + avgDurationVic + ");";
-        DBConnector.getInstance().insertQuery(query);
-    }
-
+    /**
+     * Eliminar informació de l'usuari (estadistiques)
+     * @param usuari usuari a la que s'actualitza la informació
+     */
     //BORRAR INFORMACIO
-    public void removeStats (Stats stats){
-        String query = "DELETE FROM AgeRoyale.stats WHERE idStat = " + stats.getIdStat() + ";";
-        DBConnector.getInstance().deleteQuery(query);
-    }
-
-    public void removeStats (int idStats){
-        String query = "DELETE FROM AgeRoyale.stats WHERE idStat = " + idStats + ";";
-        DBConnector.getInstance().deleteQuery(query);
-    }
-
     public void removeStats (Usuari usuari){
         String query = "DELETE FROM AgeRoyale.stats where AgeRoyale.usuari.idUser = " + usuari.getIdUsuari() + " AND AgeRoyale.usuari.idStats = AgeRoyale.stats.idStat;";
         DBConnector.getInstance().deleteQuery(query);
     }
 
+    /**
+     * Es reseteja la informació
+     * @param idStats id de les estadistiques
+     */
     //REINICIAR STATS
-    public void resetStats (Stats stats) {
-        String query = "UPDATE AgeRoyale.stats SET AgeRoyale.stats.totalPartides = 0, AgeRoyale.stats.totalVictories = 0, AgeRoyale.stats.winrate = 0, AgeRoyale.stats.avgDurationVictories = 0 WHERE AgeRoyale.stats.idStat = " + stats.getIdStat() + ";";
-        DBConnector.getInstance().updateQuery(query);
-    }
     public void resetStats (int idStats) {
         String query = "UPDATE AgeRoyale.stats SET AgeRoyale.stats.totalPartides = 0, AgeRoyale.stats.totalVictories = 0, AgeRoyale.stats.winrate = 0, AgeRoyale.stats.avgDurationVictories = 0 WHERE AgeRoyale.stats.idStat = " + idStats + ";";
         DBConnector.getInstance().updateQuery(query);
     }
 
+    /**
+     * Genera una PK
+     * @return nextPk PK generada
+     */
     //GESTIO DE PK
     public int nextStatPK(){
         int nextPk = -1;

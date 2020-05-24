@@ -4,6 +4,9 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.Serializable;
 
+/**
+* Vista del mapa de la partida, el mapa del joc. Implementa serializable perque s'ha de enviar al servidor de tant en quant
+* */
 public class GameMap implements Serializable {
 
     protected int mapWidth;
@@ -15,9 +18,10 @@ public class GameMap implements Serializable {
     protected Tile[] tilesArray;
 
 
-
-
-
+    /**
+    * Constructor de la classe
+     * @param path directori de la imatge del mapa
+    * */
     public GameMap(String path) throws IOException {
         loadMap(path);
         generateGameMap();
@@ -25,32 +29,57 @@ public class GameMap implements Serializable {
         assignTilePixels();
     }
 
-
+    /**
+    * --
+    * */
     protected void generateGameMap(){
 
     }
 
+    /**
+    * Retorna el grossor del mapa
+     * @return maWidth enter amb el valor del grossor
+    * */
     public int getMapWidth() {
         return mapWidth;
     }
 
+    /**
+    * Retorna un Tile que es trobia  al posició indicada
+     * @param position posició de la que es vol el tile
+     * @return variable de tipus Tile corresponent al tile que està en la posició donada
+    * */
     public Tile getSpecificTile(int position) {
         return tilesArray[position];
     }
 
-
+    /**
+    * Retorna el array de Tiles de la partida
+     * @return tilesArray variable de tipus Tile[] amb totes les Tiles de la partida
+    * */
     public Tile[] getTilesArray() {
         return tilesArray;
     }
 
+    /**
+    * Retorna la matri de tiles de la partida
+     * @return mapTiles variable de tipus Tile[][] amb la informació de totes les tiles de la partida
+    * */
     public Tile[][] getMapTiles() {
         return mapTiles;
     }
 
+    /**
+    * Setter que assigna la matriu de tiles a lo que rep per valor
+     * @param mapTiles variable de tipus Tile[][]
+    * */
     public void setMapTiles(Tile[][] mapTiles) {
         this.mapTiles = mapTiles;
     }
 
+    /**
+    * Construeix la graella de la partida mitjançant tiles
+    * */
     private void assignTilePixels(){
         xIncrement = 0;
         yIncrement = 0;
@@ -72,13 +101,26 @@ public class GameMap implements Serializable {
         }
     }
 
+    /**
+     * --
+    * */
     protected void loadMap(String path) throws IOException {
 
     }
+
+    /**
+     * --
+     * */
     public void updateMap(){
 
     }
-    //Metode que traduira el conjunt de tiles del nostre mapa a pixels
+
+    /**
+     * Traduira el conjunt de tiles del nostre mapa a pixels
+     * @param compensX posició X
+     * @param compensY posició Y
+     * @param gameView vista de la partida
+     * */
     public void showMap(int compensX, int compensY, GameView gameView){
         //Utilitzarem bit shifting per tal d'optimitzar memoria (movem cinc bits cap a la dreta, es a dir, >> 5 es el mateix que / 32), i aixi passarem els tiles a pixels
         int north = compensY >> 5;

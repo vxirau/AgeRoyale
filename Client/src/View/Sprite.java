@@ -2,6 +2,10 @@ package src.View;
 
 import java.io.Serializable;
 
+
+/**
+* Classe destinada a la assignació de sprites
+* */
 public class Sprite implements Serializable {
 
 
@@ -68,6 +72,14 @@ public class Sprite implements Serializable {
     public static Sprite CASTLE_DOWN_RIGHT_ENEMY = new Sprite(32, 0, 1, 0, SpritesSheet.arena);
 
 
+    /**
+    * Constructor de la classe
+    *  @param side costat en el que es troba
+    *  @param column columna a la que volem accedir
+     * @param row fila a la que volem accedir
+     * @param orientation orientació del sprite a printar
+     * @param sheet variable de tipus SpritesSheet amb la informació de la gameView
+    * */
     public Sprite(final int side, final int column, final int row, final int orientation, final SpritesSheet sheet){
         this.side = side;
         this.sheet = sheet;
@@ -80,7 +92,11 @@ public class Sprite implements Serializable {
         loadSprite(orientation);
 
     }
-    //Escollirem si carregar l'sprite normal o rotat amb el metode loadSprite
+
+    /**
+    * Escollirem si carregar l'sprite normal o rotat amb el metode loadSprite
+     * @param orientation orientació del sprite
+    * */
     private void loadSprite(int orientation){
         //type ens indicara si volem carregar el sprite de forma normal o rotat 180 graus, donat que a algunes parts del mapa reutilitzem spritespero necessitem invertirlos
         if(orientation == 0){
@@ -90,7 +106,9 @@ public class Sprite implements Serializable {
         }
     }
 
-    //Carrega l'sprite sense rotar
+    /**
+    * Carrega l'sprite sense rotar
+    * */
     private void loadNormalSprite(){
         //Iterem a traves del full de sprites i obtenim els pixels de cada sprite
         for(int i = 0; i < side; i++){
@@ -101,7 +119,10 @@ public class Sprite implements Serializable {
         }
     }
 
-    //Carrega l'sprite sense rotar
+
+    /**
+    * Carrega l'sprite sense rotar
+    * */
     private void loadRotatedSprite(){
         int[] tempPixels = loadTempPixels();
         for(int i = 0; i < pixels.length; i++){
@@ -109,7 +130,11 @@ public class Sprite implements Serializable {
         }
     }
 
-    //Copiem els pixels normals a un array temporal de pixels
+
+    /**
+    * Copiem els pixels normals a un array temporal de pixels
+     * @return array de enters amb els pixels temporals
+    * */
     private int[] loadTempPixels(){
         int[] tempPixels = new int[side * side];
 
@@ -123,11 +148,18 @@ public class Sprite implements Serializable {
         return tempPixels;
     }
 
-
+    /**
+    * Retorna el costat en el que es troba
+     * @return enter amb el costat
+    * */
     public int getSide() {
         return side;
     }
 
+    /**
+    * Retorna el sprite dret
+     * @return sprite variable de tipus Sprite que retorna
+    * */
     public Sprite getRight(Sprite sprite){
 
         return sprite;

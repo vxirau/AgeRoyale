@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+* Aquesta classe és la classe destinada a la creació de la vista de login. Hereda de JFrame ja que és una finestra i volem que es comporti com a tal.
+* */
 public class LoginView extends JFrame {
     private JPanel jpPare;
     private JTextField jtfusername;
@@ -11,6 +14,9 @@ public class LoginView extends JFrame {
     private JButton botoInici;
     private JButton jbRegistrat;
 
+    /**
+    * Constructor de la classe
+    * */
     public LoginView(){
         setTitle("Login");
         setLocationRelativeTo(null);
@@ -25,11 +31,17 @@ public class LoginView extends JFrame {
         setLocation(x, y);
     }
 
+    /**
+    * Inicialitza els components de la pantalla grafica
+    * */
     private void initComponents() {
         colocarPanel();
         colocarElements();
     }
 
+    /**
+    * Inicialitza i coloca el JPanel principal de la vista
+    * */
     private void colocarPanel(){
         jpPare = new JPanel();
         jpPare.setLayout(null);
@@ -37,6 +49,9 @@ public class LoginView extends JFrame {
         this.getContentPane().add(jpPare);
     }
 
+    /**
+    * Coloca els elements de UI a la finestra gràfica
+    * */
     private void colocarElements() {
         //Títol: AGE ROYALE
         JLabel jlTitol = new JLabel();
@@ -138,22 +153,42 @@ public class LoginView extends JFrame {
 
     }
 
+    /**
+    * Retorna l'usuari introduit per text
+     * @return string amb el nom de usuari
+    * */
     public String getUsuari(){
         return jtfusername.getText();
     }
 
+    /**
+     * Retorna la contrasenya introduit per text
+     * @return string amb la contrasenya
+     * */
     public String getPassword(){
         return jtfpassword.getText();
     }
 
+    /**
+     * Assigna el valor del TextField al que reb per paràmetre
+     * @param us nom de usuari
+     * */
 	public void setUsuari(String us){
         jtfusername.setText(us);
     }
 
+    /**
+     * Assigna el valor del TextField al que reb per paràmetre
+     * @param pass contrasenya desitjada
+     * */
     public void setPassword(String pass){
         jtfpassword.setText(pass);
     }
 
+    /**
+     * Assignació de tots els controladors als elements de UI que els necessiten. En aquest cas només 2.
+     * @param controlador controlador de la vista Login.
+     * */
     public void loginViewsetListener(ActionListener controlador) {
         botoInici.addActionListener(controlador);
         jbRegistrat.addActionListener(controlador);

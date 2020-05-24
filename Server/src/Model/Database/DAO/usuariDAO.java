@@ -15,8 +15,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Classe que representa la taula usuari de la base de dades
+ */
 public class usuariDAO {
 
+    /**
+     * Funció que retorna tots els usuaris de la base de dades
+     * @return usuaris representa la llista de tots els usuaris
+     */
     //OBTENIR INFORMACIO
     public ArrayList<Usuari> getAllUsers(){
         tropesDAO tropesDAO = new tropesDAO();
@@ -46,6 +53,11 @@ public class usuariDAO {
         return usuaris;
     }
 
+    /**
+     * Retorna els usuaris de la base de dades cercant-los per un nom
+     * @param name nom corresponent a l'usuari
+     * @return usuaris retorna la llista d'usuaris corresponent amb el nom
+     */
     public ArrayList<Usuari> getUsersByName(String name){
         tropesDAO tropesDAO = new tropesDAO();
         statsDAO statsDAO = new statsDAO();
@@ -74,6 +86,11 @@ public class usuariDAO {
         return usuaris;
     }
 
+    /**
+     * Retorna un usuari corresponent al id que li passem per referència
+     * @param idUser id del usuari
+     * @return usuari retorna el usuari que correspon amb el id
+     */
     public Usuari getUserFromId(Integer idUser) {
         tropesDAO tropesDAO = new tropesDAO();
         statsDAO statsDAO = new statsDAO();
@@ -99,39 +116,40 @@ public class usuariDAO {
         return usuari;
     }
 
+    /**
+     * Actualiza l'estat del usuari
+     * @param usuari usuari a actualitzar
+     * @param online indica si l'usuari està online o no
+     */
     //ACTUALITZAR INFORMACIO
-    public void updateUsuari (Usuari usuari){
-        statsDAO statsDAO = new statsDAO();
-        usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
-        amicDAO amicDAO = new amicDAO();
-
-        statsDAO.updateStats(usuari.getStats());
-
-        usuariTropaDAO.onRemoveUsuari(usuari);
-        usuariTropaDAO.addTropesToUsuari(usuari, usuari.getTropes());
-
-        amicDAO.removeAmics(usuari);
-        amicDAO.addAmic(usuari, usuari.getAmics());
-
-        String query = "UPDATE AgeRoyale.usuari SET nickname = '" + usuari.getNickName() + "' , email = '" + usuari.getEmail() + "' , password = '" + usuari.getPassword() + "' WHERE idUser = " + usuari.getIdUsuari() + ";";
-        DBConnector.getInstance().updateQuery(query);
-    }
-
     public void updateState(Usuari usuari, boolean online){
         String query = "UPDATE AgeRoyale.usuari SET isOnline = " + Boolean.toString(online) + " WHERE idUser = " + usuari.getIdUsuari() + ";";
         DBConnector.getInstance().updateQuery(query);
     }
 
+    /**
+     * Actualitza la contrasenya d'un usuari
+     * @param usuari usuari que vol actualitzar la contrasenya
+     */
     public void updatePass(Usuari usuari) {
         String query = "UPDATE AgeRoyale.usuari SET password = '"  + usuari.getPassword() + "' WHERE idUser = " + usuari.getIdUsuari() + ";";
         DBConnector.getInstance().updateQuery(query);
     }
 
+    /**
+     * Actualitza el nickname i el email d'un usuari
+     * @param usuari usuari a actualitzar
+     */
     public void updateNickEmail (Usuari usuari) {
         String query = "UPDATE AgeRoyale.usuari SET nickname = '"  + usuari.getNickName() + "' , email = '" + usuari.getEmail() + "' WHERE idUser = " + usuari.getIdUsuari() + ";";
         DBConnector.getInstance().updateQuery(query);
     }
 
+    /**
+     * Afegeix un usuari a la base de dades
+     * @param usuari usuari a afegir
+     * @return newUserPk retorna la Pk del usuari
+     */
     //AFEGIR INFORMACIO
     public synchronized int addUser(Usuari usuari){
         statsDAO statsDAO = new statsDAO();
@@ -163,22 +181,10 @@ public class usuariDAO {
         return newUserPK;
     }
 
-    //BORRAR INFORMACIO
-    public void removeUsuari(Usuari usuari){
-        statsDAO statsDAO = new statsDAO();
-        usuariTropaDAO usuariTropaDAO = new usuariTropaDAO();
-        amicDAO amicDAO = new amicDAO();
-        partidaDAO partidaDAO = new partidaDAO();
-
-        String query = "DELETE FROM AgeRoyale.usuari WHERE idUser = " + usuari.getIdUsuari() + ";";
-        DBConnector.getInstance().deleteQuery(query);
-
-        amicDAO.removeAmics(usuari);
-        usuariTropaDAO.onRemoveUsuari(usuari);
-        statsDAO.removeStats(usuari);
-        partidaDAO.removePartida(usuari);
-    }
-
+    /**
+     * Genera una PK per un usuari
+     * @return nextPk representa la PK (tipus serial) del usuari
+     */
     //GESTIO DE PK
     public int nextUserPK(){
         int nextPk = -1;
@@ -196,6 +202,11 @@ public class usuariDAO {
         return ++nextPk;
     }
 
+    /**
+     * Comprova si existeix un usuari
+     * @param usr usuari a comprovar
+     * @return Usuari retorna l'usuari en cas d'existir, i sinó retorna null
+     */
     //COMPROVAR EXISTENCIA
     public Usuari existsLogin (Usuari usr){
         String query = "SELECT if(COUNT(*) = 1, us.idUser, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = '" + usr.getNickName() + "' AND us.password = '" + usr.getPassword() + "';";
@@ -213,6 +224,12 @@ public class usuariDAO {
         return null;
     }
 
+    /**
+     * Comprova si existeix un usuari pel seu nickname i contrasenya
+     * @param nickname nom de l'usuari
+     * @param password contrasenya de l'usuari
+     * @return Usuari retorna l'usuari en cas d'existir, i sinó retorna null
+     */
     public Usuari existsLogin (String nickname, String password){
         String query = "SELECT if(COUNT(*) = 1, us.idUser, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = '" + nickname + "' AND us.password = '" + password + "';";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
@@ -230,6 +247,11 @@ public class usuariDAO {
         return null;
     }
 
+    /**
+     * Comprova si ja existeix aquell registre, en cas de que l'usuari ja s'hagi registrat anteriorment
+     * @param usr usuari a comprovar
+     * @return boolean indica si ja s'ha registrat o no
+     */
     public boolean existsRegistre (Usuari usr){
         String query = "SELECT if(COUNT(*) = 1, 1, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = '" + usr.getNickName() + "' OR us.email = '" + usr.getEmail() + "';";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
@@ -246,22 +268,10 @@ public class usuariDAO {
         return false;
     }
 
-    public boolean existsRegistre (String nickname, String email){
-        String query = "SELECT if(COUNT(*) = 1, 1, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = '" + nickname + "' OR us.email = '" + email + "';";
-        ResultSet rs = DBConnector.getInstance().selectQuery(query);
-        try {
-            if (rs.next()) {
-                int result = rs.getInt("exist");
-                if (result == 1){
-                    return true;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
+    /**
+     * Es bannejar a l'usuari, es prohibeix l'accés a la app durant 24 hores
+     * @param u usuari a bannejar
+     */
     public void banUser(Usuari u){
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
@@ -270,12 +280,11 @@ public class usuariDAO {
         DBConnector.getInstance().updateQuery(query);
     }
 
-    public Date convertToDateViaInstant(LocalDate dateToConvert) {
-        return java.util.Date.from(dateToConvert.atStartOfDay()
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
-    }
-
+    /**
+     * Comprova si ja exiteix un usuari amb un nickname o email
+     * @param usuari usuari a comprovar
+     * @return boolean indica si existeix un usuari amb aquell nickname o email
+     */
     public boolean existsUsuariOnChange(Usuari usuari){
         String query = "SELECT if(COUNT(*) > 1, 1, -1) as exist FROM AgeRoyale.usuari AS us WHERE us.nickname = '" + usuari.getNickName() + "' OR us.email = '" + usuari.getEmail() + "';";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
@@ -292,6 +301,11 @@ public class usuariDAO {
         return false;
     }
 
+    /**
+     * Comprova si aquell usuari està bannejat
+     * @param usr usuari a comprovar
+     * @return boolean indica si està bannejat o no
+     */
     public boolean isBanned(Usuari usr) {
         String query = "SELECT us.banned FROM AgeRoyale.usuari AS us WHERE us.idUser = " + usr.getIdUsuari() + ";";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
@@ -310,6 +324,11 @@ public class usuariDAO {
         }
     }
 
+    /**
+     * Retorna la data en la que va estar bannejat aquell usuari
+     * @param usr usuari bannejat
+     * @return s representa la data en la que va estra bannejat
+     */
     public String getDateBan(Usuari usr) {
         String query = "SELECT us.banDate FROM AgeRoyale.usuari AS us WHERE us.idUser = " + usr.getIdUsuari() + ";";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
@@ -324,6 +343,10 @@ public class usuariDAO {
         return s;
     }
 
+    /**
+     * Desbanneja a un usuari, li permet el accés a la app després de 24 hores
+     * @param u usuari a desbannejar
+     */
     public void unBan(Usuari u) {
         String query = "UPDATE AgeRoyale.usuari SET AgeRoyale.usuari.banned = 0, AgeRoyale.usuari.banDate = " + null + "WHERE AgeRoyale.usuari.idUser = " + u.getIdUsuari() + " AND AgeRoyale.usuari.nickname = '" + u.getNickName() + "';";
         DBConnector.getInstance().updateQuery(query);

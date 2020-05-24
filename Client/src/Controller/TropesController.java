@@ -6,15 +6,28 @@ import src.View.TropesView;
 import javax.swing.*;
 import java.awt.*;
 
+
+/**
+* Classe destinada a controlar les tropes. Aquesta assigna imatges de les topes a la vista del client. No es part del joc
+* */
 public class TropesController {
 
     private TropesView tropesView;
     private Usuari usuari;
 
+    /**
+    * Construcotr de la classe
+     * @param usr usuari que ha incit sessió al client
+    * */
     public TropesController(Usuari usr) {
         this.usuari = usr;
     }
 
+
+    /**
+    * Encarregada de assignar les tropes a les dfierents imatges de la vista grafica
+     * @param viewTropes vista grafica a la que es troben les imatges
+    * */
     public void setTropesView(TropesView viewTropes) {
         this.tropesView = viewTropes;
 

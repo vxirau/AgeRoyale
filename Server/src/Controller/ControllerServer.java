@@ -3,7 +3,6 @@ package src.Controller;
 import src.Model.Database.DAO.partidaDAO;
 import src.Model.Database.DAO.statsDAO;
 import src.Model.Database.DAO.usuariDAO;
-import src.Model.Network.DedicatedServer;
 import src.Model.Network.Server;
 import src.Partida;
 import src.Usuari;
@@ -14,18 +13,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
+/**
+ * Aquesta classe és el controller destinat a la vista del server.
+ */
 public class ControllerServer implements ActionListener, WindowListener {
 
     private Server server;
     private static ViewServer view;
     private boolean flag;
 
+    /**
+     * Contructor de la classe
+     * @param view vista del server
+     */
     public ControllerServer(ViewServer view) {
         this.view = view;
         statsDAO sDAO = new statsDAO();
@@ -37,6 +39,10 @@ public class ControllerServer implements ActionListener, WindowListener {
         view.initAll();
     }
 
+    /**
+     * Funció que mostra les dades desitjades segons on s'ha premut
+     * @param e indica on s'ha premut
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -75,6 +81,9 @@ public class ControllerServer implements ActionListener, WindowListener {
 
     }
 
+    /**
+     * Funcio que actualitza la taula de les estadistidiques
+     */
     public static void updateTable(){
         statsDAO sDAO = new statsDAO();
         partidaDAO aDAO = new partidaDAO();
@@ -90,7 +99,12 @@ public class ControllerServer implements ActionListener, WindowListener {
         view.refresh(h);
     }
 
-
+    /**
+     * Funció que comprova el login
+     * @param name nom de l'usuari
+     * @param password contrasenya de l'usuari
+     * @return int si és 1 vol dir que existeix i si és 2 no exiteix
+     */
     public static int checkLogin(String name, String password) {
         usuariDAO u = new usuariDAO();
         //Existeix el login i la contrasenya
@@ -100,37 +114,60 @@ public class ControllerServer implements ActionListener, WindowListener {
         return 2;
     }
 
+    /**
+     * --
+     */
     @Override
     public void windowOpened(WindowEvent e) {
 
     }
 
+    /**
+     * Quan s'esta tancant una finestra
+     * @param e finestra que es tanca
+     */
     @Override
     public void windowClosing(WindowEvent e) {
         if(server.isOn())    server.stopServer();
     }
 
+    /**
+     * Es tanca per complet una finestra
+     * @param e finestra que es tanca
+     */
     @Override
     public void windowClosed(WindowEvent e) {
         if(server.isOn())    server.stopServer();
 
     }
 
+    /**
+     * --
+     */
     @Override
     public void windowIconified(WindowEvent e) {
 
     }
 
+    /**
+     * --
+     */
     @Override
     public void windowDeiconified(WindowEvent e) {
 
     }
 
+    /**
+     * --
+     */
     @Override
     public void windowActivated(WindowEvent e) {
 
     }
 
+    /**
+     * --
+     */
     @Override
     public void windowDeactivated(WindowEvent e) {
 

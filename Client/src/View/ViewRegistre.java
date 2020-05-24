@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Vista corresponent a la part gràfica del registre. Hereda de JFrame ja que volem que sigui una finestra.
+ */
 public class ViewRegistre extends JFrame {
 
 		private JPanel jpPare;
@@ -14,15 +17,24 @@ public class ViewRegistre extends JFrame {
 		private JButton botoRegistre;
 		private JButton jbAtras;
 
+		/**
+		 * Constructor de la classe
+		 */
 		public ViewRegistre(){
 			initComponents();
 		}
 
+		/**
+		 * Inicia la pantalla gràfica de la vista
+		 */
 		private void initComponents() {
 			colocarPanel();
 			colocarElements();
 		}
 
+		/**
+		 * Funció que coloca el JPanel pare de la pantalla gràfica
+		 */
 		private void colocarPanel(){
 			jpPare = new JPanel();
 			jpPare.setLayout(null);
@@ -30,6 +42,9 @@ public class ViewRegistre extends JFrame {
 			this.getContentPane().add(jpPare);
 		}
 
+		/**
+		 * Colocar els components gràfics de la pantalla gràfica dins del Jpanel pare
+		 */
 		private void colocarElements() {
 			JLabel jlTitol = new JLabel();
 			jlTitol.setText("AGE ROYALE");
@@ -135,23 +150,42 @@ public class ViewRegistre extends JFrame {
 			this.setLocationRelativeTo(null);
 		}
 
-
+		/**
+		 * Retorna el nom de l'usuari
+		 * @return jtfusername representa el nom de l'usuari
+		 */
 		public String getName(){
 			return jtfusername.getText().toString();
 		}
 
+		/**
+		 * Retorna el email de l'usuari
+		 * @return jtfCorreu representa el email de l'usuari
+		 */
 		public String getEmail(){
 			return jtfCorreu.getText().toString();
 		}
 
+		/**
+		 * Retorna la contrasenya de l'usuari
+		 * @return jtfpassword representa la contrasenya de l'usuari
+		 */
 		public String getPassword(){
 			return jtfpassword.getText().toString();
 		}
 
+		/**
+		 * Retorna la contrasenya comprovada de l'usuari
+		 * @return jtfpassword2 representa la contrasenya comprovada de l'usuari
+		 */
 		public String getRePass(){
 			return jtfpassword2.getText().toString();
 		}
 
+		/**
+		 * Assigna el controlador corresponent a la vista
+		 * @param controlador controlador que s'assigna a la vista
+		 */
 		public void registerController(ActionListener controlador) {
 			botoRegistre.addActionListener(controlador);
 			jbAtras.addActionListener(controlador);

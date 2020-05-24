@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Classe que representa els gràfics del servidor
+ */
 public class GraphPanel extends JPanel {
     private boolean hiHaDades = true;
     private ArrayList<Partida> games;
@@ -27,7 +30,11 @@ public class GraphPanel extends JPanel {
     private int eixX;
     private int eixY;
 
-
+    /**
+     * Constructor de la classe
+     * @param selectedIndex indica quina gràfica s'ha de mostrar (setmana, mes, any)
+     * @param games partides jugades
+     */
     public GraphPanel(int selectedIndex, ArrayList<Partida> games) {
         punts = new ArrayList<>();
         scaledPoints= new ArrayList<>();
@@ -52,6 +59,10 @@ public class GraphPanel extends JPanel {
         this.setBounds(0, 50, 700, 400);
     }
 
+    /**
+     * Printar la gràfica
+     * @param g gràfica a mostrar
+     */
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D gd = (Graphics2D) g;
@@ -106,6 +117,10 @@ public class GraphPanel extends JPanel {
 
     }
 
+    /**
+     * Ajusta la gràfica depenent de si s'ha de mostrar setmana mes o nay
+     * @param selectedIndex indica quina gràfica s'ha de mostrar (setmana, mes, any)
+     */
     private void ferDataset(int selectedIndex) {
 
         int days = 0, total, ok=0;
@@ -143,6 +158,10 @@ public class GraphPanel extends JPanel {
             hiHaDades = false;
         }
     }
+
+    /**
+     * Escala els pixels, per tal de que es vegin més grans
+     */
     public void scaleDataSet(){
         if(maxY == 0 || maxX == 0){
            hiHaDades = false;
@@ -156,6 +175,12 @@ public class GraphPanel extends JPanel {
         }
 
     }
+
+    /**
+     * Retorna el total de partides jugades en un dia
+     * @param data indica la data de la partida
+     * @return total indica el total de partides jugades en aquell dia
+     */
     private int totalGamesToday(String data){
         int total = 0;
         for(Partida p : games){
@@ -173,6 +198,11 @@ public class GraphPanel extends JPanel {
         return total;
     }
 
+    /**
+     * Converteix un tipus date a tipus LocalDate
+     * @param dateToConvert data a convertir
+     * @return dateToConvert data convertida a LocalDate
+     */
     public LocalDate toLocalDate(Date dateToConvert) {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())

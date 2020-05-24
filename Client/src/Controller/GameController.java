@@ -1,20 +1,25 @@
 package src.Controller;
 
-import src.*;
+import src.Message;
 import src.Model.Network.UserService;
+import src.Partida;
+import src.Tropa;
 import src.View.Deck;
 import src.View.GameView;
 import src.View.MenuView;
 import src.View.Sprite;
 
-import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+* Classe que controla la partida. Implementa un seguit de interficies per poder escoltar les diferentes accions del client
+* */
 public class GameController implements MouseListener, MouseMotionListener, Runnable, ActionListener {
 
+
+    //Declaració de variables
     private GameView gameView;
     private boolean mouseIsClicked;
     private int whichTroop;
@@ -36,6 +41,11 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
     private Partida partida;
     private Usuari usuari;
 
+
+
+    /**
+    * WindowListener destinada a saber si s'ha tancat la finestr abans dora i bannejar en cas que calgui.
+    * */
     public WindowListener windowListener = new WindowAdapter() {
         @Override
         public void windowClosed(WindowEvent e) {
@@ -47,8 +57,18 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
 
         }
     };
-
+    /**
+     * Constructor de la classe.
+     * @param gameView vista grafica del joc
+     * @param userService servei que permet al client connectar-se amb el servidor
+     * @param menuController controlador del menú. Emprat per actualitzar les vistes o informació que calguin
+     * @param p partida que esta inicialitzada
+     * @throws IOException en cas que hi hagués algun error retorna aquesta excepció.
+     * */
     public GameController(GameView gameView,UserService userService, MenuController menuController, Partida p, Usuari usuari) throws IOException {
+
+
+
         this.gameView = gameView;
         this.gameView.setUser(usuari);
         this.mouseIsClicked = false;
@@ -61,11 +81,19 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
         gameView.setGameController(this);
     }
 
+    /**
+     * Donat que aqesta classe implementa de runnable, ha de tenir la funció de run pertinent.
+    * */
     @Override
     public void run() {
 
     }
 
+
+    /**
+    * Donat que la classe implement MouseListener, ha de implementar la funció pertinent a la interficie. Aquesta esta destinada a detectar quan el ratolí s'ha premut.
+     * @param e MouseEvent que detecta la informació de on i quan s'ha premut el ratolí.
+    * */
     @Override
     public void mouseClicked(MouseEvent e) {
 
@@ -123,50 +151,81 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
 
     }
 
+
+    /**
+    * --
+    * */
     @Override
     public void mousePressed(MouseEvent e) {
 
 
     }
 
+    /**
+     * --
+     * */
     @Override
     public void mouseReleased(MouseEvent e) {
 
     }
 
+    /**
+     * --
+     * */
     @Override
     public void mouseEntered(MouseEvent e) {
 
     }
 
+    /**
+     * --
+     * */
     @Override
     public void mouseExited(MouseEvent e) {
 
     }
 
+    /**
+     * --
+     * */
     @Override
     public void mouseDragged(MouseEvent e) {
 
     }
 
+    /**
+    * Detecció de moviment del ratolí. Es fa servir per colocar la tropa a la vista.
+     * @param e informació de la posició del ratolí
+    * */
     @Override
     public void mouseMoved(MouseEvent e) {
         gameView.updateMouse(e.getX(), e.getY(), mouseIsClicked);
     }
 
 
+    /**
+     * --
+     * */
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
 
-
+    /**
+    * Funció encarregada de detectar quina tropa s'ha seleccionat de les tropes disponibles a la part inferior de la interficie gràfica.
+     * @param whichTroop integer que conté l'id de la tropa seleccionada.
+    * */
     public void selectTroopFromDeck(int whichTroop){
         gameView.setWhichTroop(whichTroop);
         deck.selectTroop(whichTroop);
     }
-
+    /**
+     * Encarregada de mostrar la tropa a la vista. Amb la tropa seleccionada, detecta quin sprite correspon i el coloca a la vista a la posició que s'hagués deixat.
+     * @param whichTroop enter que representa el "id" de la tropa, es fa servir per detectar quina tropa és
+     * */
     public synchronized void invokeTroop(int whichTroop){
+
+
         switch (whichTroop){
             case 0:
 
@@ -177,6 +236,7 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
                 skeleton.setNumTorre(-1);
                 skeleton.setIdPartida(partida.getIdPartida());
                 skeleton.setWhichSprite("SKELETON_BACK");
+
                 tropaStatic.forEach(tropa -> {if(tropa.getIdTropa() == 1) {skeleton.setVida(tropa.getVida()); skeleton.setAtac(tropa.getAtac());}} );
                 skeleton.setInitialX(skeleton.getxPosition());
                 skeleton.setInitialY(skeleton.getyPosition());
@@ -259,6 +319,10 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
         }
     }
 
+
+    /**
+    * Envia la comprovació del id al servidor
+    * */
     public void sendCheck(){
 
         Message m = new Message(gameView.getTropes(),"checkID");
@@ -269,26 +333,54 @@ public class GameController implements MouseListener, MouseMotionListener, Runna
 
     }
 
+    /**
+    * Encarregada de retornar el id del controller
+     * @return id enter que té l'id desat.
+    * */
     public int getId() {
         return id;
     }
 
+    /**
+    * Assigna el id de la classe al id que reb
+     * @param id id enviat pel servidor o la vista
+    * */
     public void setId(int id) {
         this.id = id;
     }
 
+
+    /**
+    * Encarregada de retornar la vista grafica
+     * @return gameView retorna l'objecte GameView, la vista a la que esta assignat el controller
+    * */
     public GameView getGameView() {
         return gameView;
     }
 
+
+    /**
+     * Assigna la game view a la game view que reb per paramtre
+     * @param gameView vista grafica del joc
+    * */
     public void setGameView(GameView gameView) {
         this.gameView = gameView;
     }
 
+
+    /**
+    * Retorna la llista de tropes emprades a la partida.
+     * @return tropaStatic llista de tropes.
+    * */
     public ArrayList<Tropa> getTropaStatic() {
         return tropaStatic;
     }
 
+
+    /**
+    * Assigna la llista de tropes emprades a la partda a les que reb per paràmetre
+     * @param tropaStatic llista de tropes enviades pel servidor
+    * */
     public void setTropaStatic(ArrayList<Tropa> tropaStatic) {
         this.tropaStatic = tropaStatic;
         gameView.startGame();

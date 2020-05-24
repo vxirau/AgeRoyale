@@ -5,32 +5,40 @@ import src.Usuari;
 import src.Utils;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+/**
+* Classe destinada a mostrar els amics del usuari i hereda de JFrame.
+* */
 public class FriendView extends JFrame {
     private JPanel jpFriends;
     private JPanel jpAmics;
     private JPanel[] jpsAmics;
-    private ArrayList<Usuari> amics;
     private JScrollPane scrollPaneAmics;
     private JButton jbSearchAmic;
     private JTextField jtfSearchAmic;
-    private Usuari usuari;
-    private JButton jpFriendsTitle;
     private JButton request;
     private FriendsController friendsController;
-    private MenuView menuView;
+    private Usuari usuari;
 
-    public FriendView(Usuari usr, FriendsController friendsCtrl, MenuView menuView) {
+
+    /**
+    * Constructor de la classe
+     * @param usr usuari del client
+     * @param friendsCtrl controlador de la fienstra
+    * */
+    public FriendView(Usuari usr, FriendsController friendsCtrl) {
         this.usuari = usr;
         setAmics(usr.getAmics());
         this.friendsController = friendsCtrl;
-        this.menuView = menuView;
     }
+
+    /**
+    * Inicia la finestra grafica
+    * */
     public void initAll(){
         this.removeAll();
 
@@ -39,7 +47,7 @@ public class FriendView extends JFrame {
         jpFriends.setOpaque(false);
 
         jpsAmics = null;
-        jpsAmics = new JPanel[amics.size()];
+        jpsAmics = new JPanel[usuari.getAmics().size()];
 
         jpAmics = new JPanel();
         jpAmics.setLayout(new BoxLayout(jpAmics, BoxLayout.Y_AXIS));
@@ -56,7 +64,7 @@ public class FriendView extends JFrame {
         titol.setBounds(20, 30, 400, 300);
         titol.setOpaque(false);
         titol.setLayout(null);
-        jpFriendsTitle = new JButton("Amics");
+        JButton jpFriendsTitle = new JButton("Amics");
         jpFriendsTitle.setBounds(45, 20, 300, 30);
         jpFriendsTitle.setOpaque(false);
         jpFriendsTitle.setContentAreaFilled(false);
@@ -118,7 +126,7 @@ public class FriendView extends JFrame {
         //--------------------------------------------------------------------------------------------------------------
 
 
-        for (int i = 0; i < amics.size() ; i++) {
+        for (int i = 0; i < usuari.getAmics().size() ; i++) {
             jpsAmics[i] = new JPanel(new GridLayout(3, 1)){
                 protected void paintComponent(Graphics g) {
                     ImageIcon elementButton = new ImageIcon(this.getClass().getResource("/resources/friend_bg.png"));
@@ -130,7 +138,7 @@ public class FriendView extends JFrame {
             jpsAmics[i].addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    friendsController.removeFriend(amics.get(finalI));
+                    friendsController.removeFriend(usuari.getAmics().get(finalI));
                 }
             });
 
@@ -138,7 +146,7 @@ public class FriendView extends JFrame {
             jpsAmics[i].setVisible(true);
 
             JLabel nomAmic = new JLabel();
-						nomAmic.setText("<html><font color='white'>" + Utils.ferEspais(14) + " "+ amics.get(i).getNickName() + "</font></html>");
+						nomAmic.setText("<html><font color='white'>" + Utils.ferEspais(14) + " "+ usuari.getAmics().get(i).getNickName() + "</font></html>");
             nomAmic.setForeground(Color.WHITE);
             nomAmic.setBorder(new EmptyBorder(10,0,0,0));//top,left,bottom,right
 
@@ -159,7 +167,7 @@ public class FriendView extends JFrame {
             }
 
             JLabel online = new JLabel();
-            if(amics.get(i).isOnline()){
+            if(usuari.getAmics().get(i).isOnline()){
                 online.setText("<html><font color='white'>" + Utils.ferEspais(22) + " Online" +  "</font></html>");
                 online.setForeground(Color.WHITE);
 
@@ -193,85 +201,141 @@ public class FriendView extends JFrame {
         repaint();
     }
 
-    private boolean teComAmic(Usuari amic){
-      for (Usuari amics :usuari.getAmics() ) {
-        if (amics.getIdUsuari() == amic.getIdUsuari()) {
-          return true;
-        }
-      }
-      return false;
-    }
 
+    /**
+    * Getter de la variable jpFriends
+     * @return variable de tipus JPanel
+    * */
     public JPanel getJpFriends() {
         return jpFriends;
     }
 
+    /**
+    * Setter de la variable jpFriends
+     * @param jpFriends variable de tipus JPanel que reb per valor
+    * */
     public void setJpFriends(JPanel jpFriends) {
         this.jpFriends = jpFriends;
     }
 
+    /**
+     * Getter de la variable jpAmics
+     * @return variable de tipus JPanel
+     * */
     public JPanel getJpAmics() {
         return jpAmics;
     }
 
+    /**
+     * Setter de la variable jpAmics
+     * @param jpAmics variable de tipus JPanel que reb per valor
+     * */
     public void setJpAmics(JPanel jpAmics) {
         this.jpAmics = jpAmics;
     }
 
+    /**
+     * Getter de la variable jpsAmics
+     * @return variable de tipus JPanel[]
+     * */
     public JPanel[] getJpsAmics() {
         return jpsAmics;
     }
 
+    /**
+     * Setter de la variable jpsAmics
+     * @param jpsAmics variable de tipus JPanel[] que reb per valor
+     * */
     public void setJpsAmics(JPanel[] jpsAmics) {
         this.jpsAmics = jpsAmics;
     }
 
-    public ArrayList<Usuari> getAmics() {
-        return amics;
-    }
-
+    /**
+     * Setter dels amics del usuari.
+     * @param amics llista de usuaris que corresponen als amics del usuari
+     * */
     public void setAmics(ArrayList<Usuari> amics) {
-        this.amics = amics;
+        this.usuari.setAmics(amics);
         initAll();
     }
 
+
+    /**
+     * Getter de la variable jtfSearchAmic
+     * @return variable de tipus JTextField
+     * */
     public JTextField getTextField(){
         return this.jtfSearchAmic;
     }
 
+
+    /**
+     * Getter de la variable scrollPaneAmics
+     * @return variable de tipus JScrollPane
+     * */
     public JScrollPane getScrollPaneAmics() {
         return scrollPaneAmics;
     }
 
+
+    /**
+     * Setter de la variable scrollPaneAmics
+     * @param scrollPaneAmics variable de tipus JScrollPane que reb per valor
+     * */
     public void setScrollPaneAmics(JScrollPane scrollPaneAmics) {
         this.scrollPaneAmics = scrollPaneAmics;
     }
 
+
+    /**
+     * Getter de la variable jbSearchAmic
+     * @return variable de tipus JButton
+     * */
     public JButton getJbSearchAmic() {
         return jbSearchAmic;
     }
 
+    /**
+     * Setter de la variable jbSearchAmic
+     * @param jbSearchAmic variable de tipus JButton que reb per valor
+     * */
     public void setJbSearchAmic(JButton jbSearchAmic) {
         this.jbSearchAmic = jbSearchAmic;
     }
 
+
+    /**
+     * Getter de la variable jtfSearchAmic
+     * @return variable de tipus JTextField
+     * */
     public JTextField getJtfSearchAmic() {
         return jtfSearchAmic;
     }
 
+    /**
+     * Setter de la variable jtfSearchAmic
+     * @param jtfSearchAmic variable de tipus JTextField que reb per valor
+     * */
     public void setJtfSearchAmic(JTextField jtfSearchAmic) {
         this.jtfSearchAmic = jtfSearchAmic;
     }
 
-
+    /**
+     * Assigna els controllers als elements de UI pertinents
+     * @param listenerDelTextField KeyListener encarregat de detectar canvies als inputs de text
+     * @param listenerCercaAmic detecta si s'ha premut el botó de cerca
+     * @param controller controlador de amics
+     * */
     public void setControllers(KeyListener listenerDelTextField, MouseListener listenerCercaAmic, FriendsController controller) {
         jtfSearchAmic.addKeyListener(listenerDelTextField);
         jbSearchAmic.addMouseListener(listenerCercaAmic);
-        //jpFriendsTitle.addActionListener(controller);
-        //request.addActionListener(controller);
         request.addActionListener(controller);
     }
 
+    /**
+     * Setter dels amics del usuari
+     * @param update Llista de usuaris actualitzada
+     * */
     public void setAmicsUsuari(ArrayList<Usuari> update) {
         this.usuari.setAmics(update);
     }

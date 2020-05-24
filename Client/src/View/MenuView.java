@@ -1,18 +1,17 @@
 package src.View;
 
 import src.Controller.MenuController;
-import src.Model.Network.UserService;
-import src.Usuari;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+/**
+* Classe del menú principal. Com les demés, exten de JFrame perque volem que sigui una finestra e implementa Runnable per poder-la tractar com a un thread
+* */
 public class MenuView extends JFrame implements Runnable {
 
-    private UserService uService;
-    private Usuari usuari;
     private MenuController menuController;
 
     //CONSTANTS PER CONTROLAR EL MENU
@@ -26,9 +25,8 @@ public class MenuView extends JFrame implements Runnable {
     public static final String WAITINROOM = "WaitingRoom_";
 
     //Animacions
-    private static Thread thread;
-    private static volatile boolean onTroopsView = false;
-    private boolean firstTimeOnThread = true;
+    private Thread thread;
+    private volatile boolean onTroopsView = false;
 
     //Panell actual
     private JPanel jpActive;
@@ -47,19 +45,15 @@ public class MenuView extends JFrame implements Runnable {
 
     //JPanel de Friends
     private FriendView friendView;
-    private JPanel jpFriends;
 
     //JPanel de FriendsRequest
     private FriendRequestView friendRequestView;
-    private JPanel jpFriendsRequest;
 
     //Jpanel de partida
     private RoomListView roomListView;
-    private JPanel jpCrearPartida;
 
     //JPanel de WaitingRoom
     private WaitingRoomView waitingRoomView;
-    private JPanel jpWaitingRoom;
 
     //Menu inferior
     private JPanel jpMenu;
@@ -70,7 +64,10 @@ public class MenuView extends JFrame implements Runnable {
     private JPanel jpMenuFriends;
     private boolean shown = false;
 
-    private final MouseListener mouseActionMenu = new MouseAdapter() {
+    /**
+    * Listener encarregat de detectar els clicks del ratolí a la finestra fràfica
+    * */
+    private MouseListener mouseActionMenu = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
             super.mouseClicked(e);
@@ -79,17 +76,28 @@ public class MenuView extends JFrame implements Runnable {
         }
     };
 
+    /**
+    * Constructor de la classe
+    * */
     public MenuView() {
 
     }
 
-    public void setMenuController(MenuController menuController) throws InterruptedException {
+    /**
+    * Encarregat de assignar els controllers del menu
+     * @param menuController variable de tipus MenuController responsable del control de la vista
+    * */
+    public void setMenuController(MenuController menuController) {
         this.menuController = menuController;
         init();
         basic();
     }
 
-    private void init() throws InterruptedException {
+
+    /**
+    * Inicialitza la finestra grafica
+    * */
+    private void init(){
         this.setLayout(new BorderLayout());
 
         //iniciem el menu
@@ -110,6 +118,9 @@ public class MenuView extends JFrame implements Runnable {
         adjustViews(MenuView.MAIN);
     }
 
+    /**
+    * Dedicada a la assignació de atributs de la finestra
+    * */
     private void basic() {
         this.setSize(450, 800);
 
@@ -124,6 +135,10 @@ public class MenuView extends JFrame implements Runnable {
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     }
 
+    /**
+    * Ajusta les vistes de la pantalla. En funció de quina es vol mostrar canviarà el jp Actiu
+     * @param name string amb el nom de quina de les finestres s'ha de mostrar.
+    * */
     private void adjustViews(String name) {
         actualView = name;
         String bgColor = "#282828";
@@ -155,6 +170,9 @@ public class MenuView extends JFrame implements Runnable {
             jpMenuFriends.setBackground(Color.decode(bgColor));
         }
         if (name.equals(MenuView.MAIN)){
+            this.setTitle("Menu");
+            jpMenu.setVisible(true);
+
             if(thread.isAlive()) stopTimer();
             jpActive = jpMain;
 
@@ -215,6 +233,9 @@ public class MenuView extends JFrame implements Runnable {
         this.repaint();
     }
 
+    /**
+    * Inicialitza la part inferior del client, el menú
+    * */
     private synchronized void initMenu() {
         int width = 81;
         int height = 90;
@@ -273,90 +294,140 @@ public class MenuView extends JFrame implements Runnable {
         this.add(jpMenu, BorderLayout.SOUTH);
     }
 
+    /**
+    * Inicialitza la configuració, tant finestra com controller
+    * */
     private void initConfig() {
         configView = new ConfigView(menuController.getConfigController());
         jpConfig = configView.getJpConfig();
     }
 
+    /**
+     * Inicialitza la vista de les tropes, tant finestra com controller
+     * */
     private void initTropes() {
-        tropesView = new TropesView(usuari);
+        tropesView = new TropesView();
         jpTropes = tropesView.getJpTropes();
     }
 
+    /**
+     * Inicialitza la vista principal, tant finestra com controller
+     * */
     private void initMain() {
         mainView = new MainView(this);
         jpMain = mainView.getJpMain();
     }
 
+    /**
+     * Inicialitza amics, tant finestra com controller
+     * */
     public void initFriends() {
-        friendView = new FriendView(usuari, menuController.getFriendsController(), this);
-        jpFriends = friendView.getJpFriends();
+        friendView = new FriendView(menuController.user, menuController.getFriendsController());
     }
 
+    /**
+     * Inicialitza la finestra de solicituds
+     * */
     private void initFriendsRequest() {
         friendRequestView = new FriendRequestView(menuController.getFriendsController(), menuController.getFriendsController().getRequests() == null ? new ArrayList<>() : menuController.getFriendsController().getRequests() );
-        jpFriendsRequest = friendRequestView.getJpPare();
     }
 
+    /**
+     * Inicialitza la finestra de creació de partida
+     * */
     private void initCrearPartida() {
-        menuController.getRoomsController().setMenuView(this);
-        roomListView = new RoomListView(menuController.getRoomsController(), this.usuari);
-        jpCrearPartida = roomListView.getJpPare();
+        roomListView = new RoomListView(menuController.getRoomsController(), menuController.user);
     }
 
+    /**
+     * Inicialitza la finestra de la sala d'espera
+     * */
     private void initWaitingRoom() {
-        waitingRoomView = new WaitingRoomView(null, usuari, menuController.getWaitingController());
-        jpWaitingRoom = waitingRoomView.getJPanelPare();
+        waitingRoomView = new WaitingRoomView(null, menuController.user, menuController.getWaitingController());
     }
 
-    public void setUsuari(Usuari usuari){
-        this.usuari = usuari;
-    }
-
+    /**
+    * Funció que crida a un altre funció de la classe.
+     * @param view string amb el nom de la vista a actualitzar
+    * */
     public void invokeAdjustViews(String view) {
         adjustViews(view);
     }
 
-    public void setuService(UserService uService) {
-        this.uService = uService;
-    }
-
+    /**
+    * Retorna la vista principal
+     * @return mainView variable de tipus MainView
+    * */
     public MainView getMainView() {
         return mainView;
     }
 
+    /**
+     * Retorna la vista de les tropes
+     * @return tropesView variable de tipus TropesView
+     * */
     public TropesView getTropesView() {
         return tropesView;
     }
 
+    /**
+     * Retorna la vista de configuració
+     * @return configView variable de tipus ConfigView
+     * */
     public ConfigView getConfigView() {
         return configView;
     }
 
+    /**
+     * Retorna la vista dels amics
+     * @return friendView variable de tipus FriendView
+     * */
     public FriendView getFriendView() {
         return friendView;
     }
 
+    /**
+     * Retorna la vista de partides
+     * @return roomListView variable de tipus RoomListView
+     * */
     public RoomListView getRoomListView() {
         return roomListView;
     }
 
+    /**
+     * Retorna la vista de solicituds d'amistat
+     * @return friendRequestView variable de tipus FriendRequestView
+     * */
     public FriendRequestView getFriendRequestView() {
         return friendRequestView;
     }
 
+    /**
+    * Setter per la vista de solicituds d'amistat
+     * @param friendRequestView vista de solicituds.
+    * */
     public void setFriendRequestView(FriendRequestView friendRequestView) {
         this.friendRequestView = friendRequestView;
     }
 
+    /**
+     * Retorna la vista de la sala d'espera
+     * @return waitingRoomView variable de tipus WaitingRoomView
+     * */
     public WaitingRoomView getWaitingRoomView() {
         return waitingRoomView;
     }
 
+    /**
+    * Actualitza les vistes en funció de la actual
+    * */
     public void updateViews() {
         adjustViews(actualView);
     }
 
+    /**
+    * Thread de la classe destinat a fer que les tropes a la vista de tropes estigui animades
+    * */
     @Override
     public void run() {
         final long[] startTime = {System.currentTimeMillis()};
@@ -370,12 +441,18 @@ public class MenuView extends JFrame implements Runnable {
         }
     }
 
+    /**
+    * Inicia el contador de tropes
+    * */
     public synchronized void startTimer() {
         onTroopsView = true;
         thread = new Thread(this, "Troop Selection Timer");
         thread.start();
     }
 
+    /**
+     * Atura el contador de tropes
+     * */
     public synchronized void stopTimer() {
         onTroopsView = false;
         thread.interrupt();

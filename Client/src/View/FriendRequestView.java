@@ -10,14 +10,20 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+* Classe destinada a mostrar les solicituds d'amistat del client. Exten de JFrame ja que és una finestra.
+* */
 public class FriendRequestView extends JFrame {
     private JPanel jpPare;
-    private JPanel[] jpsRequest;
-    private JScrollPane jScrollPane;
-    private JPanel jpRequest;
     private FriendsController controller;
     private ArrayList<Usuari> requests;
 
+
+    /**
+    * Constructor de la classe
+    * @param controller controlador de la vista
+     * @param requests array de usuaris que han solicitat amistat al client
+    * */
     public FriendRequestView(FriendsController controller, ArrayList<Usuari> requests) {
         this.controller = controller;
         requests.removeIf(usr -> usr.getIdUsuari() == -20);
@@ -35,6 +41,9 @@ public class FriendRequestView extends JFrame {
         setLocation(x, y);
     }
 
+    /**
+    * Inicia els components de la vista
+    * */
     private void initComponents() {
         removeAll();
         colocarPanel();
@@ -43,6 +52,9 @@ public class FriendRequestView extends JFrame {
         repaint();
     }
 
+    /**
+    * Colocar els diferents jpanels a la finestra i assigna layouts
+    * */
     private void colocarPanel() {
         jpPare = new JPanel();
         jpPare.setLayout(null);
@@ -50,18 +62,21 @@ public class FriendRequestView extends JFrame {
         this.getContentPane().add(jpPare);
     }
 
+    /**
+    * Coloca els elements al jpanel principal
+    * */
     private void colocarElements() {
 
 
-        jpRequest = new JPanel(null);
+        JPanel jpRequest = new JPanel(null);
         jpRequest.setOpaque(false);
 
-        jpsRequest = new JPanel[requests.size()];
+        JPanel[] jpsRequest = new JPanel[requests.size()];
 
         jpRequest = new JPanel(new GridLayout(10, 1));
         jpRequest.setOpaque(false);
 
-        jScrollPane = new JScrollPane();
+        JScrollPane jScrollPane = new JScrollPane();
         jScrollPane.setBounds(0, 200, 450, 500);
         jScrollPane.setEnabled(true);
         jScrollPane.setOpaque(false);
@@ -152,10 +167,19 @@ public class FriendRequestView extends JFrame {
         repaint();
     }
 
+    /**
+     * Retorna el JPanel pare, el que conté tot lo de la finestra
+     * @return jpPare variable de tipus JPanel amb tots els elements de la finestra
+    * */
     public JPanel getJpPare() {
         return jpPare;
     }
 
+
+    /**
+    * Assigna les solicituds de la classe a les que reb per valor
+     * @param requests llista de usuaris que han solicitat amistat al usuari
+    * */
     public void setRequests(ArrayList<Usuari> requests) {
         requests.removeIf(usr -> usr.getIdUsuari() == -20);
         this.requests = requests;

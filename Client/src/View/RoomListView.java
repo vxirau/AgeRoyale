@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+* Vista destinada a mostrar la llista de partides en una finestra
+* */
 public class RoomListView extends JFrame{
 
 	private ArrayList<Partida> allGames;
@@ -28,8 +31,6 @@ public class RoomListView extends JFrame{
 	private JPanel jpPare;
 	private JPanel jpPartidesPubliques;
 	private JPanel jpPartidesPrivades;
-	private JButton nova;
-	private JToggleButton visibilitat;
 	private JScrollPane scrollPubliquesF;
 	private JScrollPane scrollPrivadesF;
 	private boolean visible=false;
@@ -38,6 +39,9 @@ public class RoomListView extends JFrame{
 
 	private RoomsController roomsController;
 
+	/**
+	* Divideix l'array de partides que reb del servidor en dos, publiques i privades
+	* */
 	private void dividirPartides(){
 		pPrivades = new ArrayList<>();
 		pPubliques = new ArrayList<>();
@@ -52,6 +56,11 @@ public class RoomListView extends JFrame{
 		}
 	}
 
+	/**
+	* Funció que mira si la partida és una partida de un amic nostre, ja que privades només podem mostrar les dels nostres amics
+	 * @param game objecte partida amb la informació de la partida actual
+	 * @return boolea que indicarà si ho és o no
+	* */
 	private boolean isFriendGame(Partida game){
 		for (Usuari amic: usuari.getAmics()) {
 			if (game.getHost().equals(amic.getNickName())) {
@@ -61,16 +70,28 @@ public class RoomListView extends JFrame{
 		return false;
 	}
 
+	/**
+	* Retorna el panell principal de la vista
+	 * @return jpPare JPanel amb tots els elements de UI de la vista de llistat de partides
+	* */
 	public JPanel getJpPare(){
 		return jpPare;
 	}
 
+	/**
+	* Constructor de la classe
+	 * @param roomsController variable de tipus controlador que s'assigna a la vista
+	 * @param user variable que correspon al usuari que ha iniciat sessió en el nostre client
+	* */
 	public RoomListView(RoomsController roomsController, Usuari user){
 		this.roomsController = roomsController;
 		this.usuari = user;
 		roomsController.initMessage();
 	}
 
+	/**
+	* Inicialitza les vistes de la classe
+	* */
 	private void initAll(){
 		this.removeAll();
 		dividirPartides();
@@ -79,11 +100,17 @@ public class RoomListView extends JFrame{
 		repaint();
 	}
 
+	/**
+	* Crida a les funcions necessaries per inicialitzar la classe
+	* */
 	private void initComponents() {
 		colocarPanel();
 		colocarElements();
 	}
 
+	/**
+	 * Coloca el JPanel principal a la finestra e inicialitza els layouts.
+	* */
 	private void colocarPanel(){
 
 		jpPare = new JPanel();
@@ -112,6 +139,11 @@ public class RoomListView extends JFrame{
 
 	}
 
+	/**
+	* Crear un element de la llista de elements que ha de mostrar. Cada partida és un element
+	 * @param p partida que s'ha de crear en el element
+	 * @return JPanel generat amb els elements de la partida
+	* */
 	private JPanel crearElement(Partida p){
 		JPanel element = new JPanel(new GridLayout(3, 1)) {
 			protected void paintComponent(Graphics g) {
@@ -156,8 +188,11 @@ public class RoomListView extends JFrame{
 		return element;
 	}
 
+	/**
+	* Coloca els elements a la UI de la finestra
+	* */
 	private void colocarElements(){
-		nova = new JButton();
+		JButton nova = new JButton();
 		nova.setText("Crear nova partida");
 		nova.setBounds(20, 70, 410, 70);
 		nova.setOpaque(false);
@@ -248,15 +283,27 @@ public class RoomListView extends JFrame{
 
 	}
 
+
+	/**
+	* Retorna el scroll pane de les partides publiques
+	 * @return scrollPubliquesF variable de tipus JScrollPane
+	* */
 	public JScrollPane getScrollPubliques(){
 		return this.scrollPubliquesF;
 	}
 
-
+	/**
+	 * Retorna el scroll pane de les partides privades
+	 * @return scrollPrivadesF variable de tipus JScrollPane
+	 * */
 	public JScrollPane getScrollPrivades(){
 		return this.scrollPrivadesF;
 	}
 
+	/**
+	* Genera un JPanel separador per que els elements de les partides no estiguin molt junts
+	 * @return JPanel que retorna la funció
+	* */
 	public JPanel addSeparator(){
 		JPanel separator = new JPanel();
 		separator.setPreferredSize(new Dimension(430, 10));
@@ -266,6 +313,10 @@ public class RoomListView extends JFrame{
 		return separator;
 	}
 
+	/**
+	* Assigna la llista de partides a les que reb per parametre
+	 * @param partides llista de partides que reb del servidor
+	* */
 	public void setAllGames(ArrayList<Partida> partides){
 		if(partides!=null){
 			cleanGames(partides);
@@ -275,6 +326,11 @@ public class RoomListView extends JFrame{
 			JOptionPane.showOptionDialog(new JFrame(), "LOKO HI HA QUELCOM MALAMENT" , "Alerta", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 		}
 	}
+
+	/**
+	* Fa una neteja de les partides que reb.
+	 * @param games llista de partides que li envia el servidor
+	* */
 	private void cleanGames(ArrayList<Partida> games){
 		for(Partida p : games){
 			boolean done = true;
@@ -311,6 +367,11 @@ public class RoomListView extends JFrame{
 		}
 	}
 
+	/**
+	* Retorna el tamany total de les llistes de les partides
+	 * @param p partida seleccionada
+	 * @return enter que representa el total que retorna
+	* */
 	public int getTotal(Partida p){
 		if (p.isPublic()){
 			for (int i = 0; i < pPubliques.size(); i++) {

@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+* Destinada a mostrar les tropes del usuari. Implementa serialitzable perque ho haurem de enviar pel servidor
+* */
 public class Deck implements Serializable {
 
     private Rectangle deckRectangle;
@@ -38,7 +41,11 @@ public class Deck implements Serializable {
 
     private final Color  DECK_RECTANGLE_COLOR;
 
-
+    /**
+    * Constructor de la classe
+     * @param screenHeight altura de la pantalla grafica
+     * @param screenWidth amplada de la pantalla grafica
+    * */
     public Deck(int screenWidth, int screenHeight) throws IOException {
 
         this.gameView = gameView;
@@ -65,20 +72,53 @@ public class Deck implements Serializable {
 
     }
 
+
+    /**
+    * Mostra per pantalla el "mazo" del usuari, les tropes de les que disposa
+     * @param g variable de tipus grafics propia de swing
+     * @param xMousePosition posició a la coordenada x del ratolí
+     * @param yMousePosition posició a la coordenada y del ratolí
+     * @param mouseIsClicked booleà que indicarà si el ratolí ha estat premut o no
+     * @param whichTroop enter que indica quina tropa s'ha premut.
+    * */
     public void showDeck(final Graphics g, int xMousePosition, int yMousePosition, boolean mouseIsClicked, int whichTroop){
         drawDeck(g, xMousePosition, yMousePosition, mouseIsClicked, whichTroop);
     }
 
+    /**
+    * Assigna a la variable de la classe el id de la tropa seleccionada
+     * @param whichTroop id de la tropa seleccionada
+    * */
     public void selectTroop(int whichTroop){
         this.whichTroop = whichTroop;
     }
 
+
+    /**
+    * Mostra per pantalla la informació del "mazo"
+     * @param g variable de tipus grafics propia de swing
+     * @param xMousePosition posició a la coordenada x del ratolí
+     * @param yMousePosition posició a la coordenada y del ratolí
+     * @param mouseIsClicked booleà que indicarà si el ratolí ha estat premut o no
+     * @param whichTroop enter que indica quina tropa s'ha premut.
+     * */
     private void drawDeck(final Graphics g, int xMousePosition, int yMousePosition, boolean mouseIsClicked, int whichTroop){
         drawFilledRect(g, deckRectangle, DECK_RECTANGLE_COLOR, xMousePosition, yMousePosition, mouseIsClicked, whichTroop);
         drawFilledRect(g, deckRectangleBorder, Color.WHITE, xMousePosition, yMousePosition, mouseIsClicked, whichTroop);
         drawClockDelimiter(g, clockDelimiter, Color.GRAY);
         drawAvailableGold(g, goldRectangle, Color.ORANGE);
     }
+
+    /**
+    * Mostra un rectangle emplenat amb el grafic que es vol mostrar
+     * @param g variable de tipus grafics propia de swing
+     * @param r variable te tipus Rectangle
+     * @param c color del que es vol fer el rectangle
+     * @param xMousePosition posició a la coordenada x del ratolí
+     * @param yMousePosition posició a la coordenada y del ratolí
+     * @param mouseIsClicked booleà que indicarà si el ratolí ha estat premut o no
+     * @param whichTroop enter que indica quina tropa s'ha premut.
+    * */
     private void drawFilledRect(final Graphics g, final Rectangle r, final Color c, int xMousePosition, int yMousePosition, boolean mouseIsClicked, int whichTroop){
 
 
@@ -155,16 +195,35 @@ public class Deck implements Serializable {
 
 
     }
+
+
+    /**
+    * Dibuixa per pantalla el clock
+     * @param g variable de tipus grafics propia de swing
+     * @param r rectangle a dibuixar a la pantalla
+     * @param c color del que es vol el rectangle
+    * */
     private void drawClockDelimiter(final Graphics g, final Rectangle r, final Color c){
         g.setColor(c);
         g.fillRect(r.x, r.y, r.width, r.height);
     }
 
+
+    /**
+    * Dibuixa la quantitat de or restant del client
+     * @param g variable de tipus grafics propia de swing
+     * @param r rectangle a printar
+     * @param c color del que es vol el rectangle
+    * */
     private void drawAvailableGold(final Graphics g, final Rectangle r, final Color c){
         g.setColor(c);
         g.fillRect(r.x, r.y, r.width, r.height);
     }
 
+    /**
+     * Actualitza el valor del or restant del usuari
+     * @param whichTroop enter que indica quina tropa ha seleccionat, per descomptar aquesta quantitat de or
+     * */
     public void updateUserGold(int whichTroop){
         switch (whichTroop){
             case 0:
@@ -185,6 +244,12 @@ public class Deck implements Serializable {
 
     }
 
+
+    /**
+    * Indica si la tropa que ha seleccionat es pot posicionar, si l'usuari disposa de prou or o no
+     * @param whichTroop tropa seleccionada
+     * @return boolean retorna si es valid o no
+    * */
     public boolean isEnoughGold(int whichTroop){
         switch (whichTroop){
             case 0:
@@ -225,10 +290,18 @@ public class Deck implements Serializable {
         return true;
     }
 
+    /**
+    * Retorna el rectangle de progrés del or
+     * @return goldRectangle variable de tipus Rectangle
+    * */
     public Rectangle getGoldRectangle() {
         return goldRectangle;
     }
 
+    /**
+    * Assigna un rectangle a la barra de progrés del or
+     * @param goldRectangle variable de tipus rectangle que reb per valor
+    * */
     public void setGoldRectangle(Rectangle goldRectangle) {
         this.goldRectangle = goldRectangle;
     }
