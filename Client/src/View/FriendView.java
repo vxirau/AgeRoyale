@@ -259,41 +259,83 @@ public class FriendView extends JFrame {
         initAll();
     }
 
+
+    /**
+     * Getter de la variable jtfSearchAmic
+     * @return variable de tipus JTextField
+     * */
     public JTextField getTextField(){
         return this.jtfSearchAmic;
     }
 
+
+    /**
+     * Getter de la variable scrollPaneAmics
+     * @return variable de tipus JScrollPane
+     * */
     public JScrollPane getScrollPaneAmics() {
         return scrollPaneAmics;
     }
 
+
+    /**
+     * Setter de la variable scrollPaneAmics
+     * @param scrollPaneAmics variable de tipus JScrollPane que reb per valor
+     * */
     public void setScrollPaneAmics(JScrollPane scrollPaneAmics) {
         this.scrollPaneAmics = scrollPaneAmics;
     }
 
+
+    /**
+     * Getter de la variable jbSearchAmic
+     * @return variable de tipus JButton
+     * */
     public JButton getJbSearchAmic() {
         return jbSearchAmic;
     }
 
+    /**
+     * Setter de la variable jbSearchAmic
+     * @param jbSearchAmic variable de tipus JButton que reb per valor
+     * */
     public void setJbSearchAmic(JButton jbSearchAmic) {
         this.jbSearchAmic = jbSearchAmic;
     }
 
+
+    /**
+     * Getter de la variable jtfSearchAmic
+     * @return variable de tipus JTextField
+     * */
     public JTextField getJtfSearchAmic() {
         return jtfSearchAmic;
     }
 
+    /**
+     * Setter de la variable jtfSearchAmic
+     * @param jtfSearchAmic variable de tipus JTextField que reb per valor
+     * */
     public void setJtfSearchAmic(JTextField jtfSearchAmic) {
         this.jtfSearchAmic = jtfSearchAmic;
     }
 
-
+    /**
+     * Assigna els controllers als elements de UI pertinents
+     * @param listenerDelTextField KeyListener encarregat de detectar canvies als inputs de text
+     * @param listenerCercaAmic detecta si s'ha premut el botó de cerca
+     * @param controller controlador de amics
+     * */
     public void setControllers(KeyListener listenerDelTextField, MouseListener listenerCercaAmic, FriendsController controller) {
         jtfSearchAmic.addKeyListener(listenerDelTextField);
         jbSearchAmic.addMouseListener(listenerCercaAmic);
         request.addActionListener(controller);
     }
 
+    /**
+     * Setter dels amics del usuari
+     * @param update Llista de usuaris actualitzada
+     * */
     public void setAmicsUsuari(ArrayList<Usuari> update) {
         this.usuari.setAmics(update);
     }
