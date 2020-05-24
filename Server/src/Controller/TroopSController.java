@@ -3,11 +3,7 @@ package src.Controller;
 import src.Edifici;
 import src.Model.Network.DedicatedServer;
 import src.Tropa;
-import src.View.GameView;
-import src.View.Sprite;
-import src.View.Tile;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class TroopSController {

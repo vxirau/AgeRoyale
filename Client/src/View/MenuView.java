@@ -283,7 +283,7 @@ public class MenuView extends JFrame implements Runnable {
     }
 
     public void initFriends() {
-        friendView = new FriendView(menuController.user, menuController.getFriendsController(), this);
+        friendView = new FriendView(menuController.user, menuController.getFriendsController());
     }
 
     private void initFriendsRequest() {

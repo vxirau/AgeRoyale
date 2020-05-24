@@ -88,18 +88,8 @@ public class amicDAO {
     }
 
     //BORRAR INFORMACIO
-    public void removeAmic (int idUser, int idAmic){
-        String query = "DELETE FROM AgeRoyale.amic WHERE (" + idUser + " = id_u1 AND " + idAmic + " = id_u2) OR (" + idAmic + " = id_u1 and " + idUser + " = id_u2);";
-        DBConnector.getInstance().deleteQuery(query);
-    }
-
     public void removeAmic (Usuari usuari, Usuari amic){
         String query = "DELETE FROM AgeRoyale.amic WHERE (" + usuari.getIdUsuari() + " = id_u1 AND " + amic.getIdUsuari() + " = id_u2) OR (" + amic.getIdUsuari() + " = id_u1 and " + usuari.getIdUsuari() + " = id_u2);";
-        DBConnector.getInstance().deleteQuery(query);
-    }
-
-    public void removeAmics (int idUser){
-        String query = "DELETE FROM AgeRoyale.amic WHERE (" + idUser + " = id_u1 OR " + idUser + " = id_u2);";
         DBConnector.getInstance().deleteQuery(query);
     }
 
