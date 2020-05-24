@@ -21,6 +21,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * Classe que representa un servidor dedicat per cada client. Hereda de thread ja que s'executa paralelament a l'execució del programa per poder-se fer servir en qualsevol moment
+ */
 public class DedicatedServer extends Thread {
 
 	private boolean isOn;
@@ -38,7 +41,13 @@ public class DedicatedServer extends Thread {
 
 	private static CopyOnWriteArrayList<Tropa> deleted;
 
-
+	/**
+	 * Contructor de la classe
+	 * @param sClient client amb el que s'estableix la connexió
+	 * @param clients clients connectats al servidor
+	 * @param server servidor
+	 * @throws IOException en cas que hi hagués algun error retorna aquesta excepció.
+	 */
 	public DedicatedServer(Socket sClient, CopyOnWriteArrayList<DedicatedServer> clients, Server server) throws IOException {
 		this.isOn = false;
 		this.sClient = sClient;
@@ -50,18 +59,27 @@ public class DedicatedServer extends Thread {
 		this.deleted = new CopyOnWriteArrayList<>();
 	}
 
+	/**
+	 * S'inicialitza la comunicació entre servidor i client
+	 */
 	public void startDedicatedServer() {
 		// iniciem el servidor dedicat
 		isOn = true;
 		this.start();
 	}
 
+	/**
+	 * S'atura la connexió entre servidor i client
+	 */
 	public void stopDedicatedServer() {
 		// aturem el servidor dedicat
 		this.isOn = false;
 		this.interrupt();
 	}
 
+	/**
+	 * El servidor rep els missatges del client corresponent i retorna una resposta
+	 */
 	public void run() {
 		String in;
 		String[] aux;
@@ -334,12 +352,22 @@ public class DedicatedServer extends Thread {
 
 	}
 
+	/**
+	 * Converteix una data de tipus LocalDate a Date
+	 * @param dateToConvert data a convertir de tipus LocalDate
+	 * @return dateToConvert retorna la data de tipus Date
+	 */
 	public Date convertToDateViaInstant(LocalDate dateToConvert) {
 		return java.util.Date.from(dateToConvert.atStartOfDay()
 				.atZone(ZoneId.systemDefault())
 				.toInstant());
 	}
 
+	/**
+	 * Missatges que envia el client al servidor, i el servidor respon. Són missatges privats perquè són els encarregats de dur a terme les broadcast.
+	 * @param message missatge rebut per part del client
+	 * @throws IOException en cas que hi hagués algun error retorna aquesta excepció.
+	 */
 	public void privateMessage(String message) throws IOException {
 
 		if (message.equals("Friends") && this.clientUser != null){
@@ -362,7 +390,10 @@ public class DedicatedServer extends Thread {
 		}
 	}
 
-
+	/**
+	 * El servidor rep un missatge que correspon a les invitacions per part d'un client a un altre
+	 * @param invite invitació corresponent
+	 */
 	public void inviteMessage(Invite invite) {
 		if (clientUser != null && clientUser.getIdUsuari() == invite.getDesti().getIdUsuari()){
 			try {
@@ -375,6 +406,10 @@ public class DedicatedServer extends Thread {
 		}
 	}
 
+	/**
+	 * El servidor rep un missatge per part del clinet de inicialitzar la partida, i el servidor respon
+	 * @param partida Partida a iniciar
+	 */
 	public void startGameMessage(Partida partida) {
 		if (clientUser != null && inRoom != null && partida.getIdPartida() == inRoom && (partida.getJugadors().get(0).getIdUsuari() == clientUser.getIdUsuari() || partida.getJugadors().get(1).getIdUsuari() == clientUser.getIdUsuari())){
 			try {

@@ -11,6 +11,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Vista de la sala d'espera de la partida. Hereda de JFrame ja que volem que sigui una finestra.
+ */
 public class WaitingRoomView extends JFrame {
     private JButton start;
     private Partida p;
@@ -18,6 +21,12 @@ public class WaitingRoomView extends JFrame {
     private JPanel main;
     private WaitingController waitingController;
 
+    /**
+     * Constructor de la classe
+     * @param p partida a la que correspon la sala d'espera
+     * @param usr usuari que ha iniciat sessió
+     * @param waitingController controlador assignat a aquesta vista
+     */
     public WaitingRoomView(Partida p, Usuari usr, WaitingController waitingController) {
         this.p = p;
         this.usr = usr;
@@ -26,11 +35,18 @@ public class WaitingRoomView extends JFrame {
         if (p != null) initAll();
     }
 
+    /**
+     * S'assigna la partida
+     * @param partida partida a la que es farà la sala d'espera
+     */
     public void setPartida(Partida partida){
         this.p = partida;
         initAll();
     }
 
+    /**
+     * Inicialitza la pantalla gràfica de la sala d'espera amb els components gràfics corresponents
+     */
     public void initAll(){
         this.removeAll();
 
@@ -211,10 +227,19 @@ public class WaitingRoomView extends JFrame {
 
     }
 
+    /**
+     * S'assigna el controlador a la vista
+     * @param controller controlador que se li assigna
+     */
     public void setController(WaitingController controller){
         start.addActionListener(controller);
     }
-    
+
+    /**
+     * Genera el Jpanel de un amic
+     * @param u usuari corresponent a amic
+     * @return amic retorna el JPanel generat
+     */
     public JPanel createFriend(Usuari u){
         JPanel amic = new JPanel(new GridLayout(1, 1));
         amic.setBackground(Color.decode("#FFDC60"));
@@ -235,6 +260,10 @@ public class WaitingRoomView extends JFrame {
         return amic;
     }
 
+    /**
+     * Genera un JPanel que representa una separació entre els JPanels d'amics
+     * @return
+     */
     public JPanel makeSeparator(){
         JPanel amic = new JPanel();
         amic.setPreferredSize(new Dimension(360,5));
@@ -245,6 +274,10 @@ public class WaitingRoomView extends JFrame {
         return amic;
     }
 
+    /**
+     * Retorna el Jpanel pare
+     * @return main retorna el pare JPanel
+     */
     public JPanel getJPanelPare() {
         return main;
     }

@@ -6,6 +6,9 @@ import src.Tropa;
 
 import java.util.ArrayList;
 
+/**
+ * Aquesta classe és el controller destinat a la vista de les tropes
+ */
 public class TroopSController {
     private static Float minDistance = Float.MAX_VALUE;
     private static Tropa troop;
@@ -24,11 +27,22 @@ public class TroopSController {
     private static final int OWN_TOWER_PADDING_RIGHT = 205;
     private static final int HALF_MAP = 320;
 
+    /**
+     * Constructor de la classe
+     */
     public TroopSController(){
         edificiDef = new ArrayList<>();
         ompleEdifici();
     }
 
+    /**
+     * Funció que mou la tropa ofensiva
+     * @param tropa tropa a moure
+     * @param xVariation variació de la x
+     * @param yVariation variació de la y
+     * @param cont variable auxiliar que indica quin moviment ha de fer el personatge
+     * @return tropa tropa moguda
+     */
     public synchronized Tropa moveOffensiveTroop(Tropa tropa, float xVariation, float yVariation, int cont) {
         //Es mou cap a la dreta (east)
         float xTroop;
@@ -375,6 +389,11 @@ public class TroopSController {
         return collision;
     }*/
 
+    /**
+     * Funció que indica si ha hagut una colisió entre tropes o edificis
+     * @param tropa tropa que ha pogut colisionar
+     * @return collision indica si hi ha hagut una colisió o no
+     */
     private boolean onCollision(Tropa tropa){
         boolean collision = false;
 
@@ -667,6 +686,10 @@ public class TroopSController {
         }
         return collision;
     }
+
+    /**
+     * Funció que omple el mapa amb els edificis corresponents
+     */
     public void ompleEdifici() {
 
         for (int i = 0; i < 6; i++) {
@@ -729,10 +752,18 @@ public class TroopSController {
         }
     }
 
+    /**
+     * Retorna els edificis del mapa
+     * @return edificiDef llista d'edificis del mapa
+     */
     public  ArrayList<Edifici> getEdificiDef() {
         return edificiDef;
     }
 
+    /**
+     * Assigna els edificis del mapa
+     * @return edificiDef llista d'edificis del mapa
+     */
     public void setEdificiDef(ArrayList<Edifici> edificiDef) {
         this.edificiDef = edificiDef;
     }

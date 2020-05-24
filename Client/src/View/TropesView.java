@@ -3,6 +3,9 @@ package src.View;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Classe que representa la pantalla gràfica de les Tropes. Hereda de JFrame ja que volem que sigui una finestra.
+ */
 public class TropesView extends JFrame{
 
     private JPanel jpTropes;
@@ -45,6 +48,9 @@ public class TropesView extends JFrame{
     public static final String BOMB_PHASE2 = "/resources/bomb_phase2_deck.png";
 
 
+    /**
+     * Constructor de la classe. Inicialitza la pantalla gràfica
+     */
     public TropesView() {
 
         String bgColor = "#85201F";
@@ -234,6 +240,10 @@ public class TropesView extends JFrame{
         jpTropes.add(fondo);
     }
 
+    /**
+     * Actualitza les tropes
+     * @param elapsedTime temps cada quan s'ha d'actualitzar la tropa
+     */
     public void updateTropes(long elapsedTime){
         if(elapsedTime < 300){
             //TROPA 1 UPDATE
@@ -314,139 +324,117 @@ public class TropesView extends JFrame{
         }
     }
 
+    /**
+     * Retorna el JPanel de les tropes
+     * @return jpTropes és el Jpanel corresponent
+     */
     public JPanel getJpTropes() {
         return jpTropes;
     }
 
+    /**
+     * Assigna el JPanel de les tropes
+     * @param jpTropes és el Jpanel corresponent
+     */
     public void setJpTropes(JPanel jpTropes) {
         this.jpTropes = jpTropes;
     }
 
-    public JPanel getJpTropes1() {
-        return jpTropes1;
-    }
-
-    public void setJpTropes1(JPanel jpTropes1) {
-        this.jpTropes1 = jpTropes1;
-    }
-
+    /**
+     * Retorna la foto de la tropa 1
+     * @return jlTropes1_foto representa la foto de la tropa 1
+     */
     public JButton getJlTropes1_foto() {
         return jlTropes1_foto;
     }
 
-    public void setJlTropes1_foto(JButton jlTropes1_foto) {
-        this.jlTropes1_foto = jlTropes1_foto;
-    }
-
+    /**
+     * Retorna la vida de la tropa 1
+     * @return jlTropes1_vida representa la vida de la tropa 1
+     */
     public JLabel getJlTropes1_vida() {
         return jlTropes1_vida;
     }
 
-    public void setJlTropes1_vida(JLabel jlTropes1_vida) {
-        this.jlTropes1_vida = jlTropes1_vida;
-    }
-
+    /**
+     * Retorna el dany de la tropa 1
+     * @return jlTropes1_dany representa el dany de la tropa 1
+     */
     public JLabel getJlTropes1_dany() {
         return jlTropes1_dany;
     }
 
-    public void setJlTropes1_dany(JLabel jlTropes1_dany) {
-        this.jlTropes1_dany = jlTropes1_dany;
-    }
-
-    public JPanel getJpTropes2() {
-        return jpTropes2;
-    }
-
-    public void setJpTropes2(JPanel jpTropes2) {
-        this.jpTropes2 = jpTropes2;
-    }
-
+    /**
+     * Retorna la foto de la tropa 2
+     * @return jlTropes2_foto representa la foto de la tropa 2
+     */
     public JButton getJlTropes2_foto() {
         return jlTropes2_foto;
     }
 
-    public void setJlTropes2_foto(JButton jlTropes2_foto) {
-        this.jlTropes2_foto = jlTropes2_foto;
-    }
-
+    /**
+     * Retorna la vida de la tropa 2
+     * @return jlTropes2_vida representa la vida de la tropa 2
+     */
     public JLabel getJlTropes2_vida() {
         return jlTropes2_vida;
     }
 
-    public void setJlTropes2_vida(JLabel jlTropes2_vida) {
-        this.jlTropes2_vida = jlTropes2_vida;
-    }
-
+    /**
+     * Retorna el dany de la tropa 2
+     * @return jlTropes2_dany representa el dany de la tropa 2
+     */
     public JLabel getJlTropes2_dany() {
         return jlTropes2_dany;
     }
 
-    public void setJlTropes2_dany(JLabel jlTropes2_dany) {
-        this.jlTropes2_dany = jlTropes2_dany;
-    }
-
-    public JPanel getJpTropes3() {
-        return jpTropes3;
-    }
-
-    public void setJpTropes3(JPanel jpTropes3) {
-        this.jpTropes3 = jpTropes3;
-    }
-
+    /**
+     * Retorna la foto de la tropa 3
+     * @return jlTropes3_foto representa la foto de la tropa 3
+     */
     public JButton getJlTropes3_foto() {
         return jlTropes3_foto;
     }
 
-    public void setJlTropes3_foto(JButton jlTropes3_foto) {
-        this.jlTropes3_foto = jlTropes3_foto;
-    }
-
+    /**
+     * Retorna la vida de la tropa 3
+     * @return jlTropes3_vida representa la vida de la tropa 3
+     */
     public JLabel getJlTropes3_vida() {
         return jlTropes3_vida;
     }
 
-    public void setJlTropes3_vida(JLabel jlTropes3_vida) {
-        this.jlTropes3_vida = jlTropes3_vida;
-    }
-
+    /**
+     * Retorna el dany de la tropa 3
+     * @return jlTropes3_dany representa el dany de la tropa 3
+     */
     public JLabel getJlTropes3_dany() {
         return jlTropes3_dany;
     }
 
-    public void setJlTropes3_dany(JLabel jlTropes3_dany) {
-        this.jlTropes3_dany = jlTropes3_dany;
-    }
-
-    public JPanel getJpTropes4() {
-        return jpTropes4;
-    }
-
-    public void setJpTropes4(JPanel jpTropes4) {
-        this.jpTropes4 = jpTropes4;
-    }
-
+    /**
+     * Retorna la foto de la tropa 4
+     * @return jlTropes4_foto representa la foto de la tropa 4
+     */
     public JButton getJlTropes4_foto() {
         return jlTropes4_foto;
     }
 
-    public void setJlTropes4_foto(JButton jlTropes4_foto) {
-        this.jlTropes4_foto = jlTropes4_foto;
-    }
-
+    /**
+     * Retorna la vida de la tropa 4
+     * @return jlTropes4_vida representa la vida de la tropa 4
+     */
     public JLabel getJlTropes4_vida() {
         return jlTropes4_vida;
     }
 
-    public void setJlTropes4_vida(JLabel jlTropes4_vida) {
-        this.jlTropes4_vida = jlTropes4_vida;
-    }
-
+    /**
+     * Retorna el dany de la tropa 4
+     * @return jlTropes4_dany representa el dany de la tropa 4
+     */
     public JLabel getJlTropes4_dany() {
         return jlTropes4_dany;
     }
 
-    public void setJlTropes4_dany(JLabel jlTropes4_dany) {
-        this.jlTropes4_dany = jlTropes4_dany;
-    }
+
 }

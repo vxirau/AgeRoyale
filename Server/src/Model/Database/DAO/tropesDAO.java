@@ -7,8 +7,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Classe que representa la taula de tropes de la base de dades
+ */
 public class tropesDAO {
 
+    /**
+     * Retorna totes les tropes de la base de dades
+     * @return tropas llista de tropes
+     */
     //OBTENIR
     public ArrayList<Tropa> getAllTropes (){
         ArrayList<Tropa> tropas = new ArrayList<>();
@@ -31,6 +38,11 @@ public class tropesDAO {
         return tropas;
     }
 
+    /**
+     * Retorna les tropes d'un usuari, buscant-lo per l'id
+     * @param idUser id del usuari
+     * @return tropas llista de tropes corresponent amb l'id del usuari
+     */
     public ArrayList<Tropa> getTropesFromUserId (Integer idUser) {
         ArrayList<Tropa> tropas = new ArrayList<>();
         String query = "SELECT tr.* FROM AgeRoyale.tropa as tr, AgeRoyale.usuaritropa as ustr WHERE ustr.idUser = " + idUser + " and ustr.idTropa = tr.idTropa;";

@@ -12,6 +12,9 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+/**
+ * Classe que representa la vista del servidor, hereda de JFrame
+ */
 public class ViewServer extends JFrame {
 
 	private JButton btnStart;
@@ -22,10 +25,16 @@ public class ViewServer extends JFrame {
 	private ArrayList<Partida> games;
 	private boolean hiHaDades=false;
 
+	/**
+	 * Constructor de la classe
+	 */
 	public ViewServer(){
 
 	}
 
+	/**
+	 * S'inicialita la pnatlla gràfica amb tots els seus components gràfics
+	 */
 	public void initAll(){
 		JPanel panelPare = new JPanel(new GridLayout(1, 1));
 		panelPare.setOpaque(false);
@@ -80,6 +89,11 @@ public class ViewServer extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
+	/**
+	 * Genera el gràfic del servidor
+	 * @param selectedIndex indica quina gràfica mostrar (setmana, mes, any)
+	 * @return j retorna el JPanel corresponent a la gràfica
+	 */
 	public JPanel makeGraph(int selectedIndex) {
 		GraphPanel j = new GraphPanel(selectedIndex, this.games);
 		selector.setSelectedIndex(selectedIndex);
@@ -87,7 +101,10 @@ public class ViewServer extends JFrame {
 		return j;
 	}
 
-
+	/**
+	 * Genera la taula de estadistiques
+	 * @return JScrollPane scroll que inclou la taula
+	 */
 	private JScrollPane makePanellEstadistiques() {
 
 		String[] columnNames = {"Username", "% Victòries", "Temps mig x Victoria"};
@@ -125,14 +142,31 @@ public class ViewServer extends JFrame {
 		scrollPane.setBorder(null);
 		return scrollPane;
 	}
+
+	/**
+	 * Arrodoneix el decimal cap adalt
+	 * @param d número decimal a arrodonir
+	 * @param decimalPlace posició del decimal
+	 * @return bd retorna el decimal arrodonit
+	 */
 	public static float round(float d, int decimalPlace) {
 		BigDecimal bd = new BigDecimal(Float.toString(d));
 		bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
 		return bd.floatValue();
 	}
+
+	/**
+	 * Assigna les partides
+	 * @param all representa les partides
+	 */
 	public void setAllGames(ArrayList<Partida> all){
 		this.games = all;
 	}
+
+	/**
+	 * Assigna els valors a la taula d'estadístiques
+	 * @param all representa els usuaris
+	 */
 	public void setTableContents(ArrayList<Usuari> all){
 		Object[][] data = new Object[all.size()][3];
 		for(int i=0; i<all.size() ;i++){
@@ -146,18 +180,38 @@ public class ViewServer extends JFrame {
 		}
 		this.data = data;
 	}
+
+	/**
+	 * Assigna les dades
+	 * @param v indica si hi ha Dades
+	 */
 	public void setDades(boolean v){
 		this.hiHaDades = v;
 	}
+
+	/**
+	 * Retorna la taula d'estadistiques
+	 * @return tabbedPane representa la taula JTabbedPane
+	 */
 	public JTabbedPane getTabbedPane(){
 		return this.tabbedPane;
 	}
+
+	/**
+	 * Controlador del servidor
+	 * @param controlador variable que determina el que ha de succeir
+	 */
 	public void serverController(ActionListener controlador) {
 		btnStart.addActionListener(controlador);
 		//btnStop.addActionListener(controlador);
 		selector.addActionListener(controlador);
 
 	}
+
+	/**
+	 * Actualitza la taula d'estadístqiues
+	 * @param p representa la taula d'estadistiques
+	 */
 	public void refresh(JTabbedPane p){
 		this.tabbedPane = p;
 		revalidate();

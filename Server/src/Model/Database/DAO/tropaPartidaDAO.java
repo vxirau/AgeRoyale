@@ -10,8 +10,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * Classe que representa la tropa de la partida
+ */
 public class tropaPartidaDAO {
 
+    /**
+     * Retorna les tropes de la partida
+     * @param idPartida id de la partida
+     * @return tropas llista de tropes
+     */
     public synchronized ArrayList<Tropa> getTropesPartida (int idPartida){
         ArrayList<Tropa> tropas = new ArrayList<>();
         String query = "SELECT trp.* FROM AgeRoyale.tropapartida as trp WHERE trp.idPartida = " + idPartida + " ;";
@@ -48,6 +56,10 @@ public class tropaPartidaDAO {
         return tropas;
     }
 
+    /**
+     * Afegeix una tropa
+     * @param tropa tropa a afegir
+     */
     public void addTropa (Tropa tropa){
         String query = "INSERT INTO AgeRoyale.tropapartida (idPartida, sprite, troopDirection, isMoving, xVariation, yVariation, xPosition, yPosition, atac, vida, cost, tipus) VALUE ( " + tropa.getIdPartida() + ", '" + tropa.getWhichSprite() + "', '" + tropa.getTroopDirection() + "', " + tropa.isMoving() + ", " + tropa.getxVariation() + ", " + tropa.getyVariation() + ", " + tropa.getxPosition() + ", " + tropa.getyPosition() + ", " +  tropa.getAtac() + ", " + tropa.getVida() + ", " + tropa.getCost() + ", " + tropa.isOfensiva() +");";
         DBConnector.getInstance().insertQuery(query);
