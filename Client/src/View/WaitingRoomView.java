@@ -215,12 +215,6 @@ public class WaitingRoomView extends JFrame {
         fondo.setBounds(0, 0, 450, 800);
         main.add(fondo);
 
-        /*
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.setLocationRelativeTo(null);
-        this.setSize(450, 800);
-        this.setContentPane(main);
-         */
 
         revalidate();
         repaint();

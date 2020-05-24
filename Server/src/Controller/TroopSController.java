@@ -66,7 +66,6 @@ public class TroopSController {
                 tropa.setxPosition(xTroop);
                 switch (cont) {
                     case 0:
-                        //this.sprite = Sprite.SKELETON_RIGHT;
                         if(tropa.getTroopType() == 0){
                             tropa.setSprite(tropa.getMov().get(0));
                         }
@@ -79,7 +78,6 @@ public class TroopSController {
                     }
                         break;
                     case 1:
-                        //this.sprite = Sprite.SKELETON_RIGHT_LEFT_FOOT;
                         if(tropa.getTroopType() == 0){
                             tropa.setSprite(tropa.getMov().get(1));
                         }
@@ -90,7 +88,6 @@ public class TroopSController {
                     }
                         break;
                     case 2:
-                        //this.sprite = Sprite.SKELETON_RIGHT_RIGHT_FOOT;
                         if(tropa.getTroopType() == 0){
                             tropa.setSprite(tropa.getMov().get(2));
                         }
@@ -156,7 +153,6 @@ public class TroopSController {
 
                         break;
                     case 2:
-                        //this.sprite = Sprite.SKELETON_FRONT_RIGHT_FOOT;
                         tropa.setSprite(tropa.getMov().get(11));
 
                         DedicatedServer.cont = -1;
@@ -176,7 +172,6 @@ public class TroopSController {
                 tropa.setyPosition(yTroop);
                 switch (cont) {
                     case 0:
-                        //this.sprite = Sprite.SKELETON_FRONT;
                         tropa.setSprite(tropa.getMov().get(3));
                     try {
                         Thread.sleep(160);
@@ -185,7 +180,6 @@ public class TroopSController {
                     }
                         break;
                     case 1:
-                        //this.sprite = Sprite.SKELETON_FRONT_LEFT_FOOT;
                         tropa.setSprite(tropa.getMov().get(4));
                     try {
                         Thread.sleep(160);
@@ -194,7 +188,6 @@ public class TroopSController {
                     }
                         break;
                     case 2:
-                        //this.sprite = Sprite.SKELETON_FRONT_RIGHT_FOOT;
                         tropa.setSprite(tropa.getMov().get(5));
                         DedicatedServer.cont = -1;
                     try {
@@ -212,7 +205,6 @@ public class TroopSController {
             //Si la tropa no ha estat destruida, la movem
             if (!tropa.entityIsDestroyed()) {
                 if (onCollision(tropa)) {
-                    //updatexPosition(xVariation);
                     xTroop = tropa.getxPosition() + xVariation;
                     tropa.setxPosition(xTroop);
                 } else {
@@ -220,7 +212,6 @@ public class TroopSController {
                     xVariation = 0;
                 }
                 if (onCollision(tropa)) {
-                    //updateyPosition(yVariation);
                     yTroop = tropa.getyPosition() + yVariation;
                     tropa.setyPosition(yTroop);
                 } else {
@@ -292,7 +283,6 @@ public class TroopSController {
                         if( edificiDef.get(0).getEntityLife() > 0){
                             tropa.setxVariation(0);
                             edificiDef.get(0).setEntityLife(edificiDef.get(0).getEntityLife() - tropa.getAtac());
-                            System.out.println("ME HACES DAÑO BBSITAA: " + edificiDef.get(0).getEntityLife());
 
                         } else {
 
@@ -308,7 +298,6 @@ public class TroopSController {
                         if( edificiDef.get(4).getEntityLife() > 0){
                             tropa.setxVariation(0);
                             edificiDef.get(4).setEntityLife(edificiDef.get(4).getEntityLife() - tropa.getAtac());
-                            System.out.println("LE ESTAS PARTIENDO EL CULO AL CASTILLO:" + edificiDef.get(4).getEntityLife());
 
                         } else {
                             //Destruim la torre enemiga
@@ -331,11 +320,9 @@ public class TroopSController {
                     }else if (yPosition < OWN_TOWER_DELIM && xPosition < RIGHT_WATER_PADDING && yPosition > TOWER_PADDING_OPPONENT ){
                         tropa.setxVariation(VARIATION);
                     }else if (yPosition < TOWER_PADDING_OPPONENT &&  yPosition > CASTLE_PADDING){
-                        //tropa.setxVariation(-VARIATION);
                         if( edificiDef.get(1).getEntityLife() > 0){
                             tropa.setxVariation(0);
                             edificiDef.get(1).setEntityLife(edificiDef.get(1).getEntityLife() - tropa.getAtac());
-                            System.out.println("ME HACES DAÑO BBSITAA: " + edificiDef.get(1).getEntityLife());
 
                         } else {
 
@@ -352,7 +339,6 @@ public class TroopSController {
                         if( edificiDef.get(4).getEntityLife() > 0){
                             tropa.setxVariation(0);
                             edificiDef.get(4).setEntityLife(edificiDef.get(4).getEntityLife() - tropa.getAtac());
-                            System.out.println("LE ESTAS PARTIENDO EL CULO AL CASTILLO: " + edificiDef.get(4).getEntityLife());
 
                         } else {
 
@@ -406,7 +392,6 @@ public class TroopSController {
                             tropa.setxVariation(0);
 
                             edificiDef.get(2).setEntityLife(edificiDef.get(2).getEntityLife() - tropa.getAtac());
-                            System.out.println("ME HACES DAÑO BBSITAA: " + edificiDef.get(2).getEntityLife());
 
                         } else {
 

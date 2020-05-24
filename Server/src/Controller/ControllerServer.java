@@ -63,18 +63,14 @@ public class ControllerServer implements ActionListener, WindowListener {
             p.setSelectedIndex(2);
             view.refresh(p);
         }else if(e.getSource() instanceof  JButton){
-            //String botoClicked = ((JButton)e.getSource()).getText();
-            //if(botoClicked.equals("Start")){
+
             if (!flag) {
                 this.server = new Server(view);
                 JOptionPane.showMessageDialog(view, "Server started!", "Server", JOptionPane.PLAIN_MESSAGE);
                 server.startServer();
             }
             flag = true;
-            //}
-            /*else if(botoClicked.equals("Stop")){
-                server.stopServer();
-            }*/
+
         }
 
 

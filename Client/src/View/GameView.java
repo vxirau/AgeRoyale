@@ -116,7 +116,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
         this.pixelsImage = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
         this.pixels = new int[width * height];
         this.tropes = new CopyOnWriteArrayList<>();
-        //this.troops = new ArrayList<>();
         this.updates = new CopyOnWriteArrayList<>();
         mouseIsClicked = false;
         whichTroop = 10;
@@ -129,7 +128,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
         ompleBandera(bufferedImages1, bufferedImages2);
         this.setVisible(true);
         this.setResizable(false);
-        //this.setTitle(gameController.getUsuari().getNickName());
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setSize(width, height);
         this.setLocationRelativeTo(null);
@@ -285,9 +283,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
         }
 
-        //Copiem els grafics al joc
         System.arraycopy(pixels, 0, pixelsImage, 0, pixelsImage.length);
-        //L'objecte g s'encarregara de dibuixar els grafics a la pantalla
         Graphics g = bufferStrategy.getDrawGraphics();
         g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
         for (Iterator<Tropa> iterator = tropes.iterator(); iterator.hasNext();) {
@@ -316,7 +312,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
         deck.showDeck(g, xMousePosition, yMousePosition, mouseIsClicked, whichTroop);
 
         g.dispose();
-        //Mostrem el que tenim
         bufferStrategy.show();
 
     }
@@ -417,8 +412,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
             if(elapsed > 2500){
                 startTime[0] = System.currentTimeMillis();
             }
-
-            //Message message = new Message(this, "Game Refresh");
             final long loopStart = System.nanoTime();
 
             elapsedTime = loopStart - updateReference;
@@ -427,23 +420,11 @@ public class GameView extends JFrame implements Runnable, Serializable {
             delta += elapsedTime/NS_PER_FRAME;
 
             while(delta >= 1){
-                //updateGame();
                 synchronized (Integer.class) {
                     showGraphics();
                 }
                 delta--;
             }
-
-
-
-
-           /* synchronized (Tropa.class) {
-                if (sendcheck) {
-                    gameController.sendCheck();
-                    sendcheck = false;
-                }
-            }*/
-
         }
     }
 
@@ -477,8 +458,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
         this.addMouseMotionListener(gameController);
         this.addMouseListener(gameController);
         this.addWindowListener(gameController.windowListener);
-        //this.gameController = gameController;
-        //this.addWindowListener(w);
     }
 
     /**

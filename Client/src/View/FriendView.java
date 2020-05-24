@@ -42,7 +42,6 @@ public class FriendView extends JFrame {
     public void initAll(){
         this.removeAll();
 
-			//------------------------------------------------------OK------------------------------------------------------
         jpFriends = new JPanel(null);
         jpFriends.setOpaque(false);
 
@@ -123,7 +122,6 @@ public class FriendView extends JFrame {
         Icon iconoButtonUser = new ImageIcon(fonsButtonUser.getImage().getScaledInstance(50, 50, Image.SCALE_FAST));
         jbSearchAmic.setIcon(iconoButtonUser);
         jpFriends.add(jbSearchAmic);
-        //--------------------------------------------------------------------------------------------------------------
 
 
         for (int i = 0; i < usuari.getAmics().size() ; i++) {
@@ -148,7 +146,7 @@ public class FriendView extends JFrame {
             JLabel nomAmic = new JLabel();
 						nomAmic.setText("<html><font color='white'>" + Utils.ferEspais(14) + " "+ usuari.getAmics().get(i).getNickName() + "</font></html>");
             nomAmic.setForeground(Color.WHITE);
-            nomAmic.setBorder(new EmptyBorder(10,0,0,0));//top,left,bottom,right
+            nomAmic.setBorder(new EmptyBorder(10,0,0,0));
 
             nomAmic.setFont(new Font("Helvetica", 0, 20));
             jpsAmics[i].add(nomAmic);
@@ -185,7 +183,6 @@ public class FriendView extends JFrame {
 
 
 
-		//------------------------------------------------------OK------------------------------------------------------
 		jpAmics.setVisible(true);
         scrollPaneAmics.setViewportView(jpAmics);
         jpFriends.add(scrollPaneAmics);
@@ -196,7 +193,6 @@ public class FriendView extends JFrame {
         getLayeredPane().add(fondo, JLayeredPane.FRAME_CONTENT_LAYER);
         fondo.setBounds(0, 0, 450, 700);
         jpFriends.add(fondo);
-				//--------------------------------------------------------------------------------------------------------------
         revalidate();
         repaint();
     }

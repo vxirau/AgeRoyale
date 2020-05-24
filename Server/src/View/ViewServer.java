@@ -56,20 +56,11 @@ public class ViewServer extends JFrame {
 		Start.setOpaque(false);
 
 		JPanel panel = new JPanel(new BorderLayout());
-		/*btnStop = new JButton("Stop");
-		panel.add(btnStop);
-		btnStop.setFont(new Font("Arial", Font.BOLD , 40));
-		btnStop.setForeground(Color.decode("#FFDC60"));
-		btnStop.setBorderPainted(false);
-		btnStop.setContentAreaFilled(false);
-		btnStop.setAlignmentY(Component.CENTER_ALIGNMENT);
-		btnStop.setFocusPainted(false);
-		btnStop.setOpaque(false);*/
+
 		panel.setOpaque(false);
 
 
 		panelPare.add(Start);
-		//panelPare.add(panel);
 
 		panelPare.setBackground(Color.decode("#85201F"));
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -203,7 +194,6 @@ public class ViewServer extends JFrame {
 	 */
 	public void serverController(ActionListener controlador) {
 		btnStart.addActionListener(controlador);
-		//btnStop.addActionListener(controlador);
 		selector.addActionListener(controlador);
 
 	}

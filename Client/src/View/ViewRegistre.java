@@ -125,7 +125,6 @@ public class ViewRegistre extends JFrame {
 			botoRegistre.setOpaque(true);
 			jpPare.add(botoRegistre);
 
-			//setBounds(x, y, width, height)
 			jbAtras = new JButton();
 			jbAtras.setText("ATRAS");
 			jbAtras.setBounds(130, 710, 200, 35);

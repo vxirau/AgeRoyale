@@ -100,10 +100,7 @@ public class MenuView extends JFrame implements Runnable {
     private void init(){
         this.setLayout(new BorderLayout());
 
-        //iniciem el menu
         initMenu();
-
-        //Iniciem els 5 panels pricipals
         initConfig();
         initTropes();
         initMain();

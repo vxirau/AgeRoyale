@@ -94,15 +94,12 @@ public class MainView extends JFrame{
         GridBagConstraints c = new GridBagConstraints();
 
         c.fill = GridBagConstraints.HORIZONTAL;
-        //c.insets = new Insets(20,20,0,10);  //top padding
         c.weightx = 0.5;
         c.gridx = 0;
-        //c.gridwidth = 2;
         c.gridy = 0;
         jpMainMiddle.add(new JLabel(new ImageIcon("Client/resources/main_victories_icon.png"), SwingConstants.CENTER), c);
 
-        //c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(20,20,0,10);  //top padding
+        c.insets = new Insets(20,20,0,10);
         c.weightx = 0.5;
         c.gridx = 1;
         c.gridwidth = 2;
@@ -112,16 +109,13 @@ public class MainView extends JFrame{
         jlVictories.setVerticalAlignment(SwingConstants.CENTER);
         jpMainMiddle.add(jlVictories, c);
 
-        //c.fill = GridBagConstraints.HORIZONTAL;
-        //c.insets = new Insets(20,20,0,10);  //top padding
+
         c.weightx = 0.5;
         c.gridx = 0;
-        //c.gridwidth = 2;
         c.gridy = 1;
         jpMainMiddle.add(new JLabel(new ImageIcon("Client/resources/main_clock_icon.png"), SwingConstants.CENTER), c);
 
-        //c.fill = GridBagConstraints.HORIZONTAL;
-        //c.insets = new Insets(20,20,0,10);  //top padding
+
         c.weightx = 0.5;
         c.gridx = 1;
         c.gridwidth = 2;
@@ -131,16 +125,13 @@ public class MainView extends JFrame{
         jlTempsXVictoria.setVerticalAlignment(SwingConstants.CENTER);
         jpMainMiddle.add(jlTempsXVictoria, c);
 
-        //c.fill = GridBagConstraints.HORIZONTAL;
-        //c.insets = new Insets(20,20,0,10);  //top padding
+
         c.weightx = 0.5;
         c.gridx = 0;
-        //c.gridwidth = 2;
         c.gridy = 2;
         jpMainMiddle.add(new JLabel(new ImageIcon("Client/resources/main_defaultTropa_icon.png"), SwingConstants.CENTER), c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
-        //c.insets = new Insets(20,20,0,10);  //top padding
         c.weightx = 0.5;
         c.gridx = 1;
         c.gridwidth = 2;

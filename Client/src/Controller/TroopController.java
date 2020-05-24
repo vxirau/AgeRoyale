@@ -177,31 +177,10 @@ public class TroopController {
     * */
     public void deleteTropa(Tropa t){
 
-       /*if(indice < gameView.getTropes().size()) {
-
-
-            gameView.getTropes().remove(indice);
-            System.out.println(gameView.getUpdates().get(indice).getT().getState());
-            gameView.getUpdates().get(indice).getT().interrupt();
-            gameView.getUpdates().get(indice).getT().stop();
-            gameView.getUpdates().remove(indice);
-
-            for(int i = 0; i < gameView.getUpdates().size(); i++){
-                if(gameView.getUpdates().get(i).getIndex() > i){
-                    System.out.println("The modificat l'index de " + gameView.getUpdates().get(i).getIndex() + " a : " + i);
-                    gameView.getUpdates().get(i).setIndex(i);
-                } else {
-                    System.out.println("Index: " + gameView.getUpdates().get(i).getIndex());
-                }
-            }
-       }*/
-
         for (int i = 0; i <gameView.getTropes().size(); i++) {
             if(gameView.getTropes().get(i).getInitialX() == t.getInitialX() && gameView.getTropes().get(i).getInitialY() == t.getInitialY()) {
-                //gameView.getTropes().set(indice,t);
                 Tropa troopToDelete = gameView.getTropes().get(i);
                 gameView.getTropes().remove(troopToDelete);
-                //gameView.setRebut(true);
             }
 
             if(gameView.getUpdates().get(i).getTropa().getInitialX() == t.getInitialX() && gameView.getUpdates().get(i).getTropa().getInitialY() == t.getInitialY()){
@@ -227,16 +206,6 @@ public class TroopController {
 
 
     }
-
-   /* public void destroyTroop(Tropa tropa) {
-        System.out.println("COMO NO FUNCIONES TE REVIENTO HIJOUPUTA");
-        ArrayList<Tropa> troopsAux = gameView.getTropes();
-
-        troopsAux.remove(tropa);
-        gameView.setTroops(troopsAux);
-
-
-    }*/
 
     /**
     * Retorna la variable accept de la classe

@@ -282,8 +282,7 @@ public class TropesView extends JFrame{
                 iconotropa2foto = new ImageIcon(tropa2_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
                 jlTropes2_foto.setIcon(iconotropa2foto);
 
-            //jpTropes2.add(jlTropes2_foto);
-            //jpTropes2.add(new JLabel(""));
+
             //TROPA 3 UPDATE
                 tropa3_foto = new ImageIcon(this.getClass().getResource(WIZARD));
                 iconotropa3foto = new ImageIcon(tropa3_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
@@ -308,8 +307,6 @@ public class TropesView extends JFrame{
                 iconotropa2foto = new ImageIcon(tropa2_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
                 jlTropes2_foto.setIcon(iconotropa2foto);
 
-            //jpTropes2.add(jlTropes2_foto);
-            //jpTropes2.add(new JLabel(""));
             //TROPA 3 UPDATE
                 tropa3_foto = new ImageIcon(this.getClass().getResource(WIZARD));
                 iconotropa3foto = new ImageIcon(tropa3_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));

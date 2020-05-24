@@ -67,7 +67,6 @@ public class UserService extends Thread{
 				NetworkConfiguration.Setup = true;
 			}
 			this.socket = new Socket(NetworkConfiguration.staticIP, NetworkConfiguration.staticPort);
-			//this.socket = new Socket("192.168.86.31", 2003);
 			this.doStream = new ObjectOutputStream(socket.getOutputStream());
 			this.doInput = new ObjectInputStream(socket.getInputStream());
 			this.dInput = new DataInputStream(socket.getInputStream());
@@ -129,8 +128,6 @@ public class UserService extends Thread{
 
 
 				Message jelow = (Message) doInput.readObject();
-
-				//System.out.println("Arriba a client: " + jelow.getType());
 				if (jelow.getType().equals("REGISTER_OK")) {
 					JOptionPane.showOptionDialog(new JFrame(), "T'has registrat correctament!", "Congratulacions", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 					LoginView lview = new LoginView();
@@ -178,32 +175,17 @@ public class UserService extends Thread{
 									troopController.deleteTropa(t);
 								} else {
 									troopController.getTropa(t);
-									//troopController.show(t);
 									troopController.setAccept(true);
 								}
 							} else {
 								troopController.getTropa(t);
-								//troopController.show(t);
 								troopController.setAccept(true);
 							}
 
                         } else {
-
-							/*or(int i = 0; i < troopController.getGameView().getTropes().size(); i++){
-								if(found){
-									troopController.getGameView().getUpdates().get(i).setIndex(i-1);
-									System.out.println("La he trobat al mediooo");
-								}
-								if(troopController.getGameView().getTropes().get(i).equals(t)){
-									found = true;
-								}
-							}
-							found = false;*/
 							troopController.deleteTropa(t);
                         }
                     }
-
-					//troopController.getGameView().setSendcheck(true);
 				} else if(jelow.getType().equals("FindFriendResposta")){
                 	friendsController.setFriends((ArrayList<Usuari>) jelow.getObject());
 				}else if(jelow.getType().equals("requestsReply")){
@@ -211,51 +193,7 @@ public class UserService extends Thread{
 				} else if(jelow.getType().equals("requestsReplyUpdate")) {
 					ArrayList<Usuari>  requests = (ArrayList<Usuari>) jelow.getObject();
 					friendsController.setRequests(requests);
-				}/*else if(jelow.getType().equals("tropesCheck")){
-
-					Tropa t = (Tropa) jelow.getObject();
-					if(t.getWhichSprite() != null) {
-						t.setIdPartida(10);
-						t.setOn(true);
-						if(t.getWhichSprite().equals("BOMB") ) {
-                            t.setyPosition(610 - t.getyPosition());
-                            t.setxPosition(285 - t.getxPosition());
-                        } else if(t.getWhichSprite().equals("SKELETON_BACK") || t.getWhichSprite().equals("GOBLIN_BACK")){
-                            t.setyPosition(590 - t.getyPosition());
-                            t.setxPosition(294 - t.getxPosition());
-                        } else if(t.getWhichSprite().equals("MAGIC_TOWER")){
-                            t.setyPosition(590 - t.getyPosition());
-                            t.setxPosition(284 - t.getxPosition());
-                        }
-						t.setyVariation(2);
-						t.setDefaultY(10);
-						t.setGameMap(gameController.getGameView().getGameMap());
-						if (t.getWhichSprite().equals("SKELETON_BACK")) {
-							t.setSprite(Sprite.SKELETON_BACK);
-							t.setSprites(Sprite.SKELETON_BACK);
-							t.setNumTorre(-1);
-							gameController.getGameView().getTropes().add(t);
-						} else if(t.getWhichSprite().equals("GOBLIN_BACK")){
-							t.setSprite(Sprite.GOBLIN_BACK);
-							t.setSprites(Sprite.GOBLIN_BACK);
-							t.setNumTorre(-1);
-							gameController.getGameView().getTropes().add(t);
-						} else if(t.getWhichSprite().equals("MAGIC_TOWER")){
-							t.setyVariation(0);
-							t.setSprite(Sprite.MAGIC_TOWER);
-							t.setSprites(Sprite.MAGIC_TOWER);
-							t.setNumTorre(-1);
-							gameController.getGameView().getTropes().add(t);
-						} else if(t.getWhichSprite().equals("BOMB")){
-							t.setyVariation(0);
-							t.setSprite(Sprite.BOMB);
-							t.setSprites(Sprite.BOMB);
-							t.setNumTorre(-1);
-							gameController.getGameView().getTropes().add(t);
-						}
-					}
-					gameController.getGameView().setSendcheck(true);
-				}*/else if(jelow.getType().equals("updateWaiting")){
+				}else if(jelow.getType().equals("updateWaiting")){
 					Partida p= (Partida)jelow.getObject();
 					waitingController.updateGame(p);
 				}else if(jelow.getType().equals("InviteRecived")){
@@ -268,17 +206,9 @@ public class UserService extends Thread{
 				} else if(jelow.getType().equals("SetTropesStats")){
 					gameController.setTropaStatic((ArrayList<Tropa>) jelow.getObject());
 				}else if(jelow.getType().equals("Tropa Answer")){
-
 					Tropa t = (Tropa) jelow.getObject();
-
 					gameController.getGameView().getTroopsToAdd().add(t);
-
-
-
 				}
-
-
-
 			} catch (IOException | ClassNotFoundException e ) {
 				e.printStackTrace();
 				stopServerComunication();

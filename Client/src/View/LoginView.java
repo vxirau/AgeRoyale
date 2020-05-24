@@ -108,7 +108,7 @@ public class LoginView extends JFrame {
 
         //Text: pregunta
         JLabel jlText4 = new JLabel();
-        jlText4.setText("No estas registra't?");
+        jlText4.setText("No estas registrat?");
         jlText4.setBounds(70, 440, 200, 80);
         jlText4.setOpaque(false);
         jlText4.setForeground(Color.WHITE);
@@ -139,7 +139,6 @@ public class LoginView extends JFrame {
 
         ImageIcon imagen2 = new ImageIcon(this.getClass().getResource("/resources/fondo-rojo-oscuro-marron_28629-798.png"));
         Icon icono = new ImageIcon(imagen2.getImage().getScaledInstance(450, 800, Image.SCALE_DEFAULT));
-        //Image image = imagen2.getImage();
         JLabel fondo = new JLabel();
         fondo.setIcon(icono);
         getLayeredPane().add(fondo, JLayeredPane.FRAME_CONTENT_LAYER);

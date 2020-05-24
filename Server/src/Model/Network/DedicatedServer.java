@@ -242,9 +242,7 @@ public class DedicatedServer extends Thread {
 					rDAO.acceptRequest(users.get(0), users.get(1));
 					aDAO.addAmic(users.get(0), users.get(1));
 					ArrayList<Usuari> a = aDAO.getAmics(users.get(0));
-					//Ja el fas amb el broadcast
-					//Message messageResposta = new Message(a, "FriendsResposta");
-					//objectOut.writeObject(messageResposta);
+
 					Message messageResposta2 = new Message(rDAO.getFriendRequests(users.get(0)), "requestsReplyUpdate");
 					objectOut.writeObject(messageResposta2);
 					server.broadcastClients();
@@ -268,7 +266,7 @@ public class DedicatedServer extends Thread {
 				} else if (m.getType().equals("newPlayer")) {
 					Partida p = (Partida) m.getObject();
 					partidaDAO pDAO = new partidaDAO();
-					if (!pDAO.hasPlayerOne(p) && p.getJugadors().size() > 0) { //TODO: descobrir que fa aixo aqui -> if(pDAO.hasPlayerOne(p) && p.getIdPartida() != pDAO.getPlayerOne(p)) : versio original
+					if (!pDAO.hasPlayerOne(p) && p.getJugadors().size() > 0) {
 						pDAO.addPlayerOne(p, p.getJugadors().get(0));
 					} else if (!pDAO.hasPlayerTwo(p) && p.getJugadors().size() > 1) {
 						pDAO.addPlayerTwo(p, p.getJugadors().get(1));
