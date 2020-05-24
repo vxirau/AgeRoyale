@@ -1,6 +1,5 @@
 package src.View;
 
-
 import src.Partida;
 import src.Usuari;
 
@@ -10,16 +9,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.geom.Line2D;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class ViewServer extends JFrame {
 
 	private JButton btnStart;
-	private JButton btnStop;
 	private Object[][] data;
 	private JComboBox selector;
 	private JTabbedPane tabbedPane;

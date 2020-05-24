@@ -13,12 +13,22 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+/**
+* Controlador destinat a la vista de registre. Implementa actionListener perque detectarà quan es realitza una acció.
+ * E implementa també una WindowListener perque en cas de tancar-se volem tornar a la finestra de login.
+* */
 public class RegisterViewController implements ActionListener, WindowListener {
 	private ViewRegistre view;
 	private UserService uService;
 	private Object[] options = {"Entèsos"};
 
 
+
+	/**
+	* Constructor de la classe
+	 * @param view vista del registre
+	 * @param uService variable que permet la connexió del client amb el servidor
+	* */
     public RegisterViewController(ViewRegistre view, UserService uService) {
         this.view = view;
         this.uService = uService;
@@ -27,6 +37,10 @@ public class RegisterViewController implements ActionListener, WindowListener {
 				}
     }
 
+    /**
+    * Funció que sobrecarrega la funció de la interficie actionListener. Es crida quan es realitza alguna acció per la part de clinet.
+	 * @parma event variable que conté la informació de quina acció ha realitzat el client.
+    * */
 	public void actionPerformed(ActionEvent event) {
 		String boto = ((JButton) event.getSource()).getText();
 
@@ -70,41 +84,65 @@ public class RegisterViewController implements ActionListener, WindowListener {
 		}
     }
 
+	/**
+	 * --
+	 * */
 	@Override
 	public void windowOpened(WindowEvent e) {
 
 	}
 
+	/**
+	 * --
+	 * */
 	@Override
 	public void windowClosing(WindowEvent e) {
 
 	}
 
+	/**
+	 * En quan la finestra es tanca es tanca la comuncació amb el servidor d'aquest client
+	 * */
 	@Override
 	public void windowClosed(WindowEvent e) {
 		uService.stopServerComunication();
 	}
 
+	/**
+	 * --
+	 * */
 	@Override
 	public void windowIconified(WindowEvent e) {
 
 	}
 
+	/**
+	 * --
+	 * */
 	@Override
 	public void windowDeiconified(WindowEvent e) {
 
 	}
 
+	/**
+	 * --
+	 * */
 	@Override
 	public void windowActivated(WindowEvent e) {
 
 	}
 
+	/**
+	 * --
+	 * */
 	@Override
 	public void windowDeactivated(WindowEvent e) {
 
 	}
-
+	/**
+	* Assigna la visibilitat de la vista en funció del boolean que reb per valor
+	 * @param b boolean que indicarà la visibilitat de la vista.
+	* */
 	public void setView(boolean b) {
     	view.setVisible(b);
 	}

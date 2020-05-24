@@ -62,7 +62,7 @@ public class Server extends Thread {
 				Socket sClient = sSocket.accept();
 				// creem un nou servidor dedicat per atendre les
 				// peticions del client
-				DedicatedServer pwClient = new DedicatedServer(sClient, view, dServers, this);
+				DedicatedServer pwClient = new DedicatedServer(sClient, dServers, this);
 				dServers.add(pwClient);
 				// engegem el servidor dedicat
 				pwClient.startDedicatedServer();

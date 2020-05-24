@@ -11,9 +11,6 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 public class DBConnector {
-    private static String userName;
-    private static String password;
-    private static String db = "ageroyale";
 
     private String url = NetworkConfiguration.staticDPip;
     public Connection conn;
@@ -21,8 +18,6 @@ public class DBConnector {
     private static DBConnector instance;
 
     private DBConnector() {
-        DBConnector.userName = NetworkConfiguration.staticDBUser;
-        DBConnector.password = NetworkConfiguration.staticDBPass;
         this.instance = this;
     }
 

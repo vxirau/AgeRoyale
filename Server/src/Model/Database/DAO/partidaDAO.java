@@ -38,31 +38,6 @@ public class partidaDAO {
         return partida;
     }
 
-    public ArrayList<Partida> getPartidesFromUserId (Usuari usuari){
-        usuariDAO usuariDAO = new usuariDAO();
-        spectatorDAO sDAO = new spectatorDAO();
-        ArrayList<Partida> partides = new ArrayList<>();
-        String query = "SELECT par.* FROM AgeRoyale.partida AS par WHERE player1 = " + usuari.getIdUsuari() + " OR player2 = " + usuari.getIdUsuari() + " ;";
-        ResultSet rs = DBConnector.getInstance().selectQuery(query);
-        try{
-            while (rs.next()){
-                Partida partida = new Partida();
-                partida.setIdPartida(rs.getInt("idPartida"));
-                partida.setDuracio(rs.getInt("duration"));
-                partida.setData(rs.getString("date"));
-                partida.setName(rs.getString("name"));
-                partida.setFinished(rs.getBoolean("finished"));
-                partida.setHost(rs.getString("host"));
-                partida.setPubliques(rs.getBoolean("publica"));
-                partida.setJugadors(usuariDAO.getUserFromId(rs.getInt("player1")), usuariDAO.getUserFromId(rs.getInt("player2")));
-                partida.setEspectadors(sDAO.getAllSpectatorInGame(partida));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return partides;
-    }
-
     public ArrayList<Partida> getAllPartides (){
         usuariDAO usuariDAO = new usuariDAO();
         spectatorDAO sDAO = new spectatorDAO();
@@ -142,16 +117,6 @@ public class partidaDAO {
     }
 
     //BORRAR PARTIDA
-    public void removePartida (Partida partida){
-        String query = "DELETE FROM AgeRoyale.partida WHERE idPartida = " + partida.getIdPartida() + ";";
-        DBConnector.getInstance().deleteQuery(query);
-    }
-
-    public void removePartida (int idPartida){
-        String query = "DELETE FROM AgeRoyale.partida WHERE idPartida = " + idPartida + ";";
-        DBConnector.getInstance().deleteQuery(query);
-    }
-
     public void removePartida (Usuari user){
         String query = "DELETE FROM AgeRoyale.partida WHERE player1 = " + user.getIdUsuari() + " OR player2 = " + user.getIdUsuari() + ";";
         DBConnector.getInstance().deleteQuery(query);
@@ -219,21 +184,6 @@ public class partidaDAO {
             has = 1;
         }else{
             has = 2;
-        }
-        return has;
-    }
-
-
-    public Integer getPlayerOne(Partida p){
-        Integer has = null;
-        String query = "SELECT par.player1 FROM AgeRoyale.partida as par WHERE idPartida = " + p.getIdPartida();
-        ResultSet rs = DBConnector.getInstance().selectQuery(query);
-        try {
-            if (rs.next()) {
-                has = (Integer) rs.getObject("player1");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return has;
     }

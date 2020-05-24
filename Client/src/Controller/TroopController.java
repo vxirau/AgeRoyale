@@ -15,6 +15,10 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+
+/**
+* Classe encarregada de controlar els moviments de la tropa a la vista.
+* */
 public class TroopController {
 
     private GameView gameView;
@@ -29,19 +33,25 @@ public class TroopController {
     private CopyOnWriteArrayList<Tropa> detected =  new CopyOnWriteArrayList<>();
 
 
-
-    public TroopController(GameView gameView, UserService userService) throws IOException {
+    /**
+    * Constructor de la classe
+     * @param gameView vista del joc
+     * @param userService variable que permet la comunicació amb el servidor desde el client
+    * */
+    public TroopController(GameView gameView, UserService userService){
         this.gameView = gameView;
         this.uService = userService;
 
-        //userService.startServerComunication(); //TODO: comentar
 
         gameView.setTroopController(this);
 
     }
 
 
-
+    /**
+    * Encarregada de detectar la informació de la ubicació de la tropa i de la seva sitaució al joc
+     * @param tropa variable de tipus tropa amb tota la informació que necessita per funcionar
+    * */
     public void checkTroopsStatus(Tropa tropa) {
 
         troops = detectedTroops(gameView.getTropes(), tropa);
@@ -90,6 +100,13 @@ public class TroopController {
 
     }
 
+
+    /**
+    * Detecta tropes aprop de una tropa en concret.
+     * @param tropes array de tropes que estan ara mateix a la partida
+     * @param t troba al voltant de que volem trobar altres tropes
+     * @return llista de tropes que estan aprop de la tropa passada
+    * */
     public CopyOnWriteArrayList<Tropa> detectedTroops(CopyOnWriteArrayList<Tropa> tropes, Tropa t){
         ArrayList<Point2D> points = new ArrayList<>();
         points.add(new Point2D.Float(t.getxPosition() + 20,t.getyPosition() + 20));
@@ -122,6 +139,13 @@ public class TroopController {
         return founds;
     }
 
+
+    /**
+    * Fa la animcació de fer explotar una bomba
+     * @param tropa objecte troba que representa la bomba
+     * @param cont variable que ens indica en quin estat de la explosió està
+     * @return tropa, la tropa modificada. Es modifica el seu sprite
+    * */
     public Tropa bombExplosion(Tropa tropa, int cont) {
         switch (cont) {
             case 0:
@@ -206,6 +230,11 @@ public class TroopController {
         uService.sendEdificis(m);
     }*/
 
+    /**
+    * Actualitza la tropa en questió. La i simbolitza les vegades que s'ha actualitzat
+     * @param t tropa a modificar
+     * @param i vegeades actualitzat
+    * */
     public void update(Tropa t, int i){
         //checkTroopsStatus(t);
         if(gameView.getTropes().size() > 0){
@@ -220,6 +249,10 @@ public class TroopController {
         }
     }
 
+    /**
+    * Actualitza la tropa en posició i sprite
+     * @param tropa tropa a actualitzar
+    * */
     public void updateTropa(Tropa tropa){
 
         if(tropa.isPlaying()) {
@@ -245,6 +278,10 @@ public class TroopController {
         }
     }
 
+    /**
+     *Passa la tropa que es reb per parametre a la vista
+     * @param t tropa que reb desde el servidor
+    * */
     public void getTropa(Tropa t){
         t.setOn(false);
 
@@ -257,6 +294,11 @@ public class TroopController {
 
     }
 
+
+    /**
+    * Elimina la tropa de la vista si ha de ser eliminada.
+     * @param t tropa a eliminar
+    * */
     public void deleteTropa(Tropa t){
 
        if(indice < gameView.getTropes().size()) {
@@ -282,6 +324,10 @@ public class TroopController {
 
     }
 
+    /**
+    * Mostra la tropa a la pantalla grafica
+     * @param t tropa a mostrar
+    * */
     public void show(Tropa t){
 
         gameView.drawTroop(t.getxPosition(), t.getyPosition(), t);
@@ -299,30 +345,53 @@ public class TroopController {
 
     }*/
 
-
+    /**
+    * Retorna la variable accept de la classe
+    *  @return accept variable boolean indicant si s'ha acceptat o no
+    * */
     public boolean isAccept() {
         return accept;
     }
 
+    /**
+     *Assigna la variable accept de la classe
+     * @param accept boolea que volem que s'assigni a la variable accept de la classe
+     * */
     public void setAccept(boolean accept) {
         this.accept = accept;
     }
 
+    /**
+     * Retorna la vista del joc
+     * @return gameView retorna la vista de tipus GameView
+     * */
     public GameView getGameView() {
         return gameView;
     }
 
+    /**
+     * Assigna la vista del joc a la vista del joc de la classe 
+     * @param gameView variable de tipus GameView que s'assignarà a la classe
+     * */
     public void setGameView(GameView gameView) {
         this.gameView = gameView;
     }
 
+    /**
+     *Retorna el array de tropes detectades de la classe
+     * @return detected array de Tropes
+     * */
     public CopyOnWriteArrayList<Tropa> getDetected() {
         return detected;
     }
 
+    /**
+     * Assigna les tropes detectades a les tropes que li passen per valor
+     * @param detected llista de tropes a assignar
+     * */
     public void setDetected(CopyOnWriteArrayList<Tropa> detected) {
         this.detected = detected;
     }
 
-    //on collision
+
 }

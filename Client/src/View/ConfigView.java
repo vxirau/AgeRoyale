@@ -8,6 +8,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+* Vista de la configuració del usuari. Hereda de JFrame ja que volem que sigui una finestra.
+* */
 public class ConfigView extends JFrame {
 
     private ConfigController configController;
@@ -17,11 +20,20 @@ public class ConfigView extends JFrame {
     private JTextField jtfConfigContrasenya;
     private JButton jbConfigSave;
 
+
+    /**
+    * Constructor de la classe
+     * @param confiController controlador assignat a aquesta vista
+    * */
     public ConfigView(ConfigController confiController) {
         this.configController = confiController;
         initAll();
     }
 
+
+    /**
+    * Encarregada de inicialitzar tots els elements de UI de la classe
+    * */
     public void initAll(){
         jpConfig = new JPanel(null);
 
@@ -148,42 +160,84 @@ public class ConfigView extends JFrame {
         fondo.setBounds(0, 0, 450, 700);
         jpConfig.add(fondo);
     }
+
+    /**
+    * Retorna el panell de configuració principal
+     * @return jpConfig variable de tipus JPanel que conté tota la informació de la vista
+    * */
     public JPanel getJpConfig() {
         return jpConfig;
     }
 
+    /**
+    * Assigna el panell princpal de la vista al panell que li passen per valor
+     * @param jpConfig variable de tipus JPanel que conté tota la vista
+    * */
     public void setJpConfig(JPanel jpConfig) {
         this.jpConfig = jpConfig;
     }
 
+    /**
+    * Retorna la variable de tipus JTextField on es posa en nom de usuari introduit a la part de configuracio
+     * @return jtfConfigNickname variable de tipus JTextField on esta la informació del usuari
+    * */
     public JTextField getJtfConfigNickname() {
         return jtfConfigNickname;
     }
 
+    /**
+     * Assigna el cuadre de text del nom al que reb per parametre
+     * @param jtfConfigNickname variable de tipus JTextField que conté el nom del usuari
+     * */
     public void setJtfConfigNickname(JTextField jtfConfigNickname) {
         this.jtfConfigNickname = jtfConfigNickname;
     }
 
+    /**
+     * Retorna la variable de tipus JTextField on es posa el correu de usuari introduit a la part de configuracio
+     * @return jtfConfigCorreu variable de tipus JTextField on esta la informació del usuari
+     * */
     public JTextField getJtfConfigCorreu() {
         return jtfConfigCorreu;
     }
 
+    /**
+     * Assigna el cuadre de text del nom al que reb per parametre
+     * @param jtfConfigCorreu variable de tipus JTextField que conté el correu del usuari
+     * */
     public void setJtfConfigCorreu(JTextField jtfConfigCorreu) {
         this.jtfConfigCorreu = jtfConfigCorreu;
     }
 
+    /**
+     * Retorna la variable de tipus JTextField on es posa la conrasenya de usuari introduit a la part de configuracio
+     * @return jtfConfigContrasenya variable de tipus JTextField on esta la informació del usuari
+     * */
     public JTextField getJtfConfigContrasenya() {
         return jtfConfigContrasenya;
     }
 
+    /**
+     * Assigna el cuadre de text del nom al que reb per parametre
+     * @param jtfConfigContrasenya variable de tipus JTextField que conté ela contrasenya del usuari
+     * */
     public void setJtfConfigContrasenya(JTextField jtfConfigContrasenya) {
         this.jtfConfigContrasenya = jtfConfigContrasenya;
     }
 
+    /**
+    * Retorna el jbutton de desar informació
+     * @return jbConfigSave variabel de tipus JButton
+    * */
     public JButton getJbConfigSave() {
         return jbConfigSave;
     }
 
+
+    /**
+    * Assigna el JButton el JButton que reb per valor
+     * @param jbConfigSave JButton a assignar
+    * */
     public void setJbConfigSave(JButton jbConfigSave) {
         this.jbConfigSave = jbConfigSave;
     }

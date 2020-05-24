@@ -1,10 +1,6 @@
 package src;
 
-import src.View.Tile;
-
-import java.awt.geom.Point2D;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Edifici extends Entity implements Serializable{
 

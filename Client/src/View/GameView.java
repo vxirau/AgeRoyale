@@ -16,6 +16,9 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+* Vista de la partida. Hereda de JFrame perque és una finestra i implementa runnable i serializable per poder-ho gestionar adequadament amb el servidor
+* */
 public class GameView extends JFrame implements Runnable, Serializable {
 
     private static Thread thread;
@@ -59,17 +62,28 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
     private static final String IMAGE_MAP_PATH  = "/resources/pixels_map.png";
 
-
+    /**
+    * Retorna la amplada de la finestra
+     * @return width enter amb el valor de l'amplada
+    * */
     @Override
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Retorna la alçada de la finestra
+     * @return height enter amb el valor de l'alçada
+     * */
     @Override
     public int getHeight() {
         return height;
     }
 
+    /**
+    * Constructor de la classe
+     * @throws IOException en cas que no s'hagi pogut carregar bé el contingut que s'ha de colocar a la partida.
+    * */
     public GameView() throws IOException {
 
         this.width = 32 * COLUMNS;
@@ -109,7 +123,13 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
     }*/
 
-    //Metode que ens dibuixa els tiles del nostre mapa
+
+    /**
+    * Metode que ens dibuixa els tiles del nostre mapa
+     * @param compensX coordeanda X
+     * @param compensY coordenada Y
+     * @param tile tile a dibuixar
+    * */
     public void drawTile(int compensX, int compensY, Tile tile){
 
         for(int i = 0; i < tile.getSprite().getSide(); i++){
@@ -126,7 +146,13 @@ public class GameView extends JFrame implements Runnable, Serializable {
     }
 
 
-    //Metode que ens dibuixa les tropes al nostre mapa
+
+    /**
+    * Metode que ens dibuixa les tropes al nostre mapa
+     * @param compensX coordenada x de la tropa
+     * @param compensY coordenada y de la tropa
+     * @param troop objecte tropa a dibuixar a la pantalla
+    * */
     public void drawTroop(float compensX, float compensY, Tropa troop){
         for(int i = 0; i < troop.getSprite().getSide(); i++){
             int yPosition = (int) (i + compensY);
@@ -145,31 +171,51 @@ public class GameView extends JFrame implements Runnable, Serializable {
         }
     }
 
+    /**
+    * Inicia el thread de la partida
+    * */
     public synchronized void startGame(){
         gameIsRunning = true;
         thread = new Thread(this, "GameGraphics");
         thread.start();
     }
 
+    /**
+     * Atura el thread de la partida
+     * */
     public synchronized void stopGame() throws InterruptedException {
         gameIsRunning = false;
         thread.join();
     }
 
+    /**
+    * --
+    * */
     public void updateGame(){
 
     }
 
+    /**
+     * Retorna el Deck del usuari. El seguit de tropes de les que disposa
+     * @return deck variable de tipus Deck
+     * */
     public Deck getDeck() {
         return deck;
     }
 
+    /**
+    * Setter del deck del usuari
+     * @param deck deck que es vol assignar al usuari
+    * */
     public void setDeck(Deck deck) {
         this.deck = deck;
     }
 
 
-        public synchronized void showGraphics(){
+    /**
+    * Funció encarregada de mostrar els grafics per pantalla
+    * */
+    public synchronized void showGraphics(){
         //Creem un buffer per tal de dibuixar els grafics en segon pla
         BufferStrategy bufferStrategy = getBufferStrategy();
         if(bufferStrategy == null){
@@ -247,6 +293,12 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
     }
 
+    /**
+    * Mou la bandera que apareix a la torre quan aquesta es "destruida"
+     * @param time temps de execució de la bandera
+     * @param num variable de control que fem servir per saber quina bandera dibuixar
+     * @param g variable de swing per poder printar grafics
+    * */
     public void moveBandera(long time, int num, Graphics g){
 
         if(time < 250){
@@ -273,6 +325,12 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
     }
 
+    /**
+    * Dibuixa la bandera a la pantalla gràfica
+     * @param num numero que representa el sprite a dibuixar
+     * @param index index de control que fem servir
+     * @param g variable de swing per poder printar grafics
+    * */
     public void drawFlag(int num, int index, Graphics g){
         switch (num){
             case 0:
@@ -290,6 +348,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
         }
     }
 
+    //
     public void ompleBandera(BufferedImage[] b, BufferedImage[] c) {
         for (int i = 0; i < 10; i++) {
 
