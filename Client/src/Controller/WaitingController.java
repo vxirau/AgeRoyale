@@ -52,13 +52,13 @@ public class WaitingController implements ActionListener, WindowListener {
                 ex.printStackTrace();
             }
         } else */ //if(((JButton)e.getSource()).getText().equals("Start Game")){
-            try {
+            /*try {
                 //p.setIdPartida(10);
-                gv = roomsController.startGame(p, this);
+                //gv = roomsController.startGame(p, this);
                 view.setVisible(false);
             } catch (IOException ex) {
                 ex.printStackTrace();
-            }
+            }*/
         //}
 
     }

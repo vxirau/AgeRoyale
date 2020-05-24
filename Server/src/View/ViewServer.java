@@ -30,6 +30,7 @@ public class ViewServer extends JFrame {
 	public ViewServer(){
 
 	}
+
 	public void initAll(){
 		JPanel panelPare = new JPanel(new GridLayout(1, 2));
 		panelPare.setOpaque(false);
@@ -84,13 +85,11 @@ public class ViewServer extends JFrame {
 		int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
 		this.setLocation(x, y);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 	}
 
 	public JPanel makeGraph(int selectedIndex) {
 		GraphPanel j = new GraphPanel(selectedIndex, this.games);
 		selector.setSelectedIndex(selectedIndex);
-
 		j.add(selector);
 		return j;
 	}

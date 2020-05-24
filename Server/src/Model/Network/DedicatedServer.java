@@ -76,7 +76,6 @@ public class DedicatedServer extends Thread {
 			while(isOn) {
 
 				Message m = (Message) dataInput.readObject();
-				//System.out.println("ARRIBA: " + m.getType());
 				if (m.getType().equals("register")) {
 					Usuari u = (Usuari) m.getObject();
 					System.out.println(u.toString());
