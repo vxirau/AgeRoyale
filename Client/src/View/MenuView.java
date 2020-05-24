@@ -1,8 +1,6 @@
 package src.View;
 
 import src.Controller.MenuController;
-import src.Model.Network.UserService;
-import src.Usuari;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,8 +9,6 @@ import java.util.ArrayList;
 
 public class MenuView extends JFrame implements Runnable {
 
-    private UserService uService;
-    private Usuari usuari;
     private MenuController menuController;
 
     //CONSTANTS PER CONTROLAR EL MENU
@@ -26,9 +22,8 @@ public class MenuView extends JFrame implements Runnable {
     public static final String WAITINROOM = "WaitingRoom_";
 
     //Animacions
-    private static Thread thread;
-    private static volatile boolean onTroopsView = false;
-    private boolean firstTimeOnThread = true;
+    private Thread thread;
+    private volatile boolean onTroopsView = false;
 
     //Panell actual
     private JPanel jpActive;
@@ -47,19 +42,15 @@ public class MenuView extends JFrame implements Runnable {
 
     //JPanel de Friends
     private FriendView friendView;
-    private JPanel jpFriends;
 
     //JPanel de FriendsRequest
     private FriendRequestView friendRequestView;
-    private JPanel jpFriendsRequest;
 
     //Jpanel de partida
     private RoomListView roomListView;
-    private JPanel jpCrearPartida;
 
     //JPanel de WaitingRoom
     private WaitingRoomView waitingRoomView;
-    private JPanel jpWaitingRoom;
 
     //Menu inferior
     private JPanel jpMenu;
@@ -70,7 +61,7 @@ public class MenuView extends JFrame implements Runnable {
     private JPanel jpMenuFriends;
     private boolean shown = false;
 
-    private final MouseListener mouseActionMenu = new MouseAdapter() {
+    private MouseListener mouseActionMenu = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
             super.mouseClicked(e);
@@ -155,6 +146,9 @@ public class MenuView extends JFrame implements Runnable {
             jpMenuFriends.setBackground(Color.decode(bgColor));
         }
         if (name.equals(MenuView.MAIN)){
+            this.setTitle("Menu");
+            jpMenu.setVisible(true);
+
             if(thread.isAlive()) stopTimer();
             jpActive = jpMain;
 
@@ -279,7 +273,7 @@ public class MenuView extends JFrame implements Runnable {
     }
 
     private void initTropes() {
-        tropesView = new TropesView(usuari);
+        tropesView = new TropesView();
         jpTropes = tropesView.getJpTropes();
     }
 
@@ -289,36 +283,23 @@ public class MenuView extends JFrame implements Runnable {
     }
 
     public void initFriends() {
-        friendView = new FriendView(usuari, menuController.getFriendsController(), this);
-        jpFriends = friendView.getJpFriends();
+        friendView = new FriendView(menuController.user, menuController.getFriendsController(), this);
     }
 
     private void initFriendsRequest() {
         friendRequestView = new FriendRequestView(menuController.getFriendsController(), menuController.getFriendsController().getRequests() == null ? new ArrayList<>() : menuController.getFriendsController().getRequests() );
-        jpFriendsRequest = friendRequestView.getJpPare();
     }
 
     private void initCrearPartida() {
-        menuController.getRoomsController().setMenuView(this);
-        roomListView = new RoomListView(menuController.getRoomsController(), this.usuari);
-        jpCrearPartida = roomListView.getJpPare();
+        roomListView = new RoomListView(menuController.getRoomsController(), menuController.user);
     }
 
     private void initWaitingRoom() {
-        waitingRoomView = new WaitingRoomView(null, usuari, menuController.getWaitingController());
-        jpWaitingRoom = waitingRoomView.getJPanelPare();
-    }
-
-    public void setUsuari(Usuari usuari){
-        this.usuari = usuari;
+        waitingRoomView = new WaitingRoomView(null, menuController.user, menuController.getWaitingController());
     }
 
     public void invokeAdjustViews(String view) {
         adjustViews(view);
-    }
-
-    public void setuService(UserService uService) {
-        this.uService = uService;
     }
 
     public MainView getMainView() {

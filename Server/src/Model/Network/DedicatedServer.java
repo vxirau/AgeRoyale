@@ -47,6 +47,7 @@ public class DedicatedServer extends Thread {
 
 	private static CopyOnWriteArrayList<Tropa> deleted;
 
+
 	public DedicatedServer(Socket sClient, ViewServer vista, CopyOnWriteArrayList<DedicatedServer> clients, Server server) throws IOException {
 		this.isOn = false;
 		this.sClient = sClient;
@@ -57,7 +58,6 @@ public class DedicatedServer extends Thread {
 		objectOut = new ObjectOutputStream(sClient.getOutputStream());
 		this.troopSController = new TroopSController();
 		this.deleted = new CopyOnWriteArrayList<>();
-
 	}
 
 	public void startDedicatedServer() {
@@ -386,7 +386,6 @@ public class DedicatedServer extends Thread {
 	}
 
 	public void startGameMessage(Partida partida) {
-
 		if (clientUser != null && inRoom != null && partida.getIdPartida() == inRoom && (partida.getJugadors().get(0).getIdUsuari() == clientUser.getIdUsuari() || partida.getJugadors().get(1).getIdUsuari() == clientUser.getIdUsuari())){
 			try {
 				objectOut.writeObject(new Message(null, "StartGameAsPlayerRecived"));
@@ -401,7 +400,4 @@ public class DedicatedServer extends Thread {
 			}
 		}
 	}
-
-
-
 }

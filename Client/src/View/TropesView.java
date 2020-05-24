@@ -1,12 +1,9 @@
 package src.View;
 
-import src.Usuari;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class TropesView extends JFrame{
-    private Usuari usuari;
 
     private JPanel jpTropes;
     private JPanel jpTropes1;
@@ -48,8 +45,7 @@ public class TropesView extends JFrame{
     public static final String BOMB_PHASE2 = "/resources/bomb_phase2_deck.png";
 
 
-    public TropesView(Usuari usuari) {
-        this.usuari = usuari;
+    public TropesView() {
 
         String bgColor = "#85201F";
         String borderColor = "#979797";
@@ -241,92 +237,80 @@ public class TropesView extends JFrame{
     public void updateTropes(long elapsedTime){
         if(elapsedTime < 300){
             //TROPA 1 UPDATE
-            if (usuari.getTropes().size() > 0) {
                 tropa1_foto = new ImageIcon(this.getClass().getResource(SKELETON_FRONT));
                 iconotropa1foto = new ImageIcon(tropa1_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
                 jlTropes1_foto.setIcon(iconotropa1foto);
-            }
+
 
             //TROPA 2 UPDATE
-            if (usuari.getTropes().size() > 1) {
                 tropa2_foto = new ImageIcon(this.getClass().getResource(GOBLIN_FRONT));
                 iconotropa2foto = new ImageIcon(tropa2_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
                 jlTropes2_foto.setIcon(iconotropa2foto);
-            }
+
 
             //TROPA 3 UPDATE
-            if (usuari.getTropes().size() > 2) {
                 tropa3_foto = new ImageIcon(this.getClass().getResource(WIZARD));
                 iconotropa3foto = new ImageIcon(tropa3_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
                 jlTropes3_foto.setIcon(iconotropa3foto);
-            }
+
 
             //TROPA 4 UPDATE
-            if (usuari.getTropes().size() > 3) {
                 tropa4_foto = new ImageIcon(this.getClass().getResource(BOMB));
                 iconotropa4foto = new ImageIcon(tropa4_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
                 jlTropes4_foto.setIcon(iconotropa4foto);
-            }
+
 
         } else if(elapsedTime < 600 && elapsedTime > 300){
             //TROPA 1 UPDATE
-            if (usuari.getTropes().size() > 0) {
                 tropa1_foto = new ImageIcon(this.getClass().getResource(SKELETON_FRONT_LEFT));
                 iconotropa1foto = new ImageIcon(tropa1_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
                 jlTropes1_foto.setIcon(iconotropa1foto);
-            }
+
 
             //TROPA 2 UPDATE
-            if (usuari.getTropes().size() > 1) {
                 tropa2_foto = new ImageIcon(this.getClass().getResource(GOBLIN_FRONT_LEFT));
                 iconotropa2foto = new ImageIcon(tropa2_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
                 jlTropes2_foto.setIcon(iconotropa2foto);
-            }
+
             //jpTropes2.add(jlTropes2_foto);
             //jpTropes2.add(new JLabel(""));
             //TROPA 3 UPDATE
-            if (usuari.getTropes().size() > 2) {
                 tropa3_foto = new ImageIcon(this.getClass().getResource(WIZARD));
                 iconotropa3foto = new ImageIcon(tropa3_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
                 jlTropes3_foto.setIcon(iconotropa3foto);
-            }
+
 
             //TROPA 4 UPDATE
-            if (usuari.getTropes().size() > 3) {
                 tropa4_foto = new ImageIcon(this.getClass().getResource(BOMB_PHASE1));
                 iconotropa4foto = new ImageIcon(tropa4_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
                 jlTropes4_foto.setIcon(iconotropa4foto);
-            }
+
 
         }else if(elapsedTime < 900 && elapsedTime > 600){
             //TROPA 1 UPDATE
-            if (usuari.getTropes().size() > 0) {
                 tropa1_foto = new ImageIcon(this.getClass().getResource(SKELETON_FRONT_RIGHT));
                 iconotropa1foto = new ImageIcon(tropa1_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
                 jlTropes1_foto.setIcon(iconotropa1foto);
-            }
+
 
             //TROPA 2 UPDATE
-            if (usuari.getTropes().size() > 1) {
                 tropa2_foto = new ImageIcon(this.getClass().getResource(GOBLIN_FRONT_RIGHT));
                 iconotropa2foto = new ImageIcon(tropa2_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
                 jlTropes2_foto.setIcon(iconotropa2foto);
-            }
+
             //jpTropes2.add(jlTropes2_foto);
             //jpTropes2.add(new JLabel(""));
             //TROPA 3 UPDATE
-            if (usuari.getTropes().size() > 2) {
                 tropa3_foto = new ImageIcon(this.getClass().getResource(WIZARD));
                 iconotropa3foto = new ImageIcon(tropa3_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
                 jlTropes3_foto.setIcon(iconotropa3foto);
-            }
+
 
             //TROPA 4 UPDATE
-            if (usuari.getTropes().size() > 3) {
                 tropa4_foto = new ImageIcon(this.getClass().getResource(BOMB_PHASE2));
                 iconotropa4foto = new ImageIcon(tropa4_foto.getImage().getScaledInstance(30, 30, Image.SCALE_FAST));
                 jlTropes4_foto.setIcon(iconotropa4foto);
-            }
+
         }
     }
 

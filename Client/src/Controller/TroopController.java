@@ -19,12 +19,12 @@ public class TroopController {
 
     private GameView gameView;
     private UserService uService;
-    public static CopyOnWriteArrayList<Tropa> troops = new CopyOnWriteArrayList<>();
-    private static Tropa troop;
-    public static int indice;
-    private static int cont = 0;
+    private Tropa troop;
+    public int indice;
+    private int cont = 0;
     private boolean accept = false;
-    private static float minDistance = Float.MAX_VALUE;
+    private float minDistance = Float.MAX_VALUE;
+    public CopyOnWriteArrayList<Tropa> troops = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Tropa> founds =  new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Tropa> detected =  new CopyOnWriteArrayList<>();
 
@@ -42,51 +42,51 @@ public class TroopController {
 
 
 
-        public void checkTroopsStatus(Tropa tropa) {
+    public void checkTroopsStatus(Tropa tropa) {
 
-            troops = detectedTroops(gameView.getTropes(), tropa);
+        troops = detectedTroops(gameView.getTropes(), tropa);
 
-            if (!troops.isEmpty()) {
-                for (Tropa t : troops) {
-                    float c1 = tropa.getxPosition() - t.getxPosition();
-                    float c2 = tropa.getyPosition() - t.getyPosition();
-                    float distance = (float) Math.sqrt(c1 * c1 + c2 * c2);
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        troop = t;
-                    /*System.out.println("----------------------------------------------");
-                    System.out.println("Tropa mes propera: " + troop.getWhichSprite());
-                    System.out.println("Tropa agafada: " + t.getWhichSprite());
-                    System.out.println("distance: " + distance);
-                    System.out.println("----------------------------------------------");*/
-                    }
+        if (!troops.isEmpty()) {
+            for (Tropa t : troops) {
+                float c1 = tropa.getxPosition() - t.getxPosition();
+                float c2 = tropa.getyPosition() - t.getyPosition();
+                float distance = (float) Math.sqrt(c1 * c1 + c2 * c2);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    troop = t;
+                /*System.out.println("----------------------------------------------");
+                System.out.println("Tropa mes propera: " + troop.getWhichSprite());
+                System.out.println("Tropa agafada: " + t.getWhichSprite());
+                System.out.println("distance: " + distance);
+                System.out.println("----------------------------------------------");*/
                 }
-
-                tropa.setVida(tropa.getVida() - troop.getAtac());
-                tropa.setFighting(true);
-
-                if(tropa.getDefaultY() < 320 && tropa.getVida() <= 0){
-
-                    if(gameView.getDeck().getGoldRectangle().getX() + 10 <= 280){
-                        Double d = gameView.getDeck().getGoldRectangle().getWidth();
-                        Integer i = d.intValue();
-                        Double d2 =  gameView.getDeck().getGoldRectangle().getHeight();
-                        Integer j = d2.intValue();
-                        gameView.getDeck().getGoldRectangle().setBounds( gameView.getDeck().getGoldRectangle().x, gameView.getDeck().getGoldRectangle().y,   i+10 , j);
-                    }
-                }
-
-                if(tropa.getTroopType() == 2){
-                    while (cont < 3) {
-                        bombExplosion(tropa, cont);
-                        cont++;
-                    }
-                }
-
-
             }
-            founds.removeAll(founds);
-            minDistance = Float.MAX_VALUE;
+
+            tropa.setVida(tropa.getVida() - troop.getAtac());
+            tropa.setFighting(true);
+
+            if(tropa.getDefaultY() < 320 && tropa.getVida() <= 0){
+
+                if(gameView.getDeck().getGoldRectangle().getX() + 10 <= 280){
+                    Double d = gameView.getDeck().getGoldRectangle().getWidth();
+                    Integer i = d.intValue();
+                    Double d2 =  gameView.getDeck().getGoldRectangle().getHeight();
+                    Integer j = d2.intValue();
+                    gameView.getDeck().getGoldRectangle().setBounds( gameView.getDeck().getGoldRectangle().x, gameView.getDeck().getGoldRectangle().y,   i+10 , j);
+                }
+            }
+
+            if(tropa.getTroopType() == 2){
+                while (cont < 3) {
+                    bombExplosion(tropa, cont);
+                    cont++;
+                }
+            }
+
+
+        }
+        founds.removeAll(founds);
+        minDistance = Float.MAX_VALUE;
 
     }
 

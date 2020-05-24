@@ -1,31 +1,18 @@
 package src.View;
 
 import src.Controller.GameController;
-import src.Controller.MenuController;
 import src.Controller.TroopController;
 import src.Controller.TroopUpdate;
-import src.Controller.WaitingController;
-import src.Edifici;
-import src.Message;
-import src.Model.Network.UserService;
 import src.Tropa;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.text.html.ImageView;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -42,7 +29,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
     private GameController gameController;
     private static boolean sendcheck = true;
     private int flag = 0;
-    public static int ident = 0;
     public static BufferedImage[] bufferedImages1,bufferedImages2 ;
     public long elapsed = 0;
 
@@ -52,8 +38,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
     private  TroopController troopController;
     private static int xMousePosition;
     private static int yMousePosition;
-    private  boolean rebut = false;
-    private  boolean trobat = false;
+    private boolean rebut = false;
     public static boolean deleted = false;
     private static BufferedImage image;
     private static int cont = 0;
@@ -63,7 +48,6 @@ public class GameView extends JFrame implements Runnable, Serializable {
     private static int[] pixelsImage;
 
     private CopyOnWriteArrayList<Tropa> tropes;
-    //private ArrayList<Tropa> troops;
 
     private static GameMap gameMap;
     private boolean mouseIsClicked;

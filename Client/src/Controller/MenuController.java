@@ -16,7 +16,7 @@ public class MenuController {
 
     private MenuView view;
     private UserService uService;
-    private Usuari user;
+    public Usuari user;
 
     //Controllers
     private ConfigController configController;
@@ -61,8 +61,6 @@ public class MenuController {
         }
         userService.setMenuController(this);
 
-        view.setUsuari(user);
-        view.setuService(userService);
         view.addWindowListener(windowListener);
 
         initControllers();

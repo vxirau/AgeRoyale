@@ -28,8 +28,6 @@ public class RoomListView extends JFrame{
 	private JPanel jpPare;
 	private JPanel jpPartidesPubliques;
 	private JPanel jpPartidesPrivades;
-	private JButton nova;
-	private JToggleButton visibilitat;
 	private JScrollPane scrollPubliquesF;
 	private JScrollPane scrollPrivadesF;
 	private boolean visible=false;
@@ -157,7 +155,7 @@ public class RoomListView extends JFrame{
 	}
 
 	private void colocarElements(){
-		nova = new JButton();
+		JButton nova = new JButton();
 		nova.setText("Crear nova partida");
 		nova.setBounds(20, 70, 410, 70);
 		nova.setOpaque(false);

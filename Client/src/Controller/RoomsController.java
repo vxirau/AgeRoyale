@@ -20,13 +20,12 @@ import java.util.ArrayList;
 public class RoomsController {
 	private RoomListView vista;
 	private Usuari usuari;
-	private static UserService uService;
+	private UserService uService;
 	private ArrayList<Partida> allGames;
-	private ArrayList<Tropa> tropes;
-	private static ArrayList<GameController> listGameC;
-	private static ArrayList<TroopController> listTroopC;
-	private static ArrayList<GameView> listGameView;
-	private static MenuView menuView;
+	//private static ArrayList<GameController> listGameC;
+	//private static ArrayList<TroopController> listTroopC;
+	//private static ArrayList<GameView> listGameView;
+	private MenuView menuView;
 	private MenuController menuController;
 	public Partida startGamePartida;
 
@@ -77,9 +76,9 @@ public class RoomsController {
 		if(!uService.serviceStarted()){
 			uService.startServerComunication();
 		}
-		this.listGameC = new ArrayList<>();
-		this.listTroopC = new ArrayList<>();
-		this.listGameView = new ArrayList<>();
+		//this.listGameC = new ArrayList<>();
+		//this.listTroopC = new ArrayList<>();
+		//this.listGameView = new ArrayList<>();
 
 	}
 
@@ -88,7 +87,7 @@ public class RoomsController {
 		uService.sendGetPartides(m, this);
 	}
 
-	public static UserService getService() {
+	public UserService getService() {
 		return uService;
 	}
 
@@ -150,7 +149,7 @@ public class RoomsController {
 		menuController.updateViews();
 	}
 
-	public static void setClientVisible(boolean visible){
+	public void setClientVisible(boolean visible){
 		menuView.setVisible(visible);
 	}
 

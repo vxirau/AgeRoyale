@@ -5,7 +5,6 @@ import src.Message;
 import src.Model.Network.UserService;
 import src.Partida;
 import src.Usuari;
-import src.View.GameView;
 import src.View.MenuView;
 import src.View.WaitingRoomView;
 
@@ -17,7 +16,6 @@ public class WaitingController implements ActionListener {
     private RoomsController roomsController;
     private Partida p;
     private WaitingRoomView view;
-    private GameView gv;
     private UserService userService;
     private Usuari usuari;
 

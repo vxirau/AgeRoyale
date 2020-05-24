@@ -8,11 +8,8 @@ import src.Utils;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class WaitingRoomView extends JFrame {
     private JButton start;
@@ -20,12 +17,6 @@ public class WaitingRoomView extends JFrame {
     private Usuari usr;
     private JPanel main;
     private WaitingController waitingController;
-    private JScrollPane players;
-    private JScrollPane spectators;
-
-    //Publica, esperar a que es connecti algú i quan es connecti començar partida
-
-    //Privada, convidar amics en linia (amics entren si accepten)
 
     public WaitingRoomView(Partida p, Usuari usr, WaitingController waitingController) {
         this.p = p;
@@ -75,7 +66,7 @@ public class WaitingRoomView extends JFrame {
         jName.setFont(new Font("Herculanum", Font.BOLD, 25));
         main.add(jName);
 
-        players = new JScrollPane();
+        JScrollPane players = new JScrollPane();
         players.setEnabled(true);
         players.getViewport().setOpaque(false);
         players.setBounds(30,100,400,100);
@@ -104,7 +95,7 @@ public class WaitingRoomView extends JFrame {
         espectadorsText.setFont(new Font("Herculanum", Font.BOLD, 15));
         main.add(espectadorsText);
 
-        spectators = new JScrollPane();
+        JScrollPane spectators = new JScrollPane();
         spectators.setOpaque(false);
         spectators.setEnabled(true);
         spectators.getViewport().setOpaque(false);

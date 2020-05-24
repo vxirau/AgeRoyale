@@ -12,9 +12,6 @@ import java.util.ArrayList;
 
 public class FriendRequestView extends JFrame {
     private JPanel jpPare;
-    private JPanel[] jpsRequest;
-    private JScrollPane jScrollPane;
-    private JPanel jpRequest;
     private FriendsController controller;
     private ArrayList<Usuari> requests;
 
@@ -53,15 +50,15 @@ public class FriendRequestView extends JFrame {
     private void colocarElements() {
 
 
-        jpRequest = new JPanel(null);
+        JPanel jpRequest = new JPanel(null);
         jpRequest.setOpaque(false);
 
-        jpsRequest = new JPanel[requests.size()];
+        JPanel[] jpsRequest = new JPanel[requests.size()];
 
         jpRequest = new JPanel(new GridLayout(10, 1));
         jpRequest.setOpaque(false);
 
-        jScrollPane = new JScrollPane();
+        JScrollPane jScrollPane = new JScrollPane();
         jScrollPane.setBounds(0, 200, 450, 500);
         jScrollPane.setEnabled(true);
         jScrollPane.setOpaque(false);

@@ -5,7 +5,6 @@ import src.Usuari;
 import src.Utils;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
@@ -15,21 +14,17 @@ public class FriendView extends JFrame {
     private JPanel jpFriends;
     private JPanel jpAmics;
     private JPanel[] jpsAmics;
-    private ArrayList<Usuari> amics;
     private JScrollPane scrollPaneAmics;
     private JButton jbSearchAmic;
     private JTextField jtfSearchAmic;
-    private Usuari usuari;
-    private JButton jpFriendsTitle;
     private JButton request;
     private FriendsController friendsController;
-    private MenuView menuView;
+    private Usuari usuari;
 
-    public FriendView(Usuari usr, FriendsController friendsCtrl, MenuView menuView) {
+    public FriendView(Usuari usr, FriendsController friendsCtrl) {
         this.usuari = usr;
         setAmics(usr.getAmics());
         this.friendsController = friendsCtrl;
-        this.menuView = menuView;
     }
     public void initAll(){
         this.removeAll();
@@ -39,7 +34,7 @@ public class FriendView extends JFrame {
         jpFriends.setOpaque(false);
 
         jpsAmics = null;
-        jpsAmics = new JPanel[amics.size()];
+        jpsAmics = new JPanel[usuari.getAmics().size()];
 
         jpAmics = new JPanel();
         jpAmics.setLayout(new BoxLayout(jpAmics, BoxLayout.Y_AXIS));
@@ -56,7 +51,7 @@ public class FriendView extends JFrame {
         titol.setBounds(20, 30, 400, 300);
         titol.setOpaque(false);
         titol.setLayout(null);
-        jpFriendsTitle = new JButton("Amics");
+        JButton jpFriendsTitle = new JButton("Amics");
         jpFriendsTitle.setBounds(45, 20, 300, 30);
         jpFriendsTitle.setOpaque(false);
         jpFriendsTitle.setContentAreaFilled(false);
@@ -118,7 +113,7 @@ public class FriendView extends JFrame {
         //--------------------------------------------------------------------------------------------------------------
 
 
-        for (int i = 0; i < amics.size() ; i++) {
+        for (int i = 0; i < usuari.getAmics().size() ; i++) {
             jpsAmics[i] = new JPanel(new GridLayout(3, 1)){
                 protected void paintComponent(Graphics g) {
                     ImageIcon elementButton = new ImageIcon(this.getClass().getResource("/resources/friend_bg.png"));
@@ -130,7 +125,7 @@ public class FriendView extends JFrame {
             jpsAmics[i].addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    friendsController.removeFriend(amics.get(finalI));
+                    friendsController.removeFriend(usuari.getAmics().get(finalI));
                 }
             });
 
@@ -138,7 +133,7 @@ public class FriendView extends JFrame {
             jpsAmics[i].setVisible(true);
 
             JLabel nomAmic = new JLabel();
-						nomAmic.setText("<html><font color='white'>" + Utils.ferEspais(14) + " "+ amics.get(i).getNickName() + "</font></html>");
+						nomAmic.setText("<html><font color='white'>" + Utils.ferEspais(14) + " "+ usuari.getAmics().get(i).getNickName() + "</font></html>");
             nomAmic.setForeground(Color.WHITE);
             nomAmic.setBorder(new EmptyBorder(10,0,0,0));//top,left,bottom,right
 
@@ -159,7 +154,7 @@ public class FriendView extends JFrame {
             }
 
             JLabel online = new JLabel();
-            if(amics.get(i).isOnline()){
+            if(usuari.getAmics().get(i).isOnline()){
                 online.setText("<html><font color='white'>" + Utils.ferEspais(22) + " Online" +  "</font></html>");
                 online.setForeground(Color.WHITE);
 
@@ -193,15 +188,6 @@ public class FriendView extends JFrame {
         repaint();
     }
 
-    private boolean teComAmic(Usuari amic){
-      for (Usuari amics :usuari.getAmics() ) {
-        if (amics.getIdUsuari() == amic.getIdUsuari()) {
-          return true;
-        }
-      }
-      return false;
-    }
-
     public JPanel getJpFriends() {
         return jpFriends;
     }
@@ -226,12 +212,8 @@ public class FriendView extends JFrame {
         this.jpsAmics = jpsAmics;
     }
 
-    public ArrayList<Usuari> getAmics() {
-        return amics;
-    }
-
     public void setAmics(ArrayList<Usuari> amics) {
-        this.amics = amics;
+        this.usuari.setAmics(amics);
         initAll();
     }
 
@@ -267,8 +249,6 @@ public class FriendView extends JFrame {
     public void setControllers(KeyListener listenerDelTextField, MouseListener listenerCercaAmic, FriendsController controller) {
         jtfSearchAmic.addKeyListener(listenerDelTextField);
         jbSearchAmic.addMouseListener(listenerCercaAmic);
-        //jpFriendsTitle.addActionListener(controller);
-        //request.addActionListener(controller);
         request.addActionListener(controller);
     }
 
