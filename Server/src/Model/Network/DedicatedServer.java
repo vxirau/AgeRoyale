@@ -10,6 +10,7 @@ import src.Partida;
 import src.Tropa;
 import src.Usuari;
 import src.Model.Database.DAO.*;
+import src.View.Sprite;
 import src.View.ViewServer;
 
 import java.io.*;
@@ -38,16 +39,19 @@ public class DedicatedServer extends Thread {
 	private ObjectOutputStream objectOut;
 	private CopyOnWriteArrayList<DedicatedServer> clients;
 	private ViewServer vista;
-	private Integer inRoom = null;
+	public Integer inRoom = null;
 	private TroopSController troopSController;
 	private Usuari clientUser;
 	private Server server;
 	public static int cont = 0;
 	public static int cont2 = 0;
 
-	private static CopyOnWriteArrayList<Tropa> deleted;
 
-	public DedicatedServer(Socket sClient, ViewServer vista, CopyOnWriteArrayList<DedicatedServer> clients, Server server) throws IOException {
+
+	private static CopyOnWriteArrayList<Tropa> deleted;
+	private static CopyOnWriteArrayList<Tropa> full;
+
+	public DedicatedServer(Socket sClient, ViewServer vista, CopyOnWriteArrayList<DedicatedServer> clients, Server server) throws IOException  {
 		this.isOn = false;
 		this.sClient = sClient;
 		this.vista = vista;
@@ -77,8 +81,10 @@ public class DedicatedServer extends Thread {
 		String[] aux;
 
 		try {
-			while(isOn) {
+			while (isOn) {
+
 				Message m = (Message) dataInput.readObject();
+
 				if (m.getType().equals("register")) {
 					Usuari u = (Usuari) m.getObject();
 					System.out.println(u.toString());
@@ -112,7 +118,7 @@ public class DedicatedServer extends Thread {
 					usuariDAO uDAO = new usuariDAO();
 					Usuari usr = uDAO.existsLogin(usuari);
 					Message messageResposta;
-					if(usr != null && uDAO.isBanned(usr)){
+					if (usr != null && uDAO.isBanned(usr)) {
 						SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 						Date date = format.parse(uDAO.getDateBan(usr));
 
@@ -122,18 +128,18 @@ public class DedicatedServer extends Thread {
 
 						long secs = (currentDate.getTime() - date.getTime()) / 1000;
 						int hours = (int) (secs / 3600);
-						int minuts = (int) (secs/60) - hours*60;
+						int minuts = (int) (secs / 60) - hours * 60;
 
-						if(hours>=24){
+						if (hours >= 24) {
 							uDAO.unBan(usr);
 							messageResposta = new Message(usr, "Login resposta");
-						}else{
-							int remainingH = 23-hours;
-							int remainingMin = 60-minuts;
-							Usuari not = new Usuari(-30, remainingH+"h " + remainingMin + "min ", "BANNED");
+						} else {
+							int remainingH = 23 - hours;
+							int remainingMin = 60 - minuts;
+							Usuari not = new Usuari(-30, remainingH + "h " + remainingMin + "min ", "BANNED");
 							messageResposta = new Message(not, "Login resposta");
 						}
-					}else{
+					} else {
 						clientUser = usr;
 						messageResposta = new Message(usr, "Login resposta");
 						server.broadcastClients();
@@ -191,30 +197,29 @@ public class DedicatedServer extends Thread {
 					Message messageResposta = new Message(a, "FriendsResposta");
 					objectOut.writeObject(messageResposta);
 				} else if (m.getType().equals("Tropa update")) {
+
 					Tropa t = (Tropa) m.getObject();
-					if(t.getVida() <= 0){
+					t.setChecked(true);
+					if (t.getVida() <= 0) {
 						deleted.add(t);
 					} else {
 						if (t.getTroopType() == 0 || t.getTroopType() == 1) {
 							t = troopSController.moveOffensiveTroop(t, t.getxVariation(), t.getyVariation(), cont);
 							cont++;
-							//objectOut.reset();
+							objectOut.reset();
 						}
 					}
-					/*else if(t.getTroopType() == 3){
-						troopSController.bombExplosion(t,cont2);
-						cont2++;
-					}*/
+
 					Message mresposta = new Message(t, "Tropa resposta");
 					objectOut.writeObject(mresposta);
 
-				} else if (m.getType().equals("FindFriend")){
+				} else if (m.getType().equals("FindFriend")) {
 					String nom = (String) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
 					ArrayList<Usuari> auz = uDAO.getUsersByName(nom);
 					Message messageResposta = new Message(auz, "FindFriendResposta");
 					objectOut.writeObject(messageResposta);
-				}else if(m.getType().equals("acceptRequest")){
+				} else if (m.getType().equals("acceptRequest")) {
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					requestsDAO rDAO = new requestsDAO();
 					amicDAO aDAO = new amicDAO();
@@ -227,38 +232,38 @@ public class DedicatedServer extends Thread {
 					Message messageResposta2 = new Message(rDAO.getFriendRequests(users.get(0)), "requestsReplyUpdate");
 					objectOut.writeObject(messageResposta2);
 					server.broadcastClients();
-				}else if(m.getType().equals("removeRequest")){
+				} else if (m.getType().equals("removeRequest")) {
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					requestsDAO rDAO = new requestsDAO();
 					rDAO.removeRequest(users.get(0), users.get(1));
-				}else if(m.getType().equals("denyRequest")){
+				} else if (m.getType().equals("denyRequest")) {
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					requestsDAO rDAO = new requestsDAO();
 					rDAO.denyRequest(users.get(0), users.get(1));
 					server.broadcastClients();
-				}else if(m.getType().equals("sendRequest")){
+				} else if (m.getType().equals("sendRequest")) {
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					requestsDAO rDAO = new requestsDAO();
 					rDAO.addRequest(users.get(0), users.get(1));
-				}else if(m.getType().equals("banUser")){
+				} else if (m.getType().equals("banUser")) {
 					Usuari user = (Usuari) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
 					uDAO.banUser(user);
-				}else if(m.getType().equals("newPlayer")){
-					Partida p = (Partida)m.getObject();
+				} else if (m.getType().equals("newPlayer")) {
+					Partida p = (Partida) m.getObject();
 					partidaDAO pDAO = new partidaDAO();
-					if(!pDAO.hasPlayerOne(p) &&  p.getJugadors().size() > 0) { //TODO: descobrir que fa aixo aqui -> if(pDAO.hasPlayerOne(p) && p.getIdPartida() != pDAO.getPlayerOne(p)) : versio original
+					if (!pDAO.hasPlayerOne(p) && p.getJugadors().size() > 0) { //TODO: descobrir que fa aixo aqui -> if(pDAO.hasPlayerOne(p) && p.getIdPartida() != pDAO.getPlayerOne(p)) : versio original
 						pDAO.addPlayerOne(p, p.getJugadors().get(0));
-					}else if (!pDAO.hasPlayerTwo(p) && p.getJugadors().size() > 1){
+					} else if (!pDAO.hasPlayerTwo(p) && p.getJugadors().size() > 1) {
 						pDAO.addPlayerTwo(p, p.getJugadors().get(1));
 					}
 					inRoom = p.getIdPartida();
 					server.broadcastClients();
-				}else if(m.getType().equals("newSpectator")){
+				} else if (m.getType().equals("newSpectator")) {
 					spectatorDAO sDAO = new spectatorDAO();
-					Partida p = (Partida)m.getObject();
-					for(Usuari u : p.getEspectadors()){
-						if(!sDAO.isSpectating(p, u)){
+					Partida p = (Partida) m.getObject();
+					for (Usuari u : p.getEspectadors()) {
+						if (!sDAO.isSpectating(p, u)) {
 							sDAO.addSpectator(p, u);
 						}
 					}
@@ -269,34 +274,40 @@ public class DedicatedServer extends Thread {
 					partidaDAO pDAO = new partidaDAO();
 					spectatorDAO sDAO = new spectatorDAO();
 					Partida part = pDAO.userIsPlayer(u);
-					if(part != null){
+					if (part != null) {
 						pDAO.removePlayer(part, u);
-					}else{
+					} else {
 						sDAO.removeSpectator(u);
 					}
 					inRoom = null;
 					server.broadcastClients();
-				}else if(m.getType().equals("Invite")) {
+				} else if (m.getType().equals("Invite")) {
 					Invite invite = (Invite) m.getObject();
 					server.broadcastInvite(invite);
-				} else if(m.getType().equals("GetTropesStats")) {
-					Message message = new Message(new tropesDAO(){}.getAllTropes(),"SetTropesStats");
+				} else if (m.getType().equals("GetTropesStats")) {
+					Message message = new Message(new tropesDAO() {
+					}.getAllTropes(), "SetTropesStats");
 					objectOut.writeObject(message);
-				} else if(m.getType().equals("add tropa")){
-                    Tropa t = (Tropa) m.getObject();
-                    tropaPartidaDAO pDAO = new tropaPartidaDAO();
-                    pDAO.addTropa(t);
-                    statsDAO sDAO = new statsDAO();
+				} else if (m.getType().equals("add tropa")) {
+					Tropa t = (Tropa) m.getObject();
 
-                    if(t.getTroopType() != -1) {
-                    	String type = "";
+
+					server.broadcastTropa(t);
+
+					tropaPartidaDAO pDAO = new tropaPartidaDAO();
+					pDAO.addTropa(t);
+					statsDAO sDAO = new statsDAO();
+					if (t.getTroopType() != -1) {
+						String type = "";
 						if (t.getTroopType() == 0) type = "Skeleton";
 						if (t.getTroopType() == 1) type = "Goblin";
 						if (t.getTroopType() == 2) type = "Bomb";
 						if (t.getTroopType() == 3) type = "Wizard";
 						sDAO.updateUsedTroop(clientUser.getIdUsuari(), type);
 					}
-                } else if(m.getType().equals("checkID")){
+
+				}
+				/*else if(m.getType().equals("checkID")){
                     Tropa troop = new Tropa();
                     boolean trobat = false;
                     CopyOnWriteArrayList<Tropa> vistes = (CopyOnWriteArrayList<Tropa>) m.getObject();
@@ -311,7 +322,7 @@ public class DedicatedServer extends Thread {
 					}
 
                     Message message = new Message(troop,"tropesCheck");
-                    objectOut.writeObject(message);
+                    //objectOut.writeObject(message);
 
 
 					/*tropaPartidaDAO pDAO = new tropaPartidaDAO();
@@ -320,26 +331,25 @@ public class DedicatedServer extends Thread {
 					if(!tropes.isEmpty()) {
 						Message message = new Message(tropes.get(0), "tropesCheck");
 						objectOut.writeObject(message);
-					}*/
+					}
 
-                }else if(m.getType().equals("startGame")){
+                }*/
+				else if (m.getType().equals("startGame")) {
 					Partida p = (Partida) m.getObject();
 					server.broadcastStartGame(p);
-				} else if(m.getType().equals("Edificis")){
+				} else if (m.getType().equals("Edificis")) {
 					ArrayList<Edifici> edificiDef = (ArrayList<Edifici>) m.getObject();
 					troopSController.setEdificiDef(edificiDef);
 					System.out.println("HE LLEGADOO");
 				}
-            }
-		} catch (IOException | ClassNotFoundException | ParseException e1 ){
-			e1.printStackTrace();
+			}
+		} catch (IOException | ClassNotFoundException | ParseException e1) {
 			// en cas derror aturem el servidor dedicat
 			stopDedicatedServer();
 			// eliminem el servidor dedicat del conjunt de servidors dedicats
 			clients.remove(this);
 			// invoquem el metode del servidor que mostra els servidors dedicats actuals
 			server.showClients();
-
 		}
 
 	}
@@ -352,7 +362,7 @@ public class DedicatedServer extends Thread {
 
 	public void privateMessage(String message) throws IOException {
 
-		if (message.equals("Friends") && this.clientUser != null){
+		if (message.equals("Friends") && this.clientUser != null) {
 			Usuari usuari = this.clientUser;
 			amicDAO aDAO = new amicDAO();
 			ArrayList<Usuari> a = aDAO.getAmics(usuari);
@@ -363,8 +373,8 @@ public class DedicatedServer extends Thread {
 			partidaDAO pDao = new partidaDAO();
 			ArrayList<Partida> p = pDao.getRunningPartides();
 			objectOut.writeObject(new Message(p, "allGamesReply"));
-		}else if(message.equals("updateWaitingRoom")){
-			if(inRoom != null){
+		} else if (message.equals("updateWaitingRoom")) {
+			if (inRoom != null) {
 				partidaDAO pDAO = new partidaDAO();
 				Partida p = pDAO.getPartida(inRoom);
 				objectOut.writeObject(new Message(p, "updateWaiting"));
@@ -374,7 +384,7 @@ public class DedicatedServer extends Thread {
 
 
 	public void inviteMessage(Invite invite) {
-		if (clientUser != null && clientUser.getIdUsuari() == invite.getDesti().getIdUsuari()){
+		if (clientUser != null && clientUser.getIdUsuari() == invite.getDesti().getIdUsuari()) {
 			try {
 				partidaDAO pDAO = new partidaDAO();
 				Invite inviteToSend = new Invite(invite.getOrigen(), invite.getDesti(), pDAO.getPartida(invite.getPartida().getIdPartida()));
@@ -385,15 +395,20 @@ public class DedicatedServer extends Thread {
 		}
 	}
 
+
+	public Usuari getClientUser() {
+		return this.clientUser;
+	}
+
 	public void startGameMessage(Partida partida) {
 
-		if (clientUser != null && inRoom != null && partida.getIdPartida() == inRoom && (partida.getJugadors().get(0).getIdUsuari() == clientUser.getIdUsuari() || partida.getJugadors().get(1).getIdUsuari() == clientUser.getIdUsuari())){
+		if (clientUser != null && inRoom != null && partida.getIdPartida() == inRoom && (partida.getJugadors().get(0).getIdUsuari() == clientUser.getIdUsuari() || partida.getJugadors().get(1).getIdUsuari() == clientUser.getIdUsuari())) {
 			try {
 				objectOut.writeObject(new Message(null, "StartGameAsPlayerRecived"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (clientUser != null && inRoom != null && partida.getIdPartida() == inRoom){
+		} else if (clientUser != null && inRoom != null && partida.getIdPartida() == inRoom) {
 			try {
 				objectOut.writeObject(new Message(null, "StartGameAsSpectatorRecived"));
 			} catch (IOException e) {
@@ -403,5 +418,72 @@ public class DedicatedServer extends Thread {
 	}
 
 
+	public void actualitzaPartida(Tropa t) {
+		if (t.getIdUsuariInvoke() != clientUser.getIdUsuari()) {
+			//Modifiquem la posicio de la tropa i l'enviem a l'oponent
+			if (t.getWhichSprite() != null) {
 
+				t.setIdPartida(inRoom);
+				t.setOn(true);
+
+
+
+
+				if (t.getWhichSprite().equals("BOMB")) {
+					t.setyPosition(610 - t.getyPosition());
+					t.setxPosition(285 - t.getxPosition());
+				} else if (t.getWhichSprite().equals("SKELETON_BACK") || t.getWhichSprite().equals("GOBLIN_BACK")) {
+					t.setyPosition(590 - t.getyPosition());
+					t.setxPosition(294 - t.getxPosition());
+				} else if (t.getWhichSprite().equals("MAGIC_TOWER")) {
+					t.setyPosition(590 - t.getyPosition());
+					t.setxPosition(284 - t.getxPosition());
+				}
+				t.setyVariation(2);
+				t.setDefaultY(10);
+
+				if (t.getWhichSprite().equals("SKELETON_BACK")) {
+					t.setSprite(Sprite.SKELETON_BACK);
+					t.setSprites(Sprite.SKELETON_BACK);
+					t.setNumTorre(-1);
+
+				} else if (t.getWhichSprite().equals("GOBLIN_BACK")) {
+					t.setSprite(Sprite.GOBLIN_BACK);
+					t.setSprites(Sprite.GOBLIN_BACK);
+					t.setNumTorre(-1);
+
+				} else if (t.getWhichSprite().equals("MAGIC_TOWER")) {
+					t.setyVariation(0);
+					t.setSprite(Sprite.MAGIC_TOWER);
+					t.setSprites(Sprite.MAGIC_TOWER);
+					t.setNumTorre(-1);
+
+				} else if (t.getWhichSprite().equals("BOMB")) {
+					t.setyVariation(0);
+					t.setSprite(Sprite.BOMB);
+					t.setSprites(Sprite.BOMB);
+					t.setNumTorre(-1);
+
+				}
+
+				t.setInitialX(t.getxPosition());
+				t.setInitialY(t.getyPosition());
+
+				Message messageResposta = new Message(t, "Tropa Answer");
+
+
+				try {
+					//Thread.sleep(50);
+					objectOut.writeObject(messageResposta);
+					objectOut.reset();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+
+
+			}
+
+		}
+	}
 }

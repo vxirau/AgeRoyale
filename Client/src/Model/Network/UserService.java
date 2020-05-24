@@ -17,6 +17,7 @@ import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class UserService extends Thread{
   	private Socket socket;
@@ -100,10 +101,11 @@ public class UserService extends Thread{
 		while (isOn) {
 			try {
 
+
 				Message jelow = (Message) doInput.readObject();
+
 				//System.out.println("Arriba a client: " + jelow.getType());
 				if (jelow.getType().equals("REGISTER_OK")) {
-					JOptionPane.showOptionDialog(new JFrame(), "DE SUPER PUTA MARE SOCI", "Congratulacions", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 					LoginView lview = new LoginView();
 					LoginViewController controller = new LoginViewController(lview, UserService.this);
 					lview.loginViewsetListener(controller);
@@ -182,7 +184,7 @@ public class UserService extends Thread{
 				} else if(jelow.getType().equals("requestsReplyUpdate")) {
 					ArrayList<Usuari>  requests = (ArrayList<Usuari>) jelow.getObject();
 					friendsController.setRequests(requests);
-				}else if(jelow.getType().equals("tropesCheck")){
+				}/*else if(jelow.getType().equals("tropesCheck")){
 
 					Tropa t = (Tropa) jelow.getObject();
 					if(t.getWhichSprite() != null) {
@@ -226,7 +228,7 @@ public class UserService extends Thread{
 						}
 					}
 					gameController.getGameView().setSendcheck(true);
-				}else if(jelow.getType().equals("updateWaiting")){
+				}*/else if(jelow.getType().equals("updateWaiting")){
 					Partida p= (Partida)jelow.getObject();
 					waitingController.updateGame(p);
 				}else if(jelow.getType().equals("InviteRecived")){
@@ -238,6 +240,14 @@ public class UserService extends Thread{
 					roomsController.startGame(roomsController.startGamePartida, false);
 				} else if(jelow.getType().equals("SetTropesStats")){
 					gameController.setTropaStatic((ArrayList<Tropa>) jelow.getObject());
+				}else if(jelow.getType().equals("Tropa Answer")){
+
+					Tropa t = (Tropa) jelow.getObject();
+
+					gameController.getGameView().getTroopsToAdd().add(t);
+
+
+
 				}
 
 
@@ -386,7 +396,7 @@ public class UserService extends Thread{
 	public void addTropa(Message m){
 
 		try {
-			//this.doStream.reset();
+			this.doStream.reset();
 			this.doStream.writeObject(m);
 		} catch (IOException e) {
 			e.printStackTrace();

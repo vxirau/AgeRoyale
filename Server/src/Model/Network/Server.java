@@ -1,10 +1,7 @@
 package src.Model.Network;
 
 
-import src.Invite;
-import src.NetworkConfiguration;
-import src.Partida;
-import src.Tropa;
+import src.*;
 import src.View.ViewServer;
 
 import java.io.IOException;
@@ -19,6 +16,16 @@ public class Server extends Thread {
 	private ServerSocket sSocket;
 	// relacio amb els servidors dedicats
 	private CopyOnWriteArrayList<DedicatedServer> dServers;
+	private int troopCounter;
+
+	public int getTroopCounter() {
+		return troopCounter;
+	}
+
+	public void setTroopCounter(int troopCounter) {
+		this.troopCounter = troopCounter;
+	}
+
 	// relacio amb la vista
 	// podriem mantenir una relacio amb el controlador
 	// en el cas de que aquest existis, i delegar les
@@ -84,6 +91,7 @@ public class Server extends Thread {
 				dServer.privateMessage("updateWaitingRoom");
 				dServer.privateMessage("Friends");
 				dServer.privateMessage("getAllRunningGames");
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -95,7 +103,13 @@ public class Server extends Thread {
 			dServer.inviteMessage(invite);
 		}
 	}
-
+	public void broadcastTropa(Tropa tropa) {
+		for (DedicatedServer dServer : dServers) {
+			if(dServer.inRoom != null && dServer.inRoom == tropa.getIdPartida()){
+				dServer.actualitzaPartida(tropa);
+			}
+		}
+	}
 	public void removeDedicated(DedicatedServer dedicatedServer) {
 		dServers.remove(dedicatedServer);
 	}

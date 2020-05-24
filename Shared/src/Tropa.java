@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Tropa extends Entity implements Serializable {
+public class Tropa extends Entity implements Serializable, Runnable {
 
     private Sprite sprite;
     private char troopDirection = 'n';
@@ -23,12 +23,47 @@ public class Tropa extends Entity implements Serializable {
     private boolean isFighting;
     private boolean isOn;
     private int idPartida;
+    private int idUsuariInvoke;
+
+
+
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
+    private boolean isChecked = false;
+
+
+    public int getIdUsuariInvoke() {
+        return idUsuariInvoke;
+    }
+
+    public void setIdUsuariInvoke(int idUsuariInvoke) {
+        this.idUsuariInvoke = idUsuariInvoke;
+    }
+
+
     private String whichSprite;
     private Usuari usr;
     private int defaultY;
-    private int initialX;
-    private int initialY;
+    private float initialX;
+    private float initialY;
     private int numTorre;
+    private int hasDestroyedCastle;
+
+
+    public int getDestroyedCastle() {
+        return hasDestroyedCastle;
+    }
+
+    public void setdestroyedCastle(int hasDestroyedCastle) {
+        this.hasDestroyedCastle = hasDestroyedCastle;
+    }
 
     private int troopType;
     private int idTropa;
@@ -38,6 +73,22 @@ public class Tropa extends Entity implements Serializable {
     private int alcance;
     private boolean ofensiva;
     private Tile tile;
+
+    public float getInitialX() {
+        return initialX;
+    }
+
+    public void setInitialX(float initialX) {
+        this.initialX = initialX;
+    }
+
+    public float getInitialY() {
+        return initialY;
+    }
+
+    public void setInitialY(float initialY) {
+        this.initialY = initialY;
+    }
 
     private boolean isPlaying = true;
     private static int cont = 0;
@@ -96,7 +147,7 @@ public class Tropa extends Entity implements Serializable {
         isFighting = fighting;
     }
 
-    public Tropa(GameMap gameMap, float xPosition, float yPosition, Sprite sprite) {
+    public Tropa(GameMap gameMap, float xPosition, float yPosition, Sprite sprite, Usuari user) {
         this.gameMap = gameMap;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
@@ -106,7 +157,7 @@ public class Tropa extends Entity implements Serializable {
         yVariation = (float) -2;
         this.isFighting = false;
         this.defaultY = 500;
-
+        this.idUsuariInvoke = user.getIdUsuari();
     }
 
 
@@ -366,5 +417,10 @@ public class Tropa extends Entity implements Serializable {
                 ", xPosition=" + xPosition +
                 ", yPosition=" + yPosition +
                 '}';
+    }
+
+    @Override
+    public void run() {
+
     }
 }

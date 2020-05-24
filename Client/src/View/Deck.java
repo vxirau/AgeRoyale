@@ -30,6 +30,7 @@ public class Deck implements Serializable {
     private static final String GOBLIN_DECK_PATH  = "/resources/goblin_deck.png";
     private static final String WIZARD_DECK_PATH  = "/resources/wizard_deck.png";
     private static final String BOMB_DECK_PATH  = "/resources/bomb_deck.png";
+
     private Date createdDate ;
     private boolean characterIsSelected;
     private int whichTroop;
@@ -57,6 +58,7 @@ public class Deck implements Serializable {
         bufferedImage[1] = ImageIO.read(Deck.class.getResource(GOBLIN_DECK_PATH));
         bufferedImage[2] = ImageIO.read(Deck.class.getResource(WIZARD_DECK_PATH));
         bufferedImage[3] = ImageIO.read(Deck.class.getResource(BOMB_DECK_PATH));
+
         characterIsSelected = false;
         createdDate = new java.util.Date();
         clockTime = 0;

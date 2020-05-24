@@ -238,6 +238,21 @@ public class partidaDAO {
         return has;
     }
 
+    public Integer getPlayerTwo(Partida p){
+        Integer has = null;
+        String query = "SELECT par.player2 FROM AgeRoyale.partida as par WHERE idPartida = " + p.getIdPartida();
+        ResultSet rs = DBConnector.getInstance().selectQuery(query);
+        try {
+            if (rs.next()) {
+                has = (Integer) rs.getObject("player2");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return has;
+    }
+
+
     public boolean hasPlayerOne(Partida p) {
         Integer has = null;
         String query = "SELECT par.player1 FROM AgeRoyale.partida as par WHERE idPartida = " + p.getIdPartida();

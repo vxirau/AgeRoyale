@@ -9,6 +9,7 @@ import src.Edifici;
 import src.Message;
 import src.Model.Network.UserService;
 import src.Tropa;
+import src.Usuari;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -38,13 +39,29 @@ public class GameView extends JFrame implements Runnable, Serializable {
     public static final int ROWS = 20;
     public static final int COLUMNS = 10;
     private static final int DECK_SPACE = 106;
-    private static volatile boolean gameIsRunning = false;
+
+
+
+
+    private volatile boolean gameIsRunning = false;
+    private boolean gameHasFinished  = false;
     private GameController gameController;
     private static boolean sendcheck = true;
     private int flag = 0;
     public static int ident = 0;
     public static BufferedImage[] bufferedImages1,bufferedImages2 ;
     public long elapsed = 0;
+    private Usuari user;
+
+    public int getTroopCounter() {
+        return troopCounter;
+    }
+
+    public void setTroopCounter(int troopCounter) {
+        this.troopCounter = troopCounter;
+    }
+
+    private int troopCounter = 0;
 
 
     private CopyOnWriteArrayList<TroopUpdate> updates;
@@ -63,7 +80,16 @@ public class GameView extends JFrame implements Runnable, Serializable {
     private static int[] pixelsImage;
 
     private CopyOnWriteArrayList<Tropa> tropes;
-    //private ArrayList<Tropa> troops;
+    private CopyOnWriteArrayList<Tropa> troopsToAdd;
+
+    public CopyOnWriteArrayList<Tropa> getTroopsToAdd() {
+        return troopsToAdd;
+    }
+
+    public void setTroopsToAdd(CopyOnWriteArrayList<Tropa> troopsToAdd) {
+        this.troopsToAdd = troopsToAdd;
+    }
+//private ArrayList<Tropa> troops;
 
     private static GameMap gameMap;
     private boolean mouseIsClicked;
@@ -94,36 +120,26 @@ public class GameView extends JFrame implements Runnable, Serializable {
         this.pixelsImage = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
         this.pixels = new int[width * height];
         this.tropes = new CopyOnWriteArrayList<>();
-        //this.troops = new ArrayList<>();
         this.updates = new CopyOnWriteArrayList<>();
         mouseIsClicked = false;
         whichTroop = 10;
+        this.troopsToAdd = new CopyOnWriteArrayList<>();
         this.deck = new Deck(width, height);
-        //Creem el mapa i li donem la mesura en tiles ( en aquest cas, sera de 10 x 20)
         gameMap = new ImageMap(IMAGE_MAP_PATH);
         this.bufferedImages1 = new BufferedImage[10];
         this.bufferedImages2 = new BufferedImage[10];
         ompleBandera(bufferedImages1, bufferedImages2);
         this.setVisible(true);
         this.setResizable(false);
-        //this.getContentPane().setLayout(new GridLayout(ROWS,COLUMNS));
+
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setSize(width, height);
         this.setLocationRelativeTo(null);
 
-        //gameMap.showMap(0, 0, this);
+
 
     }
 
-
-    /*public void update(){
-        if(tropes.size() > 0){
-            for(int i = 0; i < tropes.size(); i++){
-                tropes.get(i).update();
-            }
-        }
-
-    }*/
 
     //Metode que ens dibuixa els tiles del nostre mapa
     public void drawTile(int compensX, int compensY, Tile tile){
@@ -185,7 +201,9 @@ public class GameView extends JFrame implements Runnable, Serializable {
     }
 
 
-        public synchronized void showGraphics(){
+
+
+    public synchronized void showGraphics(){
         //Creem un buffer per tal de dibuixar els grafics en segon pla
         BufferStrategy bufferStrategy = getBufferStrategy();
         if(bufferStrategy == null){
@@ -194,23 +212,28 @@ public class GameView extends JFrame implements Runnable, Serializable {
         }
 
         gameMap.showMap(0, 0, this);
+        //Si hem rebut alguna tropa del contricant, l'afegim a les tropes de la nostra vista
+        if(!troopsToAdd.isEmpty()){
+            tropes.addAll(troopsToAdd);
+            troopsToAdd.clear();
+        }
 
         if(tropes.size() > 0) {
             for (Iterator<Tropa> iterator = tropes.iterator(); iterator.hasNext();) {
+
                 Tropa tropa = iterator.next();
-
-                TroopUpdate update = new TroopUpdate(troopController, this);
-
+                TroopUpdate update =  new TroopUpdate(troopController, this);
                 if (tropa.isOn()) {
-
-                    update.startThread(tropa, cont,true);
+                    //Si trobem una tropa nova, li iniciem un Thread
+                    //update.startThread(tropa, cont,true);
+                    update.startThread(tropa, true);
                     tropa.setOn(false);
                     update.getT().start();
                     updates.add(update);
-
+                    //update.catchTroop(tropa,cont);
                 }
 
-                update.catchTroop(tropa,cont);
+
 
                 if (!updates.isEmpty() && updates.size() == tropes.size()) {
                     updates.get(cont).setTropa(tropa);
@@ -218,7 +241,15 @@ public class GameView extends JFrame implements Runnable, Serializable {
                 }
 
                 cont++;
+
+                if(tropa.getDestroyedCastle() == 1  || tropa.getDestroyedCastle() == 2){
+                    finishGame(tropa.getDestroyedCastle());
+                    this.gameHasFinished = true;
+
+                }
+                tropa.setChecked(false);
             }
+
             cont = 0;
 
         }
@@ -230,27 +261,23 @@ public class GameView extends JFrame implements Runnable, Serializable {
         g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
         for (Iterator<Tropa> iterator = tropes.iterator(); iterator.hasNext();) {
             Tropa tropa = iterator.next();
-            /*try {
-                imageh = ImageIO.read(GameView.class.getResource("/resources/verde.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
+
             switch (tropa.getNumTorre()) {
                 case 0:
                     moveBandera(elapsed,0,g);
-                    //g.drawImage(imageh, 32, 128, null);
+
                     break;
                 case 1:
                     moveBandera(elapsed,1,g);
-                    //g.drawImage(imageh, 224, 128, null);
+
                     break;
                 case 2:
                     moveBandera(elapsed,2,g);
-                    //g.drawImage(imageh, 32, 448, null);
+
                     break;
                 case 3:
                     moveBandera(elapsed,3,g);
-                    //g.drawImage(imageh, 224, 448, null);
+
                     break;
             }
         }
@@ -334,6 +361,7 @@ public class GameView extends JFrame implements Runnable, Serializable {
         requestFocus();
         final long[] startTime = {System.currentTimeMillis()};
         while(gameIsRunning){
+
             elapsed = System.currentTimeMillis() - startTime[0];
 
             if(elapsed > 2500){
@@ -350,26 +378,33 @@ public class GameView extends JFrame implements Runnable, Serializable {
 
             while(delta >= 1){
                 //updateGame();
-
+                synchronized (Integer.class) {
+                    showGraphics();
+                }
                 delta--;
             }
 
-            synchronized (Integer.class) {
-                showGraphics();
-            }
 
-            synchronized (Tropa.class) {
+
+
+           /* synchronized (Tropa.class) {
                 if (sendcheck) {
                     gameController.sendCheck();
                     sendcheck = false;
                 }
-            }
+            }*/
+
+        }
+    }
 
 
-
-            //showGraphics();
-
-
+    public void finishGame(int whichCastleDestroyed){
+        if(whichCastleDestroyed == 1){
+            //Hem guanyat
+            JOptionPane.showMessageDialog(this, "Felicitats! Has guanyat la partida!", "Victòria", JOptionPane.PLAIN_MESSAGE);
+        }else if(whichCastleDestroyed == 2){
+            //Hem perdut
+            JOptionPane.showMessageDialog(this, "Has perdut! Més sort a la pròxima!", "Derrota", JOptionPane.PLAIN_MESSAGE);
         }
     }
 
@@ -449,12 +484,12 @@ public class GameView extends JFrame implements Runnable, Serializable {
         this.rebut = rebut;
     }
 
-    public static boolean isGameIsRunning() {
+    public  boolean isGameIsRunning() {
         return gameIsRunning;
     }
 
-    public static void setGameIsRunning(boolean gameIsRunning) {
-        GameView.gameIsRunning = gameIsRunning;
+    public  void setGameIsRunning(boolean gameIsRunning) {
+        this.gameIsRunning = gameIsRunning;
     }
 
     private void updateServer(){
@@ -465,7 +500,13 @@ public class GameView extends JFrame implements Runnable, Serializable {
     public static boolean isSendcheck() {
         return sendcheck;
     }
+    public Usuari getUser() {
+        return user;
+    }
 
+    public void setUser(Usuari user) {
+        this.user = user;
+    }
     public static void setSendcheck(boolean sendcheck) {
         GameView.sendcheck = sendcheck;
     }

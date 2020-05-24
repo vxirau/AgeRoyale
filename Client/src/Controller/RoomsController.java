@@ -105,7 +105,7 @@ public class RoomsController {
 		} catch (IOException rer) {
 			rer.printStackTrace();
 		}
-		GameController controller = new GameController(gView,uService,menuController, p);
+		GameController controller = new GameController(gView,uService,menuController, p, usuari);
 		//pillar tropes
 		uService.sendsGetTropes(new Message(null, "GetTropesStats"), controller);
 		controller.setId(p.getIdPartida());
