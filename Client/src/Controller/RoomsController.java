@@ -197,7 +197,6 @@ public class RoomsController {
 				if (!alredyPlayer) p.getJugadors().add(this.usuari);
 
 				missatge = "newPlayer";
-
 			}else if(n==JOptionPane.NO_OPTION){
 				if(p.getEspectadors() == null){
 					p.setEspectadors(new ArrayList<>());

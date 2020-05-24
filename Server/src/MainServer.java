@@ -26,7 +26,6 @@ public class MainServer {
             System.out.println(NetworkConfiguration.staticIP);
             System.out.println("SERVER");
 
-
             ViewServer vServer = new ViewServer();
             ControllerServer cServer = new ControllerServer(vServer);
             vServer.serverController(cServer);
