@@ -21,14 +21,13 @@ public class amicDAO {
         try{
             while (rs.next()){
                 Usuari amic = new Usuari();
-                amic.setIdUsuari(rs.getInt(1));
-                amic.setNickName(rs.getString(2));
-                amic.setEmail(rs.getString(3));
-                amic.setPassword(rs.getString(4));
-                amic.setStats(statsDAO.getStatsFromStatsId(rs.getInt(5)));
-                amic.setTropes(tropesDAO.getTropesFromUserId(idUser));
-
-                //TODO: gestionar amics dels amics : de moment no existeixen
+                amic.setIdUsuari(rs.getInt("idUser"));
+                amic.setNickName(rs.getString("nickname"));
+                amic.setEmail(rs.getString("email"));
+                amic.setPassword(rs.getString("password"));
+                amic.setTropes(tropesDAO.getTropesFromUserId(amic.getIdUsuari()));
+                amic.setStats(statsDAO.getStatsFromStatsId(rs.getInt("idStats")));
+                amic.setOnline(rs.getBoolean("isOnline"));
 
                 amics.add(amic);
             }
@@ -49,14 +48,13 @@ public class amicDAO {
         try{
             while (rs.next()){
                 Usuari amic = new Usuari();
-                amic.setIdUsuari(rs.getInt(1));
-                amic.setNickName(rs.getString(2));
-                amic.setEmail(rs.getString(3));
-                amic.setPassword(rs.getString(4));
-                amic.setStats(statsDAO.getStatsFromStatsId(rs.getInt(5)));
+                amic.setIdUsuari(rs.getInt("idUser"));
+                amic.setNickName(rs.getString("nickname"));
+                amic.setEmail(rs.getString("email"));
+                amic.setPassword(rs.getString("password"));
                 amic.setTropes(tropesDAO.getTropesFromUserId(amic.getIdUsuari()));
-
-                //TODO: gestionar amics dels amics : de moment no existeixen
+                amic.setStats(statsDAO.getStatsFromStatsId(rs.getInt("idStats")));
+                amic.setOnline(rs.getBoolean("isOnline"));
 
                 amics.add(amic);
             }

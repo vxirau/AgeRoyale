@@ -1,22 +1,56 @@
 package src.Controller;
 
+import src.Edifici;
 import src.Model.Network.DedicatedServer;
 import src.Tropa;
+import src.View.GameView;
 import src.View.Sprite;
+import src.View.Tile;
+
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 public class TroopSController {
+    private static Float minDistance = Float.MAX_VALUE;
+    private static Tropa troop;
+    public ArrayList<Edifici> edificiDef;
+
+    public static int indice = 0;
+    private static final int VARIATION = 2;
+    private static final int CENTER_PADDING = 160;
+    private static final int CASTLE_PADDING = 110;
+    private static final int OWN_CASTLE_PADDING = 530;
+    private static final int TOWER_PADDING_OPPONENT = 200;
+    private static final int OWN_TOWER_DELIM = 350;
+    private static final int LEFT_WATER_PADDING = 25;
+    private static final int RIGHT_WATER_PADDING = 260;
+    private static final int OWN_TOWER_PADDING_LEFT = 105;
+    private static final int OWN_TOWER_PADDING_RIGHT = 205;
+    private static final int HALF_MAP = 320;
 
     public TroopSController(){
-
+        edificiDef = new ArrayList<>();
+        ompleEdifici();
     }
-
 
     public synchronized Tropa moveOffensiveTroop(Tropa tropa, float xVariation, float yVariation, int cont) {
         //Es mou cap a la dreta (east)
         float xTroop;
         float yTroop;
+
         //La tropa nomes es moura si no esta lluitant
         if(!tropa.isFighting()){
+
+            if(tropa.getDefaultY() < 320){
+                if(xVariation == 0 && yVariation == 0){
+                   tropa.setyVariation(2);
+                }
+            } else if(tropa.getDefaultY() > 320){
+                if(xVariation == 0 && yVariation == 0){
+                    tropa.setyVariation(-2);
+                }
+            }
+
             if (xVariation > 0) {
                 tropa.setTroopDirection('e');
 
@@ -208,9 +242,10 @@ public class TroopSController {
                 }
             }
 
+
             //Si la tropa no ha estat destruida, la movem
             if (!tropa.entityIsDestroyed()) {
-                if (onCollision(tropa, (int) xVariation, 0)) {
+                if (onCollision(tropa)) {
                     //updatexPosition(xVariation);
                     xTroop = tropa.getxPosition() + xVariation;
                     tropa.setxPosition(xTroop);
@@ -218,7 +253,7 @@ public class TroopSController {
 
                     xVariation = 0;
                 }
-                if (onCollision(tropa, 0, (int) yVariation)) {
+                if (onCollision(tropa)) {
                     //updateyPosition(yVariation);
                     yTroop = tropa.getyPosition() + yVariation;
                     tropa.setyPosition(yTroop);
@@ -230,62 +265,13 @@ public class TroopSController {
         }else{
             tropa.setxVariation(0);
             tropa.setyVariation(0);
+
         }
 
 
     return tropa;
 
 
-    }
-    public Tropa bombExplosion(Tropa tropa, int cont) {
-        switch (cont) {
-            case 0:
-                //this.sprite = Sprite.SKELETON_RIGHT;
-
-                tropa.setSprite(tropa.getMov().get(0));
-
-               try {
-                        Thread.sleep(160);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
-                break;
-            case 1:
-                //this.sprite = Sprite.SKELETON_RIGHT_LEFT_FOOT;
-                tropa.setSprite(tropa.getMov().get(1));
-                try {
-                        Thread.sleep(160);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
-                break;
-            case 2:
-                //this.sprite = Sprite.SKELETON_RIGHT_RIGHT_FOOT;
-                tropa.setSprite(tropa.getMov().get(2));
-                try {
-                        Thread.sleep(160);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
-
-                break;
-            case 3:
-                //this.sprite = Sprite.SKELETON_RIGHT_RIGHT_FOOT;
-                tropa.setSprite(tropa.getMov().get(3));
-               try {
-                        Thread.sleep(160);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
-               DedicatedServer.cont = -1;
-               tropa.setPlaying(false);
-               tropa.setEntityIsDestroyed(true);
-
-                break;
-            default:
-                break;
-        }
-        return tropa;
     }
 
 
@@ -296,7 +282,7 @@ public class TroopSController {
     }
 
     //Metode per detectar si col·lisionem amb alguna cosa al mapa
-    private boolean onCollision(Tropa tropa, int xVariation, int yVariation){
+    /*private boolean onCollision(Tropa tropa, int xVariation, int yVariation){
         boolean collision = false;
 
 
@@ -391,6 +377,367 @@ public class TroopSController {
         }
 
         return collision;
+    }*/
+
+    private boolean onCollision(Tropa tropa){
+        boolean collision = false;
+
+
+
+        //Obtenim la posicio del jugador
+        int xPosition = (int) (tropa.getxPosition());
+        int yPosition = (int) (tropa.getyPosition());
+
+        //Controlem fins a quin punt podra col·lisionar la tropa
+        int leftMargin = -6; //-6
+        int rightMargin = 18; //18
+        int supMargin = -4; //-4
+        int infMargin = 31; //31
+
+        //Detectem els quatre bordes de l'sprite
+        int leftBorder = (xPosition + rightMargin) / tropa.getSprite().getSide();
+        int rightBorder = (xPosition + rightMargin + leftMargin) / tropa.getSprite().getSide();
+        int supBorder = (yPosition + infMargin) / tropa.getSprite().getSide();
+        int infBorder = (yPosition + infMargin + supMargin) / tropa.getSprite().getSide();
+
+        //Controlem si l'sprite al qual avancem es solid i parem el moviment
+        if(tropa.getGameMap().getSpecificTile(leftBorder + supBorder * tropa.getGameMap().getMapWidth()).isSolid()){
+
+        }
+        //El sistema de col·lisions actuara en funcio de la direccio que hagi pres la tropa.
+        //Detectarem l'usuari de la tropa amb el defaultY ficat a l'invocar la tropa,  i la direccio per tal de redirigir el moviment
+        if(tropa.getTroopDirection() != 's' && tropa.getDefaultY() > HALF_MAP) {
+
+            //TROPES ALIADES
+            //Si xoquem amb un objecte de front, canviem la seva direccio
+            if (tropa.getGameMap().getSpecificTile(leftBorder + infBorder * tropa.getGameMap().getMapWidth()).isSolid()) {
+                //PART ESQUERRA DEL MAPA
+                //Si ens trobem a la part esquerra del mapa, i al nostre camp
+                if(xPosition < CENTER_PADDING){
+                    if(yPosition > OWN_TOWER_DELIM){
+                        //T'accidentes de manera pronunciada cap a un objectiu aliè a les teves idees politico-socials
+                        tropa.setxVariation(VARIATION);
+                    }else if(yPosition < OWN_TOWER_DELIM && xPosition < LEFT_WATER_PADDING && yPosition > TOWER_PADDING_OPPONENT ){
+                        //T'accidentes de manera pronunciada cap a l'H2O
+                        tropa.setxVariation(VARIATION);
+                    }else if (yPosition < OWN_TOWER_DELIM && xPosition > LEFT_WATER_PADDING && yPosition > TOWER_PADDING_OPPONENT ){
+                        tropa.setxVariation(-VARIATION);
+                    }else if (yPosition < TOWER_PADDING_OPPONENT &&  yPosition > CASTLE_PADDING){
+                        //ataquem torre
+                        //si vida <= 0 ----> canviem sprite i solid del tile
+                        if( edificiDef.get(0).getEntityLife() > 0){
+                            tropa.setxVariation(0);
+                            edificiDef.get(0).setEntityLife(edificiDef.get(0).getEntityLife() - tropa.getAtac());
+                            System.out.println("ME HACES DAÑO BBSITAA: " + edificiDef.get(0).getEntityLife());
+
+                        } else {
+
+                            tropa.setNumTorre(0);
+                            tropa.setxVariation(VARIATION);
+
+                            //tornar a moure la tropa
+
+
+                        }
+                    } else if(yPosition < CASTLE_PADDING){
+
+                        if( edificiDef.get(4).getEntityLife() > 0){
+                            tropa.setxVariation(0);
+                            edificiDef.get(4).setEntityLife(edificiDef.get(4).getEntityLife() - tropa.getAtac());
+                            System.out.println("ME HACES DAÑO BBSITAA: " + edificiDef.get(4).getEntityLife());
+
+                        } else {
+
+                            tropa.setNumTorre(4);
+                            //tropa.setxVariation(VARIATION);
+
+
+                        }
+                    }
+                }
+
+                //PART DRETA DEL MAPA
+                //Si ens trobem a la part esquerra del mapa, i al nostre camp
+                if(xPosition >= CENTER_PADDING){
+                    if(yPosition > OWN_TOWER_DELIM){
+                        tropa.setxVariation(-VARIATION);
+                    }else if(yPosition < OWN_TOWER_DELIM && xPosition > RIGHT_WATER_PADDING && yPosition > TOWER_PADDING_OPPONENT ){
+                        tropa.setxVariation(-VARIATION);
+                    }else if (yPosition < OWN_TOWER_DELIM && xPosition < RIGHT_WATER_PADDING && yPosition > TOWER_PADDING_OPPONENT ){
+                        tropa.setxVariation(VARIATION);
+                    }else if (yPosition < TOWER_PADDING_OPPONENT &&  yPosition > CASTLE_PADDING){
+                        //tropa.setxVariation(-VARIATION);
+                        if( edificiDef.get(1).getEntityLife() > 0){
+                            tropa.setxVariation(0);
+                            edificiDef.get(1).setEntityLife(edificiDef.get(1).getEntityLife() - tropa.getAtac());
+                            System.out.println("ME HACES DAÑO BBSITAA: " + edificiDef.get(1).getEntityLife());
+
+                        } else {
+
+                            tropa.setNumTorre(1);
+                            tropa.setxVariation(-VARIATION);
+
+                            //tornar a moure la tropa
+
+                        }
+
+
+                    }else if(yPosition < CASTLE_PADDING){
+                        //atac al castell
+                        if( edificiDef.get(4).getEntityLife() > 0){
+                            tropa.setxVariation(0);
+                            edificiDef.get(4).setEntityLife(edificiDef.get(4).getEntityLife() - tropa.getAtac());
+                            System.out.println("ME HACES DAÑO BBSITAA: " + edificiDef.get(4).getEntityLife());
+
+                        } else {
+
+                            tropa.setNumTorre(5);
+                            //tropa.setxVariation(VARIATION);
+
+
+
+                        }
+                    }
+                }
+
+
+                tropa.setyVariation(0);
+                collision = true;
+            } else {
+
+
+                //Si ens estavem movent cap a l'esquerra per evitar una col·lisio i l'evitem, continuem el cami de la tropa
+                if ((tropa.getxVariation() < 0 || tropa.getxVariation() > 0)) {
+
+                        tropa.setyVariation(-VARIATION);
+                        tropa.setxVariation(0);
+
+                }
+
+            }
+
+            /*if (tropa.getGameMap().getSpecificTile(rightBorder + supBorder * tropa.getGameMap().getMapWidth()).isSolid()) {
+
+                if (tropa.getGameMap().getSpecificTile(leftBorder + supBorder * tropa.getGameMap().getMapWidth()).getSprite() == Sprite.BRIDGE) {
+                    tropa.setyVariation(VARIATION);
+                    collision = false;
+                    tropa.setxVariation(0);
+                    System.out.println("KLK SURMANO");
+
+                } else {
+
+                    collision = true;
+                    tropa.setxVariation(VARIATION);
+                    tropa.setyVariation(0);
+                }
+            }
+
+            if (tropa.getGameMap().getSpecificTile(rightBorder + infBorder * tropa.getGameMap().getMapWidth()).isSolid()) {
+                //this.yVariation = 0;
+                System.out.println("CHOQUE derecho");
+
+                collision = true;
+            }*/
+        }
+        if(tropa.getTroopDirection() != 'n' && tropa.getDefaultY() < HALF_MAP) {
+            //TROPES ENEMIGUES
+
+            //Si xoquem amb un objecte de front, canviem la seva direccio
+            if (tropa.getGameMap().getSpecificTile(leftBorder + supBorder * tropa.getGameMap().getMapWidth()).isSolid()) {
+
+                //PART ESQUERRA DEL MAPA
+                //Si ens trobem a la part esquerra del mapa
+                if(xPosition < CENTER_PADDING){
+                    if(yPosition < TOWER_PADDING_OPPONENT){
+                        tropa.setxVariation(VARIATION);
+                    }else if(yPosition < OWN_TOWER_DELIM && xPosition < LEFT_WATER_PADDING && yPosition > TOWER_PADDING_OPPONENT ){
+                        tropa.setxVariation(VARIATION);
+                    }else if (yPosition < OWN_TOWER_DELIM && xPosition > LEFT_WATER_PADDING && yPosition > TOWER_PADDING_OPPONENT ){
+                        tropa.setxVariation(-VARIATION);
+                    }else if (yPosition > OWN_TOWER_DELIM &&  yPosition < OWN_CASTLE_PADDING){
+                        //tropa.setxVariation(VARIATION);
+                        //tropa.setxVariation(-VARIATION);
+                        if( edificiDef.get(2).getEntityLife() > 0){
+                            tropa.setxVariation(0);
+
+                            edificiDef.get(2).setEntityLife(edificiDef.get(2).getEntityLife() - tropa.getAtac());
+                            System.out.println("ME HACES DAÑO BBSITAA: " + edificiDef.get(2).getEntityLife());
+
+                        } else {
+
+                            tropa.setNumTorre(2);
+                            tropa.setxVariation(VARIATION);
+                            //tornar a moure la tropa
+
+                        }
+
+                    } else if(yPosition > OWN_CASTLE_PADDING){
+                        //atac al castell
+
+                        if( edificiDef.get(5).getEntityLife() > 0){
+                            tropa.setxVariation(0);
+                            edificiDef.get(5).setEntityLife(edificiDef.get(5).getEntityLife() - tropa.getAtac());
+                            System.out.println("ME HACES DAÑO BBSITAA: " + edificiDef.get(5).getEntityLife());
+
+                        } else {
+
+                            tropa.setNumTorre(5);
+                            //tropa.setxVariation(VARIATION);
+
+
+
+                        }
+                    }
+                }
+
+                //PART DRETA DEL MAPA
+                //Si ens trobem a la part dreta del mapa
+                if(xPosition >= CENTER_PADDING){
+                    if(yPosition < TOWER_PADDING_OPPONENT){
+                        tropa.setxVariation(-VARIATION);
+                    }else if(yPosition > TOWER_PADDING_OPPONENT && xPosition > RIGHT_WATER_PADDING && yPosition < OWN_TOWER_DELIM ){
+                        tropa.setxVariation(-VARIATION);
+                    }else if (yPosition < OWN_TOWER_DELIM && xPosition < RIGHT_WATER_PADDING && yPosition > TOWER_PADDING_OPPONENT ){
+                        tropa.setxVariation(VARIATION);
+                    }else if (yPosition > OWN_TOWER_DELIM &&  yPosition < OWN_CASTLE_PADDING){
+                       // tropa.setxVariation(-VARIATION);
+                        tropa.setxVariation(0);
+
+                        if( edificiDef.get(3).getEntityLife() > 0){
+                            tropa.setyVariation(0);
+                            edificiDef.get(3).setEntityLife(edificiDef.get(3).getEntityLife() - tropa.getAtac());
+                            System.out.println("ME HACES DAÑO BBSITAA: " + edificiDef.get(3).getEntityLife());
+
+                        } else {
+
+                            tropa.setNumTorre(3);
+                            tropa.setxVariation(-VARIATION);
+
+                        }
+
+                    }  else if(yPosition > OWN_CASTLE_PADDING){
+                        //atac al castell
+                        if( edificiDef.get(5).getEntityLife() > 0){
+                            tropa.setxVariation(0);
+                            edificiDef.get(5).setEntityLife(edificiDef.get(5).getEntityLife() - tropa.getAtac());
+                            System.out.println("ME HACES DAÑO BBSITAA: " + edificiDef.get(5).getEntityLife());
+
+                        } else {
+
+                            tropa.setNumTorre(5);
+                            //tropa.setxVariation(VARIATION);
+                            
+                        }
+                    }
+                }
+
+                tropa.setyVariation(0);
+                collision = true;
+            } else {
+
+
+                //Si ens estavem movent cap a l'esquerra per evitar una col·lisio i l'evitem, continuem el cami de la tropa
+                if (tropa.getxVariation() < 0 || tropa.getxVariation() > 0) {
+
+                        tropa.setyVariation(VARIATION);
+                        tropa.setxVariation(0);
+
+                }
+
+            }
+
+            /*if (tropa.getGameMap().getSpecificTile(rightBorder + supBorder * tropa.getGameMap().getMapWidth()).isSolid()) {
+
+                if (tropa.getGameMap().getSpecificTile(leftBorder + supBorder * tropa.getGameMap().getMapWidth()).getSprite() == Sprite.BRIDGE) {
+                    tropa.setyVariation(VARIATION);
+                    collision = false;
+                    tropa.setxVariation(0);
+                    System.out.println("KLK SURMANO");
+
+                } else {
+
+                    collision = true;
+                    tropa.setxVariation(VARIATION);
+                    tropa.setyVariation(0);
+                }
+            }
+
+            if (tropa.getGameMap().getSpecificTile(rightBorder + infBorder * tropa.getGameMap().getMapWidth()).isSolid()) {
+                //this.yVariation = 0;
+                System.out.println("CHOQUE derecho");
+
+                collision = true;
+            }*/
+        }
+        return collision;
+    }
+    public void ompleEdifici() {
+
+        for (int i = 0; i < 6; i++) {
+            Edifici e = new Edifici();
+            switch (i) {
+                case 0:
+                    e.getTiles()[0][0] = 1;
+                    e.getTiles()[0][1] = 5;
+                    e.getTiles()[1][0] = 2;
+                    e.getTiles()[1][1] = 5;
+                    e.getTiles()[2][0] = 1;
+                    e.getTiles()[2][1] = 6;
+                    e.getTiles()[3][0] = 2;
+                    e.getTiles()[3][1] = 6;
+                    e.setEntityLife(20);
+                    break;
+                case 1:
+                    e.getTiles()[0][0] = 7;
+                    e.getTiles()[0][1] = 5;
+                    e.getTiles()[1][0] = 8;
+                    e.getTiles()[1][1] = 5;
+                    e.getTiles()[2][0] = 7;
+                    e.getTiles()[2][1] = 6;
+                    e.getTiles()[3][0] = 8;
+                    e.getTiles()[3][1] = 6;
+                    e.setEntityLife(20);
+                    break;
+                case 2:
+                    e.getTiles()[0][0] = 1;
+                    e.getTiles()[0][1] = 14;
+                    e.getTiles()[1][0] = 2;
+                    e.getTiles()[1][1] = 14;
+                    e.getTiles()[2][0] = 1;
+                    e.getTiles()[2][1] = 15;
+                    e.getTiles()[3][0] = 2;
+                    e.getTiles()[3][1] = 15;
+                    e.setEntityLife(20);
+                    break;
+                case 3:
+                    e.getTiles()[0][0] = 7;
+                    e.getTiles()[0][1] = 14;
+                    e.getTiles()[1][0] = 8;
+                    e.getTiles()[1][1] = 14;
+                    e.getTiles()[2][0] = 7;
+                    e.getTiles()[2][1] = 15;
+                    e.getTiles()[3][0] = 8;
+                    e.getTiles()[3][1] = 15;
+                    e.setEntityLife(20);
+                    break;
+                case 4:
+                    e.setEntityLife(100);
+                    break;
+                case 5:
+                    e.setEntityLife(100);
+                    break;
+                default:
+                    break;
+            }
+            edificiDef.add(e);
+        }
     }
 
+    public  ArrayList<Edifici> getEdificiDef() {
+        return edificiDef;
+    }
+
+    public void setEdificiDef(ArrayList<Edifici> edificiDef) {
+        this.edificiDef = edificiDef;
+    }
 }

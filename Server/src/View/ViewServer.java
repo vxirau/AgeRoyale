@@ -32,13 +32,11 @@ public class ViewServer extends JFrame {
 	}
 
 	public void initAll(){
-		JPanel panelPare = new JPanel(new GridLayout(1, 2));
+		JPanel panelPare = new JPanel(new GridLayout(1, 1));
 		panelPare.setOpaque(false);
 		String[] intervals = { "Setmana", "Mes", "Any"};
 		selector = new JComboBox(intervals);
 		selector.setBounds(550, 0, 130, 50);
-
-
 
 
 		JPanel Start = new JPanel( new BorderLayout());
@@ -54,7 +52,7 @@ public class ViewServer extends JFrame {
 		Start.setOpaque(false);
 
 		JPanel panel = new JPanel(new BorderLayout());
-		btnStop = new JButton("Stop");
+		/*btnStop = new JButton("Stop");
 		panel.add(btnStop);
 		btnStop.setFont(new Font("Arial", Font.BOLD , 40));
 		btnStop.setForeground(Color.decode("#FFDC60"));
@@ -62,12 +60,12 @@ public class ViewServer extends JFrame {
 		btnStop.setContentAreaFilled(false);
 		btnStop.setAlignmentY(Component.CENTER_ALIGNMENT);
 		btnStop.setFocusPainted(false);
-		btnStop.setOpaque(false);
+		btnStop.setOpaque(false);*/
 		panel.setOpaque(false);
 
 
 		panelPare.add(Start);
-		panelPare.add(panel);
+		//panelPare.add(panel);
 
 		panelPare.setBackground(Color.decode("#85201F"));
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -97,7 +95,7 @@ public class ViewServer extends JFrame {
 
 	private JScrollPane makePanellEstadistiques() {
 
-		String[] columnNames = {"Username", "% Victòries", "Temps mitg x Victoria"};
+		String[] columnNames = {"Username", "% Victòries", "Temps mig x Victoria"};
 
 		JTable table = new JTable(data, columnNames){
 			public boolean isCellEditable(int data, int columns){
@@ -161,7 +159,7 @@ public class ViewServer extends JFrame {
 	}
 	public void serverController(ActionListener controlador) {
 		btnStart.addActionListener(controlador);
-		btnStop.addActionListener(controlador);
+		//btnStop.addActionListener(controlador);
 		selector.addActionListener(controlador);
 
 	}

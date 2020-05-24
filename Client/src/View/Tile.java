@@ -86,6 +86,10 @@ public class Tile implements Serializable {
         return isSolid;
     }
 
+    public void setSolid(boolean solid) {
+        isSolid = solid;
+    }
+
     public Point2D getTileCenter() {
         return tileCenter;
     }

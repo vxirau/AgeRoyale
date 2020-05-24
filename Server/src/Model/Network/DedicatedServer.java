@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DedicatedServer extends Thread {
 
@@ -35,16 +36,18 @@ public class DedicatedServer extends Thread {
 	private ObjectInputStream dataInput;
 	private DataOutputStream dataOut;
 	private ObjectOutputStream objectOut;
-	private LinkedList<DedicatedServer> clients;
+	private CopyOnWriteArrayList<DedicatedServer> clients;
 	private ViewServer vista;
 	private Integer inRoom = null;
 	private TroopSController troopSController;
 	private Usuari clientUser;
 	private Server server;
 	public static int cont = 0;
+	public static int cont2 = 0;
 
+	private static CopyOnWriteArrayList<Tropa> deleted;
 
-	public DedicatedServer(Socket sClient, ViewServer vista, LinkedList<DedicatedServer> clients, Server server) throws IOException {
+	public DedicatedServer(Socket sClient, ViewServer vista, CopyOnWriteArrayList<DedicatedServer> clients, Server server) throws IOException {
 		this.isOn = false;
 		this.sClient = sClient;
 		this.vista = vista;
@@ -53,6 +56,8 @@ public class DedicatedServer extends Thread {
 		dataInput = new ObjectInputStream(sClient.getInputStream());
 		objectOut = new ObjectOutputStream(sClient.getOutputStream());
 		this.troopSController = new TroopSController();
+		this.deleted = new CopyOnWriteArrayList<>();
+
 	}
 
 	public void startDedicatedServer() {
@@ -72,9 +77,7 @@ public class DedicatedServer extends Thread {
 		String[] aux;
 
 		try {
-
 			while(isOn) {
-
 				Message m = (Message) dataInput.readObject();
 				if (m.getType().equals("register")) {
 					Usuari u = (Usuari) m.getObject();
@@ -159,7 +162,8 @@ public class DedicatedServer extends Thread {
 				} else if (m.getType().equals("getRequests")) {
 					Usuari usuari = (Usuari) m.getObject();
 					requestsDAO aDAO = new requestsDAO();
-					Message messageResposta = new Message(aDAO.getFriendRequests(usuari), "requestsReply");
+					ArrayList<Usuari> friendRequests = aDAO.getFriendRequests(usuari);
+					Message messageResposta = new Message(friendRequests, "requestsReply");
 					objectOut.writeObject(messageResposta);
 				} else if (m.getType().equals("UserPKUpdates")) {
 					Usuari usuari = (Usuari) m.getObject();
@@ -188,27 +192,23 @@ public class DedicatedServer extends Thread {
 					objectOut.writeObject(messageResposta);
 				} else if (m.getType().equals("Tropa update")) {
 					Tropa t = (Tropa) m.getObject();
-					t = troopSController.moveOffensiveTroop(t, t.getxVariation(), t.getyVariation(), cont);
-					cont++;
-					//objectOut.reset();
+					if(t.getVida() <= 0){
+						deleted.add(t);
+					} else {
+						if (t.getTroopType() == 0 || t.getTroopType() == 1) {
+							t = troopSController.moveOffensiveTroop(t, t.getxVariation(), t.getyVariation(), cont);
+							cont++;
+							//objectOut.reset();
+						}
+					}
+					/*else if(t.getTroopType() == 3){
+						troopSController.bombExplosion(t,cont2);
+						cont2++;
+					}*/
 					Message mresposta = new Message(t, "Tropa resposta");
 					objectOut.writeObject(mresposta);
-				} else if(m.getType().equals("Bomba update")){
-					Tropa t = (Tropa) m.getObject();
-					t = troopSController.bombExplosion(t, cont);
-					if(t.isPlaying()){
-						cont++;
-						objectOut.reset();
-						Message mresposta = new Message(t,"Bomba resposta");
-						objectOut.writeObject(mresposta);
-					}else{
 
-						Message mresposta = new Message(t,"Destruir bomba");
-						objectOut.writeObject(mresposta);
-						System.out.println("ESTOY DESTRUIDA COÑIOOOOOOOOOOOOOOOO");
-					}
-
-				}else if (m.getType().equals("FindFriend")){
+				} else if (m.getType().equals("FindFriend")){
 					String nom = (String) m.getObject();
 					usuariDAO uDAO = new usuariDAO();
 					ArrayList<Usuari> auz = uDAO.getUsersByName(nom);
@@ -221,9 +221,10 @@ public class DedicatedServer extends Thread {
 					rDAO.acceptRequest(users.get(0), users.get(1));
 					aDAO.addAmic(users.get(0), users.get(1));
 					ArrayList<Usuari> a = aDAO.getAmics(users.get(0));
-					Message messageResposta = new Message(a, "FriendsResposta");
-					objectOut.writeObject(messageResposta);
-					Message messageResposta2 = new Message(rDAO.getFriendRequests(users.get(0)), "requestsReply");
+					//Ja el fas amb el broadcast
+					//Message messageResposta = new Message(a, "FriendsResposta");
+					//objectOut.writeObject(messageResposta);
+					Message messageResposta2 = new Message(rDAO.getFriendRequests(users.get(0)), "requestsReplyUpdate");
 					objectOut.writeObject(messageResposta2);
 					server.broadcastClients();
 				}else if(m.getType().equals("removeRequest")){
@@ -234,6 +235,7 @@ public class DedicatedServer extends Thread {
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					requestsDAO rDAO = new requestsDAO();
 					rDAO.denyRequest(users.get(0), users.get(1));
+					server.broadcastClients();
 				}else if(m.getType().equals("sendRequest")){
 					ArrayList<Usuari> users = (ArrayList<Usuari>) m.getObject();
 					requestsDAO rDAO = new requestsDAO();
@@ -277,7 +279,10 @@ public class DedicatedServer extends Thread {
 				}else if(m.getType().equals("Invite")) {
 					Invite invite = (Invite) m.getObject();
 					server.broadcastInvite(invite);
-				}else if(m.getType().equals("add tropa")){
+				} else if(m.getType().equals("GetTropesStats")) {
+					Message message = new Message(new tropesDAO(){}.getAllTropes(),"SetTropesStats");
+					objectOut.writeObject(message);
+				} else if(m.getType().equals("add tropa")){
                     Tropa t = (Tropa) m.getObject();
                     tropaPartidaDAO pDAO = new tropaPartidaDAO();
                     pDAO.addTropa(t);
@@ -294,13 +299,16 @@ public class DedicatedServer extends Thread {
                 } else if(m.getType().equals("checkID")){
                     Tropa troop = new Tropa();
                     boolean trobat = false;
-                    ArrayList<Tropa> vistes = (ArrayList<Tropa>) m.getObject();
+                    CopyOnWriteArrayList<Tropa> vistes = (CopyOnWriteArrayList<Tropa>) m.getObject();
                     tropaPartidaDAO pDAO = new tropaPartidaDAO();
-                    ArrayList<Tropa> tropes = pDAO.getTropesPartida(10);
+                    ArrayList<Tropa> tropes = pDAO.getTropesPartida(inRoom);
 
-                    if(tropes.size() > vistes.size()){
-                        troop = tropes.get(tropes.size() - 1);
-                    }
+                    if (deleted.size() % 2 == 0) {
+                    	if (tropes.size() > (vistes.size() + (deleted.size() / 2))) {
+                    		troop = tropes.get(tropes.size() - 1);
+                    		cont2++;
+                    	}
+					}
 
                     Message message = new Message(troop,"tropesCheck");
                     objectOut.writeObject(message);
@@ -317,17 +325,21 @@ public class DedicatedServer extends Thread {
                 }else if(m.getType().equals("startGame")){
 					Partida p = (Partida) m.getObject();
 					server.broadcastStartGame(p);
+				} else if(m.getType().equals("Edificis")){
+					ArrayList<Edifici> edificiDef = (ArrayList<Edifici>) m.getObject();
+					troopSController.setEdificiDef(edificiDef);
+					System.out.println("HE LLEGADOO");
 				}
             }
-		} catch (IOException | ClassNotFoundException e1){
-				// en cas derror aturem el servidor dedicat
-				stopDedicatedServer();
-				// eliminem el servidor dedicat del conjunt de servidors dedicats
-				clients.remove(this);
-				// invoquem el metode del servidor que mostra els servidors dedicats actuals
-				server.showClients();
-			} catch (ParseException e) {
-			e.printStackTrace();
+		} catch (IOException | ClassNotFoundException | ParseException e1 ){
+			e1.printStackTrace();
+			// en cas derror aturem el servidor dedicat
+			stopDedicatedServer();
+			// eliminem el servidor dedicat del conjunt de servidors dedicats
+			clients.remove(this);
+			// invoquem el metode del servidor que mostra els servidors dedicats actuals
+			server.showClients();
+
 		}
 
 	}
@@ -374,13 +386,14 @@ public class DedicatedServer extends Thread {
 	}
 
 	public void startGameMessage(Partida partida) {
-		if (clientUser != null && partida.getIdPartida() == inRoom && (partida.getJugadors().get(0).getIdUsuari() == clientUser.getIdUsuari() || partida.getJugadors().get(1).getIdUsuari() == clientUser.getIdUsuari())){
+
+		if (clientUser != null && inRoom != null && partida.getIdPartida() == inRoom && (partida.getJugadors().get(0).getIdUsuari() == clientUser.getIdUsuari() || partida.getJugadors().get(1).getIdUsuari() == clientUser.getIdUsuari())){
 			try {
 				objectOut.writeObject(new Message(null, "StartGameAsPlayerRecived"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (clientUser != null && partida.getIdPartida() == inRoom){
+		} else if (clientUser != null && inRoom != null && partida.getIdPartida() == inRoom){
 			try {
 				objectOut.writeObject(new Message(null, "StartGameAsSpectatorRecived"));
 			} catch (IOException e) {
@@ -388,4 +401,7 @@ public class DedicatedServer extends Thread {
 			}
 		}
 	}
+
+
+
 }

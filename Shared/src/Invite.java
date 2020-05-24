@@ -1,6 +1,8 @@
 package src;
 
-public class Invite {
+import java.io.Serializable;
+
+public class Invite implements Serializable {
     private Usuari origen;
     private Usuari desti;
     private Partida partida;

@@ -10,7 +10,6 @@ import src.Tropa;
 import src.Usuari;
 import src.View.*;
 import src.View.LoginView;
-import src.View.ViewRegistre;
 
 import javax.swing.*;
 import java.io.*;
@@ -25,24 +24,26 @@ public class UserService extends Thread{
 	private ObjectInputStream doInput;
 	private DataInputStream dInput;
 	private boolean isOn = false;
+	private boolean found = false;
 	private Object[] options = {"Entèsos"};
   	private Path current = Paths.get("./Server/resources/config.json");
   	private String arxiu = current.toAbsolutePath().toString();
-    private RegisterViewController registerViewController;
-    private RoomsController roomsController;
-    private LoginViewController loginViewController;
-    private ConfigController configController;
-    private FriendsController friendsController;
-    private TroopController troopController;
-	private WaitingController waitingController;
+	private boolean flag;
+
+	private LoginViewController loginViewController;
+	private RegisterViewController registerViewController;
+	private ConfigController configController;
 	private MenuController menuController;
+	private FriendsController friendsController;
+	private RoomsController roomsController;
+	private TroopController troopController;
+	private WaitingController waitingController;
+	private GameController gameController;
+
 
 	public void setMenuController(MenuController menuController) {
 		this.menuController = menuController;
 	}
-
-	private boolean flag;
-    private GameController gameController;
 
 
 	public UserService() {
@@ -141,43 +142,88 @@ public class UserService extends Thread{
                     this.flag = false;
         		} else if(jelow.getType().equals("Tropa resposta")){
 					Tropa t = (Tropa) jelow.getObject();
-					troopController.getTropa(t);
-					troopController.show(t);
-					troopController.setAccept(true);
-				} else if(jelow.getType().equals("Bomba resposta")){
-					Tropa t = (Tropa) jelow.getObject();
-					troopController.getTropa(t);
+					if(t != null) {
+                        if (t.getVida() > 0) {
+                        	if(t.getTroopType() == 2){
+                        		if(t.getVida() < 1000){
+									troopController.deleteTropa(t);
+								} else {
+									troopController.getTropa(t);
+									//troopController.show(t);
+									troopController.setAccept(true);
+								}
+							} else {
+								troopController.getTropa(t);
+								//troopController.show(t);
+								troopController.setAccept(true);
+							}
 
-					troopController.show(t);
+                        } else {
 
+							/*or(int i = 0; i < troopController.getGameView().getTropes().size(); i++){
+								if(found){
+									troopController.getGameView().getUpdates().get(i).setIndex(i-1);
+									System.out.println("La he trobat al mediooo");
+								}
+								if(troopController.getGameView().getTropes().get(i).equals(t)){
+									found = true;
+								}
+							}
+							found = false;*/
+							troopController.deleteTropa(t);
+                        }
+                    }
 
-				}else if(jelow.getType().equals("Destruir bomba")) {
-					Tropa t = (Tropa) jelow.getObject();
-					troopController.destroyTroop(t);
-
+					//troopController.getGameView().setSendcheck(true);
 				} else if(jelow.getType().equals("FindFriendResposta")){
                 	friendsController.setFriends((ArrayList<Usuari>) jelow.getObject());
 				}else if(jelow.getType().equals("requestsReply")){
 					loginViewController.onRequestsRecieved((ArrayList<Usuari>) jelow.getObject());
-				} else if(jelow.getType().equals("tropesCheck")){
+				} else if(jelow.getType().equals("requestsReplyUpdate")) {
+					ArrayList<Usuari>  requests = (ArrayList<Usuari>) jelow.getObject();
+					friendsController.setRequests(requests);
+				}else if(jelow.getType().equals("tropesCheck")){
 
 					Tropa t = (Tropa) jelow.getObject();
 					if(t.getWhichSprite() != null) {
+						t.setIdPartida(10);
+						t.setOn(true);
+						if(t.getWhichSprite().equals("BOMB") ) {
+                            t.setyPosition(610 - t.getyPosition());
+                            t.setxPosition(285 - t.getxPosition());
+                        } else if(t.getWhichSprite().equals("SKELETON_BACK") || t.getWhichSprite().equals("GOBLIN_BACK")){
+                            t.setyPosition(590 - t.getyPosition());
+                            t.setxPosition(294 - t.getxPosition());
+                        } else if(t.getWhichSprite().equals("MAGIC_TOWER")){
+                            t.setyPosition(590 - t.getyPosition());
+                            t.setxPosition(284 - t.getxPosition());
+                        }
+						t.setyVariation(2);
+						t.setDefaultY(10);
+						t.setGameMap(gameController.getGameView().getGameMap());
 						if (t.getWhichSprite().equals("SKELETON_BACK")) {
 							t.setSprite(Sprite.SKELETON_BACK);
-							t.setGameMap(gameController.getGameView().getGameMap());
-							t.setIdPartida(10);
-							t.setOn(true);
 							t.setSprites(Sprite.SKELETON_BACK);
-							//t.setTroopDirection('s');
-							t.setyPosition(596 - t.getyPosition());
-							t.setxPosition(300 - t.getxPosition());
-							t.setyVariation(2);
+							t.setNumTorre(-1);
+							gameController.getGameView().getTropes().add(t);
+						} else if(t.getWhichSprite().equals("GOBLIN_BACK")){
+							t.setSprite(Sprite.GOBLIN_BACK);
+							t.setSprites(Sprite.GOBLIN_BACK);
+							t.setNumTorre(-1);
+							gameController.getGameView().getTropes().add(t);
+						} else if(t.getWhichSprite().equals("MAGIC_TOWER")){
+							t.setyVariation(0);
+							t.setSprite(Sprite.MAGIC_TOWER);
+							t.setSprites(Sprite.MAGIC_TOWER);
+							t.setNumTorre(-1);
+							gameController.getGameView().getTropes().add(t);
+						} else if(t.getWhichSprite().equals("BOMB")){
+							t.setyVariation(0);
+							t.setSprite(Sprite.BOMB);
+							t.setSprites(Sprite.BOMB);
+							t.setNumTorre(-1);
+							gameController.getGameView().getTropes().add(t);
 						}
-						gameController.getGameView().getTropes().add(t);
-
-						//gameController.getGameView().setFlag(2);
-
 					}
 					gameController.getGameView().setSendcheck(true);
 				}else if(jelow.getType().equals("updateWaiting")){
@@ -187,9 +233,11 @@ public class UserService extends Thread{
 					Invite invite = (Invite) jelow.getObject();
 					menuController.inviteRecived(invite);
 				} else if(jelow.getType().equals("StartGameAsPlayerRecived")){
-					roomsController.startGame(roomsController.startGamePartida, roomsController.startGameWaitingController, true);
+					roomsController.startGame(roomsController.startGamePartida, true);
 				} else if(jelow.getType().equals("StartGameAsSpectatorRecived")){
-					roomsController.startGame(roomsController.startGamePartida, roomsController.startGameWaitingController, false);
+					roomsController.startGame(roomsController.startGamePartida, false);
+				} else if(jelow.getType().equals("SetTropesStats")){
+					gameController.setTropaStatic((ArrayList<Tropa>) jelow.getObject());
 				}
 
 
@@ -287,9 +335,9 @@ public class UserService extends Thread{
 		}
 	}
 
-	public void sendUserPKUpdate(Message message, ConfigController configCntroller) {
+	public void sendUserPKUpdate(Message message, ConfigController configController) {
 		try{
-			this.configController = configCntroller;
+			this.configController = configController;
 			this.doStream.reset();
 			this.doStream.writeObject(message);
 		} catch (IOException e) {
@@ -310,8 +358,9 @@ public class UserService extends Thread{
 		}
 	}
 
-	public void sendFriendSearch(Message message, FriendsController friendsCtrl) {
+	public void sendFriendSearch(Message message, FriendsController friendsCtrl, boolean flag) {
 		try{
+			this.flag = flag;
 			this.friendsController = friendsCtrl;
 			this.doStream.reset();
 			this.doStream.writeObject(message);
@@ -349,8 +398,8 @@ public class UserService extends Thread{
 	public void sendCheck(Message m, GameController gcontroller){
 		try{
 			this.gameController = gcontroller;
-			this.doStream.reset();
 			this.doStream.writeObject(m);
+			this.doStream.reset();
 		} catch (IOException e) {
 			e.printStackTrace();
 			stopServerComunication();
@@ -369,4 +418,27 @@ public class UserService extends Thread{
 			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
 		}
 	}
+
+	public void sendEdificis(Message m){
+		try{
+			this.doStream.reset();
+			this.doStream.writeObject(m);
+		} catch (IOException e) {
+			e.printStackTrace();
+			stopServerComunication();
+			showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+		}
+	}
+
+    public void sendsGetTropes(Message m, GameController controller) {
+        try{
+            this.gameController = controller;
+            this.doStream.reset();
+            this.doStream.writeObject(m);
+        } catch (IOException e) {
+            e.printStackTrace();
+            stopServerComunication();
+            showMessage("ERROR DE CONNEXIÓ AMB EL SERVIDOR (missatge no enviat)");
+        }
+    }
 }

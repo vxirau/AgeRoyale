@@ -27,8 +27,7 @@ public class MainServer {
             System.out.println("SERVER");
 
             ViewServer vServer = new ViewServer();
-            Server serv = new Server(vServer);
-            ControllerServer cServer = new ControllerServer(serv,vServer);
+            ControllerServer cServer = new ControllerServer(vServer);
             vServer.serverController(cServer);
             vServer.getTabbedPane().setSelectedIndex(0);
             vServer.setVisible(true);

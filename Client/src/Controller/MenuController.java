@@ -3,10 +3,8 @@ package src.Controller;
 import src.Invite;
 import src.Message;
 import src.Model.Network.UserService;
-import src.Partida;
 import src.Usuari;
 import src.View.MenuView;
-import src.View.WaitingRoomView;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
@@ -26,6 +24,7 @@ public class MenuController {
     private MainController mainController;
     private FriendsController friendsController;
     private RoomsController roomsController;
+    private WaitingController waitingController;
     private ArrayList<Usuari> requests;
     private ArrayList<Usuari> requested;
 
@@ -34,8 +33,18 @@ public class MenuController {
         @Override
         public void windowClosing(WindowEvent e) {
             super.windowClosing(e);
-            Message message = new Message(user, "Logout");
-            uService.sendLogout(message);
+            Object[] aux = {"Si", "No"};
+            ImageIcon imagen = new ImageIcon(this.getClass().getResource("/resources/escut.png"));
+
+            int confirmed = JOptionPane.showOptionDialog(view,"Estas segur que vols tancar la sessió?", "Logout",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, imagen, aux, aux[0]);
+
+            if (confirmed == JOptionPane.YES_OPTION) {
+                Message message = new Message(user, "Logout");
+                uService.sendLogout(message);
+                view.dispose();
+                System.exit(0);
+            }
         }
     };
 
@@ -65,20 +74,22 @@ public class MenuController {
     }
 
     private void initControllers() {
-        configController = new ConfigController(user, uService, this);
+        configController = new ConfigController(user, uService);
         tropesController = new TropesController(user);
         mainController = new MainController(user);
         friendsController = new FriendsController(user, uService, this, requests, requested);
         roomsController = new RoomsController(user, uService, this);
+        waitingController = new WaitingController(roomsController, null, uService, user);
     }
 
     private void initControllersViews() {
         configController.setConfigView(view.getConfigView());
         tropesController.setTropesView(view.getTropesView());
         mainController.setMainView(view.getMainView());
-        friendsController.setFriendView(view.getFriendView());
+        friendsController.setFriendView(view.getFriendView(), view.getFriendRequestView());
         roomsController.setVista(view.getRoomListView());
         roomsController.setAllGames(roomsController.getAllGames());
+        waitingController.setView(view.getWaitingRoomView());
     }
 
     public RoomsController getRoomsController() {
@@ -93,11 +104,12 @@ public class MenuController {
         return friendsController;
     }
 
+    public WaitingController getWaitingController() {
+        return waitingController;
+    }
+
     public void updateViews() {
-        try {
-            view.updateViews();
-        } catch (InterruptedException e){
-        }
+        view.updateViews();
     }
 
     public int getRequestSize() {
@@ -113,7 +125,11 @@ public class MenuController {
                 "Invitacio", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
                 null, options,  options[0]);
         if (n==JOptionPane.YES_OPTION){
-            roomsController.gameSelected(invite.getPartida(), roomsController.getRoomListView().getTotal(invite.getPartida()));
+            roomsController.gameSelected(invite.getPartida());
         }
+    }
+
+    public MenuView getView() {
+        return view;
     }
 }

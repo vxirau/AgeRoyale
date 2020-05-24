@@ -4,19 +4,21 @@ package src.Model.Network;
 import src.Invite;
 import src.NetworkConfiguration;
 import src.Partida;
+import src.Tropa;
 import src.View.ViewServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Server extends Thread {
 
 	private boolean isOn;
 	private ServerSocket sSocket;
 	// relacio amb els servidors dedicats
-	private LinkedList<DedicatedServer> dServers;
+	private CopyOnWriteArrayList<DedicatedServer> dServers;
 	// relacio amb la vista
 	// podriem mantenir una relacio amb el controlador
 	// en el cas de que aquest existis, i delegar les
@@ -29,7 +31,7 @@ public class Server extends Thread {
 			this.isOn = false;
 			this.view = vista;
 			this.sSocket = new ServerSocket(NetworkConfiguration.staticPort);
-			this.dServers = new LinkedList<DedicatedServer>();
+			this.dServers = new CopyOnWriteArrayList<>();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -43,6 +45,7 @@ public class Server extends Thread {
 
 	public void stopServer() {
 		// aturem el thread del servidor
+		System.out.println("***** STOP *****");
 		isOn = false;
 		this.interrupt();
 	}
@@ -102,4 +105,10 @@ public class Server extends Thread {
 			dServer.startGameMessage(partida);
 		}
 	}
+
+	public boolean isOn() {
+		return isOn;
+	}
+
+
 }

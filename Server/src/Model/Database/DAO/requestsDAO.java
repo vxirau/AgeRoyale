@@ -13,13 +13,13 @@ public class requestsDAO {
     public ArrayList<Usuari> getFriendRequests(Usuari u){
         usuariDAO uDAO = new usuariDAO();
         ArrayList<Usuari> allRequests = new ArrayList<>();
-        String query = "SELECT if(COUNT(*) > 0, req.originId, -1) as exist FROM AgeRoyale.requests AS req WHERE destinationId = " + u.getIdUsuari()+ ";";
+        String query = "SELECT if(COUNT(*) > 0, req.originId, -1) as exist FROM AgeRoyale.requests AS req WHERE destinationId = " + u.getIdUsuari()+ " AND accepted IS NULL;";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
         try {
             if (rs.next()) {
                 int id = rs.getInt("exist");
                 if (id != -1){
-                    String query2 = "SELECT req.originId, req.accepted FROM AgeRoyale.requests AS req WHERE destinationId = " + u.getIdUsuari() + ";";
+                    String query2 = "SELECT req.originId, req.accepted FROM AgeRoyale.requests AS req WHERE destinationId = " + u.getIdUsuari() + " AND accepted IS NULL;";
                     ResultSet rs2 = DBConnector.getInstance().selectQuery(query2);
                     while(rs2.next()){
                         Usuari g = uDAO.getUserFromId(rs2.getInt("originId"));
@@ -46,13 +46,13 @@ public class requestsDAO {
     public ArrayList<Usuari> getRequested(Usuari u){
         usuariDAO uDAO = new usuariDAO();
         ArrayList<Usuari> allRequests = new ArrayList<>();
-        String query = "SELECT if(COUNT(*) > 0, req.destinationId, -1) as exist FROM AgeRoyale.requests AS req WHERE originId = " + u.getIdUsuari()+ ";";
+        String query = "SELECT if(COUNT(*) > 0, req.destinationId, -1) as exist FROM AgeRoyale.requests AS req WHERE originId = " + u.getIdUsuari()+ " AND accepted IS NOT NULL;";
         ResultSet rs = DBConnector.getInstance().selectQuery(query);
         try {
             if (rs.next()) {
                 int id = rs.getInt("exist");
                 if (id != -1){
-                    String query2 = "SELECT req.destinationId, req.accepted FROM AgeRoyale.requests AS req WHERE originId = " + u.getIdUsuari() + ";";
+                    String query2 = "SELECT req.destinationId, req.accepted FROM AgeRoyale.requests AS req WHERE originId = " + u.getIdUsuari() + " AND accepted IS NOT NULL;";
                     ResultSet rs2 = DBConnector.getInstance().selectQuery(query2);
                     while(rs2.next()){
                         Usuari g = uDAO.getUserFromId(rs2.getInt("destinationId"));
@@ -81,12 +81,12 @@ public class requestsDAO {
     }
 
     public void acceptRequest(Usuari u1, Usuari u2){
-        String query = "UPDATE AgeRoyale.requests SET AgeRoyale.requests.accepted = 1 WHERE AgeRoyale.requests.destinationId = " + u2.getIdUsuari() + " AND AgeRoyale.requests.originId = " + u1.getIdUsuari() + ";";
+        String query = "UPDATE AgeRoyale.requests SET AgeRoyale.requests.accepted = 1 WHERE AgeRoyale.requests.destinationId = " + u1.getIdUsuari() + " AND AgeRoyale.requests.originId = " + u2.getIdUsuari() + ";";
         DBConnector.getInstance().updateQuery(query);
     }
 
     public void denyRequest(Usuari u1, Usuari u2){
-        String query = "UPDATE AgeRoyale.requests SET AgeRoyale.requests.accepted = 0 WHERE AgeRoyale.requests.destinationId = " + u2.getIdUsuari() + " AND AgeRoyale.requests.originId = " + u1.getIdUsuari() + ";";
+        String query = "UPDATE AgeRoyale.requests SET AgeRoyale.requests.accepted = 0 WHERE AgeRoyale.requests.destinationId = " + u1.getIdUsuari() + " AND AgeRoyale.requests.originId = " + u2.getIdUsuari() + ";";
         DBConnector.getInstance().updateQuery(query);
     }
 

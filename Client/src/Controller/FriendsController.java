@@ -5,6 +5,7 @@ import src.Model.Network.UserService;
 import src.Usuari;
 import src.View.FriendRequestView;
 import src.View.FriendView;
+import src.View.MenuView;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -13,32 +14,23 @@ import java.util.ArrayList;
 public class FriendsController implements ActionListener{
 
     private FriendView friendView;
+    private FriendRequestView friendRequestView;
 
     private MenuController menuController;
 
     private Usuari usuari;
     private UserService uService;
-    private ArrayList<Usuari> friends;
     private ArrayList<Usuari> requests;
     private ArrayList<Usuari> requested;
 
     private String cerca;
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String boto = ((JButton) e.getSource()).getText();
-        if(boto.equals("Friend Request")){
-            FriendRequestView r = new FriendRequestView(this, requests);
-            r.setVisible(true);
-        }
-    }
 
     public MouseListener listenerCercaAmic = new MouseAdapter(){
         @Override
         public void mouseClicked(MouseEvent e) {
             super.mouseClicked(e);
             Message mes = new Message(friendView.getJtfSearchAmic().getText(), "FindFriend");
-            uService.sendFriendSearch(mes, FriendsController.this);
+            uService.sendFriendSearch(mes, FriendsController.this, false);
         }
     };
 
@@ -60,6 +52,23 @@ public class FriendsController implements ActionListener{
         this.requested = requested;
     }
 
+    /*
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String boto = ((JButton) e.getSource()).getText();
+        if(boto.equals("Friend Request")){
+            FriendRequestView r = new FriendRequestView(this, requests);
+            r.setVisible(true);
+        }
+    }
+
+     */
+
+    public void setRequests (ArrayList<Usuari> request){
+        request.removeIf(usr -> usr.getIdUsuari() == -20);
+        this.requests = request;
+        friendRequestView.setRequests(requests);
+    }
 
     public void removeFriend(Usuari user){
         boolean eliminar=false, ok=true;
@@ -97,11 +106,7 @@ public class FriendsController implements ActionListener{
             }else{
                 JOptionPane.showMessageDialog(friendView, "Ja has enviat una solicitud a aquest usuari!");
             }
-
         }
-
-
-
     }
 
     private boolean requestHasUser(Usuari u){
@@ -114,8 +119,9 @@ public class FriendsController implements ActionListener{
         return has;
     }
 
-    public void setFriendView(FriendView friendView) {
+    public void setFriendView(FriendView friendView, FriendRequestView friendRequestView) {
         this.friendView = friendView;
+        this.friendRequestView = friendRequestView;
         friendView.setControllers(listenerDelTextField, listenerCercaAmic, this);
     }
 
@@ -132,7 +138,6 @@ public class FriendsController implements ActionListener{
         if(friendView.getTextField().getText().toString().length()>0){
             clearFriendList(amics);
         }
-        this.friends = amics;
         friendView.setAmics(amics);
         menuController.updateViews();
         friendView.setControllers(listenerDelTextField, listenerCercaAmic, this);
@@ -160,17 +165,31 @@ public class FriendsController implements ActionListener{
         ArrayList<Usuari> users = new ArrayList<>();
         users.add(this.usuari);
         users.add(u);
+
         int a= JOptionPane.showConfirmDialog(friendView, "Vols acceptar aquesta solicitud?");
         if(a==JOptionPane.YES_OPTION){
             Message m = new Message(users, "acceptRequest");
-            uService.sendFriendSearch(m, this);
+            uService.sendFriendSearch(m, this, true);
+            requests.remove(u);
         }else if(a==JOptionPane.NO_OPTION){
             Message m = new Message(users, "denyRequest");
-            uService.sendFriendSearch(m, this);
+            uService.sendFriendSearch(m, this, true);
+            requests.remove(u);
         }
-
-
+        friendRequestView.setRequests(requests);
     }
 
+    public ArrayList<Usuari> getRequests() {
+        return requests;
+    }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JButton button = (JButton) e.getSource();
+        if (button.getText().equals("Friend Request")){
+            menuController.getView().invokeAdjustViews(MenuView.AMICSREQUEST);
+        } else {
+            menuController.getView().invokeAdjustViews(MenuView.AMICS);
+        }
+    }
 }

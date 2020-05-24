@@ -112,7 +112,7 @@ public class RoomListView extends JFrame{
 
 	}
 
-	private JPanel crearElement(Partida p, int total){
+	private JPanel crearElement(Partida p){
 		JPanel element = new JPanel(new GridLayout(3, 1)) {
 			protected void paintComponent(Graphics g) {
 				ImageIcon elementButton = new ImageIcon(this.getClass().getResource("/resources/fonsElement.png"));
@@ -125,7 +125,7 @@ public class RoomListView extends JFrame{
 		element.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				roomsController.gameSelected(p,total);
+				roomsController.gameSelected(p);
 			}
 		});
 
@@ -210,12 +210,12 @@ public class RoomListView extends JFrame{
 
 			//------------------------------ELEMENT------------------------------
 			for(int i=0; i<pPubliques.size() ;i++){
-				jpPartidesPubliques.add(crearElement(pPubliques.get(i), i));
+				jpPartidesPubliques.add(crearElement(pPubliques.get(i)));
 				jpPartidesPubliques.add(addSeparator());
 			}
 
 			for(int i =0; i<pPrivades.size(); i++){
-				jpPartidesPrivades.add(crearElement(pPrivades.get(i), i));
+				jpPartidesPrivades.add(crearElement(pPrivades.get(i)));
 				jpPartidesPrivades.add(addSeparator());
 			}
 
