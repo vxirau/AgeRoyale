@@ -10,6 +10,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+/**
+* Classe destinada a mostrar els amics del usuari i hereda de JFrame.
+* */
 public class FriendView extends JFrame {
     private JPanel jpFriends;
     private JPanel jpAmics;
@@ -21,11 +24,21 @@ public class FriendView extends JFrame {
     private FriendsController friendsController;
     private Usuari usuari;
 
+
+    /**
+    * Constructor de la classe
+     * @param usr usuari del client
+     * @param friendsCtrl controlador de la fienstra
+    * */
     public FriendView(Usuari usr, FriendsController friendsCtrl) {
         this.usuari = usr;
         setAmics(usr.getAmics());
         this.friendsController = friendsCtrl;
     }
+
+    /**
+    * Inicia la finestra grafica
+    * */
     public void initAll(){
         this.removeAll();
 
@@ -188,30 +201,59 @@ public class FriendView extends JFrame {
         repaint();
     }
 
+
+    /**
+    * Getter de la variable jpFriends
+     * @return variable de tipus JPanel
+    * */
     public JPanel getJpFriends() {
         return jpFriends;
     }
 
+    /**
+    * Setter de la variable jpFriends
+     * @param jpFriends variable de tipus JPanel que reb per valor
+    * */
     public void setJpFriends(JPanel jpFriends) {
         this.jpFriends = jpFriends;
     }
 
+    /**
+     * Getter de la variable jpAmics
+     * @return variable de tipus JPanel
+     * */
     public JPanel getJpAmics() {
         return jpAmics;
     }
 
+    /**
+     * Setter de la variable jpAmics
+     * @param jpAmics variable de tipus JPanel que reb per valor
+     * */
     public void setJpAmics(JPanel jpAmics) {
         this.jpAmics = jpAmics;
     }
 
+    /**
+     * Getter de la variable jpsAmics
+     * @return variable de tipus JPanel[]
+     * */
     public JPanel[] getJpsAmics() {
         return jpsAmics;
     }
 
+    /**
+     * Setter de la variable jpsAmics
+     * @param jpsAmics variable de tipus JPanel[] que reb per valor
+     * */
     public void setJpsAmics(JPanel[] jpsAmics) {
         this.jpsAmics = jpsAmics;
     }
 
+    /**
+     * Setter dels amics del usuari.
+     * @param amics llista de usuaris que corresponen als amics del usuari
+     * */
     public void setAmics(ArrayList<Usuari> amics) {
         this.usuari.setAmics(amics);
         initAll();
