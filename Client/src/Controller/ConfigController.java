@@ -7,7 +7,6 @@ import src.View.ConfigView;
 
 import javax.swing.*;
 
-
 /**
 *Aquesta classe és el controller destinat a la vista de configuració.
 * Aquesta vista permet al usuari canviar alguns aspectes de la seva configuració a la base de dades pel que aquesta classe realitza les crides necessaries
@@ -164,6 +163,5 @@ public class ConfigController {
     * */
     public void setUsuari(Usuari usuari) {
         this.usuari = usuari;
-
     }
 }

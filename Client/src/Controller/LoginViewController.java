@@ -161,14 +161,14 @@ public class LoginViewController implements ActionListener {
 
         } else if(boto.equals("Registra't ara")){
             SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                            ViewRegistre rView = new ViewRegistre();
-                            RegisterViewController controlador = new RegisterViewController(rView,uService);
-                            rView.registerController(controlador);
-                            view.setVisible(false);
-                rView.setVisible(true);
-            }
+                @Override
+                public void run() {
+                    ViewRegistre rView = new ViewRegistre();
+                    RegisterViewController controlador = new RegisterViewController(rView, uService);
+                    rView.registerController(controlador);
+                    view.setVisible(false);
+                    rView.setVisible(true);
+                }
             });
         }
     }

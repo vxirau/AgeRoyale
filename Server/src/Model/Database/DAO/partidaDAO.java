@@ -129,8 +129,8 @@ public class partidaDAO {
             preparedStmt.setString (6, partida.getData());
             preparedStmt.setBoolean (6+1, partida.isFinished());
 
-
             DBConnector.getInstance().insertQuery(preparedStmt);
+
         } catch (SQLException ex) {
             System.out.println("Problema al preparar la insercio de --> " + ex.getSQLState());
         }

@@ -17,7 +17,6 @@ import java.util.ArrayList;
 * */
 public class FriendsController implements ActionListener{
 
-
     //Declaració de variables.
     private FriendView friendView;
     private FriendRequestView friendRequestView;
@@ -57,9 +56,7 @@ public class FriendsController implements ActionListener{
             }
         }
     };
-
-
-
+    
     /**
     * Constuctor del controlador.
      * @param usr usuari que esta emprant la aplicació

@@ -133,7 +133,6 @@ public class RoomsController {
 		gView.setVisible(true);
 		menuController.getView().setVisible(false);
 		return gView;
-
 	}
 
 	/**
